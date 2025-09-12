@@ -1,0 +1,15 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "enigmaticlegacyplus:item/twisted_heart"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "enigmaticlegacyplus:tainted": 1.0
+      },
+      "model": "enigmaticlegacyplus:item/twisted_heart_on"
+    }
+
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "I": {
+      "item": "enigmaticlegacyplus:etherium_ingot"
+    },
+    "R": {
+      "item": "minecraft:respawn_anchor"
+    },
+    "S": {
+      "item": "minecraft:end_stone"
+    },
+    "X": {
+      "item": "enigmaticlegacyplus:eye_of_nebula"
+    }
+  },
+  "pattern": [
+    " E ",
+    "IRI",
+    "SXS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:dimensional_anchor"
+  }
+}

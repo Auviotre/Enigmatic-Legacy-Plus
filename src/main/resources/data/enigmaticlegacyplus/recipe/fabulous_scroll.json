@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "enigmaticlegacyplus:astral_dust"
+    },
+    "D": {
+      "item": "minecraft:dragon_breath"
+    },
+    "I": {
+      "item": "enigmaticlegacyplus:etherium_ingot"
+    },
+    "U": {
+      "item": "minecraft:elytra"
+    },
+    "X": {
+      "item": "enigmaticlegacyplus:heaven_scroll"
+    }
+  },
+  "pattern": [
+    "IAI",
+    "AXA",
+    "DUD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:fabulous_scroll"
+  }
+}

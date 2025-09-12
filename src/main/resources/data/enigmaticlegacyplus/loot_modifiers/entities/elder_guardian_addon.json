@@ -1,0 +1,10 @@
+{
+  "type": "enigmaticlegacyplus:add_curse_loot_table",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:entities/elder_guardian"
+    }
+  ],
+  "loot_table": "enigmaticlegacyplus:entities/elder_guardian_addon"
+}

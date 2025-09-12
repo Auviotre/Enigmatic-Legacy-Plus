@@ -1,0 +1,42 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:cocoa_beans"
+    },
+    "B": {
+      "item": "minecraft:vine"
+    },
+    "C": {
+      "item": "minecraft:warped_fungus"
+    },
+    "D": {
+      "item": "minecraft:apple"
+    },
+    "E": {
+      "item": "minecraft:wheat"
+    },
+    "F": {
+      "item": "minecraft:poppy"
+    },
+    "G": {
+      "item": "minecraft:lily_pad"
+    },
+    "H": {
+      "item": "minecraft:nether_wart"
+    },
+    "X": {
+      "item": "enigmaticlegacyplus:earth_heart"
+    }
+  },
+  "pattern": [
+    "ABC",
+    "DXE",
+    "FGH"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:infinimeal"
+  }
+}

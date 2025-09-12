@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "name": "enigmaticlegacyplus:eye_of_nebula"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "enigmaticlegacyplus:chests/eye_of_nebula_addon"
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "charges=0": {
+      "model": "enigmaticlegacyplus:block/dimensional_anchor"
+    },
+    "charges=1": {
+      "model": "enigmaticlegacyplus:block/dimensional_anchor_1"
+    },
+    "charges=2": {
+      "model": "enigmaticlegacyplus:block/dimensional_anchor_2"
+    },
+    "charges=3": {
+      "model": "enigmaticlegacyplus:block/dimensional_anchor_3"
+    },
+    "charges=4": {
+      "model": "enigmaticlegacyplus:block/dimensional_anchor_4"
+    }
+  }
+}

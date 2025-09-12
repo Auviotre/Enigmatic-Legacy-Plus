@@ -1,0 +1,33 @@
+{
+  "parent": "enigmaticlegacyplus:main/root",
+  "criteria": {
+    "has_scroll": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#curios:scroll"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.enigmaticlegacy.discover_scroll.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "enigmaticlegacyplus:blank_scroll"
+    },
+    "title": {
+      "translate": "advancement.enigmaticlegacy.discover_scroll.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_scroll"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "enigmaticlegacyplus:animal_guidebook"
+    },
+    "B": {
+      "item": "enigmaticlegacyplus:hunter_guidebook"
+    },
+    "E": {
+      "item": "minecraft:experience_bottle"
+    },
+    "G": {
+      "item": "minecraft:gold_nugget"
+    },
+    "X": {
+      "item": "enigmaticlegacyplus:earth_heart"
+    },
+    "Y": {
+      "item": "minecraft:golden_apple"
+    }
+  },
+  "pattern": [
+    "GXG",
+    "AYB",
+    "GEG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:ode_to_living"
+  }
+}

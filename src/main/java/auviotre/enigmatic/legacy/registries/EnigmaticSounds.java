@@ -1,0 +1,18 @@
+package auviotre.enigmatic.legacy.registries;
+
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.sounds.SoundEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+public class EnigmaticSounds {
+    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, EnigmaticLegacy.MODID);
+    public static final DeferredHolder<SoundEvent, SoundEvent> CHARGED_ON = register("misc.charge_on");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CHARGED_OFF = register("misc.charge_off");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ACCELERATE = register("misc.accelerate");
+
+    private static DeferredHolder<SoundEvent, SoundEvent> register(String name) {
+        return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(EnigmaticLegacy.location(name)));
+    }
+}

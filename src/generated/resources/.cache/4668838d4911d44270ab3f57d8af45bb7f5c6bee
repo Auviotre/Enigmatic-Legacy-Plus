@@ -1,0 +1,5 @@
+// 1.21.1	2025-08-29T20:51:07.2592236	Tags for minecraft:damage_type mod id enigmaticlegacyplus
+2262b26db0223cb750e693796dc0751a3a898e40 data/minecraft/tags/damage_type/bypasses_armor.json
+7fe3899cc968a58b06851628b74a58bbc09dd420 data/minecraft/tags/damage_type/bypasses_enchantments.json
+7fe3899cc968a58b06851628b74a58bbc09dd420 data/minecraft/tags/damage_type/bypasses_resistance.json
+7fe3899cc968a58b06851628b74a58bbc09dd420 data/minecraft/tags/damage_type/wither_immune_to.json

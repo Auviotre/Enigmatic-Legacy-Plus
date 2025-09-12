@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:ink_sac"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "I": {
+      "item": "minecraft:feather"
+    },
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "S": {
+      "item": "minecraft:nether_star"
+    },
+    "U": {
+      "item": "enigmaticlegacyplus:angel_blessing"
+    },
+    "X": {
+      "item": "enigmaticlegacyplus:blank_scroll"
+    }
+  },
+  "pattern": [
+    "GSG",
+    "BXI",
+    "LUL"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:heaven_scroll"
+  }
+}

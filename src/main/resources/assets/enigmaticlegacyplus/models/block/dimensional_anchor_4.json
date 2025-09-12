@@ -1,0 +1,6 @@
+{
+	"parent": "enigmaticlegacyplus:block/dimensional_anchor",
+	"textures": {
+		"side": "enigmaticlegacyplus:block/dimensional_anchor_side_4"
+	}
+}

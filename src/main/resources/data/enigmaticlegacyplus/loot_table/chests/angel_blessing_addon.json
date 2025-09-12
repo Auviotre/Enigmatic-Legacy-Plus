@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "chance": 0.09,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "name": "enigmaticlegacyplus:ocean_stone"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "enigmaticlegacyplus:chests/angel_blessing_addon"
+}

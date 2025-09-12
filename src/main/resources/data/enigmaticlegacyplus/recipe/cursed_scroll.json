@@ -1,0 +1,36 @@
+{
+  "type": "enigmaticlegacyplus:cursed_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:ink_sac"
+    },
+    "E": {
+      "item": "minecraft:enchanted_book"
+    },
+    "M": {
+      "item": "minecraft:phantom_membrane"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "T": {
+      "item": "enigmaticlegacyplus:darkest_scroll"
+    },
+    "X": {
+      "item": "enigmaticlegacyplus:twisted_heart"
+    },
+    "Y": {
+      "item": "minecraft:feather"
+    }
+  },
+  "pattern": [
+    "MXM",
+    "BTY",
+    "RER"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:cursed_scroll"
+  }
+}

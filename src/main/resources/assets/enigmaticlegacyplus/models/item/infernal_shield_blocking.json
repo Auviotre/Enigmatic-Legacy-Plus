@@ -1,0 +1,30 @@
+{
+  "loader": "neoforge:separate_transforms",
+  "gui_light": "front",
+  "base": {
+    "parent": "enigmaticlegacyplus:item/infernal_shield_in_inventory"
+  },
+  "perspectives": {
+    "firstperson_righthand": {
+      "parent": "enigmaticlegacyplus:item/infernal_shield_blocking_in_hand"
+    },
+    "firstperson_lefthand": {
+      "parent": "enigmaticlegacyplus:item/infernal_shield_blocking_in_hand"
+    },
+    "thirdperson_righthand": {
+      "parent": "enigmaticlegacyplus:item/infernal_shield_blocking_in_hand"
+    },
+    "thirdperson_lefthand": {
+      "parent": "enigmaticlegacyplus:item/infernal_shield_blocking_in_hand"
+    },
+    "head": {
+      "parent": "enigmaticlegacyplus:item/infernal_shield_blocking_in_hand"
+    },
+    "fixed": {
+      "parent": "enigmaticlegacyplus:item/infernal_shield_blocking_in_hand"
+    },
+    "ground": {
+      "parent": "enigmaticlegacyplus:item/infernal_shield_blocking_in_hand"
+    }
+  }
+}

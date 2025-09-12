@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "NIN",
+    "I I",
+    "NIN"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:iron_ring"
+  }
+}

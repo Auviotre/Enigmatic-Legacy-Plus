@@ -1,0 +1,37 @@
+{
+  "parent": "enigmaticlegacyplus:main/root",
+  "criteria": {
+    "equipped_cursed_ring": {
+      "conditions": {
+        "curios:slot": {
+          "slots": [
+            "ring"
+          ]
+        },
+        "item": {
+          "items": "enigmaticlegacyplus:cursed_ring"
+        },
+        "location": {}
+      },
+      "trigger": "curios:equip_curio"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.enigmaticlegacy.cursed_ring.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "enigmaticlegacyplus:cursed_ring"
+    },
+    "title": {
+      "translate": "advancement.enigmaticlegacy.cursed_ring.title"
+    }
+  },
+  "requirements": [
+    [
+      "equipped_cursed_ring"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

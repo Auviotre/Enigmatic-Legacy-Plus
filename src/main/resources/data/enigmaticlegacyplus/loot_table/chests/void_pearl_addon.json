@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "chance": 0.018,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "name": "enigmaticlegacyplus:void_pearl"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "enigmaticlegacyplus:chests/void_pearl_addon"
+}

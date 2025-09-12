@@ -1,0 +1,33 @@
+{
+  "type": "enigmaticlegacyplus:cursed_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "enigmaticlegacyplus:abyssal_heart"
+    },
+    "E": {
+      "item": "enigmaticlegacyplus:evil_essence"
+    },
+    "I": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "S": {
+      "item": "minecraft:nether_star"
+    },
+    "T": {
+      "item": "enigmaticlegacyplus:twisted_heart"
+    },
+    "X": {
+      "item": "enigmaticlegacyplus:ascension_amulet"
+    }
+  },
+  "pattern": [
+    "EAE",
+    "IXI",
+    "TST"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:eldritch_amulet"
+  }
+}

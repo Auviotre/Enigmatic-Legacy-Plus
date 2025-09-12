@@ -1,0 +1,10 @@
+{
+  "type": "enigmaticlegacyplus:add_curse_loot_table",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:entities/vex"
+    }
+  ],
+  "loot_table": "enigmaticlegacyplus:entities/vex_addon"
+}

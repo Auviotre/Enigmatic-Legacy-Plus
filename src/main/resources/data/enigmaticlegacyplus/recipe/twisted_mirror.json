@@ -1,0 +1,27 @@
+{
+  "type": "enigmaticlegacyplus:cursed_shaped",
+  "category": "equipment",
+  "key": {
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "P": {
+      "item": "enigmaticlegacyplus:recall_potion"
+    },
+    "X": {
+      "item": "enigmaticlegacyplus:twisted_heart"
+    }
+  },
+  "pattern": [
+    "IGI",
+    "PXP",
+    " I "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:twisted_mirror"
+  }
+}

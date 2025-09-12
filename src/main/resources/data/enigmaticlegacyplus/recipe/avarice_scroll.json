@@ -1,0 +1,33 @@
+{
+  "type": "enigmaticlegacyplus:cursed_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:ink_sac"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "R": {
+      "item": "enigmaticlegacyplus:golden_ring"
+    },
+    "T": {
+      "item": "enigmaticlegacyplus:darkest_scroll"
+    },
+    "X": {
+      "item": "enigmaticlegacyplus:twisted_heart"
+    },
+    "Y": {
+      "item": "minecraft:feather"
+    }
+  },
+  "pattern": [
+    "GRG",
+    "BTY",
+    "GXG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:avarice_scroll"
+  }
+}

@@ -1,0 +1,22 @@
+// 1.21.1	2025-09-11T14:28:55.0355911	Tags for minecraft:item mod id enigmaticlegacyplus
+0dd860e32202c43de8b190b38e82e755b2bf2310 data/curios/tags/item/back.json
+a7fc8c151eecec5f0f3a548470a436bc6e592c59 data/curios/tags/item/charm.json
+458c0dce7e170022bbba63dc0db47cef5ddefbe4 data/curios/tags/item/ring.json
+95f6a12787f71fe9bd1dc8fbf4da9c9b6e62ad27 data/curios/tags/item/scroll.json
+b1bdd2fe2c5c4f804c71bbb6a828cb3dc5238e31 data/curios/tags/item/spellstone.json
+87f8884749d77334fc95f468aff11ac43d0a3da3 data/c/tags/item/enchantables.json
+72459f1a10d655debb9b001093754db408a32454 data/c/tags/item/ingots.json
+80d6aaf8a4117407a4c8795dc7124d89e1f5fa64 data/c/tags/item/nuggets.json
+aba5da56bf41f73fb97dcc1982e729bf3890cb70 data/c/tags/item/raw_materials.json
+b6ccf2e11b4ae8403dd61662eb7c1d5fc9e6988e data/c/tags/item/rods.json
+6406808d4117922f2aafdb4672d8249fd8df8712 data/c/tags/item/tools/shield.json
+1dda9b3ba54f012b18bd2cad139fe2f7226da494 data/enigmaticlegacyplus/tags/item/armor_check_exclusions.json
+3b1be9fb68cae293e8ef53b58428cafb301aabb4 data/enigmaticlegacyplus/tags/item/bypass_fourth_curse.json
+075ac036f0b91ebab618457f75e9d68276440670 data/enigmaticlegacyplus/tags/item/eternal_binding_enchantable.json
+64c2414ad8b3fe2fbbd9794e95dc1bde53dd3917 data/minecraft/tags/item/bookshelf_books.json
+dc224e0ece1a472b198814ce023ed1a5a80051c3 data/minecraft/tags/item/enchantable/durability.json
+0dd860e32202c43de8b190b38e82e755b2bf2310 data/minecraft/tags/item/enchantable/equippable.json
+f93b58e74bb0edb0afb30e9220a73c66a6a67cc2 data/minecraft/tags/item/enchantable/sword.json
+d4d69cc9415a2e179178d0e0eb43ee304c208b4c data/minecraft/tags/item/enchantable/vanishing.json
+34e4343cb8bb5b68d321800ebfc3cbb46ef6eae8 data/minecraft/tags/item/lectern_books.json
+3d719ed3c77114455403f61681e08fc7d63f2c2b data/minecraft/tags/item/swords.json

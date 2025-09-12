@@ -1,0 +1,30 @@
+{
+  "type": "enigmaticlegacyplus:cursed_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "minecraft:emerald"
+    },
+    "P": {
+      "item": "minecraft:blaze_powder"
+    },
+    "T": {
+      "item": "minecraft:crying_obsidian"
+    },
+    "V": {
+      "item": "enigmaticlegacyplus:evil_essence"
+    },
+    "X": {
+      "item": "minecraft:ender_pearl"
+    }
+  },
+  "pattern": [
+    " E ",
+    "VXV",
+    "PTP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:enchanter_pearl"
+  }
+}

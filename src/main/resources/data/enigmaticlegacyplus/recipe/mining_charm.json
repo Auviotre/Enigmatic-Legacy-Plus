@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "I": {
+      "item": "minecraft:iron_nugget"
+    },
+    "T": {
+      "item": "minecraft:ghast_tear"
+    },
+    "X": {
+      "item": "enigmaticlegacyplus:earth_heart"
+    }
+  },
+  "pattern": [
+    "IDI",
+    "GXG",
+    "ATA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:mining_charm"
+  }
+}

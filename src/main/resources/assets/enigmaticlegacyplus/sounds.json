@@ -1,0 +1,29 @@
+{
+  "misc.charge_on": {
+    "subtitle": "subtitle.enigmaticlegacy.misc.charge_on",
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:misc/charge_on",
+        "stream": false
+      }
+    ]
+  },
+  "misc.charge_off": {
+    "subtitle": "subtitle.enigmaticlegacy.misc.charge_off",
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:misc/charge_off",
+        "stream": false
+      }
+    ]
+  },
+  "misc.accelerate": {
+    "subtitle": "subtitle.enigmaticlegacy.misc.accelerate",
+    "sounds": [
+      {
+        "name": "entity.ender_eye.launch",
+        "type": "event"
+      }
+    ]
+  }
+}

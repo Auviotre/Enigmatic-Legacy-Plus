@@ -1,0 +1,98 @@
+{
+  "parent": "enigmaticlegacyplus:main/discover_spellstone",
+  "criteria": {
+    "has_spellstone1": {
+      "conditions": {
+        "items": [
+          {
+            "items": "enigmaticlegacyplus:golem_heart"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_spellstone2": {
+      "conditions": {
+        "items": [
+          {
+            "items": "enigmaticlegacyplus:blazing_core"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_spellstone3": {
+      "conditions": {
+        "items": [
+          {
+            "items": "enigmaticlegacyplus:ocean_stone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_spellstone4": {
+      "conditions": {
+        "items": [
+          {
+            "items": "enigmaticlegacyplus:angel_blessing"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_spellstone5": {
+      "conditions": {
+        "items": [
+          {
+            "items": "enigmaticlegacyplus:eye_of_nebula"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_spellstone6": {
+      "conditions": {
+        "items": [
+          {
+            "items": "enigmaticlegacyplus:void_pearl"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.enigmaticlegacy.all_spellstone.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "enigmaticlegacyplus:void_pearl"
+    },
+    "title": {
+      "translate": "advancement.enigmaticlegacy.all_spellstone.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_spellstone1"
+    ],
+    [
+      "has_spellstone2"
+    ],
+    [
+      "has_spellstone3"
+    ],
+    [
+      "has_spellstone4"
+    ],
+    [
+      "has_spellstone5"
+    ],
+    [
+      "has_spellstone6"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

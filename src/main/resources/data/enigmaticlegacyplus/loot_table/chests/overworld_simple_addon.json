@@ -1,0 +1,64 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "chance": 0.25,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "name": "enigmaticlegacyplus:earth_heart",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 0.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "enigmaticlegacyplus:earth_heart_fragment",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "enigmaticlegacyplus:iron_ring",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "enigmaticlegacyplus:lore_fragment",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "chance": 0.25,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "name": "enigmaticlegacyplus:ichor_bottle",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 60
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "enigmaticlegacyplus:chests/overworld_simple_addon"
+}

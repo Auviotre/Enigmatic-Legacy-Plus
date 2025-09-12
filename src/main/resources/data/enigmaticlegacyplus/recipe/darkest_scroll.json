@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:black_dye"
+    },
+    "T": {
+      "item": "enigmaticlegacyplus:darkest_scroll"
+    },
+    "W": {
+      "item": "minecraft:wither_rose"
+    },
+    "X": {
+      "item": "enigmaticlegacyplus:blank_scroll"
+    }
+  },
+  "pattern": [
+    "BTB",
+    "WXW",
+    "BTB"
+  ],
+  "result": {
+    "count": 3,
+    "id": "enigmaticlegacyplus:darkest_scroll"
+  }
+}

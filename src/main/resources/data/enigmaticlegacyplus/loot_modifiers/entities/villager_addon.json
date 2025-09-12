@@ -1,0 +1,10 @@
+{
+  "type": "enigmaticlegacyplus:add_curse_loot_table",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:entities/villager"
+    }
+  ],
+  "loot_table": "enigmaticlegacyplus:entities/villager_addon"
+}

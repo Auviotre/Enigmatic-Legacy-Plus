@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "enigmaticlegacyplus:item/eldritch/abyssal_heart_0"
+  }
+}

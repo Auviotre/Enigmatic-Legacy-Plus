@@ -1,0 +1,50 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "enigmaticlegacyplus:item/enigmatic_amulet"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "enigmaticlegacyplus:amulet_color": 0.1
+            },
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet_01"
+        },
+		{
+            "predicate": {
+                "enigmaticlegacyplus:amulet_color": 0.2
+            },
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet_02"
+        },
+		{
+            "predicate": {
+                "enigmaticlegacyplus:amulet_color": 0.3
+            },
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet_03"
+        },
+		{
+            "predicate": {
+                "enigmaticlegacyplus:amulet_color": 0.4
+            },
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet_04"
+        },
+		{
+            "predicate": {
+                "enigmaticlegacyplus:amulet_color": 0.5
+            },
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet_05"
+        },
+		{
+            "predicate": {
+                "enigmaticlegacyplus:amulet_color": 0.6
+            },
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet_06"
+        },
+		{
+            "predicate": {
+                "enigmaticlegacyplus:amulet_color": 0.7
+            },
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet_07"
+        }
+    ]
+}

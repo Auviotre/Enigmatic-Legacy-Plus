@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "enigmaticlegacyplus:angel_blessing"
+    },
+    "B": {
+      "item": "minecraft:dragon_breath"
+    },
+    "D": {
+      "item": "enigmaticlegacyplus:astral_dust"
+    },
+    "E": {
+      "item": "enigmaticlegacyplus:etherium_ingot"
+    },
+    "V": {
+      "item": "enigmaticlegacyplus:eye_of_nebula"
+    },
+    "X": {
+      "item": "minecraft:elytra"
+    }
+  },
+  "pattern": [
+    "BAB",
+    "EXE",
+    "DVD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enigmaticlegacyplus:majestic_elytra"
+  }
+}

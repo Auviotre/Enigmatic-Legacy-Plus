@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "package": "auviotre.enigmatic.legacy.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MixinBeaconBlockEntity",
+    "MixinEnchantmentMenu",
+    "MixinEnderDragon",
+    "MixinHoglinAi",
+    "MixinLivingEntity",
+    "MixinMob",
+    "MixinPiglinAi",
+    "MixinPlayer",
+    "MixinPlayerList",
+    "MixinServerPlayer",
+    "MixinVillager"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "client": [
+    "MixinGuiBookLanding"
+  ]
+}
