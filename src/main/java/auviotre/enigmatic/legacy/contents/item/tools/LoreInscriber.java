@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.gui.LoreInscriberMenu;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -19,8 +20,10 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +31,6 @@ import java.util.Objects;
 public class LoreInscriber extends BaseItem {
     public LoreInscriber() {
         super(defaultSingleProperties().rarity(Rarity.UNCOMMON));
-        NeoForge.EVENT_BUS.register(this);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -57,18 +59,6 @@ public class LoreInscriber extends BaseItem {
         if (!level.isClientSide)
             player.openMenu(new LoreInscriberMenu.Provider(Component.translatable("gui.enigmaticlegacy.lore_inscriber")));
         return InteractionResultHolder.success(stack);
-    }
-
-    @SubscribeEvent
-    public void onAnvilUpdate(AnvilUpdateEvent event) {
-        if (event.getLeft().getCount() == 1) {
-            ItemStack lore = event.getRight();
-            if (lore.is(EnigmaticItems.LORE_FRAGMENT) && lore.has(DataComponents.ITEM_NAME)) {
-                event.setCost(4);
-                event.setMaterialCost(1);
-                event.setOutput(Helper.mergeDisplayData(lore, event.getLeft().copy()));
-            }
-        }
     }
 
     public interface Helper {
@@ -112,6 +102,22 @@ public class LoreInscriber extends BaseItem {
             ItemLore lore = from.get(DataComponents.LORE);
             if (lore != null) to.set(DataComponents.LORE, lore);
             return to;
+        }
+    }
+
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onAnvilUpdate(@NotNull AnvilUpdateEvent event) {
+            if (event.getLeft().getCount() == 1) {
+                ItemStack lore = event.getRight();
+                if (lore.is(EnigmaticItems.LORE_FRAGMENT) && lore.has(DataComponents.ITEM_NAME)) {
+                    event.setCost(4);
+                    event.setMaterialCost(1);
+                    event.setOutput(Helper.mergeDisplayData(lore, event.getLeft().copy()));
+                }
+            }
         }
     }
 

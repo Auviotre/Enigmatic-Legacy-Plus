@@ -23,14 +23,10 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
     protected final ResultContainer result = new ResultContainer();
     protected final ContainerLevelAccess access;
     private String unParsedInputField;
+
     public LoreInscriberMenu(int syncID, Inventory inventory) {
         this(syncID, inventory, ContainerLevelAccess.create(inventory.player.level(), inventory.player.blockPosition()));
-    }    protected final Container loreSlot = new SimpleContainer(1) {
-        public void setChanged() {
-            super.setChanged();
-            LoreInscriberMenu.this.slotsChanged(this);
-        }
-    };
+    }
 
     public LoreInscriberMenu(int syncID, Inventory inventory, FriendlyByteBuf buf) {
         this(syncID, inventory, ContainerLevelAccess.create(inventory.player.level(), inventory.player.blockPosition()));
@@ -39,7 +35,6 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
     private LoreInscriberMenu(int id, Inventory Inventory, ContainerLevelAccess worldPosCallable) {
         this(EnigmaticMenus.LORE_INSCRIBER_MENU.get(), id, Inventory, worldPosCallable);
     }
-
 
     private LoreInscriberMenu(@Nullable MenuType<?> menuType, int id, Inventory inventory, ContainerLevelAccess access) {
         super(menuType, id);
@@ -91,7 +86,12 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
                 });
             } else this.addSlot(new Slot(inventory, k, 8 + k * 18, 142));
         }
-    }
+    }    protected final Container loreSlot = new SimpleContainer(1) {
+        public void setChanged() {
+            super.setChanged();
+            LoreInscriberMenu.this.slotsChanged(this);
+        }
+    };
 
     public void slotsChanged(Container container) {
         super.slotsChanged(container);

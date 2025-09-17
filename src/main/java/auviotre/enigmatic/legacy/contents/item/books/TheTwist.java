@@ -1,8 +1,10 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
-import auviotre.enigmatic.legacy.api.item.ICursed;
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -26,7 +28,8 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.jetbrains.annotations.NotNull;
@@ -35,10 +38,16 @@ import java.util.List;
 
 import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
 
-public class TheTwist extends TheAcknowledgment implements ICursed {
+public class TheTwist extends TheAcknowledgment {
     public TheTwist() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC), 8, -1.8F);
-        NeoForge.EVENT_BUS.register(this);
+        super(defaultSingleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.CURSED, true), 8, -1.8F);
+    }
+
+    public static Multimap<Holder<Attribute>, AttributeModifier> getKnockbackModifier() {
+        ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
+        double modifier = 0.01 * CONFIG.CURSED_ITEMS.knockbackModifier.getAsInt();
+        builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(getLocation(EnigmaticItems.THE_TWIST.get()), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        return builder.build();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -59,17 +68,10 @@ public class TheTwist extends TheAcknowledgment implements ICursed {
         TooltipHandler.cursedOnly(list, stack);
     }
 
-    public float getAttackDamageBonus(Entity target, float damage, DamageSource damageSource) {
+    public float getAttackDamageBonus(@NotNull Entity target, float damage, DamageSource damageSource) {
         if (target.getType().is(Tags.EntityTypes.BOSSES))
             return damage * 0.01F * CONFIG.CURSED_ITEMS.specialDamageBoost.get();
         return super.getAttackDamageBonus(target, damage, damageSource);
-    }
-
-    public Multimap<Holder<Attribute>, AttributeModifier> getKnockbackModifier() {
-        ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        double modifier = 0.01 * CONFIG.CURSED_ITEMS.knockbackModifier.getAsInt();
-        builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(getLocation(this), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        return builder.build();
     }
 
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
@@ -82,12 +84,16 @@ public class TheTwist extends TheAcknowledgment implements ICursed {
         return super.use(world, player, hand);
     }
 
-    @SubscribeEvent
-    public void onTick(PlayerTickEvent.@NotNull Pre event) {
-        if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheCursedOne(entity)) {
-            if (entity.getMainHandItem().is(this))
-                entity.getAttributes().addTransientAttributeModifiers(this.getKnockbackModifier());
-            else entity.getAttributes().removeAttributeModifiers(this.getKnockbackModifier());
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onTick(PlayerTickEvent.@NotNull Pre event) {
+            if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheCursedOne(entity)) {
+                if (entity.getMainHandItem().is(EnigmaticItems.THE_TWIST))
+                    entity.getAttributes().addTransientAttributeModifiers(getKnockbackModifier());
+                else entity.getAttributes().removeAttributeModifiers(getKnockbackModifier());
+            }
         }
     }
 }

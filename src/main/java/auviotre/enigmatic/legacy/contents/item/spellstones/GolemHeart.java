@@ -1,9 +1,12 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -11,7 +14,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -21,36 +25,22 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
 
 public class GolemHeart extends SpellstoneItem {
     public GolemHeart() {
         super(defaultSingleProperties().rarity(Rarity.RARE));
-
-        this.immunityList.add(DamageTypes.CACTUS);
-        this.immunityList.add(DamageTypes.CRAMMING);
-        this.immunityList.add(DamageTypes.IN_WALL);
-        this.immunityList.add(DamageTypes.FALLING_BLOCK);
-        this.immunityList.add(DamageTypes.SWEET_BERRY_BUSH);
-
-        Supplier<Float> meleeResistanceSupplier = () -> (1.0F - 0.01F * CONFIG.SPELLSTONES.meleeResistance.getAsInt());
-        Supplier<Float> explosionResistanceSupplier = () -> (1.0F - 0.01F * CONFIG.SPELLSTONES.explosionResistance.getAsInt());
-        Supplier<Float> magicVulnerabilitySupplier = () -> (float) CONFIG.SPELLSTONES.GHVulnerabilityModifier.getAsDouble();
-
-        this.resistanceList.put(DamageTypes.GENERIC, meleeResistanceSupplier);
-        this.resistanceList.put(DamageTypes.MOB_ATTACK, meleeResistanceSupplier);
-        this.resistanceList.put(DamageTypes.PLAYER_ATTACK, meleeResistanceSupplier);
-        this.resistanceList.put(DamageTypes.EXPLOSION, explosionResistanceSupplier);
-        this.resistanceList.put(DamageTypes.PLAYER_EXPLOSION, explosionResistanceSupplier);
-
-        this.resistanceList.put(DamageTypes.MAGIC, magicVulnerabilitySupplier);
-        this.resistanceList.put(DamageTypes.WITHER, magicVulnerabilitySupplier);
-        this.resistanceList.put(DamageTypes.DRAGON_BREATH, magicVulnerabilitySupplier);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -111,5 +101,31 @@ public class GolemHeart extends SpellstoneItem {
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(noArmor, CONFIG.SPELLSTONES.superArmorToughnessBonus.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(noArmor, CONFIG.SPELLSTONES.knockbackResistance.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
+    }
+
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.GOLEM_HEART)) {
+                if (event.getSource().is(EnigmaticTags.DamageTypes.GOLEM_HEART_IMMUNE_TO))
+                    event.setCanceled(true);
+            }
+        }
+
+        @SubscribeEvent
+        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.GOLEM_HEART)) {
+                DamageSource source = event.getSource();
+                if (EnigmaticHandler.hasNoArmor(event.getEntity()) && source.is(DamageTypeTags.IS_EXPLOSION)) {
+                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * CONFIG.SPELLSTONES.explosionResistance.getAsInt()));
+                } else if (source.is(Tags.DamageTypes.IS_MAGIC)) {
+                    event.setNewDamage((float) (event.getNewDamage() * CONFIG.SPELLSTONES.GHVulnerabilityModifier.getAsDouble()));
+                } else if (source.is(EnigmaticTags.DamageTypes.GOLEM_HEART_IS_MELEE)) {
+                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * CONFIG.SPELLSTONES.meleeResistance.getAsInt()));
+                }
+            }
+        }
     }
 }

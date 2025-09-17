@@ -2,15 +2,11 @@ package auviotre.enigmatic.legacy.handlers;
 
 import auviotre.enigmatic.legacy.ELConfig;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.api.item.ICursed;
-import auviotre.enigmatic.legacy.api.item.IEldritch;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.SoulCrystal;
 import auviotre.enigmatic.legacy.contents.item.tools.InfernalShield;
-import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
-import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
-import auviotre.enigmatic.legacy.registries.EnigmaticItems;
-import auviotre.enigmatic.legacy.registries.EnigmaticTags;
+import auviotre.enigmatic.legacy.registries.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -18,13 +14,19 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.PlainTextContents;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -36,16 +38,25 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.LevelResource;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.LevelSummary;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.SlotResult;
@@ -56,6 +67,7 @@ import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -66,6 +78,11 @@ public interface EnigmaticHandler {
     static boolean isTheCursedOne(LivingEntity entity) {
         return hasCurio(entity, EnigmaticItems.CURSED_RING) || entity instanceof Player player && getPersistedData(player).getBoolean("SevenCursesBearing");
     }
+    static boolean isCursedItem(@NotNull ItemStack stack) {
+        if (stack.is(EnigmaticItems.CURSED_RING)) return false;
+        if (isEldritchItem(stack)) return true;
+        return !stack.isEmpty() && stack.has(EnigmaticComponents.CURSED) && stack.getOrDefault(EnigmaticComponents.CURSED, false);
+    }
 
     static boolean isTheBlessedOne(Player player) {
         return false;
@@ -75,16 +92,21 @@ public interface EnigmaticHandler {
         return isTheCursedOne(entity) && getSufferingFraction(entity) >= 0.995;
     }
 
+    static boolean isEldritchItem(@NotNull ItemStack stack) {
+        return !stack.isEmpty() && stack.has(EnigmaticComponents.ELDRITCH) && stack.getOrDefault(EnigmaticComponents.ELDRITCH, false);
+    }
+
     static boolean isTheOne(Player player) {
         return isTheCursedOne(player) || isTheBlessedOne(player);
     }
 
-    static boolean hasCurio(@Nullable LivingEntity entity, ItemLike item) {
+    static boolean hasCurio(@Nullable LivingEntity entity, ItemLike itemLike) {
         if (entity == null) return false;
-        if (item instanceof ICursed && !isTheCursedOne(entity)) return false;
-        else if (item instanceof IEldritch && !isTheWorthyOne(entity)) return false;
+        Item item = itemLike.asItem();
+        if (isCursedItem(item.getDefaultInstance()) && !isTheCursedOne(entity)) return false;
+        else if (isEldritchItem(item.getDefaultInstance()) && !isTheWorthyOne(entity)) return false;
         Optional<ICuriosItemHandler> curios = CuriosApi.getCuriosInventory(entity);
-        return curios.map(curiosItemHandler -> curiosItemHandler.findFirstCurio(item.asItem()).isPresent()).orElse(false);
+        return curios.map(curiosItemHandler -> curiosItemHandler.findFirstCurio(item).isPresent()).orElse(false);
     }
 
     static ItemStack getCurio(LivingEntity entity, ItemLike item) {
@@ -100,10 +122,11 @@ public interface EnigmaticHandler {
         return !getItem(entity, item).isEmpty();
     }
 
-    static ItemStack getItem(@Nullable LivingEntity entity, ItemLike item) {
+    static ItemStack getItem(@Nullable LivingEntity entity, ItemLike itemLike) {
         if (entity == null) return ItemStack.EMPTY;
-        if (item instanceof ICursed && !isTheCursedOne(entity)) return ItemStack.EMPTY;
-        else if (item instanceof IEldritch && !isTheWorthyOne(entity)) return ItemStack.EMPTY;
+        Item item = itemLike.asItem();
+        if (isCursedItem(item.getDefaultInstance()) && !isTheCursedOne(entity)) return ItemStack.EMPTY;
+        else if (isEldritchItem(item.getDefaultInstance()) && !isTheWorthyOne(entity)) return ItemStack.EMPTY;
         if (entity instanceof Player player) {
             for (NonNullList<ItemStack> compartment : player.getInventory().compartments) {
                 for (ItemStack stack : compartment) {
@@ -137,33 +160,96 @@ public interface EnigmaticHandler {
         return false;
     }
 
-    static boolean canUnequipBoundRelics(Player player) {
+    static boolean canUnequipBoundRelics(@NotNull Player player) {
         return player.isCreative();
     }
 
-    static boolean isAffectedBySoulLoss(Player player, boolean hadRing) {
+    static boolean isAffectedBySoulLoss(@NotNull Player player, boolean hadRing) {
         boolean keepInventory = player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY);
         return switch (ELConfig.CONFIG.SEVEN_CURSES.soulCrystalsMode.get()) {
             case ALWAYS_LOSS -> true;
-            case NEED_CURSE_RING -> hadRing;
-            case NEED_CURSE_RING_AND_IGNORE_KEEPINVENTORY -> hadRing && !keepInventory;
+            case NEED_CURSE_RING -> hadRing && !keepInventory;
+            case NEED_CURSE_RING_AND_IGNORE_KEEPINVENTORY -> hadRing;
         };
     }
 
     static boolean canDropSoulCrystal(Player player, boolean hadRing) {
         if (isAffectedBySoulLoss(player, hadRing)) {
-            int maxCrystalLoss = 10;
+            int maxCrystalLoss = ELConfig.CONFIG.SEVEN_CURSES.maxSoulCrystalLoss.getAsInt();
             return SoulCrystal.getLostCrystals(player) < maxCrystalLoss;
         }
         return false;
     }
 
-    static void setCurrentWorldCursed(boolean cursed) {
+    static Optional<MinecraftServer> getSinglePlayerServer() {
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        if (server == null) return Optional.empty();
+        String serverName = Objects.requireNonNull(server.getSingleplayerProfile()).getName();
+        if (server.isSingleplayer() && Objects.equals(serverName, EnigmaticLegacy.PROXY.getClientUsername()))
+            return Optional.of(server);
+        return Optional.empty();
+    }
 
+    static void setCurrentWorldCursed(boolean cursed) {
+        getSinglePlayerServer().ifPresent(server -> {
+            File saveFolder = server.getWorldPath(LevelResource.ROOT).toFile();
+            EnigmaticTransience transience = EnigmaticTransience.read(saveFolder);
+            transience.setCursed(cursed);
+            transience.write(saveFolder);
+        });
+    }
+
+    static boolean isWorldCursed(File world) {
+        return EnigmaticTransience.read(world).isCursed();
     }
 
     static void setCurrentWorldFractured(boolean fractured) {
+        getSinglePlayerServer().ifPresent(server -> {
+            File saveFolder = server.getWorldPath(LevelResource.ROOT).toFile();
+            EnigmaticTransience transience = EnigmaticTransience.read(saveFolder);
+            transience.setPermanentlyDead(fractured);
+            transience.write(saveFolder);
+        });
+    }
 
+    static boolean isWorldFractured(File world) {
+        return EnigmaticTransience.read(world).isPermanentlyDead();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    static @NotNull File getSaveFolder(@NotNull LevelSummary summary) {
+        LevelStorageSource levels = Minecraft.getInstance().getLevelSource();
+        return new File(levels.getBaseDir().toFile(), summary.getLevelId());
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    static @NotNull Component getModdedInfo(@NotNull LevelSummary summary) {
+        Component info = summary.getInfo();
+        File world = getSaveFolder(summary);
+        boolean fractured = isWorldFractured(world);
+
+        if (summary.getGameMode() == GameType.SURVIVAL || fractured) {
+            String key = "gameMode.";
+            if (fractured) key += "fractured";
+            else if (isWorldCursed(world)) {
+                key += "cursed";
+                if (summary.isHardcore()) key += "Hardcore";
+            } else return info;
+            MutableComponent component = Component.translatable(key);
+            component.withStyle(info.getStyle());
+
+            if (info instanceof MutableComponent mutable) {
+                if (mutable.getContents() instanceof TranslatableContents) {
+                    info.getSiblings().forEach(component::append);
+                } else if (mutable.getContents() instanceof PlainTextContents.LiteralContents) {
+                    for (int i = 1; i < info.getSiblings().size(); i++) {
+                        component.append(info.getSiblings().get(i));
+                    }
+                }
+            }
+            return component;
+        }
+        return info;
     }
 
     static double getSufferingFraction(@Nullable LivingEntity livingEntity) {
@@ -282,7 +368,7 @@ public interface EnigmaticHandler {
             List<ResourceKey<MobEffect>> keys = holder.listElementIds().toList();
             for (ResourceKey<MobEffect> key : keys) {
                 MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(key);
-                if (effect != null && !effect.isBeneficial() && !effect.isInstantenous()) {
+                if (effect != null && !effect.getCategory().equals(MobEffectCategory.HARMFUL) && !effect.isInstantenous()) {
                     try {
                         DEBUFF_LIST.add(holder.getOrThrow(key));
                     } catch (Exception ignored) {
@@ -344,7 +430,7 @@ public interface EnigmaticHandler {
         ItemEnchantments mergedEnchants = EnchantmentHelper.getEnchantmentsForCrafting(mergeFrom);
         ItemEnchantments.Mutable builder = new ItemEnchantments.Mutable(inputEnchants);
 
-        for(Holder<Enchantment> mergedEnchantHolder : mergedEnchants.keySet()) {
+        for (Holder<Enchantment> mergedEnchantHolder : mergedEnchants.keySet()) {
             Enchantment mergedEnchant = mergedEnchantHolder.value();
             int inputEnchantLevel = inputEnchants.getLevel(mergedEnchantHolder);
             int mergedEnchantLevel = mergedEnchants.getLevel(mergedEnchantHolder);
@@ -359,7 +445,7 @@ public interface EnigmaticHandler {
             boolean compatible = input.supportsEnchantment(mergedEnchantHolder);
             if (input.getItem() instanceof EnchantedBookItem) compatible = true;
 
-            for(Holder<Enchantment> originalEnchant : inputEnchants.keySet()) {
+            for (Holder<Enchantment> originalEnchant : inputEnchants.keySet()) {
                 if (originalEnchant != mergedEnchantHolder && mergedEnchant.exclusiveSet().contains(originalEnchant)) {
                     compatible = false;
                 }

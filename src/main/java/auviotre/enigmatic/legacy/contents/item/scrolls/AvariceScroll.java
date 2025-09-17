@@ -4,6 +4,7 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -17,7 +18,8 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
@@ -29,7 +31,6 @@ public class AvariceScroll extends CursedCurioItem {
 
     public AvariceScroll() {
         super(defaultSingleProperties().rarity(Rarity.RARE).fireResistant());
-        NeoForge.EVENT_BUS.register(this);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -52,11 +53,6 @@ public class AvariceScroll extends CursedCurioItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
-
-    public boolean canEquip(SlotContext context, ItemStack stack) {
-        return super.canEquip(context, stack) && EnigmaticHandler.isTheCursedOne(context.entity());
-    }
-
     public int getFortuneLevel(SlotContext slotContext, LootContext lootContext, ItemStack curio) {
         return super.getFortuneLevel(slotContext, lootContext, curio) + 1;
     }
@@ -72,14 +68,18 @@ public class AvariceScroll extends CursedCurioItem {
     }
 
 
-    @SubscribeEvent
-    public void onLivingDrops(@NotNull LivingDropsEvent event) {
-        LivingEntity victim = event.getEntity();
-        if (event.isRecentlyHit() && event.getSource().getEntity() != null && event.getSource().getEntity() instanceof LivingEntity attacker) {
-            if (EnigmaticHandler.hasCurio(attacker, this) && attacker.getRandom().nextFloat() < 0.15F) {
-                ItemEntity itemEntity = new ItemEntity(victim.level(), victim.getX(), victim.getY(), victim.getZ(), Items.EMERALD.getDefaultInstance());
-                itemEntity.setDefaultPickUpDelay();
-                event.getDrops().add(itemEntity);
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onLivingDrops(@NotNull LivingDropsEvent event) {
+            LivingEntity victim = event.getEntity();
+            if (event.isRecentlyHit() && event.getSource().getEntity() != null && event.getSource().getEntity() instanceof LivingEntity attacker) {
+                if (EnigmaticHandler.hasCurio(attacker, EnigmaticItems.AVARICE_SCROLL) && attacker.getRandom().nextFloat() < 0.15F) {
+                    ItemEntity itemEntity = new ItemEntity(victim.level(), victim.getX(), victim.getY(), victim.getZ(), Items.EMERALD.getDefaultInstance());
+                    itemEntity.setDefaultPickUpDelay();
+                    event.getDrops().add(itemEntity);
+                }
             }
         }
     }

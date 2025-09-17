@@ -22,8 +22,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class TaintingCategory implements IRecipeCategory<TaintingCategory.Recipe> {
     private final IDrawable icon;
+
     public TaintingCategory(IGuiHelper guiHelper) {
         this.icon = guiHelper.createDrawableItemLike(EnigmaticItems.EARTH_HEART);
+    }
+
+    @Contract("_, _ -> new")
+    public static @NotNull Recipe create(ItemStack input, Ingredient condition) {
+        return new Recipe(input, condition);
     }
 
     public RecipeType<Recipe> getRecipeType() {
@@ -34,7 +40,7 @@ public class TaintingCategory implements IRecipeCategory<TaintingCategory.Recipe
         return Component.translatable("gui.enigmaticlegacy.jei.tainting");
     }
 
-    public  IDrawable getIcon() {
+    public IDrawable getIcon() {
         return this.icon;
     }
 
@@ -56,11 +62,6 @@ public class TaintingCategory implements IRecipeCategory<TaintingCategory.Recipe
         if (output.getItem() instanceof ITaintable) output.set(EnigmaticComponents.TAINTABLE.get(), true);
         builder.addOutputSlot(79, 13).addItemStack(output).setStandardSlotBackground();
         builder.addSlot(RecipeIngredientRole.CATALYST, 46, 23).addIngredients(recipe.condition());
-    }
-
-    @Contract("_, _ -> new")
-    public static @NotNull Recipe create(ItemStack input, Ingredient condition) {
-        return new Recipe(input, condition);
     }
 
     public record Recipe(ItemStack input, Ingredient condition) {

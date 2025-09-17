@@ -6,6 +6,7 @@ import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.packets.toServer.UpdateElytraBoostPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.illusivesoulworks.caelus.api.CaelusApi;
 import net.minecraft.client.Minecraft;
@@ -30,7 +31,8 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
@@ -42,10 +44,10 @@ public class MajesticElytra extends BaseCurioItem implements Equipable {
     private static final AttributeModifier ELYTRA_MODIFIER = new AttributeModifier(LOCATION, 1.0, AttributeModifier.Operation.ADD_VALUE);
     @OnlyIn(Dist.CLIENT)
     private static boolean isBoosting;
+
     public MajesticElytra() {
-        super(defaultSingleProperties().fireResistant().rarity(Rarity.RARE).durability(3476));
+        super(defaultSingleProperties().fireResistant().rarity(Rarity.RARE).durability(3476).component(EnigmaticComponents.ETHERIUM_TOOL, 4));
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
-        NeoForge.EVENT_BUS.register(this);
     }
 
     public static ItemStack get(LivingEntity entity) {
@@ -57,23 +59,16 @@ public class MajesticElytra extends BaseCurioItem implements Equipable {
         }
     }
 
-    public void curioTick(@NotNull SlotContext context, ItemStack stack) {
-        if (context.entity() instanceof Player player && player.level().isClientSide()) this.handleBoosting(player);
-        LivingEntity livingEntity = context.entity();
-        int ticks = livingEntity.getFallFlyingTicks();
-        if (ticks > 0 && livingEntity.isFallFlying()) stack.elytraFlightTick(livingEntity, ticks);
-    }
-
     @OnlyIn(Dist.CLIENT)
-    private void handleBoosting(Player player) {
+    private static void handleBoosting(Player player) {
         if (Minecraft.getInstance().player != player) return;
 
-        if (Minecraft.getInstance().options.keyJump.isDown() && this.flyingBoost(player)) {
+        if (Minecraft.getInstance().options.keyJump.isDown() && flyingBoost(player)) {
             if (!isBoosting) PacketDistributor.sendToServer(new UpdateElytraBoostPacket(isBoosting = true));
         } else if (isBoosting) PacketDistributor.sendToServer(new UpdateElytraBoostPacket(isBoosting = false));
     }
 
-    private boolean flyingBoost(Player player) {
+    private static boolean flyingBoost(Player player) {
         if (player.isFallFlying()) {
             Vec3 lookAngle = player.getLookAngle();
             Vec3 movement = player.getDeltaMovement();
@@ -81,6 +76,13 @@ public class MajesticElytra extends BaseCurioItem implements Equipable {
             return true;
         }
         return false;
+    }
+
+    public void curioTick(@NotNull SlotContext context, ItemStack stack) {
+        if (context.entity() instanceof Player player && player.level().isClientSide()) handleBoosting(player);
+        LivingEntity livingEntity = context.entity();
+        int ticks = livingEntity.getFallFlyingTicks();
+        if (ticks > 0 && livingEntity.isFallFlying()) stack.elytraFlightTick(livingEntity, ticks);
     }
 
     public boolean elytraFlightTick(ItemStack stack, @NotNull LivingEntity entity, int flightTicks) {
@@ -92,13 +94,14 @@ public class MajesticElytra extends BaseCurioItem implements Equipable {
                 }
                 entity.gameEvent(GameEvent.ELYTRA_GLIDE);
             }
-        } else if (entity instanceof Player player) this.handleBoosting(player);
+        } else if (entity instanceof Player player) handleBoosting(player);
         return true;
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         return this.swapWithEquipmentSlot(this, level, player, hand);
     }
+
     public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return repair.is(EnigmaticItems.ETHERIUM_INGOT);
     }
@@ -123,46 +126,50 @@ public class MajesticElytra extends BaseCurioItem implements Equipable {
         return true;
     }
 
-    @SubscribeEvent
-    public void onTick(PlayerTickEvent.@NotNull Pre event) {
-        Player player = event.getEntity();
-        EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
-        ItemStack stack = ItemStack.EMPTY;
-        AttributeInstance attribute = player.getAttribute(CaelusApi.getInstance().getFallFlyingAttribute());
-        if (attribute != null) {
-            attribute.removeModifier(ELYTRA_MODIFIER);
-            if (!attribute.hasModifier(LOCATION)) {
-                stack = get(player);
-                if (stack.is(this) && ElytraItem.isFlyEnabled(stack)) {
-                    attribute.addTransientModifier(ELYTRA_MODIFIER);
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onTick(PlayerTickEvent.@NotNull Pre event) {
+            Player player = event.getEntity();
+            EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
+            ItemStack stack = ItemStack.EMPTY;
+            AttributeInstance attribute = player.getAttribute(CaelusApi.getInstance().getFallFlyingAttribute());
+            if (attribute != null) {
+                attribute.removeModifier(ELYTRA_MODIFIER);
+                if (!attribute.hasModifier(LOCATION)) {
+                    stack = get(player);
+                    if (stack.is(EnigmaticItems.MAJESTIC_ELYTRA) && ElytraItem.isFlyEnabled(stack)) {
+                        attribute.addTransientModifier(ELYTRA_MODIFIER);
+                    }
                 }
             }
-        }
 
-        if (player instanceof ServerPlayer) {
-            if (data.isElytraBoosting()) {
-                this.flyingBoost(player);
-                if (stack.is(this)) {
-                    int flightTicks = player.getFallFlyingTicks();
-                    int nextFlightTick = flightTicks + 1;
-                    if (nextFlightTick % 5 == 0) stack.hurtAndBreak(1, player, EquipmentSlot.CHEST);
+            if (player instanceof ServerPlayer) {
+                if (data.isElytraBoosting()) {
+                    flyingBoost(player);
+                    if (stack.is(EnigmaticItems.MAJESTIC_ELYTRA)) {
+                        int flightTicks = player.getFallFlyingTicks();
+                        int nextFlightTick = flightTicks + 1;
+                        if (nextFlightTick % 5 == 0) stack.hurtAndBreak(1, player, EquipmentSlot.CHEST);
+                    }
                 }
             }
-        }
 
-        if (player.level().isClientSide()) {
-            if (data.isElytraBoosting()) {
-                if (!player.isFallFlying()) {
-                    if (player == Minecraft.getInstance().player) this.handleBoosting(player);
-                    else data.setElytraBoosting(false);
-                    return;
-                }
-                int amount = 3;
-                double rangeModifier = 0.1;
-                for (int counter = 0; counter <= amount; counter++) {
-                    Vec3 pos = player.position();
-                    pos = pos.add(Math.random() - 0.5, -1.0 + Math.random() - 0.5, Math.random() - 0.5);
-                    player.level().addParticle(ParticleTypes.DRAGON_BREATH, true, pos.x, pos.y, pos.z, ((Math.random()-0.5D)*2.0D)*rangeModifier, ((Math.random()-0.5D)*2.0D)*rangeModifier, ((Math.random()-0.5D)*2.0D)*rangeModifier);
+            if (player.level().isClientSide()) {
+                if (data.isElytraBoosting()) {
+                    if (!player.isFallFlying()) {
+                        if (player == Minecraft.getInstance().player) handleBoosting(player);
+                        else data.setElytraBoosting(false);
+                        return;
+                    }
+                    int amount = 3;
+                    double rangeModifier = 0.1;
+                    for (int counter = 0; counter <= amount; counter++) {
+                        Vec3 pos = player.position();
+                        pos = pos.add(Math.random() - 0.5, -1.0 + Math.random() - 0.5, Math.random() - 0.5);
+                        player.level().addParticle(ParticleTypes.DRAGON_BREATH, true, pos.x, pos.y, pos.z, ((Math.random() - 0.5D) * 2.0D) * rangeModifier, ((Math.random() - 0.5D) * 2.0D) * rangeModifier, ((Math.random() - 0.5D) * 2.0D) * rangeModifier);
+                    }
                 }
             }
         }

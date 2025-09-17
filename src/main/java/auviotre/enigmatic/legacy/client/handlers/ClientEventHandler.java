@@ -1,9 +1,6 @@
 package auviotre.enigmatic.legacy.client.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.api.item.IBlessed;
-import auviotre.enigmatic.legacy.api.item.ICursed;
-import auviotre.enigmatic.legacy.api.item.IEldritch;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
@@ -28,7 +25,6 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.FogType;
 import net.neoforged.api.distmarker.Dist;
@@ -57,14 +53,13 @@ public class ClientEventHandler {
     private static void onTooltipRendering(RenderTooltipEvent.@NotNull Color event) {
         ItemStack stack = event.getItemStack();
         if (!stack.isEmpty()) {
-            Item item = stack.getItem();
             LocalPlayer player = Minecraft.getInstance().player;
-            if (item instanceof ICursed) {
-                if (item instanceof IBlessed && player != null && EnigmaticHandler.isTheBlessedOne(player)) {
+            if (EnigmaticHandler.isCursedItem(stack)) {
+                if (false && player != null && EnigmaticHandler.isTheBlessedOne(player)) {
                     event.setBackground(0xF0201A10);
                     event.setBorderStart(0x90800C00);
                     event.setBorderEnd(0x80FFA632);
-                } else if (item instanceof IEldritch) {
+                } else if (EnigmaticHandler.isEldritchItem(stack)) {
                     event.setBackground(0xF0201020);
                     event.setBorderStart(0xF08F609A);
                     event.setBorderEnd(0x805A3A7A);
@@ -74,6 +69,11 @@ public class ClientEventHandler {
                     event.setBorderEnd(0x70901000);
                 }
             }
+            if (stack.is(EnigmaticItems.CURSED_RING)) {
+                event.setBackground(0xF0201010);
+                event.setBorderStart(0xF0A01000);
+                event.setBorderEnd(0x70901000);
+            }
         }
     }
 
@@ -81,12 +81,14 @@ public class ClientEventHandler {
     private static void onTooltip(@NotNull ItemTooltipEvent event) {
         Player player = event.getEntity();
         if (player != null && !player.hasInfiniteMaterials()) {
-            if (event.getItemStack().getItem() instanceof ICursed) {
+            if (EnigmaticHandler.isCursedItem(event.getItemStack())) {
                 if (!EnigmaticHandler.isTheCursedOne(player)) {
                     event.getToolTip().replaceAll(component -> {
                         if (component.getContents() instanceof TranslatableContents locations) {
-                            if (locations.getKey().startsWith("tooltip.enigmaticlegacy.cursedOnesOnly")) return component;
-                            if (locations.getKey().startsWith("tooltip.enigmaticlegacy.worthyOnesOnly")) return component;
+                            if (locations.getKey().startsWith("tooltip.enigmaticlegacy.cursedOnesOnly"))
+                                return component;
+                            if (locations.getKey().startsWith("tooltip.enigmaticlegacy.worthyOnesOnly"))
+                                return component;
                         }
 
                         return Component.literal(TooltipHandler.obscureString(component.getString(), player.getRandom())).withStyle(component.getStyle());

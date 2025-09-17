@@ -24,11 +24,13 @@ public record UpdateElytraBoostPacket(boolean boosting) implements CustomPacketP
             context.enqueueWork(() -> {
                 final Player player = context.player();
                 if (player instanceof ServerPlayer serverPlayer) {
-                    if (packet.boosting) player.level().playSound(null, player.getX(), player.getY(), player.getZ(), EnigmaticSounds.ACCELERATE, SoundSource.AMBIENT, 3.0F, 1.0F);
+                    if (packet.boosting)
+                        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), EnigmaticSounds.ACCELERATE, SoundSource.AMBIENT, 3.0F, 1.0F);
                     EnigmaticData data = serverPlayer.getData(EnigmaticAttachments.ENIGMATIC_DATA);
                     boolean wasBoosting = data.isElytraBoosting();
                     data.setElytraBoosting(packet.boosting);
-                    if (wasBoosting != packet.boosting) PacketDistributor.sendToPlayer(serverPlayer, new EnigmaticDataSyncPacket(data.save()));
+                    if (wasBoosting != packet.boosting)
+                        PacketDistributor.sendToPlayer(serverPlayer, new EnigmaticDataSyncPacket(data.save()));
                 }
             });
         }

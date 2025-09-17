@@ -31,19 +31,25 @@ import java.util.List;
 
 @Mixin(EnchantmentMenu.class)
 public abstract class MixinEnchantmentMenu extends AbstractContainerMenu {
-    @Shadow @Final private Container enchantSlots;
-
-    @Shadow @Final public int[] costs;
-
-    @Shadow @Final private ContainerLevelAccess access;
-
-    @Shadow protected abstract List<EnchantmentInstance> getEnchantmentList(RegistryAccess registryAccess, ItemStack stack, int slot, int cost);
-
-    @Shadow @Final private DataSlot enchantmentSeed;
+    @Shadow
+    @Final
+    public int[] costs;
+    @Shadow
+    @Final
+    private Container enchantSlots;
+    @Shadow
+    @Final
+    private ContainerLevelAccess access;
+    @Shadow
+    @Final
+    private DataSlot enchantmentSeed;
 
     protected MixinEnchantmentMenu(@Nullable MenuType<?> menuType, int containerId) {
         super(menuType, containerId);
     }
+
+    @Shadow
+    protected abstract List<EnchantmentInstance> getEnchantmentList(RegistryAccess registryAccess, ItemStack stack, int slot, int cost);
 
     @Inject(at = @At("HEAD"), method = "clickMenuButton", cancellable = true)
     private void onEnchantedItem(Player player, int id, CallbackInfoReturnable<Boolean> info) {

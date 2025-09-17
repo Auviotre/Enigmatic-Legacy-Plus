@@ -68,7 +68,7 @@ public record ELChestLoot(HolderLookup.Provider registries) implements LootTable
         );
         output.accept(Chests.ANGEL_BLESSING,
                 LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                        .add(LootItem.lootTableItem(EnigmaticItems.OCEAN_STONE).when(LootItemRandomChanceCondition.randomChance(0.135F)))
+                        .add(LootItem.lootTableItem(EnigmaticItems.ANGEL_BLESSING).when(LootItemRandomChanceCondition.randomChance(0.135F)))
                 )
         );
         output.accept(Chests.VOID_PEARL,

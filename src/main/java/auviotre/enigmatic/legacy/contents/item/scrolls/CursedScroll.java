@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.scrolls;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -20,14 +21,14 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -35,7 +36,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CursedScroll extends CursedCurioItem {
     public CursedScroll() {
         super(defaultSingleProperties().rarity(Rarity.RARE));
-        NeoForge.EVENT_BUS.register(this);
     }
 
     public static int getCurseAmount(LivingEntity entity) {
@@ -84,33 +84,33 @@ public class CursedScroll extends CursedCurioItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
-    public boolean canEquip(@NotNull SlotContext context, ItemStack stack) {
-        return EnigmaticHandler.isTheCursedOne(context.entity()) && super.canEquip(context, stack);
-    }
-
-    @SubscribeEvent
-    public void getBreakSpeed(PlayerEvent.@NotNull BreakSpeed event) {
-        LivingEntity entity = event.getEntity();
-        if (EnigmaticHandler.hasCurio(entity, this)) {
-            float multiplier = getCurseAmount(entity) * 0.04F;
-            event.setNewSpeed(event.getOriginalSpeed() * multiplier + event.getNewSpeed());
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void getBreakSpeed(PlayerEvent.@NotNull BreakSpeed event) {
+            LivingEntity entity = event.getEntity();
+            if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.CURSED_SCROLL)) {
+                float multiplier = getCurseAmount(entity) * 0.04F;
+                event.setNewSpeed(event.getOriginalSpeed() * multiplier + event.getNewSpeed());
+            }
         }
-    }
 
-    @SubscribeEvent
-    public void onDamage(LivingDamageEvent.@NotNull Pre event) {
-        if (event.getSource().getEntity() instanceof LivingEntity entity && EnigmaticHandler.hasCurio(entity, this)) {
-            float multiplier = getCurseAmount(entity) * 0.04F + 1;
-            event.setNewDamage(event.getNewDamage() * multiplier);
+        @SubscribeEvent
+        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getSource().getEntity() instanceof LivingEntity entity && EnigmaticHandler.hasCurio(entity, EnigmaticItems.CURSED_SCROLL)) {
+                float multiplier = getCurseAmount(entity) * 0.04F + 1;
+                event.setNewDamage(event.getNewDamage() * multiplier);
+            }
         }
-    }
 
-    @SubscribeEvent
-    public void onHeal(@NotNull LivingHealEvent event) {
-        LivingEntity entity = event.getEntity();
-        if (EnigmaticHandler.hasCurio(entity, this)) {
-            float multiplier = getCurseAmount(entity) * 0.04F + 1;
-            event.setAmount(event.getAmount() * multiplier);
+        @SubscribeEvent
+        private static void onHeal(@NotNull LivingHealEvent event) {
+            LivingEntity entity = event.getEntity();
+            if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.CURSED_SCROLL)) {
+                float multiplier = getCurseAmount(entity) * 0.04F + 1;
+                event.setAmount(event.getAmount() * multiplier);
+            }
         }
     }
 }

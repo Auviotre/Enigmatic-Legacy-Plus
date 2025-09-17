@@ -20,13 +20,15 @@ public class ELEnchantmentTags extends EnchantmentTagsProvider {
     }
 
     protected void addTags(HolderLookup.Provider provider) {
-        this.tag(EnchantmentTags.CURSE).add(NEMESIS_CURSE, SORROW_CURSE, ETERNAL_BINDING);
-        this.tag(EnchantmentTags.TREASURE).add(NEMESIS_CURSE, SORROW_CURSE, ETERNAL_BINDING);
+        this.tag(EnchantmentTags.CURSE).add(NEMESIS_CURSE, SORROW_CURSE, ETERNAL_BINDING_CURSE);
+        this.tag(EnchantmentTags.TREASURE).add(NEMESIS_CURSE, SORROW_CURSE, ETERNAL_BINDING_CURSE);
         this.tag(EnchantmentTags.NON_TREASURE).add(SLAYER, WRATH, CEASELESS, SHARPSHOOTER);
         this.tag(EnchantmentTags.DAMAGE_EXCLUSIVE).add(SLAYER, WRATH);
         this.tag(EnchantmentTags.RIPTIDE_EXCLUSIVE).add(WRATH);
         this.tag(EnchantmentTags.BOW_EXCLUSIVE).add(CEASELESS);
+        this.tag(EnchantmentTags.ON_RANDOM_LOOT).add(ETERNAL_BINDING_CURSE);
+        this.tag(EnchantmentTags.TRADEABLE).add(ETERNAL_BINDING_CURSE);
 
-        this.tag(EnigmaticTags.Enchantments.BINDING_CURSE_EXCLUSIVE).add(Enchantments.BINDING_CURSE, Enchantments.VANISHING_CURSE, ETERNAL_BINDING);
+        this.tag(EnigmaticTags.Enchantments.BINDING_CURSE_EXCLUSIVE).add(Enchantments.BINDING_CURSE, Enchantments.VANISHING_CURSE, ETERNAL_BINDING_CURSE);
     }
 }

@@ -8,11 +8,11 @@
           "type": "minecraft:item",
           "conditions": [
             {
-              "chance": 0.09,
+              "chance": 0.135,
               "condition": "minecraft:random_chance"
             }
           ],
-          "name": "enigmaticlegacyplus:ocean_stone"
+          "name": "enigmaticlegacyplus:angel_blessing"
         }
       ],
       "rolls": 1.0

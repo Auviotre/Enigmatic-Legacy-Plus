@@ -35,15 +35,24 @@ public class ELItemTags extends ItemTagsProvider {
         );
         this.tag(ItemTags.LECTERN_BOOKS).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_INFINITUM.get());
         this.tag(ItemTags.VANISHING_ENCHANTABLE).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_INFINITUM.get(), INFERNAL_SHIELD.get());
-        this.tag(ItemTags.DURABILITY_ENCHANTABLE).add(INFERNAL_SHIELD.get(), MAJESTIC_ELYTRA.get());
+        this.tag(ItemTags.DURABILITY_ENCHANTABLE).add(INFERNAL_SHIELD.get(), MAJESTIC_ELYTRA.get(), ETHERIUM_HAMMER.get());
         this.tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(MAJESTIC_ELYTRA.get());
-        this.tag(ItemTags.SWORDS).add(EXECUTION_AXE.get(), ENDER_SLAYER.get());
+        this.tag(ItemTags.SWORDS).add(EXECUTION_AXE.get(), ENDER_SLAYER.get(), ETHERIUM_SWORD.get());
         this.tag(ItemTags.SWORD_ENCHANTABLE).add(THE_INFINITUM.get());
+        this.tag(ItemTags.MINING_ENCHANTABLE).add(ETHERIUM_HAMMER.get());
+        this.tag(ItemTags.MINING_LOOT_ENCHANTABLE).add(ETHERIUM_HAMMER.get());
+        this.tag(ItemTags.WEAPON_ENCHANTABLE).add(ETHERIUM_HAMMER.get());
+        this.tag(ItemTags.HEAD_ARMOR).add(ETHERIUM_HELMET.get());
+        this.tag(ItemTags.CHEST_ARMOR).add(ETHERIUM_CHESTPLATE.get());
+        this.tag(ItemTags.LEG_ARMOR).add(ETHERIUM_LEGGINGS.get());
+        this.tag(ItemTags.FOOT_ARMOR).add(ETHERIUM_BOOTS.get());
+
         this.tag(Tags.Items.RAW_MATERIALS).add(RAW_ETHERIUM.get());
-        this.tag(Tags.Items.INGOTS).add(ETHERIUM_INGOT.get());
+        this.tag(Tags.Items.INGOTS).add(ETHERIUM_INGOT.get(), EVIL_INGOT.get());
         this.tag(Tags.Items.NUGGETS).add(ETHERIUM_NUGGET.get());
         this.tag(Tags.Items.TOOLS_SHIELD).add(INFERNAL_SHIELD.get());
         this.tag(Tags.Items.RODS).add(ENDER_ROD.get());
+        this.tag(Tags.Items.MINING_TOOL_TOOLS).add(ETHERIUM_HAMMER.get());
 
         this.tag(EnigmaticTags.Items.ARMOR_CHECK_EXCLUSION).add(Items.ELYTRA, MAJESTIC_ELYTRA.get());
         this.tag(EnigmaticTags.Items.BYPASS_FOURTH_CURSE).add(
@@ -77,10 +86,11 @@ public class ELItemTags extends ItemTagsProvider {
                 .addOptionalTag(CuriosTags.HANDS)
                 .addOptionalTag(CuriosTags.HEAD)
                 .addOptionalTag(CuriosTags.NECKLACE);
+        this.tag(ItemTags.VANISHING_ENCHANTABLE).addTag(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE);
 
         this.tag(CuriosTags.RING).add(
                 IRON_RING.get(), GOLDEN_RING.get(), MAGNET_RING.get(), DISLOCATION_RING.get(),
-                QUARTZ_RING.get(), ENDER_RING.get(), CURSED_RING.get()
+                QUARTZ_RING.get(), ENDER_RING.get(), CURSED_RING.get(), DESOLATION_RING.get()
         );
         this.tag(CuriosTags.CHARM).add(
                 UNWITNESSED_AMULET.get(),

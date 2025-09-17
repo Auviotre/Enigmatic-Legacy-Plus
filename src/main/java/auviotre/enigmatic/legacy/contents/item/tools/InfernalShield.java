@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -17,9 +18,10 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +31,6 @@ public class InfernalShield extends BaseCursedItem {
     public InfernalShield() {
         super(defaultSingleProperties().fireResistant().rarity(Rarity.RARE).durability(Tiers.NETHERITE.getUses()));
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
-        NeoForge.EVENT_BUS.register(this);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -80,16 +81,20 @@ public class InfernalShield extends BaseCursedItem {
         return 16;
     }
 
-    @SubscribeEvent
-    public void onEntityHurt(LivingDamageEvent.@NotNull Pre event) {
-        LivingEntity victim = event.getEntity();
-        if (event.getSource().getEntity() != null) {
-            if (victim.getUseItem().getItem() instanceof InfernalShield) {
-                Vec3 sourcePos = event.getSource().getSourcePosition();
-                if (sourcePos != null) {
-                    Vec3 viewVec = victim.calculateViewVector(0.0F, victim.getYHeadRot());
-                    Vec3 sourceToSelf = sourcePos.vectorTo(victim.position());
-                    if (sourceToSelf.dot(viewVec) > 0.0D) event.setNewDamage(event.getNewDamage() * 1.5F);
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            LivingEntity victim = event.getEntity();
+            if (event.getSource().getEntity() != null) {
+                if (victim.getUseItem().getItem() instanceof InfernalShield) {
+                    Vec3 sourcePos = event.getSource().getSourcePosition();
+                    if (sourcePos != null) {
+                        Vec3 viewVec = victim.calculateViewVector(0.0F, victim.getYHeadRot());
+                        Vec3 sourceToSelf = sourcePos.vectorTo(victim.position());
+                        if (sourceToSelf.dot(viewVec) > 0.0D) event.setNewDamage(event.getNewDamage() * 1.5F);
+                    }
                 }
             }
         }

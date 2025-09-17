@@ -1,8 +1,0 @@
-// 1.21.1	2025-09-03T15:03:21.8546925	Tags for minecraft:enchantment mod id enigmaticlegacyplus
-255acbdbad71c9c196533997dfcda0e58a9007c1 data/enigmaticlegacyplus/tags/enchantment/binding_curse_exclusive.json
-81c749e0de113f83b8fc931c5f8daf3d005a861a data/minecraft/tags/enchantment/curse.json
-0537105f76579029cd8c3ea030f95fcfd4e2dc72 data/minecraft/tags/enchantment/exclusive_set/bow.json
-9a38ebcfb82a4bed7f8aa1490d4277d1420fec7f data/minecraft/tags/enchantment/exclusive_set/damage.json
-e8df22225976e6f1e323355bdab4774fa09688d9 data/minecraft/tags/enchantment/exclusive_set/riptide.json
-90c7f3ec17022f54491b5a0a736c9375ddf6f77f data/minecraft/tags/enchantment/non_treasure.json
-81c749e0de113f83b8fc931c5f8daf3d005a861a data/minecraft/tags/enchantment/treasure.json

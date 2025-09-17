@@ -1,7 +1,9 @@
 package auviotre.enigmatic.legacy.contents.item.rings;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -14,18 +16,16 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 
 public class QuartzRing extends BaseCurioItem {
-    public QuartzRing() {
-        super();
-        NeoForge.EVENT_BUS.register(this);
-    }
 
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
@@ -40,11 +40,15 @@ public class QuartzRing extends BaseCurioItem {
         return builder.build();
     }
 
-    @SubscribeEvent
-    public void onDamage(LivingDamageEvent.Pre event) {
-        LivingEntity entity = event.getEntity();
-        if (EnigmaticHandler.hasCurio(entity, this) && event.getSource().is(Tags.DamageTypes.IS_MAGIC)) {
-            event.setNewDamage(event.getNewDamage() * 0.75F);
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            LivingEntity entity = event.getEntity();
+            if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.QUARTZ_RING) && event.getSource().is(Tags.DamageTypes.IS_MAGIC)) {
+                event.setNewDamage(event.getNewDamage() * 0.75F);
+            }
         }
     }
 }

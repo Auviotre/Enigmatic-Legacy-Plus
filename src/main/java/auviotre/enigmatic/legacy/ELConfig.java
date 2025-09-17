@@ -40,6 +40,8 @@ public class ELConfig {
         public final ModConfigSpec.BooleanValue enableSpecialDrops;
         public final ModConfigSpec.BooleanValue autoEquip;
         public final ModConfigSpec.BooleanValue ultraHardcore;
+        ;
+        public final ModConfigSpec.IntValue maxSoulCrystalLoss;
 
         SevenCurses(ModConfigSpec.Builder builder) {
             builder.push("sevenCurses");
@@ -56,6 +58,7 @@ public class ELConfig {
             enableSpecialDrops = builder.define("enableSpecialDrops", true);
             autoEquip = builder.define("autoEquip", false);
             ultraHardcore = builder.define("ultraHardcore", false);
+            maxSoulCrystalLoss = builder.defineInRange("maxSoulCrystalLoss", 9, 0, 10);
             builder.pop();
         }
     }
@@ -83,7 +86,8 @@ public class ELConfig {
         public final ModConfigSpec.DoubleValue ABVulnerabilityModifier;
         // EyeOfNebula
         public final ModConfigSpec.IntValue magicBoost;
-        public final ModConfigSpec.IntValue magicResistance;;
+        public final ModConfigSpec.IntValue magicResistance;
+        ;
         public final ModConfigSpec.IntValue dodgeProbability;
         public final ModConfigSpec.IntValue attackEmpower;
         public final ModConfigSpec.DoubleValue EONVulnerabilityModifier;
@@ -93,6 +97,7 @@ public class ELConfig {
         public final ModConfigSpec.IntValue witheringLevel;
         public final ModConfigSpec.DoubleValue witheringTime;
         public final ModConfigSpec.IntValue undeadProbability;
+
         Spellstones(ModConfigSpec.Builder builder) {
             builder.push("spellstone");
 
@@ -119,15 +124,15 @@ public class ELConfig {
             builder.pop();
 
             builder.push("angelBlessing");
-            deflectChance = builder.defineInRange("deflectChance", 40, 0 ,100);
+            deflectChance = builder.defineInRange("deflectChance", 40, 0, 100);
             ABVulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
             builder.pop();
 
             builder.push("eyeOfNebula");
-            magicBoost = builder.defineInRange("magicBoost", 40, 0 ,100);
-            magicResistance = builder.defineInRange("magicResistance", 65, 0 ,100);
-            dodgeProbability = builder.defineInRange("dodgeProbability", 15, 0 ,100);
-            attackEmpower = builder.defineInRange("attackEmpower", 150, 0 ,1000);
+            magicBoost = builder.defineInRange("magicBoost", 40, 0, 100);
+            magicResistance = builder.defineInRange("magicResistance", 65, 0, 100);
+            dodgeProbability = builder.defineInRange("dodgeProbability", 15, 0, 100);
+            attackEmpower = builder.defineInRange("attackEmpower", 150, 0, 1000);
             EONVulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
             builder.pop();
 
@@ -152,6 +157,7 @@ public class ELConfig {
         public final ModConfigSpec.DoubleValue BEAttackSpeed;
         public final ModConfigSpec.DoubleValue BEMovementSpeed;
         public final ModConfigSpec.DoubleValue BEDamageResistance;
+
         CursedItems(ModConfigSpec.Builder builder) {
             builder.push("cursedItems");
             builder.push("TheTwist");
@@ -178,6 +184,7 @@ public class ELConfig {
         public final ModConfigSpec.IntValue enderButtonOffsetY;
         public final ModConfigSpec.IntValue enderButtonOffsetXCreative;
         public final ModConfigSpec.IntValue enderButtonOffsetYCreative;
+
         Else(ModConfigSpec.Builder builder) {
             builder.push("else");
             magnetRingRange = builder.defineInRange("magnetRingRange", 8.0, 1.0, 256.0);

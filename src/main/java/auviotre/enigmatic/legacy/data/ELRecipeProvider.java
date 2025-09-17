@@ -228,6 +228,40 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .unlockedBy("has_item", has(EnigmaticItems.ETHERIUM_INGOT))
                 .save(output);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, EnigmaticItems.ETHERIUM_SWORD)
+                .pattern(" X ").pattern("DXD").pattern(" R ")
+                .define('D', Items.DIAMOND)
+                .define('X', EnigmaticItems.ETHERIUM_INGOT)
+                .define('R', EnigmaticItems.ENDER_ROD)
+                .unlockedBy("has_item", has(EnigmaticItems.ETHERIUM_INGOT))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, EnigmaticItems.ETHERIUM_HAMMER)
+                .pattern("XXX").pattern("XRX").pattern(" R ")
+                .define('X', EnigmaticItems.ETHERIUM_INGOT)
+                .define('R', EnigmaticItems.ENDER_ROD)
+                .unlockedBy("has_item", has(EnigmaticItems.ETHERIUM_INGOT))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, EnigmaticItems.ETHERIUM_HELMET)
+                .pattern("XXX").pattern("X X")
+                .define('X', EnigmaticItems.ETHERIUM_INGOT)
+                .unlockedBy("has_item", has(EnigmaticItems.ETHERIUM_INGOT))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, EnigmaticItems.ETHERIUM_CHESTPLATE)
+                .pattern("X X").pattern("XXX").pattern("XXX")
+                .define('X', EnigmaticItems.ETHERIUM_INGOT)
+                .unlockedBy("has_item", has(EnigmaticItems.ETHERIUM_INGOT))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, EnigmaticItems.ETHERIUM_LEGGINGS)
+                .pattern("XXX").pattern("X X").pattern("X X")
+                .define('X', EnigmaticItems.ETHERIUM_INGOT)
+                .unlockedBy("has_item", has(EnigmaticItems.ETHERIUM_INGOT))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, EnigmaticItems.ETHERIUM_BOOTS)
+                .pattern("X X").pattern("X X")
+                .define('X', EnigmaticItems.ETHERIUM_INGOT)
+                .unlockedBy("has_item", has(EnigmaticItems.ETHERIUM_INGOT))
+                .save(output);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, EnigmaticItems.MAJESTIC_ELYTRA)
                 .pattern("BAB").pattern("EXE").pattern("DVD")
                 .define('A', EnigmaticItems.ANGEL_BLESSING).define('D', EnigmaticItems.ASTRAL_DUST)
@@ -249,6 +283,12 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .define('T', Items.GHAST_TEAR).define('B', Items.BLAZE_POWDER).define('R', Items.REDSTONE)
                 .define('E', Items.ENDER_EYE).define('X', EnigmaticItems.EARTH_HEART)
                 .unlockedBy("has_item", has(EnigmaticItems.EARTH_HEART))
+                .save(output);
+        CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.EVIL_INGOT)
+                .pattern("GEG").pattern("EXE").pattern("GEG")
+                .define('G', Items.GHAST_TEAR).define('E', EnigmaticItems.EVIL_ESSENCE)
+                .define('X', Items.NETHERITE_INGOT)
+                .unlockedBy("has_item", has(EnigmaticItems.EVIL_ESSENCE))
                 .save(output);
         CursedShapedRecipe.Builder.shaped(RecipeCategory.TOOLS, EnigmaticItems.TWISTED_MIRROR)
                 .pattern("IGI").pattern("PXP").pattern(" I ")
@@ -329,6 +369,13 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .pattern("EAE").pattern("IXI").pattern("TST")
                 .define('T', EnigmaticItems.TWISTED_HEART).define('S', Items.NETHER_STAR)
                 .define('E', EnigmaticItems.EVIL_ESSENCE).define('X', EnigmaticItems.ASCENSION_AMULET)
+                .define('I', Items.NETHERITE_INGOT).define('A', EnigmaticItems.ABYSSAL_HEART)
+                .unlockedBy("has_item", has(EnigmaticItems.ABYSSAL_HEART))
+                .save(output);
+        CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.DESOLATION_RING)
+                .pattern("CAC").pattern("IXI").pattern("EVE")
+                .define('C', EnigmaticItems.COSMIC_HEART).define('V', EnigmaticItems.VOID_PEARL)
+                .define('E', EnigmaticItems.EVIL_ESSENCE).define('X', EnigmaticItems.GOLDEN_RING)
                 .define('I', Items.NETHERITE_INGOT).define('A', EnigmaticItems.ABYSSAL_HEART)
                 .unlockedBy("has_item", has(EnigmaticItems.ABYSSAL_HEART))
                 .save(output);

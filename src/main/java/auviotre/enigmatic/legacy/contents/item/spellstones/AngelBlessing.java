@@ -1,18 +1,21 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.packets.toClient.ForceProjectileRotationsPacket;
 import auviotre.enigmatic.legacy.packets.toClient.PlayerMotionPacket;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
-import com.google.common.base.Supplier;
+import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.*;
@@ -23,7 +26,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
@@ -33,13 +42,6 @@ import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
 public class AngelBlessing extends SpellstoneItem {
     public AngelBlessing() {
         super(defaultSingleProperties().rarity(Rarity.RARE));
-
-        this.immunityList.add(DamageTypes.FALL);
-        this.immunityList.add(DamageTypes.FLY_INTO_WALL);
-
-        Supplier<Float> supplier = () -> (float) CONFIG.SPELLSTONES.ABVulnerabilityModifier.getAsDouble();
-        this.resistanceList.put(DamageTypes.WITHER, supplier);
-        this.resistanceList.put(DamageTypes.FELL_OUT_OF_WORLD, supplier);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -128,6 +130,28 @@ public class AngelBlessing extends SpellstoneItem {
                 ForceProjectileRotationsPacket packet = new ForceProjectileRotationsPacket(redirected.getId(), redirected.getYRot(), redirected.getXRot(), movement.x, movement.y, movement.z, redirected.getX(), redirected.getY(), redirected.getZ());
                 for (ServerPlayer player : players) {
                     PacketDistributor.sendToPlayer(player, packet);
+                }
+            }
+        }
+    }
+
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.ANGEL_BLESSING)) {
+                if (event.getSource().is(EnigmaticTags.DamageTypes.ANGEL_BLESSING_IMMUNE_TO))
+                    event.setCanceled(true);
+            }
+        }
+
+        @SubscribeEvent
+        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.ANGEL_BLESSING)) {
+                DamageSource source = event.getSource();
+                if (source.is(EnigmaticTags.DamageTypes.ANGEL_BLESSING_VULNERABLE_TO)) {
+                    event.setNewDamage((float) (event.getNewDamage() * CONFIG.SPELLSTONES.ABVulnerabilityModifier.getAsDouble()));
                 }
             }
         }

@@ -3,6 +3,7 @@ package auviotre.enigmatic.legacy.contents.item;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -34,7 +35,8 @@ public class AstralFruit extends BaseItem {
     private final boolean enchanted;
 
     public AstralFruit(boolean enchanted) {
-        super(defaultProperties().rarity(enchanted ? Rarity.EPIC : Rarity.RARE).fireResistant().food(enchanted ? ENCHANTED_PROPERTIES : DEFAULT_PROPERTIES));
+        super(defaultProperties().rarity(enchanted ? Rarity.EPIC : Rarity.RARE).fireResistant().component(EnigmaticComponents.CURSED, true)
+                .food(enchanted ? ENCHANTED_PROPERTIES : DEFAULT_PROPERTIES));
         this.enchanted = enchanted;
     }
 

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.scrolls;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -22,7 +23,11 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -84,5 +89,18 @@ public class HeavenScroll extends BaseCurioItem {
 
     protected boolean canFly(@NotNull Player player, boolean rangeChecked) {
         return player.totalExperience > 0 && (rangeChecked || player.getData(EnigmaticAttachments.ENIGMATIC_DATA).isInBeaconRange());
+    }
+
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void getBreakSpeed(PlayerEvent.@NotNull BreakSpeed event) {
+            LivingEntity entity = event.getEntity();
+            if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.HEAVEN_SCROLL) || EnigmaticHandler.hasCurio(entity, EnigmaticItems.FABULOUS_SCROLL)) {
+                if (entity instanceof Player player && player.getAbilities().flying)
+                    event.setNewSpeed(event.getNewSpeed() * 5.0F);
+            }
+        }
     }
 }

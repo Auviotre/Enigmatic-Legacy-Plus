@@ -25,6 +25,7 @@ public class IchorBottle extends BaseDrinkableItem {
             .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 2), 1.0F)
             .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 3200), 1.0F)
             .alwaysEdible().build();
+
     public IchorBottle() {
         super(defaultSingleProperties().craftRemainder(Items.GLASS_BOTTLE).food(FOOD_PROPERTIES).rarity(Rarity.RARE));
     }

@@ -1,7 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.materials;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.entity.IAbyssalHeartBearer;
-import auviotre.enigmatic.legacy.api.item.IEldritch;
 import auviotre.enigmatic.legacy.api.item.ITaintable;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
@@ -22,16 +22,16 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class AbyssalHeart extends BaseCursedItem implements IEldritch, ITaintable {
+public class AbyssalHeart extends BaseCursedItem implements ITaintable {
     public AbyssalHeart() {
-        super(BaseItem.defaultSingleProperties().rarity(Rarity.EPIC));
-        NeoForge.EVENT_BUS.register(this);
+        super(BaseItem.defaultSingleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -51,19 +51,24 @@ public class AbyssalHeart extends BaseCursedItem implements IEldritch, ITaintabl
         if (entity instanceof Player player && EnigmaticHandler.isTheWorthyOne(player) && !level.isClientSide()) {
             this.handleTaintable(stack, player);
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
-            if (ITaintable.isTainted(stack)) stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
-            else  stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.max(0.0F, timer - 0.3F));
+            if (ITaintable.isTainted(stack))
+                stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
+            else stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.max(0.0F, timer - 0.3F));
         }
     }
 
-    @SubscribeEvent
-    public void onDrops(@NotNull LivingDropsEvent event) {
-        LivingEntity killed = event.getEntity();
-        if (killed instanceof EnderDragon || killed instanceof IAbyssalHeartBearer) {
-            if (event.isRecentlyHit() && event.getSource().getEntity() instanceof Player player && EnigmaticHandler.isTheWorthyOne(player)) {
-                CompoundTag data = EnigmaticHandler.getPersistedData(player);
-                if (data.getInt("AbyssalHeartsGained") < 5) {
-                    ((IAbyssalHeartBearer) killed).dropAbyssalHeart(player);
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onDrops(@NotNull LivingDropsEvent event) {
+            LivingEntity killed = event.getEntity();
+            if (killed instanceof EnderDragon || killed instanceof IAbyssalHeartBearer) {
+                if (event.isRecentlyHit() && event.getSource().getEntity() instanceof Player player && EnigmaticHandler.isTheWorthyOne(player)) {
+                    CompoundTag data = EnigmaticHandler.getPersistedData(player);
+                    if (data.getInt("AbyssalHeartsGained") < 5) {
+                        ((IAbyssalHeartBearer) killed).dropAbyssalHeart(player);
+                    }
                 }
             }
         }

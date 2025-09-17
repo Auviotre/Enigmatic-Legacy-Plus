@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item;
 
+import auviotre.enigmatic.legacy.ELConfig;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IPermanentCrystal;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
@@ -21,7 +22,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +36,6 @@ public class SoulCrystal extends BaseItem implements IPermanentCrystal {
 
     public SoulCrystal() {
         super(defaultSingleProperties().rarity(Rarity.EPIC));
-        NeoForge.EVENT_BUS.register(this);
     }
 
     public static ItemStack createCrystalFrom(Player player) {
@@ -44,8 +45,7 @@ public class SoulCrystal extends BaseItem implements IPermanentCrystal {
     }
 
     public static boolean isPermanentlyDead(Player player) {
-        // TODO Proper Permanent Death screen, Cursed Mode
-        return SoulCrystal.getLostCrystals(player) >= 10;
+        return SoulCrystal.getLostCrystals(player) >= 10 && ELConfig.CONFIG.SEVEN_CURSES.maxSoulCrystalLoss.get() >= 10;
     }
 
     public static boolean retrieveSoulFromCrystal(Player player) {
@@ -107,19 +107,23 @@ public class SoulCrystal extends BaseItem implements IPermanentCrystal {
         return InteractionResultHolder.pass(stack);
     }
 
-    @SubscribeEvent
-    public void onPlayerClone(PlayerEvent.@NotNull Clone event) {
-        updatePlayerSoulMap(event.getEntity());
-    }
-
-    @SubscribeEvent
-    public void entityJoinWorld(@NotNull EntityJoinLevelEvent event) {
-        if (event.getEntity() instanceof ServerPlayer joinedPlayer) {
-            updatePlayerSoulMap(joinedPlayer);
-        }
-    }
-
     public enum LossMode {
         ALWAYS_LOSS, NEED_CURSE_RING, NEED_CURSE_RING_AND_IGNORE_KEEPINVENTORY;
+    }
+
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onPlayerClone(PlayerEvent.@NotNull Clone event) {
+            updatePlayerSoulMap(event.getEntity());
+        }
+
+        @SubscribeEvent
+        private static void entityJoinWorld(@NotNull EntityJoinLevelEvent event) {
+            if (event.getEntity() instanceof ServerPlayer joinedPlayer) {
+                updatePlayerSoulMap(joinedPlayer);
+            }
+        }
     }
 }

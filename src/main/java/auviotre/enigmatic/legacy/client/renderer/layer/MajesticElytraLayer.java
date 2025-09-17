@@ -27,31 +27,31 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @OnlyIn(Dist.CLIENT)
 public class MajesticElytraLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
-	private static final ResourceLocation TEXTURE = EnigmaticLegacy.location("textures/models/misc/majestic_elytra.png");
-	private final ElytraModel<T> elytraModel;
+    private static final ResourceLocation TEXTURE = EnigmaticLegacy.location("textures/models/misc/majestic_elytra.png");
+    private final ElytraModel<T> elytraModel;
 
-	public MajesticElytraLayer(RenderLayerParent<T, M> layerParent, EntityModelSet modelSet) {
-		super(layerParent);
-		this.elytraModel = new ElytraModel<>(modelSet.bakeLayer(ModelLayers.ELYTRA));
-	}
+    public MajesticElytraLayer(RenderLayerParent<T, M> layerParent, EntityModelSet modelSet) {
+        super(layerParent);
+        this.elytraModel = new ElytraModel<>(modelSet.bakeLayer(ModelLayers.ELYTRA));
+    }
 
-	public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-		ItemStack elytra = MajesticElytra.get(livingEntity);
-		if (EnigmaticHandler.hasCurio(livingEntity, EnigmaticItems.MAJESTIC_ELYTRA)) {
-			AtomicBoolean notRender = new AtomicBoolean(false);
-			CuriosApi.getCuriosInventory(livingEntity).flatMap(handler -> handler.findFirstCurio((stack) -> stack.is(EnigmaticItems.MAJESTIC_ELYTRA))).ifPresent(curio -> {
+    public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
+        ItemStack elytra = MajesticElytra.get(livingEntity);
+        if (EnigmaticHandler.hasCurio(livingEntity, EnigmaticItems.MAJESTIC_ELYTRA)) {
+            AtomicBoolean notRender = new AtomicBoolean(false);
+            CuriosApi.getCuriosInventory(livingEntity).flatMap(handler -> handler.findFirstCurio((stack) -> stack.is(EnigmaticItems.MAJESTIC_ELYTRA))).ifPresent(curio -> {
                 if (!curio.slotContext().visible()) notRender.set(true);
             });
-			if (notRender.get()) return;
-		}
-		if (!elytra.isEmpty()) {
-			poseStack.pushPose();
-			poseStack.translate(0.0D, 0.0D, 0.125D);
-			this.getParentModel().copyPropertiesTo(this.elytraModel);
-			this.elytraModel.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-			VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(TEXTURE), elytra.hasFoil());
-			this.elytraModel.renderToBuffer(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY);
-			poseStack.popPose();
-		}
-	}
+            if (notRender.get()) return;
+        }
+        if (!elytra.isEmpty()) {
+            poseStack.pushPose();
+            poseStack.translate(0.0D, 0.0D, 0.125D);
+            this.getParentModel().copyPropertiesTo(this.elytraModel);
+            this.elytraModel.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+            VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(TEXTURE), elytra.hasFoil());
+            this.elytraModel.renderToBuffer(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY);
+            poseStack.popPose();
+        }
+    }
 }

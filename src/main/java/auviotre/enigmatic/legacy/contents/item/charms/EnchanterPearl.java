@@ -56,8 +56,4 @@ public class EnchanterPearl extends CursedCurioItem {
         tooltips.clear();
         return tooltips;
     }
-
-    public boolean canEquip(SlotContext context, ItemStack stack) {
-        return super.canEquip(context, stack) && EnigmaticHandler.isTheCursedOne(context.entity());
-    }
 }

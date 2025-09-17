@@ -19,7 +19,6 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 
 public class FabulousScroll extends HeavenScroll {
-
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);

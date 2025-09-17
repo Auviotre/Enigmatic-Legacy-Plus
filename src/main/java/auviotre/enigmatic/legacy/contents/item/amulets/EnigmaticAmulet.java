@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.amulets;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -21,7 +22,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -33,11 +35,38 @@ import java.util.List;
 public class EnigmaticAmulet extends BaseCurioItem {
     public EnigmaticAmulet() {
         super(defaultSingleProperties().fireResistant().rarity(Rarity.RARE));
-        NeoForge.EVENT_BUS.register(this);
     }
 
     public EnigmaticAmulet(Properties properties) {
         super(properties);
+    }
+
+    public static AmuletColor getColor(ItemStack amulet) {
+        if (!amulet.has(EnigmaticComponents.AMULET_COLOR)) return AmuletColor.RED;
+        Float colorVar = amulet.getOrDefault(EnigmaticComponents.AMULET_COLOR, 0.0F);
+        return evaluateColor(colorVar);
+    }
+
+    public static ItemStack setColor(@NotNull ItemStack amulet, AmuletColor color) {
+        if (amulet.is(EnigmaticItems.ENIGMATIC_AMULET)) {
+            amulet.set(EnigmaticComponents.AMULET_COLOR, color.getColorVar());
+        }
+        return amulet;
+    }
+
+    private static AmuletColor evaluateColor(float colorVar) {
+        float var = (int) (colorVar * 10F) * 0.1F;
+        for (AmuletColor color : AmuletColor.values())
+            if (var == color.colorVar) return color;
+        return AmuletColor.RED;
+    }
+
+    public static boolean hasColor(LivingEntity entity, AmuletColor color) {
+        if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.ASCENSION_AMULET))
+            return true;
+
+        ItemStack stack = EnigmaticHandler.getCurio(entity, EnigmaticItems.ENIGMATIC_AMULET);
+        return !stack.isEmpty() && getColor(stack) == color;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -64,26 +93,6 @@ public class EnigmaticAmulet extends BaseCurioItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletModifier" + getColor(stack));
     }
 
-    public static AmuletColor getColor(ItemStack amulet) {
-        if (!amulet.has(EnigmaticComponents.AMULET_COLOR)) return AmuletColor.RED;
-        Float colorVar = amulet.getOrDefault(EnigmaticComponents.AMULET_COLOR, 0.0F);
-        return evaluateColor(colorVar);
-    }
-
-    public static ItemStack setColor(@NotNull ItemStack amulet, AmuletColor color) {
-        if (amulet.is(EnigmaticItems.ENIGMATIC_AMULET)) {
-            amulet.set(EnigmaticComponents.AMULET_COLOR, color.getColorVar());
-        }
-        return amulet;
-    }
-
-    private static AmuletColor evaluateColor(float colorVar) {
-        float var = (int) (colorVar * 10F) * 0.1F;
-        for (AmuletColor color : AmuletColor.values())
-            if (var == color.colorVar) return color;
-        return AmuletColor.RED;
-    }
-
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().removeAttributeModifiers(getAllModifiers(entity));
@@ -100,14 +109,6 @@ public class EnigmaticAmulet extends BaseCurioItem {
         return tooltips;
     }
 
-    public static boolean hasColor(LivingEntity entity, AmuletColor color) {
-        if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.ASCENSION_AMULET))
-            return true;
-
-        ItemStack stack = EnigmaticHandler.getCurio(entity, EnigmaticItems.ENIGMATIC_AMULET);
-        return !stack.isEmpty() && getColor(stack) == color;
-    }
-
     public Multimap<Holder<Attribute>, AttributeModifier> getModifiers(ItemStack amulet, LivingEntity entity) {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
         AmuletColor color = getColor(amulet);
@@ -116,9 +117,9 @@ public class EnigmaticAmulet extends BaseCurioItem {
         } else if (color == AmuletColor.AQUA) {
             map.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(getLocation(this), entity.isSprinting() ? 0.15F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         } else if (color == AmuletColor.MAGENTA) {
-                map.put(Attributes.GRAVITY, new AttributeModifier(getLocation(this), -0.2F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-            } else if (color == AmuletColor.BLUE) {
-                map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(getLocation(this), 0.25F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            map.put(Attributes.GRAVITY, new AttributeModifier(getLocation(this), -0.2F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        } else if (color == AmuletColor.BLUE) {
+            map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(getLocation(this), 0.25F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
         return map;
     }
@@ -130,21 +131,6 @@ public class EnigmaticAmulet extends BaseCurioItem {
         map.put(Attributes.GRAVITY, new AttributeModifier(getLocation(this), -0.2F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(getLocation(this), 0.25F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return map;
-    }
-
-    @SubscribeEvent
-    public void getBreakSpeed(PlayerEvent.@NotNull BreakSpeed event) {
-        LivingEntity entity = event.getEntity();
-        if (hasColor(entity, AmuletColor.GREEN)) {
-            event.setNewSpeed(event.getOriginalSpeed() * 0.25F + event.getNewSpeed());
-        }
-    }
-
-    @SubscribeEvent
-    public void onDamagePost(LivingDamageEvent.@NotNull Post event) {
-        if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && !attacker.level().isClientSide()) {
-            if (hasColor(attacker, AmuletColor.BLACK)) attacker.heal(event.getNewDamage() * 0.1F);
-        }
     }
 
     public enum AmuletColor {
@@ -170,5 +156,24 @@ public class EnigmaticAmulet extends BaseCurioItem {
             return this.colorVar;
         }
 
+    }
+
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void getBreakSpeed(PlayerEvent.@NotNull BreakSpeed event) {
+            LivingEntity entity = event.getEntity();
+            if (hasColor(entity, AmuletColor.GREEN)) {
+                event.setNewSpeed(event.getOriginalSpeed() * 0.25F + event.getNewSpeed());
+            }
+        }
+
+        @SubscribeEvent
+        private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
+            if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && !attacker.level().isClientSide()) {
+                if (hasColor(attacker, AmuletColor.BLACK)) attacker.heal(event.getNewDamage() * 0.1F);
+            }
+        }
     }
 }

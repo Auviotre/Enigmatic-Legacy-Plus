@@ -1,9 +1,10 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
-import auviotre.enigmatic.legacy.api.item.IEldritch;
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -30,7 +31,8 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -41,16 +43,22 @@ import java.util.List;
 
 import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
 
-public class TheInfinitum extends TheAcknowledgment implements IEldritch {
+public class TheInfinitum extends TheAcknowledgment {
     public TheInfinitum() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC), 15, -2.0F);
-        NeoForge.EVENT_BUS.register(this);
+        super(defaultSingleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true), 15, -2.0F);
+    }
+
+    public static Multimap<Holder<Attribute>, AttributeModifier> getKnockbackModifier() {
+        ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
+        double modifier = 0.01 * CONFIG.CURSED_ITEMS.knockbackModifier.getAsInt() / 1.5F;
+        builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(getLocation(EnigmaticItems.THE_INFINITUM.get()), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        return builder.build();
     }
 
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (entity instanceof LivingEntity livingEntity && EnigmaticHandler.isTheWorthyOne(livingEntity) && !level.isClientSide()) {
+        if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
-            if (isSelected) stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
+            if (isSelected && EnigmaticHandler.isTheWorthyOne(livingEntity)) stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
             else stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.max(0.0F, timer - 0.3F));
         }
     }
@@ -94,43 +102,40 @@ public class TheInfinitum extends TheAcknowledgment implements IEldritch {
         return super.use(world, player, hand);
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getKnockbackModifier() {
-        ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        double modifier = 0.01 * CONFIG.CURSED_ITEMS.knockbackModifier.getAsInt() / 1.5F;
-        builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(getLocation(this), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        return builder.build();
-    }
-
-    @SubscribeEvent
-    public void onTick(PlayerTickEvent.@NotNull Pre event) {
-        if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheWorthyOne(entity)) {
-            if (entity.getMainHandItem().is(this))
-                entity.getAttributes().addTransientAttributeModifiers(this.getKnockbackModifier());
-            else entity.getAttributes().removeAttributeModifiers(this.getKnockbackModifier());
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onTick(PlayerTickEvent.@NotNull Pre event) {
+            if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheWorthyOne(entity)) {
+                if (entity.getMainHandItem().is(EnigmaticItems.THE_INFINITUM))
+                    entity.getAttributes().addTransientAttributeModifiers(getKnockbackModifier());
+                else entity.getAttributes().removeAttributeModifiers(getKnockbackModifier());
+            }
         }
-    }
 
-    @SubscribeEvent
-    public void onDeath(@NotNull LivingDeathEvent event) {
-        if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheWorthyOne(entity)) {
-            if (entity.getMainHandItem().is(this) || entity.getOffhandItem().is(this)) {
-                if (entity.getRandom().nextFloat() < 0.85F) {
-                    event.setCanceled(true);
-                    entity.setHealth(1);
+        @SubscribeEvent
+        private static void onDeath(@NotNull LivingDeathEvent event) {
+            if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheWorthyOne(entity)) {
+                if (entity.getMainHandItem().is(EnigmaticItems.THE_INFINITUM) || entity.getOffhandItem().is(EnigmaticItems.THE_INFINITUM)) {
+                    if (entity.getRandom().nextFloat() < 0.85F) {
+                        event.setCanceled(true);
+                        entity.setHealth(1);
+                    }
                 }
             }
         }
-    }
 
-    @SubscribeEvent
-    public void onDamagePost(LivingDamageEvent.@NotNull Post event) {
-        DamageSource source = event.getSource();
-        if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-            if (attacker.getMainHandItem().is(this) && EnigmaticHandler.isTheWorthyOne(attacker)) {
-                attacker.heal(event.getNewDamage() * 0.1F);
-                Holder<MobEffect> debuff = EnigmaticHandler.getRandomDebuff(attacker);
-                MobEffectInstance instance = new MobEffectInstance(debuff, 200, 0, false, true);
-                event.getEntity().addEffect(instance);
+        @SubscribeEvent
+        private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
+            DamageSource source = event.getSource();
+            if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
+                if (attacker.getMainHandItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
+                    attacker.heal(event.getNewDamage() * 0.1F);
+                    Holder<MobEffect> debuff = EnigmaticHandler.getRandomDebuff(attacker);
+                    MobEffectInstance instance = new MobEffectInstance(debuff, 200, 0, false, true);
+                    event.getEntity().addEffect(instance);
+                }
             }
         }
     }

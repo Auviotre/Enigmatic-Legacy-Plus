@@ -26,7 +26,6 @@ public class AscensionAmulet extends EnigmaticAmulet {
         }
     }
 
-
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().addTransientAttributeModifiers(getAllModifiers(entity));

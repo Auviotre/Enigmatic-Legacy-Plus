@@ -41,7 +41,7 @@
   "tooltip.enigmaticlegacy.inInventory": "When carried in inventory:",
 
   "enchantment.enigmaticlegacyplus.ceaseless": "Ceaseless",
-  "enchantment.enigmaticlegacyplus.eternal_binding": "Curse of Eternal Binding",
+  "enchantment.enigmaticlegacyplus.eternal_binding_curse": "Curse of Eternal Binding",
   "enchantment.enigmaticlegacyplus.nemesis_curse": "Curse of Nemesis",
   "enchantment.enigmaticlegacyplus.sharpshooter": "Sharpshooter",
   "enchantment.enigmaticlegacyplus.slayer": "Slayer",
@@ -49,7 +49,7 @@
   "enchantment.enigmaticlegacyplus.wrath": "Wrath",
 
   "enchantment.enigmaticlegacyplus.ceaseless.desc": "Can shoot basic arrows without consuming ammunition.",
-  "enchantment.enigmaticlegacyplus.eternal_binding.desc": "Makes the item impossible to unequip or lose on death.",
+  "enchantment.enigmaticlegacyplus.eternal_binding_curse.desc": "Makes the item impossible to unequip or lose on death.",
   "enchantment.enigmaticlegacyplus.nemesis_curse.desc": "Deals 35% of damage back to you for each melee attack.",
   "enchantment.enigmaticlegacyplus.sharpshooter.desc": "Increased and less random arrow damage.",
   "enchantment.enigmaticlegacyplus.slayer.desc": "Increased damage against monsters.",
@@ -80,6 +80,7 @@
   "item.enigmaticlegacyplus.cursed_scroll": "Scroll of a Thousand Curses",
   "item.enigmaticlegacyplus.darkest_scroll": "Darkest Scroll",
   "item.enigmaticlegacyplus.dislocation_ring": "Dislocation Ring",
+  "item.enigmaticlegacyplus.desolation_ring": "The Burden of Desolation",
   "item.enigmaticlegacyplus.earth_heart": "Heart of the Earth",
   "item.enigmaticlegacyplus.earth_heart_fragment": "Fragment of the Earth",
   "item.enigmaticlegacyplus.eldritch_amulet": "The Testament of Contempt",
@@ -90,9 +91,16 @@
   "item.enigmaticlegacyplus.ender_ring": "Ring of Ender",
   "item.enigmaticlegacyplus.ender_rod": "Ender Rod",
   "item.enigmaticlegacyplus.enigmatic_amulet": "Enigmatic Amulet",
+  "item.enigmaticlegacyplus.etherium_boots": "Etherium Boots",
+  "item.enigmaticlegacyplus.etherium_chestplate": "Etherium Cuirass",
+  "item.enigmaticlegacyplus.etherium_hammer": "Etherium Sledgehammer",
+  "item.enigmaticlegacyplus.etherium_helmet": "Etherium Helmet",
   "item.enigmaticlegacyplus.etherium_ingot": "Etherium Ingot",
+  "item.enigmaticlegacyplus.etherium_leggings": "Etherium Greaves",
   "item.enigmaticlegacyplus.etherium_nugget": "Etherium Nugget",
+  "item.enigmaticlegacyplus.etherium_sword": "Etherium Broadsword",
   "item.enigmaticlegacyplus.evil_essence": "Nefarious Essence",
+  "item.enigmaticlegacyplus.evil_ingot": "Nefarious Ingot",
   "item.enigmaticlegacyplus.extradimensional_eye": "Extradimensional Eye",
   "item.enigmaticlegacyplus.execution_axe": "Axe of Executioner",
   "item.enigmaticlegacyplus.eye_of_nebula": "Eye of the Nebula",
@@ -267,6 +275,13 @@
   "tooltip.enigmaticlegacy.executionAxe1": "§5Has a chance to behead slain monsters.",
   "tooltip.enigmaticlegacy.executionAxe2": "§5Each level of Looting applied adds§6 +%1$s§5",
   "tooltip.enigmaticlegacy.executionAxe3": "§5to the overall beheading chance.",
+
+  "tooltip.enigmaticlegacy.etheriumAttribute": "+%1$s Etherium Shield Threshold",
+  "tooltip.enigmaticlegacy.etheriumAttributeAlt": " %1$s Etherium Shield Threshold",
+  "tooltip.enigmaticlegacy.etheriumArmor": "§5Invisible while worn.",
+  "tooltip.enigmaticlegacy.etheriumHammer1": "§5Breaks blocks in §6%1$s§6x%1$s§6x%2$s§5 area.",
+  "tooltip.enigmaticlegacy.etheriumHammer2": "§5Hold §6Shift§5 to suppress this effect.",
+  "tooltip.enigmaticlegacy.etheriumSword": "§5When held, provides §6%1$s §dChance§5 to avoid damage.",
 
   "tooltip.enigmaticlegacy.ichorBottle1": "§5To contempt the gods, one must know them...",
   "tooltip.enigmaticlegacy.ichorBottle2": "§5Consume to obtain §6+1§d Charm Slot §5permanently.",
@@ -482,6 +497,10 @@
   "tooltip.enigmaticlegacy.eldritchAmuletStat1": "§6+20% §dAttack Damage",
   "tooltip.enigmaticlegacy.eldritchAmuletStat2": "§6+15% §dLifesteal",
 
+  "tooltip.enigmaticlegacy.desolationRing1": "§6Prevents any dropping from slain mob.",
+  "tooltip.enigmaticlegacy.desolationRing2": "§6Neutral creatures§5 will not spawn in your proximity.",
+  "tooltip.enigmaticlegacy.desolationRing3": "§6Enemies §5will not target you actively.",
+
   "tooltip.enigmaticlegacy.theJudgement1": "§5Upon attack, deals damage to every",
   "tooltip.enigmaticlegacy.theJudgement2": "§5creature within a radius of §6%s§6 blocks§5",
   "tooltip.enigmaticlegacy.theJudgement3": "§5from the target.",
@@ -511,14 +530,23 @@
   "message.enigmaticlegacy.generator_simulation_complete": "Estimated generation complete in §632768§5 instances; check §6latest.log§5 file to see the results.",
   "message.enigmaticlegacy.cursed_sleep": "Seven Curses awaken unspeakable fear and gnawing uncertainty within as you approach the tempting realm of dreams. No hope for the hopeless, no sleep for the sleepless...",
   "message.enigmaticlegacy.slot_unlocked": "%1$s are unlocked! You can now equip them within Curios inventory.",
+  "message.enigmaticlegacy.permanent_death_screen": "In attempting the feat, one proves their courage.\nMay your fractured soul at last find rest.",
 
   "subtitle.enigmaticlegacy.misc.charge_on": "Charges on",
   "subtitle.enigmaticlegacy.misc.charge_off": "Charges off",
   "subtitle.enigmaticlegacy.misc.accelerate": "Accelerates",
+  "subtitle.enigmaticlegacy.misc.deflect": "Projectile deflects",
+  "subtitle.enigmaticlegacy.misc.etherium_shield.deflect": "Etherium shield triggers",
+  "subtitle.enigmaticlegacy.item.armor.equip_etherium": "Etherium armor clanks",
 
+  "gui.enigmaticlegacy.permanent_death_screen_title": "The End",
   "gui.enigmaticlegacy.lore_inscriber": "Write Name & Lore",
   "gui.enigmaticlegacy.blazing_core_bar_title": "Heat",
   "gui.enigmaticlegacy.jei.tainting": "Tainting",
+
+  "gameMode.cursed": "§cCursed Mode",
+  "gameMode.cursedHardcore": "§4Cursed Hardcore!",
+  "gameMode.fractured": "§4Deceased",
 
   "enigmaticlegacyplus.configuration.title": "EnigmaticLegacy+ Configs",
   "enigmaticlegacyplus.configuration.section.enigmaticlegacyplus.common.toml": "EnigmaticLegacy+ Configs",
@@ -588,6 +616,8 @@
   "enigmaticlegacyplus.configuration.autoEquip.tooltip": "If true, Ring of the Seven Curses will be equipped into player's ring slot right away when it enters their inventory. This is different from ultra hardcore option as the way through which ring ends up in player's inventory does not matter.",
   "enigmaticlegacyplus.configuration.ultraHardcore": "Hardcore Mode",
   "enigmaticlegacyplus.configuration.ultraHardcore.tooltip": "If true, Ring of the Seven Curses will be equipped into player's ring slot right away when entering a new world, instead of just being added to their inventory.",
+  "enigmaticlegacyplus.configuration.maxSoulCrystalLoss": "Soul Crystal Loss Max Amount",
+  "enigmaticlegacyplus.configuration.maxSoulCrystalLoss.tooltip": "Maximum amount of Soul Crystals a player can lose before they won't drop anymore. If set to 10 - player can loose all of them, and doing so will result in permadeath. Each crystal lost subtracts 10% of from their maximum possible health value.",
 
   "enigmaticlegacyplus.configuration.cursedItems": "Cursed Items Configs",
   "enigmaticlegacyplus.configuration.TheTwist": "The Twist",
@@ -612,6 +642,10 @@
   "enigmaticlegacyplus.configuration.OffsetY": "Y-axis Offset",
   "enigmaticlegacyplus.configuration.OffsetXCreative": "X-axis Offset in Creative Inventory",
   "enigmaticlegacyplus.configuration.OffsetYCreative": "Y-axis Offset in Creative Inventory",
+
+  "enigmaticlegacyplus.configuration.section.enigmaticlegacyplus.client.toml": "Client Configs",
+  "enigmaticlegacyplus.configuration.section.enigmaticlegacyplus.client.toml.title": "Enigmatic Legacy Client Configs",
+  "enigmaticlegacyplus.configuration.etheriumShieldRenderLayer": "Whether to render the Etherium Shield",
 
   "book.enigmaticlegacy.landing_text": "In front of you lies the well of great knowledge, a place where some of this world's greatest mysteries belong, scrupulously researched and carefully cataloged.<br2/>As your journey continues and the world reveals itself to you, you may revisit and behold knowledge you gathered within these pages."
 }

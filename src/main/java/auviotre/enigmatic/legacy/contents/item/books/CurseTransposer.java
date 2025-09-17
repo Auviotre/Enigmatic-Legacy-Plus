@@ -1,8 +1,8 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
-import auviotre.enigmatic.legacy.api.item.ICursed;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.EnchantmentTags;
@@ -17,9 +17,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class CurseTransposer extends EnchantmentTransposer implements ICursed {
+public class CurseTransposer extends EnchantmentTransposer {
     public CurseTransposer() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON));
+        super(defaultSingleProperties().rarity(Rarity.UNCOMMON).component(EnigmaticComponents.CURSED, true));
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -1,10 +1,11 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
-import com.google.common.base.Supplier;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -17,6 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.world.damagesource.DamageEffects;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -34,9 +36,11 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -47,15 +51,6 @@ import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
 public class OceanStone extends SpellstoneItem {
     public OceanStone() {
         super(defaultSingleProperties().rarity(Rarity.RARE));
-        NeoForge.EVENT_BUS.register(this);
-
-        this.immunityList.add(DamageTypes.DROWN);
-        Supplier<Float> supplier = () -> (float) CONFIG.SPELLSTONES.OSVulnerabilityModifier.getAsDouble();
-        this.resistanceList.put(DamageTypes.IN_FIRE, supplier);
-        this.resistanceList.put(DamageTypes.ON_FIRE, supplier);
-        this.resistanceList.put(DamageTypes.LAVA, supplier);
-        this.resistanceList.put(DamageTypes.HOT_FLOOR, supplier);
-        this.resistanceList.put(DamageTypes.FIREBALL, supplier);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -129,13 +124,26 @@ public class OceanStone extends SpellstoneItem {
         return map;
     }
 
-    @SubscribeEvent
-    public void onEntityHurt(LivingDamageEvent.Pre event) {
-        if (ISpellstone.get(event.getEntity()).is(this)) {
-            Entity entity = event.getSource().getEntity();
-            if (entity == null) return;
-            if (entity.getType().is(EntityTypeTags.CAN_BREATHE_UNDER_WATER)) {
-                event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * CONFIG.SPELLSTONES.underwaterCreaturesResistance.get()));
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.OCEAN_STONE)) {
+                if (event.getSource().is(DamageTypes.DROWN)) event.setCanceled(true);
+            }
+        }
+
+        @SubscribeEvent
+        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.OCEAN_STONE)) {
+                Entity entity = event.getSource().getEntity();
+                if (entity == null) return;
+                if (entity.getType().is(EntityTypeTags.CAN_BREATHE_UNDER_WATER)) {
+                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * CONFIG.SPELLSTONES.underwaterCreaturesResistance.get()));
+                } else if (event.getSource().type().effects().equals(DamageEffects.BURNING)) {
+                    event.setNewDamage((float) (event.getNewDamage() * CONFIG.SPELLSTONES.OSVulnerabilityModifier.getAsDouble()));
+                }
             }
         }
     }

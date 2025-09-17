@@ -4,10 +4,12 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
 import top.theillusivec4.curios.api.CuriosApi;
 
 public interface EnigmaticTags {
@@ -15,6 +17,7 @@ public interface EnigmaticTags {
         TagKey<Item> SCROLLS = register(CuriosApi.MODID, "scroll");
         TagKey<Item> SPELLSTONES = register(CuriosApi.MODID, "spellstone");
         TagKey<Item> ARMOR_CHECK_EXCLUSION = register("armor_check_exclusions");
+        TagKey<Item> ETHERIUM_TOOLS = register("etherium_tools");
         TagKey<Item> BYPASS_FOURTH_CURSE = register("bypass_fourth_curse");
         TagKey<Item> ETERNAL_BINDING_ENCHANTABLE = register("eternal_binding_enchantable");
 
@@ -26,6 +29,15 @@ public interface EnigmaticTags {
             return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(modid, name));
         }
     }
+
+    interface Blocks {
+        TagKey<Block> ALL_MINEABLE = register("all_mineable");
+
+        private static TagKey<Block> register(String name) {
+            return TagKey.create(Registries.BLOCK, EnigmaticLegacy.location(name));
+        }
+    }
+
 
     interface Effects {
         TagKey<MobEffect> ALWAYS_APPLY = register("always_apply");
@@ -50,6 +62,18 @@ public interface EnigmaticTags {
 
         private static TagKey<EntityType<?>> register(String name) {
             return TagKey.create(Registries.ENTITY_TYPE, EnigmaticLegacy.location(name));
+        }
+    }
+
+    interface DamageTypes {
+        TagKey<DamageType> GOLEM_HEART_IMMUNE_TO = registerSpellstone("golem_heart/immune_to");
+        TagKey<DamageType> GOLEM_HEART_IS_MELEE = registerSpellstone("golem_heart/is_melee");
+        TagKey<DamageType> ANGEL_BLESSING_IMMUNE_TO = registerSpellstone("angel_blessing/immune_to");
+        TagKey<DamageType> ANGEL_BLESSING_VULNERABLE_TO = registerSpellstone("angel_blessing/vulnerable_to");
+        TagKey<DamageType> LOST_ENGINE_IMMUNE_TO = registerSpellstone("lost_engine/immune_to");
+
+        private static TagKey<DamageType> registerSpellstone(String name) {
+            return TagKey.create(Registries.DAMAGE_TYPE, EnigmaticLegacy.location("spellstone/" + name));
         }
     }
 }

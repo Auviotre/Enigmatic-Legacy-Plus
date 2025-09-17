@@ -3,6 +3,7 @@ package auviotre.enigmatic.legacy.contents.attachement;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 public class EnigmaticData implements INBTSerializable<CompoundTag> {
@@ -47,6 +48,7 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
     public void setNebulaPower(boolean power) {
         this.nebulaPower = power;
     }
+
     public boolean isElytraBoosting() {
         return this.isElytraBoosting;
     }
@@ -74,7 +76,6 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
     public void setFireImmunityTimer(int timer) {
         this.fireImmunityTimerLast = this.fireImmunityTimer;
         this.fireImmunityTimer = Math.clamp(timer, 0, getFireImmunityCap());
-
     }
 
     public int getFireImmunityTimerLast() {
@@ -114,7 +115,7 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         return tag;
     }
 
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         this.magnetRingEffect = tag.getBoolean("MagnetRingEffect");
         this.nebulaPower = tag.getBoolean("NebulaPower");
         this.isElytraBoosting = tag.getBoolean("ElytraBoosting");

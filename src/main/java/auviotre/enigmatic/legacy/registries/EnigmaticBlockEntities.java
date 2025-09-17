@@ -16,7 +16,9 @@ public class EnigmaticBlockEntities {
 
     public static <T extends BlockEntity> DeferredHolder<BlockEntityType<?>, BlockEntityType<T>> register(String name, BlockEntityType.BlockEntitySupplier<T> factory, DeferredBlock<?> block) {
         return BLOCK_ENTITIES.register(name, () -> BlockEntityType.Builder.of(factory, block.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, EnigmaticLegacy.MODID + ":" + name)));
-    }    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DimensionalAnchorEntity>> DIMENSIONAL_ANCHOR_ENTITY = register("dimensional_anchor_entity", DimensionalAnchorEntity::new, EnigmaticBlocks.DIMENSIONAL_ANCHOR);
+    }
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DimensionalAnchorEntity>> DIMENSIONAL_ANCHOR_ENTITY = register("dimensional_anchor_entity", DimensionalAnchorEntity::new, EnigmaticBlocks.DIMENSIONAL_ANCHOR);
 
 
 }

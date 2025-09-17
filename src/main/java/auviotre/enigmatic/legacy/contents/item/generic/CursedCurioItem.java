@@ -5,10 +5,6 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 public class CursedCurioItem extends BaseCursedItem implements ICurioItem {
-    public CursedCurioItem() {
-        super(defaultSingleProperties());
-    }
-
     public CursedCurioItem(Properties properties) {
         super(properties);
     }

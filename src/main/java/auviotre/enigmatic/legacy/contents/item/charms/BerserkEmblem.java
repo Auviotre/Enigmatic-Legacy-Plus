@@ -1,8 +1,10 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -21,7 +23,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
@@ -33,10 +36,9 @@ import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
 public class BerserkEmblem extends CursedCurioItem {
     public BerserkEmblem() {
         super(defaultSingleProperties().rarity(Rarity.RARE).fireResistant());
-        NeoForge.EVENT_BUS.register(this);
     }
 
-    public static float getMissingHealthPool(LivingEntity entity) {
+    public static float getMissingHealthPool(@NotNull LivingEntity entity) {
         return (entity.getMaxHealth() - Math.min(entity.getHealth(), entity.getMaxHealth())) / entity.getMaxHealth();
     }
 
@@ -87,20 +89,19 @@ public class BerserkEmblem extends CursedCurioItem {
         entity.getAttributes().removeAttributeModifiers(this.createAttributeMap(entity));
     }
 
-    public boolean canEquip(SlotContext context, ItemStack stack) {
-        return super.canEquip(context, stack) && EnigmaticHandler.isTheCursedOne(context.entity());
-    }
-
-
-    @SubscribeEvent
-    public void onEntityHurt(LivingDamageEvent.@NotNull Pre event) {
-        LivingEntity victim = event.getEntity();
-        if (EnigmaticHandler.hasCurio(victim, this)) {
-            event.setNewDamage(event.getNewDamage() * (1.0F - (getMissingHealthPool(victim) * (float) CONFIG.CURSED_ITEMS.BEDamageResistance.getAsDouble())));
-        }
-        Entity entity = event.getSource().getEntity();
-        if (entity instanceof LivingEntity attacker) {
-            event.setNewDamage(event.getNewDamage() * (1.0F + (getMissingHealthPool(attacker) * (float) CONFIG.CURSED_ITEMS.BEAttackDamage.getAsDouble())));
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            LivingEntity victim = event.getEntity();
+            if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.BERSERK_EMBLEM)) {
+                event.setNewDamage(event.getNewDamage() * (1.0F - (getMissingHealthPool(victim) * (float) CONFIG.CURSED_ITEMS.BEDamageResistance.getAsDouble())));
+            }
+            Entity entity = event.getSource().getEntity();
+            if (entity instanceof LivingEntity attacker && EnigmaticHandler.hasCurio(attacker, EnigmaticItems.BERSERK_EMBLEM)) {
+                event.setNewDamage(event.getNewDamage() * (1.0F + (getMissingHealthPool(attacker) * (float) CONFIG.CURSED_ITEMS.BEAttackDamage.getAsDouble())));
+            }
         }
     }
 }

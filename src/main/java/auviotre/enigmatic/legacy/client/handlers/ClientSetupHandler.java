@@ -4,6 +4,7 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.client.renderer.DimensionalAnchorRender;
 import auviotre.enigmatic.legacy.client.renderer.PermanentItemRenderer;
+import auviotre.enigmatic.legacy.client.renderer.layer.EtheriumShieldLayer;
 import auviotre.enigmatic.legacy.client.renderer.layer.MajesticElytraLayer;
 import auviotre.enigmatic.legacy.client.screen.LoreInscriberScreen;
 import auviotre.enigmatic.legacy.contents.gui.button.EnderChestInventoryButton;
@@ -78,9 +79,11 @@ public class ClientSetupHandler {
         }
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private static void addPlayerLayer(EntityRenderersEvent.AddLayers event, PlayerSkin.Model skin) {
         if (event.getSkin(skin) instanceof LivingEntityRenderer renderer) {
             renderer.addLayer(new MajesticElytraLayer<>(renderer, event.getEntityModels()));
+            renderer.addLayer(new EtheriumShieldLayer(renderer, event.getEntityModels()));
         }
     }
 }

@@ -1,8 +1,10 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -23,7 +25,8 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +37,6 @@ import java.util.List;
 public class MonsterCharm extends BaseCurioItem {
     public MonsterCharm() {
         super(defaultSingleProperties().rarity(Rarity.UNCOMMON));
-        NeoForge.EVENT_BUS.register(this);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -60,20 +62,24 @@ public class MonsterCharm extends BaseCurioItem {
         return super.getLootingLevel(context, lootContext, stack) + 1;
     }
 
-    @SubscribeEvent
-    public void onDamage(LivingDamageEvent.@NotNull Pre event) {
-        if (event.getSource().getEntity() instanceof LivingEntity attacker && EnigmaticHandler.hasCurio(attacker, this)) {
-            if (event.getEntity().getType().is(EntityTypeTags.UNDEAD)) {
-                event.setNewDamage(event.getNewDamage() * 1.25F);
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getSource().getEntity() instanceof LivingEntity attacker && EnigmaticHandler.hasCurio(attacker, EnigmaticItems.MONSTER_CHARM)) {
+                if (event.getEntity().getType().is(EntityTypeTags.UNDEAD)) {
+                    event.setNewDamage(event.getNewDamage() * 1.25F);
+                }
             }
         }
-    }
 
-    @SubscribeEvent()
-    public void onExperienceDrop(@NotNull LivingExperienceDropEvent event) {
-        Player player = event.getAttackingPlayer();
-        if (EnigmaticHandler.hasCurio(player, this) && event.getEntity() instanceof Monster) {
-            event.setDroppedExperience(event.getDroppedExperience() + event.getOriginalExperience());
+        @SubscribeEvent
+        private static void onExperienceDrop(@NotNull LivingExperienceDropEvent event) {
+            Player player = event.getAttackingPlayer();
+            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.MONSTER_CHARM) && event.getEntity() instanceof Monster) {
+                event.setDroppedExperience(event.getDroppedExperience() + event.getOriginalExperience());
+            }
         }
     }
 }

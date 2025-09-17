@@ -1,6 +1,5 @@
 package auviotre.enigmatic.legacy.contents.item.amulets;
 
-import auviotre.enigmatic.legacy.api.item.IEldritch;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -32,9 +31,9 @@ import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 
-public class EldritchAmulet extends BaseCurioItem implements IEldritch {
+public class EldritchAmulet extends BaseCurioItem {
     public EldritchAmulet() {
-        super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC));
+        super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -69,7 +68,7 @@ public class EldritchAmulet extends BaseCurioItem implements IEldritch {
         if (entity.tickCount % 5 == 0 && !entity.level().isClientSide()) {
             List<LivingEntity> entities = EnigmaticHandler.getObservedEntities(entity, entity.level(), 3, 128, false);
             for (LivingEntity target : entities) {
-                if (EnigmaticHandler.hasCurio(target, this) && EnigmaticHandler.isTheWorthyOne(target)) continue;
+                if (EnigmaticHandler.hasCurio(target, this)) continue;
                 target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 1));
                 target.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 10, 1));
                 target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 10, 1));
@@ -79,9 +78,9 @@ public class EldritchAmulet extends BaseCurioItem implements IEldritch {
     }
 
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (entity instanceof LivingEntity livingEntity && EnigmaticHandler.isTheWorthyOne(livingEntity) && !level.isClientSide()) {
+        if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
-            if (isSelected) stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
+            if (isSelected && EnigmaticHandler.isTheWorthyOne(livingEntity)) stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
             else stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.max(0.0F, timer - 0.3F));
         }
     }

@@ -25,5 +25,40 @@
         "type": "event"
       }
     ]
+  },
+  "misc.deflect": {
+    "subtitle": "subtitle.enigmaticlegacy.misc.deflect",
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:misc/shield_hit_0",
+        "stream": false
+      },
+      {
+        "name": "enigmaticlegacyplus:misc/shield_hit_1",
+        "stream": false
+      }
+    ]
+  },
+  "misc.etherium_shield.deflect": {
+    "subtitle": "subtitle.enigmaticlegacy.misc.etherium_shield.deflect",
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:misc/shield_hit_0",
+        "stream": false
+      },
+      {
+        "name": "enigmaticlegacyplus:misc/shield_hit_1",
+        "stream": false
+      }
+    ]
+  },
+  "item.armor.equip_etherium": {
+    "subtitle": "subtitle.enigmaticlegacy.item.armor.equip_etherium",
+    "sounds": [
+      {
+        "name": "item.armor.equip_iron",
+        "type": "event"
+      }
+    ]
   }
 }

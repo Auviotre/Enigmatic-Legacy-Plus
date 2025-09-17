@@ -7,6 +7,7 @@
     "MixinEnchantmentMenu",
     "MixinEnderDragon",
     "MixinHoglinAi",
+    "MixinItemStack",
     "MixinLivingEntity",
     "MixinMob",
     "MixinPiglinAi",
@@ -22,6 +23,7 @@
     "requireAnnotations": true
   },
   "client": [
-    "MixinGuiBookLanding"
+    "MixinGuiBookLanding",
+    "MixinWorldListEntry"
   ]
 }

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import net.minecraft.core.Holder;
@@ -18,7 +19,8 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.ItemStackedOnOtherEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +29,6 @@ import java.util.List;
 public class EnchantmentTransposer extends BaseItem {
     public EnchantmentTransposer() {
         super(defaultSingleProperties());
-        NeoForge.EVENT_BUS.register(this);
     }
 
     public EnchantmentTransposer(Properties properties) {
@@ -53,25 +54,29 @@ public class EnchantmentTransposer extends BaseItem {
         return true;
     }
 
-    @SubscribeEvent
-    public void onEnchantmentTransOn(@NotNull ItemStackedOnOtherEvent event) {
-        Slot slot = event.getSlot();
-        Player player = event.getPlayer();
-        ItemStack carried = event.getCarriedItem();
-        if (event.getClickAction() != ClickAction.PRIMARY && slot.mayPickup(player) && slot.hasItem()) {
-            ItemStack target = slot.getItem();
-            if (carried.getItem() instanceof EnchantmentTransposer transposer && transposer.canDisenchant(player, carried, target)) {
-                ItemStack book = Items.ENCHANTED_BOOK.getDefaultInstance();
-                ItemEnchantments.Mutable transposed = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(target));
-                ItemEnchantments.Mutable leftover = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(target));
-                transposed.removeIf(enchant -> !transposer.canTranspose(enchant));
-                leftover.removeIf(transposer::canTranspose);
-                EnchantmentHelper.setEnchantments(book, transposed.toImmutable());
-                EnchantmentHelper.setEnchantments(target, leftover.toImmutable());
-                if (player.level().isClientSide)
-                    player.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 0.8F, 1.2F + player.getRandom().nextFloat() * 0.4F);
-                event.getCarriedSlotAccess().set(book);
-                event.setCanceled(true);
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onEnchantmentTransOn(@NotNull ItemStackedOnOtherEvent event) {
+            Slot slot = event.getSlot();
+            Player player = event.getPlayer();
+            ItemStack carried = event.getCarriedItem();
+            if (event.getClickAction() != ClickAction.PRIMARY && slot.mayPickup(player) && slot.hasItem()) {
+                ItemStack target = slot.getItem();
+                if (carried.getItem() instanceof EnchantmentTransposer transposer && transposer.canDisenchant(player, carried, target)) {
+                    ItemStack book = Items.ENCHANTED_BOOK.getDefaultInstance();
+                    ItemEnchantments.Mutable transposed = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(target));
+                    ItemEnchantments.Mutable leftover = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(target));
+                    transposed.removeIf(enchant -> !transposer.canTranspose(enchant));
+                    leftover.removeIf(transposer::canTranspose);
+                    EnchantmentHelper.setEnchantments(book, transposed.toImmutable());
+                    EnchantmentHelper.setEnchantments(target, leftover.toImmutable());
+                    if (player.level().isClientSide)
+                        player.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 0.8F, 1.2F + player.getRandom().nextFloat() * 0.4F);
+                    event.getCarriedSlotAccess().set(book);
+                    event.setCanceled(true);
+                }
             }
         }
     }

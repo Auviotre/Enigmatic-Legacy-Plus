@@ -62,8 +62,9 @@ public class WormholePotion extends BaseDrinkableItem {
                 stack.set(EnigmaticComponents.WORMHOLE_UUID, entity.getUUID().toString());
             else {
                 try {
-                    //noinspection DataFlowIssue
-                    UUID.fromString(stack.get(EnigmaticComponents.WORMHOLE_UUID));
+                    String string = stack.get(EnigmaticComponents.WORMHOLE_UUID);
+                    if (string == null) return;
+                    UUID uuid = UUID.fromString(string);
                 } catch (Exception exception) {
                     stack.remove(EnigmaticComponents.WORMHOLE_UUID);
                 }
@@ -74,8 +75,13 @@ public class WormholePotion extends BaseDrinkableItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (stack.has(EnigmaticComponents.WORMHOLE_UUID)) {
-            //noinspection DataFlowIssue
-            UUID uuid = UUID.fromString(stack.get(EnigmaticComponents.WORMHOLE_UUID));
+            String string = stack.get(EnigmaticComponents.WORMHOLE_UUID);
+            if (string == null) {
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.wormholePotion2");
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.wormholePotion3");
+                return;
+            }
+            UUID uuid = UUID.fromString(string);
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null && player.level().getPlayerByUUID(uuid) != null) {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.wormholePotion1", ChatFormatting.GOLD, player.level().getPlayerByUUID(uuid).getName());
@@ -88,8 +94,9 @@ public class WormholePotion extends BaseDrinkableItem {
 
     public void onConsumed(Level level, Player player, ItemStack stack) {
         if (stack.has(EnigmaticComponents.WORMHOLE_UUID)) {
-            //noinspection DataFlowIssue
-            UUID uuid = UUID.fromString(stack.get(EnigmaticComponents.WORMHOLE_UUID));
+            String string = stack.get(EnigmaticComponents.WORMHOLE_UUID);
+            if (string == null) return;
+            UUID uuid = UUID.fromString(string);
             Player destination = player.level().getPlayerByUUID(uuid);
             if (destination != null && destination.level() instanceof ServerLevel server) {
                 performTeleport(player, server, destination, EnumSet.noneOf(RelativeMovement.class));

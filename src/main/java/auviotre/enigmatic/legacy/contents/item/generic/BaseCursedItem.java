@@ -1,7 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.generic;
 
-import auviotre.enigmatic.legacy.api.item.ICursed;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -10,9 +10,9 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
 
-public class BaseCursedItem extends BaseItem implements ICursed {
+public class BaseCursedItem extends BaseItem {
     public BaseCursedItem(Properties properties) {
-        super(properties);
+        super(properties.component(EnigmaticComponents.CURSED, true));
     }
 
     @OnlyIn(Dist.CLIENT)

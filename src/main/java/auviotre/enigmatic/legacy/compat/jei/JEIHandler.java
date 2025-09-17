@@ -60,6 +60,12 @@ public class JEIHandler implements IModPlugin {
         List<IJeiAnvilRecipe> recipes = new ArrayList<>();
         IVanillaRecipeFactory factory = registration.getVanillaRecipeFactory();
         addRepairData(recipes, factory, EnigmaticItems.EXECUTION_AXE.toStack(), Ingredient.of(Items.NETHERITE_INGOT));
+        addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_SWORD.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
+        addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_HAMMER.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
+        addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_HELMET.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
+        addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_CHESTPLATE.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
+        addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_LEGGINGS.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
+        addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_BOOTS.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
         addRepairData(recipes, factory, EnigmaticItems.MAJESTIC_ELYTRA.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
         addRepairData(recipes, factory, EnigmaticItems.INFERNAL_SHIELD.toStack(), Ingredient.of(Blocks.OBSIDIAN.asItem()));
         addRepairData(recipes, factory, EnigmaticItems.ENDER_SLAYER.toStack(), Ingredient.of(Blocks.OBSIDIAN.asItem()));

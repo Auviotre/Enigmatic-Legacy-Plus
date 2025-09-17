@@ -11,6 +11,9 @@ public class EnigmaticSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> CHARGED_ON = register("misc.charge_on");
     public static final DeferredHolder<SoundEvent, SoundEvent> CHARGED_OFF = register("misc.charge_off");
     public static final DeferredHolder<SoundEvent, SoundEvent> ACCELERATE = register("misc.accelerate");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DEFLECT = register("misc.deflect");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ETHERIUM_SHIELD_DEFLECT = register("misc.etherium_shield.deflect");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ARMOR_EQUIP_ETHERIUM = register("item.armor.equip_etherium");
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(EnigmaticLegacy.location(name)));

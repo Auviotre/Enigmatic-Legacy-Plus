@@ -1,9 +1,11 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticDamageTypes;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -25,10 +27,13 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.ArrayList;
@@ -39,10 +44,6 @@ import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
 public class VoidPearl extends SpellstoneItem {
     public VoidPearl() {
         super(defaultSingleProperties().rarity(Rarity.RARE));
-        NeoForge.EVENT_BUS.register(this);
-
-        this.immunityList.add(DamageTypes.DROWN);
-        this.immunityList.add(DamageTypes.IN_WALL);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -66,9 +67,10 @@ public class VoidPearl extends SpellstoneItem {
         this.addKeyText(list);
     }
 
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
-        LivingEntity entity = slotContext.entity();
+    public void curioTick(SlotContext context, ItemStack stack) {
+        LivingEntity entity = context.entity();
         if (entity.isOnFire()) entity.clearFire();
+        if (entity.isFreezing()) entity.setTicksFrozen(0);
         if (entity.getAirSupply() < entity.getMaxAirSupply()) entity.setAirSupply(entity.getMaxAirSupply());
 
         for (MobEffectInstance effect : new ArrayList<>(entity.getActiveEffects())) {
@@ -104,30 +106,42 @@ public class VoidPearl extends SpellstoneItem {
         return 0;
     }
 
-    @SubscribeEvent
-    public void onAttack(LivingDamageEvent.Post event) {
-        if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && event.getSource().is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-            if (ISpellstone.get(attacker).is(this)) {
-                event.getEntity().addEffect(new MobEffectInstance(MobEffects.WITHER, (int) (CONFIG.SPELLSTONES.witheringTime.get() * 20), CONFIG.SPELLSTONES.witheringLevel.get(), false, true), attacker);
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.VOID_PEARL)) {
+                if (event.getSource().is(DamageTypes.DROWN) || event.getSource().is(DamageTypes.IN_WALL))
+                    event.setCanceled(true);
             }
         }
-    }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onLivingDeath(LivingDeathEvent event) {
-        LivingEntity entity = event.getEntity();
-        if (ISpellstone.get(entity).is(this) && entity.getRandom().nextFloat() < 0.01F * CONFIG.SPELLSTONES.undeadProbability.getAsInt()) {
-            event.setCanceled(true);
-            entity.setHealth(1);
+        @SubscribeEvent
+        private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
+            if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && event.getSource().is(DamageTypeTags.IS_PLAYER_ATTACK)) {
+                if (ISpellstone.get(attacker).is(EnigmaticItems.VOID_PEARL)) {
+                    event.getEntity().addEffect(new MobEffectInstance(MobEffects.WITHER, (int) (CONFIG.SPELLSTONES.witheringTime.get() * 20), CONFIG.SPELLSTONES.witheringLevel.get(), false, true), attacker);
+                }
+            }
         }
-    }
 
-    @SubscribeEvent
-    public void onApplyPotion(MobEffectEvent.Applicable event) {
-        if (event.getEffectInstance() == null) return;
-        if (event.getEffectInstance().getEffect().is(EnigmaticTags.Effects.ALWAYS_APPLY)) return;
-        if (ISpellstone.get(event.getEntity()).is(this)) {
-            event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
+        @SubscribeEvent(priority = EventPriority.HIGHEST)
+        private static void onLivingDeath(@NotNull LivingDeathEvent event) {
+            LivingEntity entity = event.getEntity();
+            if (ISpellstone.get(entity).is(EnigmaticItems.VOID_PEARL) && entity.getRandom().nextFloat() < 0.01F * CONFIG.SPELLSTONES.undeadProbability.getAsInt()) {
+                event.setCanceled(true);
+                entity.setHealth(1);
+            }
+        }
+
+        @SubscribeEvent
+        private static void onApplyPotion(MobEffectEvent.@NotNull Applicable event) {
+            if (event.getEffectInstance() == null) return;
+            if (event.getEffectInstance().getEffect().is(EnigmaticTags.Effects.ALWAYS_APPLY)) return;
+            if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.VOID_PEARL)) {
+                event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
+            }
         }
     }
 }

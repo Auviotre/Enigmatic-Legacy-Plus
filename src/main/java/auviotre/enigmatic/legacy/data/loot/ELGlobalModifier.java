@@ -85,11 +85,11 @@ public class ELGlobalModifier extends GlobalLootModifierProvider {
     @SafeVarargs
     private void addChest(ResourceKey<LootTable> addon, ResourceKey<LootTable>... lootTables) {
         AnyOfCondition.Builder builder = new AnyOfCondition.Builder();
-        for (ResourceKey<LootTable> lootTable : lootTables){
+        for (ResourceKey<LootTable> lootTable : lootTables) {
             builder = builder.or(LootTableIdCondition.builder(lootTable.location()));
         }
         this.add(addon.location().getPath(),
-                new AddTableLootModifier(new LootItemCondition[] {builder.build()}, addon)
+                new AddTableLootModifier(new LootItemCondition[]{builder.build()}, addon)
         );
     }
 }

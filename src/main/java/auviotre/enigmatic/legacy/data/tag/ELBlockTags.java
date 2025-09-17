@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.data.tag;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.registries.EnigmaticBlocks;
+import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
@@ -23,6 +24,14 @@ public class ELBlockTags extends BlockTagsProvider {
                 EnigmaticBlocks.ETHERIUM_ORE.get(),
                 EnigmaticBlocks.ETHERIUM_BLOCK.get()
         );
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
+                EnigmaticBlocks.DIMENSIONAL_ANCHOR.get(),
+                EnigmaticBlocks.ETHERIUM_ORE.get(),
+                EnigmaticBlocks.ETHERIUM_BLOCK.get()
+        );
+        this.tag(BlockTags.MINEABLE_WITH_HOE).add(
+                EnigmaticBlocks.ASTRAL_DUST_SACK.get()
+        );
         this.tag(Tags.Blocks.ORES).add(
                 EnigmaticBlocks.ETHERIUM_ORE.get()
         );
@@ -30,5 +39,10 @@ public class ELBlockTags extends BlockTagsProvider {
                 EnigmaticBlocks.ASTRAL_DUST_SACK.get(),
                 EnigmaticBlocks.ETHERIUM_BLOCK.get()
         );
+        this.tag(EnigmaticTags.Blocks.ALL_MINEABLE)
+                .addTag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .addTag(BlockTags.MINEABLE_WITH_AXE)
+                .addTag(BlockTags.MINEABLE_WITH_SHOVEL)
+                .addTag(BlockTags.MINEABLE_WITH_HOE);
     }
 }

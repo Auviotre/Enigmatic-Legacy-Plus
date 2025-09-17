@@ -15,7 +15,7 @@ public interface TooltipHandler {
     char[] LOWERCASE_LETTERS = "abcdefghijklmnopqrstuvwxyz".toCharArray();
     char[] NUMBERS = "0123456789".toCharArray();
     char[] SPECIAL_SYMBOLS = "-+=(){}[]':;./,<>*&^%$#@!?~".toCharArray();
-    
+
     static void line(List<Component> list) {
         list.add(Component.empty());
     }

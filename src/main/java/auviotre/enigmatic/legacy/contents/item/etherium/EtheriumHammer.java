@@ -1,0 +1,128 @@
+package auviotre.enigmatic.legacy.contents.item.etherium;
+
+import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticTags;
+import com.google.common.collect.Sets;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+
+import static auviotre.enigmatic.legacy.contents.item.etherium.EtheriumSword.TIER;
+
+public class EtheriumHammer extends DiggerItem {
+    public EtheriumHammer() {
+        super(TIER, EnigmaticTags.Blocks.ALL_MINEABLE, new Item.Properties().fireResistant().attributes(createAttributes(TIER, 9.0F, -3.0F)
+        ).component(EnigmaticComponents.ETHERIUM_TOOL, 4));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammer1", ChatFormatting.GOLD, 3, 1);
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammer2");
+        TooltipHandler.line(list);
+    }
+
+
+    public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
+        return ItemAbilities.DEFAULT_PICKAXE_ACTIONS.contains(ability) || ability == ItemAbilities.AXE_DIG
+                || ability == ItemAbilities.SHOVEL_DIG || ability == ItemAbilities.HOE_DIG || ability == ItemAbilities.SWORD_DIG;
+    }
+
+    public void spawnFlameParticles(ServerLevel level, BlockPos pos) {
+        Vec3 center = pos.getCenter();
+        ItemParticleOption particle = new ItemParticleOption(ParticleTypes.ITEM, EnigmaticItems.ETHERIUM_INGOT.toStack());
+        level.sendParticles(particle, center.x, center.y, center.z, 6, 0.5, 0.5, 0.5, 0);
+    }
+
+    public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
+        if (level instanceof ServerLevel server) this.spawnFlameParticles(server, pos);
+        if (miningEntity.isCrouching()) return super.mineBlock(stack, level, state, pos, miningEntity);
+        if (miningEntity instanceof Player player && isCorrectToolForDrops(stack, state) && !level.isClientSide()) {
+            BlockHitResult hitResult = Item.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);
+            if (hitResult.getType() == HitResult.Type.BLOCK) {
+                Helper.destroyBlocks(level, player, hitResult.getDirection(), pos, (objState) -> isCorrectToolForDrops(stack, objState), 3, 1, true, pos, stack, (objPos, objState) -> {
+                    stack.hurtAndBreak(1, miningEntity, EquipmentSlot.MAINHAND);
+                    if (level instanceof ServerLevel server) this.spawnFlameParticles(server, objPos);
+                });
+            }
+        }
+        return super.mineBlock(stack, level, state, pos, miningEntity);
+    }
+
+    public interface Helper {
+        static void tryBreak(Level level, BlockPos pos, Player player, Set<Block> effectiveOn, Predicate<BlockState> predicate, boolean checkHarvestLevel, ItemStack tool, BiConsumer<BlockPos, BlockState> toolDamageConsumer) {
+            BlockState state = level.getBlockState(pos);
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+
+            boolean validHarvest = !checkHarvestLevel || player.getMainHandItem().isCorrectToolForDrops(state);
+            boolean isEffective = effectiveOn.contains(state.getBlock()) || predicate.test(state);
+            boolean unbreakable = state.is(BlockTags.WITHER_IMMUNE) || state.getBlock() == Blocks.SPAWNER || state.getDestroySpeed(level, pos) < 0F;
+
+            if (validHarvest && isEffective && !unbreakable) {
+                level.destroyBlock(pos, false);
+                Block.dropResources(state, level, pos, blockEntity, player, player.getMainHandItem());
+                toolDamageConsumer.accept(pos, state);
+                int exp = state.getExpDrop(level, pos, blockEntity, player, player.getMainHandItem());
+                if (exp > 0 && level instanceof ServerLevel) {
+                    state.getBlock().popExperience((ServerLevel) level, pos, exp);
+                }
+            }
+        }
+        static void destroyPlane(Level world, Player player, Direction dir, BlockPos pos, Predicate<BlockState> predicate, int radius, boolean check, @Nullable BlockPos excludedBlock, ItemStack tool, BiConsumer<BlockPos, BlockState> toolDamageConsumer) {
+            int supRad = (radius - 1) / 2;
+            for (int a = -supRad; a <= supRad; a++) {
+                for (int b = -supRad; b <= supRad; b++) {
+                    BlockPos target = null;
+                    if (dir == Direction.UP || dir == Direction.DOWN) target = pos.offset(a, 0, b);
+                    if (dir == Direction.NORTH || dir == Direction.SOUTH) target = pos.offset(a, b, 0);
+                    if (dir == Direction.EAST || dir == Direction.WEST) target = pos.offset(0, a, b);
+                    if (target != null && target.equals(excludedBlock)) continue;
+                    tryBreak(world, target, player, Sets.newHashSet(), predicate, check, tool, toolDamageConsumer);
+                }
+            }
+        }
+
+        static void destroyBlocks(Level world, Player player, Direction direction, BlockPos pos, Predicate<BlockState> predicate, int radius, int depth, boolean check, @Nullable BlockPos excludedBlock, ItemStack tool, BiConsumer<BlockPos, BlockState> toolDamageConsumer) {
+            for (int a = 0; a < depth; a++) {
+                Vec3i offset = new Vec3i(0, 0, 0);
+                offset.offset(direction.getNormal());
+
+                destroyPlane(world, player, direction, pos.subtract(offset), predicate, radius, check, excludedBlock, tool, toolDamageConsumer);
+            }
+        }
+    }
+}

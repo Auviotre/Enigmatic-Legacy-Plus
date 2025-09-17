@@ -19,6 +19,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelResource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.InputStream;
@@ -144,24 +146,7 @@ public class SoulArchive {
         }
     }
 
-    private static class SoulData {
-        private ResourceLocation dimension;
-        private UUID id;
-        private UUID ownerID;
-        private BlockPos pos;
-        private int type;
-
-        SoulData(ResourceLocation dimension, UUID id, UUID ownerID, BlockPos pos, int type) {
-            this.dimension = dimension;
-            this.id = id;
-            this.ownerID = ownerID;
-            this.pos = pos;
-            this.type = type;
-        }
-
-        public int hashCode() {
-            return Objects.hash(this.dimension, this.id, this.ownerID, this.pos, this.type);
-        }
+    private record SoulData(ResourceLocation dimension, UUID id, UUID ownerID, BlockPos pos, int type) {
 
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -171,11 +156,12 @@ public class SoulArchive {
             return Objects.equals(this.dimension, other.dimension) && Objects.equals(this.id, other.id) && Objects.equals(this.ownerID, other.ownerID) && Objects.equals(this.pos, other.pos) && this.type == other.type;
         }
 
-        public String toString() {
+        @Contract(pure = true)
+        public @NotNull String toString() {
             return "SoulData [dimension=" + this.dimension + ", id=" + this.id + ", ownerID=" + this.ownerID + ", pos=" + this.pos + ", type=" + this.type + "]";
         }
 
-        boolean isEqual(PermanentItemEntity item) {
+        boolean isEqual(@NotNull PermanentItemEntity item) {
             return Objects.equals(this.id, item.getUUID()) && Objects.equals(this.ownerID, item.getOwnerId());
         }
     }

@@ -14,9 +14,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity implements ILivingEntityExtension {
-    @Shadow protected ItemStack useItem;
+    @Shadow
+    protected ItemStack useItem;
 
-    @Shadow public abstract boolean isUsingItem();
+    @Shadow
+    public abstract boolean isUsingItem();
 
     @Inject(method = "isDamageSourceBlocked", at = @At("HEAD"), cancellable = true)
     private void onDamageSourceBlocking(DamageSource source, CallbackInfoReturnable<Boolean> info) {
