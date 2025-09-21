@@ -11,10 +11,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -31,6 +31,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -68,12 +69,6 @@ public class TheTwist extends TheAcknowledgment {
         TooltipHandler.cursedOnly(list, stack);
     }
 
-    public float getAttackDamageBonus(@NotNull Entity target, float damage, DamageSource damageSource) {
-        if (target.getType().is(Tags.EntityTypes.BOSSES))
-            return damage * 0.01F * CONFIG.CURSED_ITEMS.specialDamageBoost.get();
-        return super.getAttackDamageBonus(target, damage, damageSource);
-    }
-
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         if (!EnigmaticHandler.isTheCursedOne(player)) return InteractionResultHolder.pass(player.getItemInHand(hand));
         if (hand == InteractionHand.MAIN_HAND) {
@@ -93,6 +88,18 @@ public class TheTwist extends TheAcknowledgment {
                 if (entity.getMainHandItem().is(EnigmaticItems.THE_TWIST))
                     entity.getAttributes().addTransientAttributeModifiers(getKnockbackModifier());
                 else entity.getAttributes().removeAttributeModifiers(getKnockbackModifier());
+            }
+        }
+
+        @SubscribeEvent
+        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES)) {
+                DamageSource source = event.getSource();
+                if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
+                    if (attacker.getMainHandItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
+                        event.setNewDamage(event.getNewDamage() * (1 + 0.01F * CONFIG.CURSED_ITEMS.specialDamageBoost.get()));
+                    }
+                }
             }
         }
     }

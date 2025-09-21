@@ -30,7 +30,7 @@ import java.util.List;
 
 public class XpScroll extends BaseCurioItem {
     public XpScroll() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON));
+        super(defaultSingleProperties().rarity(Rarity.UNCOMMON).component(EnigmaticComponents.XP_SCROLL_STORED, 0L));
     }
 
     public static void trigger(Level level, ItemStack stack, Player player, InteractionHand hand, boolean swing) {

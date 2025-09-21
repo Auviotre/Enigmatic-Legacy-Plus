@@ -3,7 +3,9 @@ package auviotre.enigmatic.legacy.contents.entity;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.SoulCrystal;
+import auviotre.enigmatic.legacy.contents.item.StorageCrystal;
 import auviotre.enigmatic.legacy.handlers.SoulArchive;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEntities;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.core.particles.ParticleTypes;
@@ -31,6 +33,7 @@ import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -107,7 +110,7 @@ public class PermanentItemEntity extends Entity {
         return Entity.MovementEmission.NONE;
     }
 
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
         builder.define(PermanentItemEntity.ITEM, ItemStack.EMPTY);
     }
 
@@ -222,29 +225,38 @@ public class PermanentItemEntity extends Entity {
         if (this.level() instanceof ServerLevel level) {
             if (this.pickupDelay > 0) return;
 
-            ItemStack itemstack = this.getItem();
-            Item item = itemstack.getItem();
-            int count = itemstack.getCount();
+            ItemStack stack = this.getItem();
+            Item item = stack.getItem();
+            int count = stack.getCount();
 
-            ItemStack copy = itemstack.copy();
+            ItemStack copy = stack.copy();
             boolean isPlayerOwner = player.getUUID().equals(this.getOwnerId());
-            boolean allowPickUp = item instanceof SoulCrystal && isPlayerOwner;
+            boolean allowPickUp = (item instanceof SoulCrystal || item instanceof StorageCrystal) && isPlayerOwner;
 
             if (allowPickUp) {
-                if (!SoulCrystal.retrieveSoulFromCrystal(player)) return;
-                else SoulArchive.getInstance().removeItem(this);
+                if (item instanceof StorageCrystal) {
+                    StorageCrystal.StorageInfo info = stack.get(EnigmaticComponents.STORAGE_INFO);
+                    if (info != null) {
+                        ItemStack crystal = info.soulCrystal();
+                        StorageCrystal.retrieveDropsFromCrystal(stack, player, crystal, this.position());
+                    }
+                    SoulArchive.getInstance().removeItem(this);
+                } else {
+                    if (!SoulCrystal.retrieveSoulFromCrystal(player)) return;
+                    else SoulArchive.getInstance().removeItem(this);
+                }
                 level.sendParticles(ParticleTypes.DRAGON_BREATH, this.getX(), this.getY(0.5), this.getZ(), 48, 0, 0, 0, 0.03);
                 player.take(this, count);
                 EnigmaticLegacy.LOGGER.info("Player " + player.getGameProfile().getName() + " picking up: " + this);
                 this.discard();
-                itemstack.setCount(0);
-            } else if (this.pickupDelay == 0 && (this.owner == null || this.owner.equals(player.getUUID())) && (count <= 0 || player.getInventory().add(itemstack))) {
+                stack.setCount(0);
+            } else if (this.pickupDelay == 0 && (this.owner == null || this.owner.equals(player.getUUID())) && (count <= 0 || player.getInventory().add(stack))) {
                 copy.setCount(copy.getCount() - this.getItem().getCount());
-                if (itemstack.isEmpty()) {
+                if (stack.isEmpty()) {
                     player.take(this, count);
                     EnigmaticLegacy.LOGGER.info("Player " + player.getGameProfile().getName() + " picking up: " + this);
                     this.discard();
-                    itemstack.setCount(count);
+                    stack.setCount(count);
                 }
                 player.awardStat(Stats.ITEM_PICKED_UP.get(item), count);
             }

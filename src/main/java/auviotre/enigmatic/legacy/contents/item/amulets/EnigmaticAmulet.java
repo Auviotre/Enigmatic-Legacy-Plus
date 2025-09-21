@@ -6,16 +6,22 @@ import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
@@ -25,10 +31,12 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.event.CurioCanEquipEvent;
 
 import java.util.List;
 
@@ -72,10 +80,19 @@ public class EnigmaticAmulet extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmulet1");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmulet2");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmulet3");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmulet4");
+        if (Screen.hasShiftDown()) {
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletShift1");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletShift2");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletShift3");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletShift4");
+        } else {
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmulet1");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmulet2");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmulet3");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmulet4");
+            TooltipHandler.line(list);
+            TooltipHandler.holdShift(list);
+        }
 
         String name = stack.get(EnigmaticComponents.AMULET_NAME);
         if (name != null) {
@@ -173,6 +190,22 @@ public class EnigmaticAmulet extends BaseCurioItem {
         private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
             if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && !attacker.level().isClientSide()) {
                 if (hasColor(attacker, AmuletColor.BLACK)) attacker.heal(event.getNewDamage() * 0.1F);
+            }
+        }
+
+        @SubscribeEvent
+        private static void onEquip(@NotNull CurioCanEquipEvent event) {
+            if (event.getEntity() instanceof Player player && player.isCreative()) return;
+            if (event.getStack().is(EnigmaticTags.Items.AMULETS)) {
+                HolderLookup<Item> holder = event.getEntity().level().holderLookup(Registries.ITEM);
+                holder.get(EnigmaticTags.Items.AMULETS).ifPresent(holders -> {
+                    for (Holder<Item> itemHolder : holders) {
+                        if (EnigmaticHandler.hasCurio(event.getEntity(), itemHolder.value())) {
+                            event.setEquipResult(TriState.FALSE);
+                            return;
+                        }
+                    }
+                });
             }
         }
     }

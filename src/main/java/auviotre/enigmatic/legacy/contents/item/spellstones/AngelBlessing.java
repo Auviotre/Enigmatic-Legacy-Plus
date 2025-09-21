@@ -90,7 +90,7 @@ public class AngelBlessing extends SpellstoneItem {
         super.triggerActiveAbility(level, player, stack);
     }
 
-    public void curioTick(SlotContext context, ItemStack stack) {
+    public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity living = context.entity();
 
         if (!(living.level() instanceof ServerLevel level)) return;

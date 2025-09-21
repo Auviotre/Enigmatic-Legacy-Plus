@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "enigmaticlegacyplus:item/miner_ring"
+    "layer0": "enigmaticlegacyplus:item/miner_ring_on"
   }
 }

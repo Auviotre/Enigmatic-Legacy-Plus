@@ -1,15 +1,22 @@
 package auviotre.enigmatic.legacy.contents.item.amulets;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -21,15 +28,22 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EldritchAmulet extends BaseCurioItem {
     public EldritchAmulet() {
@@ -42,6 +56,9 @@ public class EldritchAmulet extends BaseCurioItem {
         if (Screen.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmulet1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmulet2");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmulet3");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmulet4");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmulet5");
         } else {
             TooltipHandler.holdShift(list);
             String name = stack.get(EnigmaticComponents.AMULET_NAME);
@@ -96,10 +113,61 @@ public class EldritchAmulet extends BaseCurioItem {
         return map;
     }
 
-    @SubscribeEvent
-    public void onDamagePost(LivingDamageEvent.@NotNull Post event) {
-        if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && !attacker.level().isClientSide()) {
-            if (EnigmaticHandler.hasCurio(attacker, this)) attacker.heal(event.getNewDamage() * 0.15F);
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onDamagePost(LivingDamageEvent.@NotNull Post event) {
+            if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && !attacker.level().isClientSide()) {
+                if (EnigmaticHandler.hasCurio(attacker, EnigmaticItems.ELDRITCH_AMULET)) attacker.heal(event.getNewDamage() * 0.15F);
+            }
         }
+    }
+
+
+    private static Map<String, NonNullList<ItemStack>> inventoryMap(Player player) {
+        Map<String, NonNullList<ItemStack>> inventories = new HashMap<>();
+        inventories.put("Armor", player.getInventory().armor);
+        inventories.put("Main", player.getInventory().items);
+        inventories.put("Offhand", player.getInventory().offhand);
+        return inventories;
+    }
+
+    public static void storeInventory(ServerPlayer player) {
+        Map<String, NonNullList<ItemStack>> inventories = inventoryMap(player);
+        CompoundTag tag = new CompoundTag();
+        Holder<Enchantment> holder = player.registryAccess().holderOrThrow(Enchantments.VANISHING_CURSE);
+        inventories.forEach((key, value) -> {
+            ListTag list = new ListTag();
+            for (int i = 0; i < value.size(); i++) {
+                ItemStack stack = value.get(i);
+                if (EnchantmentHelper.getTagEnchantmentLevel(holder, stack) > 0) stack = ItemStack.EMPTY;
+                list.add(stack.saveOptional(player.registryAccess()));
+                value.set(i, ItemStack.EMPTY);
+            }
+            tag.put("Inventory" + key, list);
+        });
+        EnigmaticHandler.getPersistedData(player).put("ELPersistentInventory", tag);
+    }
+
+    public static boolean reclaimInventory(ServerPlayer oldPlayer, ServerPlayer newPlayer) {
+        Map<String, NonNullList<ItemStack>> inventories = inventoryMap(newPlayer);
+        Tag maybeTag = EnigmaticHandler.getPersistedData(oldPlayer).get("ELPersistentInventory");
+        boolean hadTag = false;
+        if (maybeTag instanceof CompoundTag tag) {
+            EnigmaticHandler.getPersistedData(oldPlayer).remove("ELPersistentInventory");
+            hadTag = true;
+            inventories.forEach((key, value) -> {
+                Tag maybeList = tag.get("Inventory" + key);
+                if (maybeList instanceof ListTag list) {
+                    for (int i = 0; i < value.size(); i++) {
+                        CompoundTag stackTag = list.getCompound(i);
+                        ItemStack stack = ItemStack.parseOptional(newPlayer.registryAccess(), stackTag);
+                        value.set(i, stack);
+                    }
+                }
+            });
+        }
+        return hadTag;
     }
 }

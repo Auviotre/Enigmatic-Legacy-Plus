@@ -21,6 +21,7 @@ public interface EnigmaticLootTables {
         ResourceKey<LootTable> ANGEL_BLESSING = key("angel_blessing");
         ResourceKey<LootTable> EYE_OF_NEBULA = key("eye_of_nebula");
         ResourceKey<LootTable> VOID_PEARL = key("void_pearl");
+        ResourceKey<LootTable> FORGOTTEN_ICE = key("forgotten_ice");
         ResourceKey<LootTable> LOST_ENGINE = key("lost_engine");
 
         private static ResourceKey<LootTable> key(String name) {

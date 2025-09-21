@@ -35,7 +35,7 @@ public class SoulCrystal extends BaseItem implements IPermanentCrystal {
     public static final Map<Player, Multimap<Holder<Attribute>, AttributeModifier>> ATTRIBUTE_DISPATCHER = new WeakHashMap<>();
 
     public SoulCrystal() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC));
+        super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC));
     }
 
     public static ItemStack createCrystalFrom(Player player) {
@@ -101,7 +101,7 @@ public class SoulCrystal extends BaseItem implements IPermanentCrystal {
             updatePlayerSoulMap(player);
             // TODO: Add Particle Packet.
             player.swing(hand);
-            stack.setCount(0);
+            stack.consume(1, player);
             return InteractionResultHolder.success(stack);
         }
         return InteractionResultHolder.pass(stack);

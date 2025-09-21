@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.registries;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.loot.conditions.IsMonsterCondition;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import net.minecraft.advancements.critereon.DamageSourcePredicate;
@@ -164,13 +165,20 @@ public class EnigmaticEnchantments {
 
         @SubscribeEvent
         private static void onDrop(@NotNull DropRulesEvent event) {
-            event.addOverride(
-                    stack -> {
+            event.addOverride(stack -> {
                         Holder<Enchantment> holder = event.getEntity().registryAccess().holderOrThrow(ETERNAL_BINDING_CURSE);
-                        return stack.is(EnigmaticItems.CURSED_RING) || stack.is(EnigmaticItems.ENIGMATIC_AMULET) || EnchantmentHelper.getTagEnchantmentLevel(holder, stack) > 0;
-                    },
-                    ICurio.DropRule.ALWAYS_KEEP
+                        return stack.is(EnigmaticItems.CURSED_RING) || stack.is(EnigmaticTags.Items.AMULETS)
+                                || EnigmaticHandler.isEldritchItem(stack) || EnchantmentHelper.getTagEnchantmentLevel(holder, stack) > 0;
+                    }, ICurio.DropRule.ALWAYS_KEEP
             );
+            if (event.getEntity() instanceof Player player) {
+                if (CursedRing.POSSESSIONS.containsEntry(player, EnigmaticItems.ELDRITCH_AMULET)) {
+                    event.addOverride(stack -> {
+                        Holder<Enchantment> holder = event.getEntity().registryAccess().holderOrThrow(Enchantments.VANISHING_CURSE);
+                        return EnchantmentHelper.getTagEnchantmentLevel(holder, stack) <= 0;
+                    }, ICurio.DropRule.ALWAYS_KEEP);
+                }
+            }
         }
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)

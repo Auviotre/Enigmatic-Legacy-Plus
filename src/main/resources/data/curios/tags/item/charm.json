@@ -1,12 +1,9 @@
 {
   "values": [
-    "enigmaticlegacyplus:unwitnessed_amulet",
-    "enigmaticlegacyplus:enigmatic_amulet",
-    "enigmaticlegacyplus:ascension_amulet",
+    "#curios:amulets",
     "enigmaticlegacyplus:mining_charm",
     "enigmaticlegacyplus:monster_charm",
     "enigmaticlegacyplus:berserk_emblem",
-    "enigmaticlegacyplus:enchanter_pearl",
-    "enigmaticlegacyplus:eldritch_amulet"
+    "enigmaticlegacyplus:enchanter_pearl"
   ]
 }

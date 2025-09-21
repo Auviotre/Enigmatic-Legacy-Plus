@@ -6,8 +6,10 @@ import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -39,9 +41,11 @@ public class DesolationRing extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing1");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing2");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing3");
+        if (Screen.hasShiftDown()) {
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing1");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing2");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing3");
+        } else TooltipHandler.holdShift(list);
         TooltipHandler.line(list);
         TooltipHandler.worthyOnly(list, stack);
     }
@@ -75,6 +79,12 @@ public class DesolationRing extends BaseCurioItem {
                 if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.DESOLATION_RING))
                     BOXES.put(entity, entity.getBoundingBox().inflate(64));
                 else BOXES.remove(entity);
+            }
+            if (event.getEntity() instanceof ItemEntity itemEntity) {
+                if (BOXES.values().stream().anyMatch(itemEntity.getBoundingBox()::intersects)) {
+                    itemEntity.tick();
+                    itemEntity.tick();
+                }
             }
         }
 

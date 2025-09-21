@@ -4,7 +4,6 @@ import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
-import com.google.common.collect.Sets;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,7 +36,6 @@ import net.neoforged.neoforge.common.ItemAbility;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
@@ -84,21 +82,21 @@ public class EtheriumHammer extends DiggerItem {
     }
 
     public interface Helper {
-        static void tryBreak(Level level, BlockPos pos, Player player, Set<Block> effectiveOn, Predicate<BlockState> predicate, boolean checkHarvestLevel, ItemStack tool, BiConsumer<BlockPos, BlockState> toolDamageConsumer) {
+        static void tryBreak(Level level, BlockPos pos, Player player, Predicate<BlockState> predicate, boolean checkHarvestLevel, ItemStack tool, BiConsumer<BlockPos, BlockState> toolDamageConsumer) {
             BlockState state = level.getBlockState(pos);
+            Block block = state.getBlock();
             BlockEntity blockEntity = level.getBlockEntity(pos);
 
-            boolean validHarvest = !checkHarvestLevel || player.getMainHandItem().isCorrectToolForDrops(state);
-            boolean isEffective = effectiveOn.contains(state.getBlock()) || predicate.test(state);
-            boolean unbreakable = state.is(BlockTags.WITHER_IMMUNE) || state.getBlock() == Blocks.SPAWNER || state.getDestroySpeed(level, pos) < 0F;
+            boolean validHarvest = !checkHarvestLevel || state.canHarvestBlock(level, pos, player);
+            boolean isEffective = predicate.test(state);
+            boolean unbreakable = state.is(BlockTags.WITHER_IMMUNE) || block == Blocks.SPAWNER || state.getDestroySpeed(level, pos) < 0F;
 
-            if (validHarvest && isEffective && !unbreakable) {
-                level.destroyBlock(pos, false);
-                Block.dropResources(state, level, pos, blockEntity, player, player.getMainHandItem());
-                toolDamageConsumer.accept(pos, state);
-                int exp = state.getExpDrop(level, pos, blockEntity, player, player.getMainHandItem());
-                if (exp > 0 && level instanceof ServerLevel) {
-                    state.getBlock().popExperience((ServerLevel) level, pos, exp);
+            if (isEffective && !unbreakable) {
+                boolean removed = state.onDestroyedByPlayer(level, pos, player, validHarvest, level.getFluidState(pos));
+                if (removed) {
+                    block.destroy(level, pos, state);
+                    block.playerDestroy(level, player, pos, state, blockEntity, tool);
+                    toolDamageConsumer.accept(pos, state);
                 }
             }
         }
@@ -111,7 +109,7 @@ public class EtheriumHammer extends DiggerItem {
                     if (dir == Direction.NORTH || dir == Direction.SOUTH) target = pos.offset(a, b, 0);
                     if (dir == Direction.EAST || dir == Direction.WEST) target = pos.offset(0, a, b);
                     if (target != null && target.equals(excludedBlock)) continue;
-                    tryBreak(world, target, player, Sets.newHashSet(), predicate, check, tool, toolDamageConsumer);
+                    tryBreak(world, target, player, predicate, check, tool, toolDamageConsumer);
                 }
             }
         }

@@ -4,6 +4,7 @@ import auviotre.enigmatic.legacy.api.item.ITaintable;
 import auviotre.enigmatic.legacy.client.ClientConfig;
 import auviotre.enigmatic.legacy.contents.item.SoulCrystal;
 import auviotre.enigmatic.legacy.contents.item.amulets.EnigmaticAmulet;
+import auviotre.enigmatic.legacy.contents.item.rings.MinerRing;
 import auviotre.enigmatic.legacy.handlers.SoulArchive;
 import auviotre.enigmatic.legacy.packets.toClient.*;
 import auviotre.enigmatic.legacy.packets.toServer.*;
@@ -93,6 +94,7 @@ public class EnigmaticLegacy {
             ItemProperties.register(EnigmaticItems.THE_INFINITUM.get(), ELDRITCH_LOCATION, eldritchFunc);
             ItemProperties.register(EnigmaticItems.ELDRITCH_AMULET.get(), ELDRITCH_LOCATION, eldritchFunc);
             ItemProperties.register(EnigmaticItems.DESOLATION_RING.get(), ELDRITCH_LOCATION, eldritchFunc);
+            ItemProperties.register(EnigmaticItems.MINER_RING.get(), ResourceLocation.withDefaultNamespace("on"), (stack, level, entity, i) -> MinerRing.getPoint(stack) > 0 ? 1.0F : 0.0F);
             ItemProperties.register(EnigmaticItems.INFERNAL_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
             ItemProperties.register(EnigmaticItems.ENIGMATIC_AMULET.get(), EnigmaticLegacy.location("amulet_color"), (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.AMULET_COLOR, 0.0F));
         } catch (Exception exception) {
@@ -123,6 +125,7 @@ public class EnigmaticLegacy {
         registrar.playToClient(ForceProjectileRotationsPacket.TYPE, ForceProjectileRotationsPacket.STREAM_CODEC, ForceProjectileRotationsPacket::handle);
         registrar.playToClient(PlayerMotionPacket.TYPE, PlayerMotionPacket.STREAM_CODEC, PlayerMotionPacket::handle);
         registrar.playToClient(PermanentDeathPacket.TYPE, PermanentDeathPacket.STREAM_CODEC, PermanentDeathPacket::handle);
+        registrar.playToClient(TotemOfMalicePacket.TYPE, TotemOfMalicePacket.STREAM_CODEC, TotemOfMalicePacket::handle);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {

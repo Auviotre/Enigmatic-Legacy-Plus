@@ -12,8 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
-import static auviotre.enigmatic.legacy.registries.EnigmaticDamageTypes.DARKNESS;
-import static auviotre.enigmatic.legacy.registries.EnigmaticDamageTypes.NEMESIS_CURSE;
+import static auviotre.enigmatic.legacy.registries.EnigmaticDamageTypes.*;
 
 public class ELDamageTypeTags extends DamageTypeTagsProvider {
     public ELDamageTypeTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
@@ -21,9 +20,12 @@ public class ELDamageTypeTags extends DamageTypeTagsProvider {
     }
 
     protected void addTags(HolderLookup.Provider provider) {
-        this.tag(DamageTypeTags.BYPASSES_ARMOR).add(NEMESIS_CURSE, DARKNESS);
-        this.tag(DamageTypeTags.BYPASSES_ENCHANTMENTS).add(DARKNESS);
-        this.tag(DamageTypeTags.BYPASSES_RESISTANCE).add(DARKNESS);
+        this.tag(DamageTypeTags.BYPASSES_ARMOR).add(NEMESIS_CURSE, EVIL_CURSE, DARKNESS);
+        this.tag(DamageTypeTags.BYPASSES_ENCHANTMENTS).add(DARKNESS, EVIL_CURSE);
+        this.tag(DamageTypeTags.BYPASSES_RESISTANCE).add(DARKNESS, EVIL_CURSE);
+        this.tag(DamageTypeTags.BYPASSES_COOLDOWN).add(EVIL_CURSE);
+        this.tag(DamageTypeTags.BYPASSES_EFFECTS).add(EVIL_CURSE);
+        this.tag(DamageTypeTags.BYPASSES_SHIELD).add(EVIL_CURSE);
         this.tag(DamageTypeTags.WITHER_IMMUNE_TO).add(DARKNESS);
 
         this.tag(EnigmaticTags.DamageTypes.GOLEM_HEART_IMMUNE_TO).add(
@@ -49,6 +51,10 @@ public class ELDamageTypeTags extends DamageTypeTagsProvider {
         this.tag(EnigmaticTags.DamageTypes.LOST_ENGINE_IMMUNE_TO).addTag(DamageTypeTags.IS_EXPLOSION).addTag(DamageTypeTags.IS_FALL).add(
                 DamageTypes.CACTUS,
                 DamageTypes.SWEET_BERRY_BUSH
+        );
+        this.tag(EnigmaticTags.DamageTypes.FORGOTTEN_ICE_RESISTANT_TO).add(
+                DamageTypes.SONIC_BOOM,
+                DamageTypes.MOB_PROJECTILE
         );
     }
 }

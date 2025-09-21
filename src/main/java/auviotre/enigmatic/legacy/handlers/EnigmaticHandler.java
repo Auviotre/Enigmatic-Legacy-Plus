@@ -54,6 +54,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.jetbrains.annotations.NotNull;
@@ -138,6 +139,17 @@ public interface EnigmaticHandler {
                 if (stack.is(item.asItem())) return stack;
         }
         return ItemStack.EMPTY;
+    }
+
+    static void destroyCurio(LivingEntity entity, ItemLike curio) {
+        CuriosApi.getCuriosInventory(entity).ifPresent(handler -> {
+            IItemHandlerModifiable curios = handler.getEquippedCurios();
+            for (int i = 0; i < curios.getSlots(); i++) {
+                if (curios.getStackInSlot(i).is(curio.asItem())) {
+                    curios.setStackInSlot(i, ItemStack.EMPTY);
+                }
+            }
+        });
     }
 
     static boolean isAttacker(Mob entity, LivingEntity target) {
@@ -368,7 +380,9 @@ public interface EnigmaticHandler {
             List<ResourceKey<MobEffect>> keys = holder.listElementIds().toList();
             for (ResourceKey<MobEffect> key : keys) {
                 MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(key);
-                if (effect != null && !effect.getCategory().equals(MobEffectCategory.HARMFUL) && !effect.isInstantenous()) {
+                if (effect != null && effect.getCategory().equals(MobEffectCategory.HARMFUL) && !effect.isInstantenous()) {
+                    if (holder.getOrThrow(EnigmaticTags.Effects.SHOULD_NOT_RANDOM_OUT).stream().anyMatch(effectHolder -> effectHolder.value().equals(effect)))
+                        continue;
                     try {
                         DEBUFF_LIST.add(holder.getOrThrow(key));
                     } catch (Exception ignored) {

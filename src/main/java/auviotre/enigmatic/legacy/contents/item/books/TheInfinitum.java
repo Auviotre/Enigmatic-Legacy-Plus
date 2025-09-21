@@ -87,8 +87,6 @@ public class TheInfinitum extends TheAcknowledgment {
     }
 
     public float getAttackDamageBonus(@NotNull Entity target, float damage, DamageSource damageSource) {
-        if (target.getType().is(Tags.EntityTypes.BOSSES))
-            return damage * 0.01F * CONFIG.CURSED_ITEMS.specialDamageBoost.get() / 1.5F;
         return super.getAttackDamageBonus(target, damage, damageSource);
     }
 
@@ -121,6 +119,18 @@ public class TheInfinitum extends TheAcknowledgment {
                     if (entity.getRandom().nextFloat() < 0.85F) {
                         event.setCanceled(true);
                         entity.setHealth(1);
+                    }
+                }
+            }
+        }
+
+        @SubscribeEvent
+        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES)) {
+                DamageSource source = event.getSource();
+                if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
+                    if (attacker.getMainHandItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
+                        event.setNewDamage(event.getNewDamage() * (1 + 0.01F * CONFIG.CURSED_ITEMS.specialDamageBoost.get() / 1.5F));
                     }
                 }
             }

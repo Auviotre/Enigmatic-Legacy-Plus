@@ -12,10 +12,12 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class EnigmaticDamageTypes {
+    public static final ResourceKey<DamageType> EVIL_CURSE = key("evil_curse");
     public static final ResourceKey<DamageType> NEMESIS_CURSE = key("nemesis_curse");
     public static final ResourceKey<DamageType> DARKNESS = key("darkness");
 
     public static void bootstrap(BootstrapContext<DamageType> context) {
+        context.register(EVIL_CURSE, new DamageType("enigmaticlegacy.evil_curse", 0.0F));
         context.register(NEMESIS_CURSE, new DamageType("enigmaticlegacy.nemesis_curse", 0.0F));
         context.register(DARKNESS, new DamageType("enigmaticlegacy.darkness", 0.0F));
     }

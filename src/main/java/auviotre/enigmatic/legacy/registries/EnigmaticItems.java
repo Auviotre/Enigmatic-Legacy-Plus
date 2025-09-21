@@ -1,10 +1,7 @@
 package auviotre.enigmatic.legacy.registries;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.contents.item.AstralFruit;
-import auviotre.enigmatic.legacy.contents.item.ExtradimensionalEye;
-import auviotre.enigmatic.legacy.contents.item.Infinimeal;
-import auviotre.enigmatic.legacy.contents.item.SoulCrystal;
+import auviotre.enigmatic.legacy.contents.item.*;
 import auviotre.enigmatic.legacy.contents.item.amulets.AscensionAmulet;
 import auviotre.enigmatic.legacy.contents.item.amulets.EldritchAmulet;
 import auviotre.enigmatic.legacy.contents.item.amulets.EnigmaticAmulet;
@@ -55,9 +52,11 @@ public class EnigmaticItems {
     public static final DeferredItem<AngelBlessing> ANGEL_BLESSING = registerWithTab("angel_blessing", AngelBlessing::new);
     public static final DeferredItem<EyeOfNebula> EYE_OF_NEBULA = registerWithTab("eye_of_nebula", EyeOfNebula::new);
     public static final DeferredItem<VoidPearl> VOID_PEARL = registerWithTab("void_pearl", VoidPearl::new);
+    public static final DeferredItem<ForgottenIce> FORGOTTEN_ICE = registerWithTab("forgotten_ice", ForgottenIce::new);
     public static final DeferredItem<LostEngine> LOST_ENGINE = registerWithTab("lost_engine", LostEngine::new);
     public static final DeferredItem<IronRing> IRON_RING = registerWithTab("iron_ring", IronRing::new);
     public static final DeferredItem<GoldenRing> GOLDEN_RING = registerWithTab("golden_ring", GoldenRing::new);
+    public static final DeferredItem<MinerRing> MINER_RING = registerWithTab("miner_ring", MinerRing::new);
     public static final DeferredItem<MagnetRing> MAGNET_RING = registerWithTab("magnet_ring", MagnetRing::new);
     public static final DeferredItem<QuartzRing> QUARTZ_RING = registerWithTab("quartz_ring", QuartzRing::new);
     public static final DeferredItem<EnderRing> ENDER_RING = registerWithTab("ender_ring", EnderRing::new);
@@ -104,10 +103,12 @@ public class EnigmaticItems {
     public static final DeferredItem<TwistedMirror> TWISTED_MIRROR = registerWithTab("twisted_mirror", TwistedMirror::new);
     public static final DeferredItem<InfernalShield> INFERNAL_SHIELD = registerWithTab("infernal_shield", InfernalShield::new);
     public static final DeferredItem<BerserkEmblem> BERSERK_EMBLEM = registerWithTab("berserk_emblem", BerserkEmblem::new);
+    public static final DeferredItem<CursedStone> CURSED_STONE = registerWithTab("cursed_stone", CursedStone::new);
     public static final DeferredItem<Item> EVIL_ESSENCE = registerWithTab("evil_essence", EvilEssence::new);
     public static final DeferredItem<Item> EVIL_INGOT = registerWithTab("evil_ingot", () -> new BaseCursedItem(BaseItem.defaultProperties().rarity(Rarity.UNCOMMON)));
     public static final DeferredItem<TheTwist> THE_TWIST = registerWithTab("the_twist", TheTwist::new);
     public static final DeferredItem<CurseTransposer> CURSE_TRANSPOSER = registerWithTab("curse_transposer", CurseTransposer::new);
+    public static final DeferredItem<TotemOfMalice> TOTEM_OF_MALICE = registerWithTab("totem_of_malice", TotemOfMalice::new);
     public static final DeferredItem<EnchanterPearl> ENCHANTER_PEARL = registerWithTab("enchanter_pearl", EnchanterPearl::new);
     public static final DeferredItem<EnderSlayer> ENDER_SLAYER = registerWithTab("ender_slayer", EnderSlayer::new);
     public static final DeferredItem<Item> DARKEST_SCROLL = registerWithTab("darkest_scroll", () -> new Item(BaseItem.defaultProperties(16).rarity(Rarity.UNCOMMON)));
@@ -118,6 +119,7 @@ public class EnigmaticItems {
     public static final DeferredItem<EldritchAmulet> ELDRITCH_AMULET = registerWithTab("eldritch_amulet", EldritchAmulet::new);
     public static final DeferredItem<DesolationRing> DESOLATION_RING = registerWithTab("desolation_ring", DesolationRing::new);
     public static final DeferredItem<SoulCrystal> SOUL_CRYSTAL = registerWithTab("soul_crystal", SoulCrystal::new);
+    public static final DeferredItem<StorageCrystal> STORAGE_CRYSTAL = ITEMS.register("storage_crystal", StorageCrystal::new);
     public static final DeferredItem<TheJudgement> THE_JUDGEMENT = ITEMS.register("the_judgement", TheJudgement::new);
     public static final DeferredItem<LootGenerator> LOOT_GENERATOR = ITEMS.register("loot_generator", LootGenerator::new);
 

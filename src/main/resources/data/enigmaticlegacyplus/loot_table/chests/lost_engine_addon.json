@@ -8,7 +8,7 @@
           "type": "minecraft:item",
           "conditions": [
             {
-              "chance": 0.06,
+              "chance": 0.05,
               "condition": "minecraft:random_chance"
             }
           ],

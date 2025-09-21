@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "enigmaticlegacyplus:item/stroage_crystal"
+    "layer0": "enigmaticlegacyplus:item/storage_crystal"
   }
 }

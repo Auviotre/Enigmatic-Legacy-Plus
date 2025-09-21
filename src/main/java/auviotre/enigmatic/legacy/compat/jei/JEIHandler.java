@@ -3,9 +3,9 @@ package auviotre.enigmatic.legacy.compat.jei;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.compat.jei.category.TaintingCategory;
 import auviotre.enigmatic.legacy.compat.jei.extension.CursedRecipeExtension;
-import auviotre.enigmatic.legacy.compat.jei.subtype.AmuletSubtypeInterpreter;
 import auviotre.enigmatic.legacy.compat.jei.subtype.TaintableSubtypeInterpreter;
 import auviotre.enigmatic.legacy.contents.crafting.CursedShapedRecipe;
+import auviotre.enigmatic.legacy.contents.item.tools.TotemOfMalice;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -39,7 +39,7 @@ public class JEIHandler implements IModPlugin {
         registration.registerSubtypeInterpreter(EnigmaticItems.EARTH_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
         registration.registerSubtypeInterpreter(EnigmaticItems.TWISTED_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
         registration.registerSubtypeInterpreter(EnigmaticItems.ABYSSAL_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
-        registration.registerSubtypeInterpreter(EnigmaticItems.ENIGMATIC_AMULET.get(), AmuletSubtypeInterpreter.INSTANCE);
+//        registration.registerSubtypeInterpreter(EnigmaticItems.ENIGMATIC_AMULET.get(), AmuletSubtypeInterpreter.INSTANCE);
     }
 
     public void registerVanillaCategoryExtensions(@NotNull IVanillaCategoryExtensionRegistration registration) {
@@ -69,6 +69,7 @@ public class JEIHandler implements IModPlugin {
         addRepairData(recipes, factory, EnigmaticItems.MAJESTIC_ELYTRA.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
         addRepairData(recipes, factory, EnigmaticItems.INFERNAL_SHIELD.toStack(), Ingredient.of(Blocks.OBSIDIAN.asItem()));
         addRepairData(recipes, factory, EnigmaticItems.ENDER_SLAYER.toStack(), Ingredient.of(Blocks.OBSIDIAN.asItem()));
+        addCustomDate(recipes, factory);
         registration.addRecipes(RecipeTypes.ANVIL, recipes);
     }
 
@@ -98,5 +99,16 @@ public class JEIHandler implements IModPlugin {
             );
             list.add(repairWithMaterial);
         }
+    }
+
+    private void addCustomDate(List<IJeiAnvilRecipe> list, IVanillaRecipeFactory factory) {
+        ItemStack stack = EnigmaticItems.TOTEM_OF_MALICE.toStack();
+        TotemOfMalice.setDurability(stack, TotemOfMalice.getMaxDurability(stack));
+        list.add(factory.createAnvilRecipe(
+                EnigmaticItems.TOTEM_OF_MALICE.toStack(),
+                List.of(EnigmaticItems.EVIL_ESSENCE.toStack()),
+                List.of(stack),
+                EnigmaticLegacy.location("materials_repair.")
+        ));
     }
 }

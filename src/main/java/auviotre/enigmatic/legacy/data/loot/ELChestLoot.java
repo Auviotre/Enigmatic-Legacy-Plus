@@ -81,9 +81,14 @@ public record ELChestLoot(HolderLookup.Provider registries) implements LootTable
                         .add(LootItem.lootTableItem(EnigmaticItems.EYE_OF_NEBULA).when(LootItemRandomChanceCondition.randomChance(0.053F)))
                 )
         );
+        output.accept(Chests.FORGOTTEN_ICE,
+                LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(EnigmaticItems.FORGOTTEN_ICE).when(LootItemRandomChanceCondition.randomChance(0.048F)))
+                )
+        );
         output.accept(Chests.LOST_ENGINE,
                 LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                        .add(LootItem.lootTableItem(EnigmaticItems.LOST_ENGINE).when(LootItemRandomChanceCondition.randomChance(0.06F)))
+                        .add(LootItem.lootTableItem(EnigmaticItems.LOST_ENGINE).when(LootItemRandomChanceCondition.randomChance(0.05F)))
                 )
         );
     }

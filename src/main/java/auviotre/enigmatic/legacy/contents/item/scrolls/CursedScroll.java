@@ -50,7 +50,7 @@ public class CursedScroll extends CursedCurioItem {
         return amount.get();
     }
 
-    private static int getItemCurseLevel(@NotNull ItemStack stack) {
+    public static int getItemCurseLevel(@NotNull ItemStack stack) {
         ItemEnchantments enchantments = stack.getTagEnchantments();
         int level = 0;
         if (stack.is(EnigmaticItems.CURSED_RING)) level += 7;

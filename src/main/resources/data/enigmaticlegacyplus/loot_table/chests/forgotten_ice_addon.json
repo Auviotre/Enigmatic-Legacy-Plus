@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "chance": 0.048,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "name": "enigmaticlegacyplus:forgotten_ice"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "enigmaticlegacyplus:chests/forgotten_ice_addon"
+}

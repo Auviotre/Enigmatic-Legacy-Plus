@@ -20,5 +20,6 @@ public class ELEffectTags extends TagsProvider<MobEffect> {
 
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(EnigmaticTags.Effects.ALWAYS_APPLY).add(MobEffects.NIGHT_VISION.getKey());
+        this.tag(EnigmaticTags.Effects.SHOULD_NOT_RANDOM_OUT).add(MobEffects.INFESTED.getKey());
     }
 }

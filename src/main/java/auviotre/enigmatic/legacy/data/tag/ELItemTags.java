@@ -63,7 +63,7 @@ public class ELItemTags extends ItemTagsProvider {
                 GOLEM_HEART.get(), BLAZING_CORE.get(),
                 OCEAN_STONE.get(), ANGEL_BLESSING.get(),
                 EYE_OF_NEBULA.get(), VOID_PEARL.get(),
-                LOST_ENGINE.get()
+                FORGOTTEN_ICE.get(), LOST_ENGINE.get()
         );
         this.tag(EnigmaticTags.Items.SCROLLS).add(
                 XP_SCROLL.get(),
@@ -72,9 +72,15 @@ public class ELItemTags extends ItemTagsProvider {
                 CURSED_SCROLL.get(),
                 AVARICE_SCROLL.get()
         );
+        this.tag(EnigmaticTags.Items.AMULETS).add(
+                UNWITNESSED_AMULET.get(),
+                ENIGMATIC_AMULET.get(),
+                ASCENSION_AMULET.get(),
+                ELDRITCH_AMULET.get()
+        );
 
         this.tag(Tags.Items.ENCHANTABLES).addTag(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE);
-        this.tag(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE)
+        this.tag(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE).add(TOTEM_OF_MALICE.get())
                 .addTag(EnigmaticTags.Items.SCROLLS)
                 .addTag(CuriosTags.RING)
                 .addTag(CuriosTags.CHARM)
@@ -89,18 +95,14 @@ public class ELItemTags extends ItemTagsProvider {
         this.tag(ItemTags.VANISHING_ENCHANTABLE).addTag(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE);
 
         this.tag(CuriosTags.RING).add(
-                IRON_RING.get(), GOLDEN_RING.get(), MAGNET_RING.get(), DISLOCATION_RING.get(),
+                IRON_RING.get(), GOLDEN_RING.get(), MINER_RING.get(), MAGNET_RING.get(), DISLOCATION_RING.get(),
                 QUARTZ_RING.get(), ENDER_RING.get(), CURSED_RING.get(), DESOLATION_RING.get()
         );
-        this.tag(CuriosTags.CHARM).add(
-                UNWITNESSED_AMULET.get(),
-                ENIGMATIC_AMULET.get(),
-                ASCENSION_AMULET.get(),
+        this.tag(CuriosTags.CHARM).addTag(EnigmaticTags.Items.AMULETS).add(
                 MINING_CHARM.get(),
                 MONSTER_CHARM.get(),
                 BERSERK_EMBLEM.get(),
-                ENCHANTER_PEARL.get(),
-                ELDRITCH_AMULET.get()
+                ENCHANTER_PEARL.get()
         );
         this.tag(CuriosTags.BACK).add(MAJESTIC_ELYTRA.get());
     }

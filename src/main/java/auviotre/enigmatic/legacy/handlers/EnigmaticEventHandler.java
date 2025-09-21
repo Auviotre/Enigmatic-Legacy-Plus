@@ -3,6 +3,7 @@ package auviotre.enigmatic.legacy.handlers;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
+import auviotre.enigmatic.legacy.contents.item.amulets.EldritchAmulet;
 import auviotre.enigmatic.legacy.contents.item.amulets.EnigmaticAmulet;
 import auviotre.enigmatic.legacy.packets.toClient.EnigmaticDataSyncPacket;
 import auviotre.enigmatic.legacy.packets.toClient.ForceProjectileRotationsPacket;
@@ -106,11 +107,13 @@ public class EnigmaticEventHandler {
 
     @SubscribeEvent
     private static void onClone(PlayerEvent.@NotNull Clone event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            EnigmaticData data = event.getOriginal().getData(EnigmaticAttachments.ENIGMATIC_DATA);
+        if (event.getEntity() instanceof ServerPlayer player && event.getOriginal() instanceof ServerPlayer original) {
+            EnigmaticData data = original.getData(EnigmaticAttachments.ENIGMATIC_DATA);
             data.setFireImmunityTimer(0);
             data.setFireImmunityTimer(0);
             PacketDistributor.sendToPlayer(player, new EnigmaticDataSyncPacket(data.save()));
+
+            if (event.isWasDeath()) EldritchAmulet.reclaimInventory(original, player);
         }
     }
 
