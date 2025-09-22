@@ -2,14 +2,13 @@ package auviotre.enigmatic.legacy.client.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
+import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
-import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
-import auviotre.enigmatic.legacy.contents.item.rings.EnderRing;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
-import auviotre.enigmatic.legacy.packets.toServer.EnderRingKeyPacket;
-import auviotre.enigmatic.legacy.packets.toServer.ScrollKeyPacket;
-import auviotre.enigmatic.legacy.packets.toServer.SpellstoneKeyPacket;
+import auviotre.enigmatic.legacy.packets.server.EnderRingKeyPacket;
+import auviotre.enigmatic.legacy.packets.server.ScrollKeyPacket;
+import auviotre.enigmatic.legacy.packets.server.SpellstoneKeyPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
@@ -101,11 +100,11 @@ public class ClientEventHandler {
     @SubscribeEvent
     private static void onClientTick(ClientTickEvent.Pre event) {
         LocalPlayer player = Minecraft.getInstance().player;
-        if (!ISpellstone.get(player).isEmpty() && ISpellstone.KEY_MAPPING.get().consumeClick())
+        if (!ISpellstone.get(player).isEmpty() && KeyHandler.SPELLSTONE.get().consumeClick())
             PacketDistributor.sendToServer(new SpellstoneKeyPacket());
-        if (BaseCurioItem.KEY_MAPPING.get().consumeClick())
+        if (KeyHandler.SCROLL.get().consumeClick())
             PacketDistributor.sendToServer(new ScrollKeyPacket());
-        if (EnderRing.KEY_MAPPING.get().consumeClick())
+        if (KeyHandler.ENDER_RING.get().consumeClick())
             PacketDistributor.sendToServer(new EnderRingKeyPacket(ItemStack.EMPTY));
 
         boolean down = Minecraft.getInstance().options.keyJump.isDown();

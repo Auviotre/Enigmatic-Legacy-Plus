@@ -8,11 +8,11 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
@@ -71,7 +71,7 @@ public class CursedScroll extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll4");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll5");
         } else TooltipHandler.holdShift(list);
-        LocalPlayer player = Minecraft.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         if (player != null && EnigmaticHandler.getCurio(player, this) == stack) {
             int curses = getCurseAmount(player);
             TooltipHandler.line(list);

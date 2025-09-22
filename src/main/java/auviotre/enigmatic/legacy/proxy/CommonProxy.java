@@ -5,6 +5,10 @@ public class CommonProxy {
 
     }
 
+    public void clientInit() {
+
+    }
+
     public void displayPermanentDeathScreen() {
     }
 

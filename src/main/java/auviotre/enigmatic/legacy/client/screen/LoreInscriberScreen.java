@@ -2,7 +2,7 @@ package auviotre.enigmatic.legacy.client.screen;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.gui.LoreInscriberMenu;
-import auviotre.enigmatic.legacy.packets.toServer.LoreInscriberRenamePacket;
+import auviotre.enigmatic.legacy.packets.server.LoreInscriberRenamePacket;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

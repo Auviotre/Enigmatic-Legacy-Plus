@@ -1,18 +1,15 @@
 package auviotre.enigmatic.legacy;
 
-import auviotre.enigmatic.legacy.api.item.ITaintable;
 import auviotre.enigmatic.legacy.client.ClientConfig;
 import auviotre.enigmatic.legacy.contents.item.SoulCrystal;
 import auviotre.enigmatic.legacy.contents.item.amulets.EnigmaticAmulet;
-import auviotre.enigmatic.legacy.contents.item.rings.MinerRing;
 import auviotre.enigmatic.legacy.handlers.SoulArchive;
-import auviotre.enigmatic.legacy.packets.toClient.*;
-import auviotre.enigmatic.legacy.packets.toServer.*;
+import auviotre.enigmatic.legacy.packets.ClientPayloadHandler;
+import auviotre.enigmatic.legacy.packets.client.*;
+import auviotre.enigmatic.legacy.packets.server.*;
 import auviotre.enigmatic.legacy.proxy.ClientProxy;
 import auviotre.enigmatic.legacy.proxy.CommonProxy;
 import auviotre.enigmatic.legacy.registries.*;
-import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -85,21 +82,7 @@ public class EnigmaticLegacy {
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
-        try {
-            ResourceLocation ELDRITCH_LOCATION = EnigmaticLegacy.location("eldritch_open");
-            ClampedItemPropertyFunction taintedFunc = (stack, level, entity, i) -> ITaintable.isTainted(stack) ? 1.0F : 0.0F;
-            ClampedItemPropertyFunction eldritchFunc = (stack, level, entity, i) -> entity == null ? 0.0F : stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
-            ItemProperties.register(EnigmaticItems.TWISTED_HEART.get(), ITaintable.LOCATION, taintedFunc);
-            ItemProperties.register(EnigmaticItems.ABYSSAL_HEART.get(), ELDRITCH_LOCATION, (stack, level, entity, i) -> entity == null ? (ITaintable.isTainted(stack) ? 1.0F : 0.0F) : stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F));
-            ItemProperties.register(EnigmaticItems.THE_INFINITUM.get(), ELDRITCH_LOCATION, eldritchFunc);
-            ItemProperties.register(EnigmaticItems.ELDRITCH_AMULET.get(), ELDRITCH_LOCATION, eldritchFunc);
-            ItemProperties.register(EnigmaticItems.DESOLATION_RING.get(), ELDRITCH_LOCATION, eldritchFunc);
-            ItemProperties.register(EnigmaticItems.MINER_RING.get(), ResourceLocation.withDefaultNamespace("on"), (stack, level, entity, i) -> MinerRing.getPoint(stack) > 0 ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.INFERNAL_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.ENIGMATIC_AMULET.get(), EnigmaticLegacy.location("amulet_color"), (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.AMULET_COLOR, 0.0F));
-        } catch (Exception exception) {
-            LOGGER.warn("Could not load item models.");
-        }
+        PROXY.clientInit();
     }
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
@@ -112,20 +95,20 @@ public class EnigmaticLegacy {
 
     }
 
-    public void onPacketSetup(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
+    public void onPacketSetup(final RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar("1.0").optional();
         registrar.playToServer(EnderRingKeyPacket.TYPE, EnderRingKeyPacket.STREAM_CODEC, EnderRingKeyPacket::handle);
         registrar.playToServer(ToggleMagnetEffectKeyPacket.TYPE, ToggleMagnetEffectKeyPacket.STREAM_CODEC, ToggleMagnetEffectKeyPacket::handle);
         registrar.playToServer(SpellstoneKeyPacket.TYPE, SpellstoneKeyPacket.STREAM_CODEC, SpellstoneKeyPacket::handle);
         registrar.playToServer(ScrollKeyPacket.TYPE, ScrollKeyPacket.STREAM_CODEC, ScrollKeyPacket::handle);
         registrar.playToServer(LoreInscriberRenamePacket.TYPE, LoreInscriberRenamePacket.STREAM_CODEC, LoreInscriberRenamePacket::handle);
         registrar.playToServer(UpdateElytraBoostPacket.TYPE, UpdateElytraBoostPacket.STREAM_CODEC, UpdateElytraBoostPacket::handle);
-        registrar.playToClient(EnderRingGrabItemPacket.TYPE, EnderRingGrabItemPacket.STREAM_CODEC, EnderRingGrabItemPacket::handle);
-        registrar.playToClient(EnigmaticDataSyncPacket.TYPE, EnigmaticDataSyncPacket.STREAM_CODEC, EnigmaticDataSyncPacket::handle);
-        registrar.playToClient(ForceProjectileRotationsPacket.TYPE, ForceProjectileRotationsPacket.STREAM_CODEC, ForceProjectileRotationsPacket::handle);
-        registrar.playToClient(PlayerMotionPacket.TYPE, PlayerMotionPacket.STREAM_CODEC, PlayerMotionPacket::handle);
-        registrar.playToClient(PermanentDeathPacket.TYPE, PermanentDeathPacket.STREAM_CODEC, PermanentDeathPacket::handle);
-        registrar.playToClient(TotemOfMalicePacket.TYPE, TotemOfMalicePacket.STREAM_CODEC, TotemOfMalicePacket::handle);
+        registrar.playToClient(EnderRingGrabItemPacket.TYPE, EnderRingGrabItemPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(EnigmaticDataSyncPacket.TYPE, EnigmaticDataSyncPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(ForceProjectileRotationsPacket.TYPE, ForceProjectileRotationsPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(PlayerMotionPacket.TYPE, PlayerMotionPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(PermanentDeathPacket.TYPE, PermanentDeathPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(TotemOfMalicePacket.TYPE, TotemOfMalicePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {

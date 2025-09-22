@@ -79,6 +79,7 @@ public interface EnigmaticHandler {
     static boolean isTheCursedOne(LivingEntity entity) {
         return hasCurio(entity, EnigmaticItems.CURSED_RING) || entity instanceof Player player && getPersistedData(player).getBoolean("SevenCursesBearing");
     }
+
     static boolean isCursedItem(@NotNull ItemStack stack) {
         if (stack.is(EnigmaticItems.CURSED_RING)) return false;
         if (isEldritchItem(stack)) return true;
@@ -196,8 +197,8 @@ public interface EnigmaticHandler {
     static Optional<MinecraftServer> getSinglePlayerServer() {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (server == null) return Optional.empty();
-        String serverName = Objects.requireNonNull(server.getSingleplayerProfile()).getName();
-        if (server.isSingleplayer() && Objects.equals(serverName, EnigmaticLegacy.PROXY.getClientUsername()))
+        if (server.getSingleplayerProfile() == null) return Optional.empty();
+        if (server.isSingleplayer() && Objects.equals(server.getSingleplayerProfile().getName(), EnigmaticLegacy.PROXY.getClientUsername()))
             return Optional.of(server);
         return Optional.empty();
     }

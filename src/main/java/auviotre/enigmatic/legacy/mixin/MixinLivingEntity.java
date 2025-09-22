@@ -4,7 +4,7 @@ import auviotre.enigmatic.legacy.contents.item.scrolls.CursedScroll;
 import auviotre.enigmatic.legacy.contents.item.tools.InfernalShield;
 import auviotre.enigmatic.legacy.contents.item.tools.TotemOfMalice;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
-import auviotre.enigmatic.legacy.packets.toClient.TotemOfMalicePacket;
+import auviotre.enigmatic.legacy.packets.client.TotemOfMalicePacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticDamageTypes;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -37,22 +37,27 @@ import java.util.List;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity implements ILivingEntityExtension {
+    @Shadow
+    protected ItemStack useItem;
+
     public MixinLivingEntity(EntityType<?> type, Level level) {
         super(type, level);
     }
-    @Shadow
-    protected ItemStack useItem;
 
     @Shadow
     public abstract boolean isUsingItem();
 
-    @Shadow public abstract ItemStack getItemInHand(InteractionHand hand);
+    @Shadow
+    public abstract ItemStack getItemInHand(InteractionHand hand);
 
-    @Shadow public abstract void setHealth(float health);
+    @Shadow
+    public abstract void setHealth(float health);
 
-    @Shadow public abstract boolean removeEffectsCuredBy(EffectCure cure);
+    @Shadow
+    public abstract boolean removeEffectsCuredBy(EffectCure cure);
 
-    @Shadow public abstract float getMaxHealth();
+    @Shadow
+    public abstract float getMaxHealth();
 
     @Inject(method = "isDamageSourceBlocked", at = @At("HEAD"), cancellable = true)
     private void onDamageSourceBlocking(DamageSource source, CallbackInfoReturnable<Boolean> info) {

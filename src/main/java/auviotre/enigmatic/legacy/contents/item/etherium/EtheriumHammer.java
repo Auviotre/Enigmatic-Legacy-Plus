@@ -100,6 +100,7 @@ public class EtheriumHammer extends DiggerItem {
                 }
             }
         }
+
         static void destroyPlane(Level world, Player player, Direction dir, BlockPos pos, Predicate<BlockState> predicate, int radius, boolean check, @Nullable BlockPos excludedBlock, ItemStack tool, BiConsumer<BlockPos, BlockState> toolDamageConsumer) {
             int supRad = (radius - 1) / 2;
             for (int a = -supRad; a <= supRad; a++) {

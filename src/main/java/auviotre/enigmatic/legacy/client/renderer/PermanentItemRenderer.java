@@ -25,7 +25,6 @@ import static net.minecraft.client.renderer.entity.ItemEntityRenderer.getSeedFor
 import static net.minecraft.client.renderer.entity.ItemEntityRenderer.renderMultipleFromCount;
 
 @OnlyIn(Dist.CLIENT)
-@SuppressWarnings("deprecation")
 public class PermanentItemRenderer extends EntityRenderer<PermanentItemEntity> {
     private final ItemRenderer itemRenderer;
     private final RandomSource random = RandomSource.create();

@@ -1,8 +1,8 @@
-package auviotre.enigmatic.legacy.packets.toServer;
+package auviotre.enigmatic.legacy.packets.server;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
-import auviotre.enigmatic.legacy.packets.toClient.EnigmaticDataSyncPacket;
+import auviotre.enigmatic.legacy.packets.client.EnigmaticDataSyncPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
 import net.minecraft.network.RegistryFriendlyByteBuf;

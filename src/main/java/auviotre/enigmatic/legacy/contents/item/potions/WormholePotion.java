@@ -6,7 +6,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -82,7 +81,7 @@ public class WormholePotion extends BaseDrinkableItem {
                 return;
             }
             UUID uuid = UUID.fromString(string);
-            LocalPlayer player = Minecraft.getInstance().player;
+            Player player = Minecraft.getInstance().player;
             if (player != null && player.level().getPlayerByUUID(uuid) != null) {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.wormholePotion1", ChatFormatting.GOLD, player.level().getPlayerByUUID(uuid).getName());
             }

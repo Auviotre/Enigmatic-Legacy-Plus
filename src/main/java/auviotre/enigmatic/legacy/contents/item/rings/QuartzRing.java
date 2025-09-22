@@ -15,6 +15,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
@@ -26,7 +28,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 
 public class QuartzRing extends BaseCurioItem {
-
+    @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
         list.add(Component.translatable("attribute.modifier.take.1", "25", Component.translatable("tooltip.enigmaticlegacy.quartzRingAttribute")).withStyle(ChatFormatting.BLUE));

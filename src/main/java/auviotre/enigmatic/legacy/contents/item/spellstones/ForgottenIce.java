@@ -47,7 +47,7 @@ import java.util.Optional;
 import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
 
 public class ForgottenIce extends SpellstoneItem {
-     static final ReplaceDisk EFFECT = new ReplaceDisk(
+    static final ReplaceDisk EFFECT = new ReplaceDisk(
             new LevelBasedValue.Constant(5.0F),
             LevelBasedValue.constant(1.0F), new Vec3i(0, -1, 0),
             Optional.of(
@@ -60,9 +60,11 @@ public class ForgottenIce extends SpellstoneItem {
             ),
             BlockStateProvider.simple(Blocks.FROSTED_ICE), Optional.of(GameEvent.BLOCK_PLACE)
     );
+
     public ForgottenIce() {
         super(defaultSingleProperties().rarity(Rarity.RARE));
     }
+
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);

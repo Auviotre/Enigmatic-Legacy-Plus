@@ -50,6 +50,52 @@ public class EldritchAmulet extends BaseCurioItem {
         super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true));
     }
 
+    private static Map<String, NonNullList<ItemStack>> inventoryMap(Player player) {
+        Map<String, NonNullList<ItemStack>> inventories = new HashMap<>();
+        inventories.put("Armor", player.getInventory().armor);
+        inventories.put("Main", player.getInventory().items);
+        inventories.put("Offhand", player.getInventory().offhand);
+        return inventories;
+    }
+
+    public static void storeInventory(ServerPlayer player) {
+        Map<String, NonNullList<ItemStack>> inventories = inventoryMap(player);
+        CompoundTag tag = new CompoundTag();
+        Holder<Enchantment> holder = player.registryAccess().holderOrThrow(Enchantments.VANISHING_CURSE);
+        inventories.forEach((key, value) -> {
+            ListTag list = new ListTag();
+            for (int i = 0; i < value.size(); i++) {
+                ItemStack stack = value.get(i);
+                if (EnchantmentHelper.getTagEnchantmentLevel(holder, stack) > 0) stack = ItemStack.EMPTY;
+                list.add(stack.saveOptional(player.registryAccess()));
+                value.set(i, ItemStack.EMPTY);
+            }
+            tag.put("Inventory" + key, list);
+        });
+        EnigmaticHandler.getPersistedData(player).put("ELPersistentInventory", tag);
+    }
+
+    public static boolean reclaimInventory(ServerPlayer oldPlayer, ServerPlayer newPlayer) {
+        Map<String, NonNullList<ItemStack>> inventories = inventoryMap(newPlayer);
+        Tag maybeTag = EnigmaticHandler.getPersistedData(oldPlayer).get("ELPersistentInventory");
+        boolean hadTag = false;
+        if (maybeTag instanceof CompoundTag tag) {
+            EnigmaticHandler.getPersistedData(oldPlayer).remove("ELPersistentInventory");
+            hadTag = true;
+            inventories.forEach((key, value) -> {
+                Tag maybeList = tag.get("Inventory" + key);
+                if (maybeList instanceof ListTag list) {
+                    for (int i = 0; i < value.size(); i++) {
+                        CompoundTag stackTag = list.getCompound(i);
+                        ItemStack stack = ItemStack.parseOptional(newPlayer.registryAccess(), stackTag);
+                        value.set(i, stack);
+                    }
+                }
+            });
+        }
+        return hadTag;
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -97,7 +143,8 @@ public class EldritchAmulet extends BaseCurioItem {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
-            if (isSelected && EnigmaticHandler.isTheWorthyOne(livingEntity)) stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
+            if (isSelected && EnigmaticHandler.isTheWorthyOne(livingEntity))
+                stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
             else stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.max(0.0F, timer - 0.3F));
         }
     }
@@ -119,55 +166,9 @@ public class EldritchAmulet extends BaseCurioItem {
         @SubscribeEvent
         private static void onDamagePost(LivingDamageEvent.@NotNull Post event) {
             if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && !attacker.level().isClientSide()) {
-                if (EnigmaticHandler.hasCurio(attacker, EnigmaticItems.ELDRITCH_AMULET)) attacker.heal(event.getNewDamage() * 0.15F);
+                if (EnigmaticHandler.hasCurio(attacker, EnigmaticItems.ELDRITCH_AMULET))
+                    attacker.heal(event.getNewDamage() * 0.15F);
             }
         }
-    }
-
-
-    private static Map<String, NonNullList<ItemStack>> inventoryMap(Player player) {
-        Map<String, NonNullList<ItemStack>> inventories = new HashMap<>();
-        inventories.put("Armor", player.getInventory().armor);
-        inventories.put("Main", player.getInventory().items);
-        inventories.put("Offhand", player.getInventory().offhand);
-        return inventories;
-    }
-
-    public static void storeInventory(ServerPlayer player) {
-        Map<String, NonNullList<ItemStack>> inventories = inventoryMap(player);
-        CompoundTag tag = new CompoundTag();
-        Holder<Enchantment> holder = player.registryAccess().holderOrThrow(Enchantments.VANISHING_CURSE);
-        inventories.forEach((key, value) -> {
-            ListTag list = new ListTag();
-            for (int i = 0; i < value.size(); i++) {
-                ItemStack stack = value.get(i);
-                if (EnchantmentHelper.getTagEnchantmentLevel(holder, stack) > 0) stack = ItemStack.EMPTY;
-                list.add(stack.saveOptional(player.registryAccess()));
-                value.set(i, ItemStack.EMPTY);
-            }
-            tag.put("Inventory" + key, list);
-        });
-        EnigmaticHandler.getPersistedData(player).put("ELPersistentInventory", tag);
-    }
-
-    public static boolean reclaimInventory(ServerPlayer oldPlayer, ServerPlayer newPlayer) {
-        Map<String, NonNullList<ItemStack>> inventories = inventoryMap(newPlayer);
-        Tag maybeTag = EnigmaticHandler.getPersistedData(oldPlayer).get("ELPersistentInventory");
-        boolean hadTag = false;
-        if (maybeTag instanceof CompoundTag tag) {
-            EnigmaticHandler.getPersistedData(oldPlayer).remove("ELPersistentInventory");
-            hadTag = true;
-            inventories.forEach((key, value) -> {
-                Tag maybeList = tag.get("Inventory" + key);
-                if (maybeList instanceof ListTag list) {
-                    for (int i = 0; i < value.size(); i++) {
-                        CompoundTag stackTag = list.getCompound(i);
-                        ItemStack stack = ItemStack.parseOptional(newPlayer.registryAccess(), stackTag);
-                        value.set(i, stack);
-                    }
-                }
-            });
-        }
-        return hadTag;
     }
 }

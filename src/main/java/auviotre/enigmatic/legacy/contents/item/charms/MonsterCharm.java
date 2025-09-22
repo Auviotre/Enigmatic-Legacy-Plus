@@ -45,6 +45,7 @@ public class MonsterCharm extends BaseCurioItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.monsterCharm");
     }
 
+    @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
         list.add(Component.translatable("attribute.modifier.plus.1", 25, Component.translatable("tooltip.enigmaticlegacy.monsterCharmAttribute")).withStyle(ChatFormatting.BLUE));

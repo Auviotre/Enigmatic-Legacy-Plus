@@ -1,16 +1,14 @@
 package auviotre.enigmatic.legacy.client.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.api.item.ISpellstone;
+import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.client.renderer.DimensionalAnchorRender;
 import auviotre.enigmatic.legacy.client.renderer.PermanentItemRenderer;
 import auviotre.enigmatic.legacy.client.renderer.layer.EtheriumShieldLayer;
 import auviotre.enigmatic.legacy.client.renderer.layer.MajesticElytraLayer;
 import auviotre.enigmatic.legacy.client.screen.LoreInscriberScreen;
-import auviotre.enigmatic.legacy.contents.gui.button.EnderChestInventoryButton;
-import auviotre.enigmatic.legacy.contents.gui.button.MagnetRingInventoryButton;
-import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
-import auviotre.enigmatic.legacy.contents.item.rings.EnderRing;
+import auviotre.enigmatic.legacy.client.screen.button.EnderChestInventoryButton;
+import auviotre.enigmatic.legacy.client.screen.button.MagnetRingInventoryButton;
 import auviotre.enigmatic.legacy.registries.EnigmaticBlockEntities;
 import auviotre.enigmatic.legacy.registries.EnigmaticEntities;
 import auviotre.enigmatic.legacy.registries.EnigmaticMenus;
@@ -64,9 +62,9 @@ public class ClientSetupHandler {
 
     @SubscribeEvent
     private static void registerKeybindings(@NotNull RegisterKeyMappingsEvent event) {
-        event.register(ISpellstone.KEY_MAPPING.get());
-        event.register(BaseCurioItem.KEY_MAPPING.get());
-        event.register(EnderRing.KEY_MAPPING.get());
+        event.register(KeyHandler.SPELLSTONE.get());
+        event.register(KeyHandler.SCROLL.get());
+        event.register(KeyHandler.ENDER_RING.get());
     }
 
     @SubscribeEvent

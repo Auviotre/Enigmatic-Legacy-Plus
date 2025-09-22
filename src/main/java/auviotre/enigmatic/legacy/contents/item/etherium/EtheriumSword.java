@@ -41,7 +41,8 @@ public class EtheriumSword extends SwordItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         int power = 10;
-        if (Minecraft.getInstance().player != null) power += EtheriumArmor.getShieldThreshold(Minecraft.getInstance().player) / 2;
+        if (Minecraft.getInstance().player != null)
+            power += EtheriumArmor.getShieldThreshold(Minecraft.getInstance().player) / 2;
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumSword", ChatFormatting.GOLD, power + "%");
         TooltipHandler.line(list);
     }

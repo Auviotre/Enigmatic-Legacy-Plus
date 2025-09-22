@@ -3,9 +3,9 @@ package auviotre.enigmatic.legacy.handlers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public interface TooltipHandler {
 
     static void worthyOnly(List<Component> list, ItemStack stack) {
         if (Screen.hasShiftDown()) {
-            LocalPlayer player = Minecraft.getInstance().player;
+            Player player = Minecraft.getInstance().player;
             ChatFormatting color = player != null && EnigmaticHandler.isTheWorthyOne(player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
             list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly1"));
             list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly2"));

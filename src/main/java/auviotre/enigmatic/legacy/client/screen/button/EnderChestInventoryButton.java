@@ -1,8 +1,8 @@
-package auviotre.enigmatic.legacy.contents.gui.button;
+package auviotre.enigmatic.legacy.client.screen.button;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
-import auviotre.enigmatic.legacy.packets.toServer.EnderRingKeyPacket;
+import auviotre.enigmatic.legacy.packets.server.EnderRingKeyPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,6 +17,8 @@ import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.client.ICuriosScreen;
@@ -25,6 +27,7 @@ import javax.annotation.Nonnull;
 
 import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
 
+@OnlyIn(Dist.CLIENT)
 public class EnderChestInventoryButton extends ImageButton {
     public static final WidgetSprites SPRITES = new WidgetSprites(
             EnigmaticLegacy.location("ender_chest_button"),

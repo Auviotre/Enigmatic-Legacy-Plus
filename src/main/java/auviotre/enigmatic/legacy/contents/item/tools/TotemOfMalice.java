@@ -37,29 +37,6 @@ public class TotemOfMalice extends BaseCursedItem {
                 .component(EnigmaticComponents.MALICE_DURABILITY, 0).component(EnigmaticComponents.MALICE_MAX_DURABILITY, 8));
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice1");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice2", ChatFormatting.GOLD, "80%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice3", ChatFormatting.GOLD, "50%");
-            TooltipHandler.line(list);
-            if (getDurability(stack) > 0) {
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice4");
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice5");
-            } else {
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice4_alt");
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice5_alt");
-            }
-        } else TooltipHandler.holdShift(list);
-        TooltipHandler.line(list);
-        TooltipHandler.cursedOnly(list, stack);
-    }
-
-    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
-        return enchantment.is(EnchantmentTags.CURSE);
-    }
-
     public static void hurtAndBreak(ItemStack stack, LivingEntity entity) {
         if (!entity.level().isClientSide() && !entity.hasInfiniteMaterials()) {
             entity.invulnerableTime = 60;
@@ -84,8 +61,32 @@ public class TotemOfMalice extends BaseCursedItem {
         stack.set(EnigmaticComponents.MALICE_DURABILITY, durability);
         return durability;
     }
+
     public static void setDurability(ItemStack stack, int damage) {
         stack.set(EnigmaticComponents.MALICE_DURABILITY, Mth.clamp(damage, 0, getMaxDurability(stack)));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+        if (Screen.hasShiftDown()) {
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice1");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice2", ChatFormatting.GOLD, "80%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice3", ChatFormatting.GOLD, "50%");
+            TooltipHandler.line(list);
+            if (getDurability(stack) > 0) {
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice4");
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice5");
+            } else {
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice4_alt");
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice5_alt");
+            }
+        } else TooltipHandler.holdShift(list);
+        TooltipHandler.line(list);
+        TooltipHandler.cursedOnly(list, stack);
+    }
+
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+        return enchantment.is(EnchantmentTags.CURSE);
     }
 
     public boolean isFoil(ItemStack stack) {

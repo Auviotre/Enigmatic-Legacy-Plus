@@ -72,6 +72,7 @@ public class StorageCrystal extends BaseItem implements IPermanentCrystal {
                 ByteBufCodecs.INT, StorageInfo::exp,
                 ByteBufCodecs.fromCodec(Codec.list(ItemStack.CODEC)), StorageInfo::drops,
                 StorageInfo::of);
+
         public static StorageInfo of(ItemStack soulCrystal, int exp, List<ItemStack> drops) {
             return new StorageInfo(soulCrystal, exp, drops);
         }

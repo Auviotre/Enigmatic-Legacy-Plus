@@ -1,4 +1,4 @@
-package auviotre.enigmatic.legacy.packets.toServer;
+package auviotre.enigmatic.legacy.packets.server;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.gui.LoreInscriberMenu;

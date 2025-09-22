@@ -1,8 +1,8 @@
-package auviotre.enigmatic.legacy.packets.toServer;
+package auviotre.enigmatic.legacy.packets.server;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
-import auviotre.enigmatic.legacy.packets.toClient.EnderRingGrabItemPacket;
+import auviotre.enigmatic.legacy.packets.client.EnderRingGrabItemPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;

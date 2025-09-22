@@ -41,10 +41,24 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 
 public class MinerRing extends BaseCurioItem {
-    private final RecipeManager.CachedCheck<SingleRecipeInput, BlastingRecipe> quickCheck = RecipeManager.createCheck(RecipeType.BLASTING);
     private static final int MAX_POINT = 128;
+    private final RecipeManager.CachedCheck<SingleRecipeInput, BlastingRecipe> quickCheck = RecipeManager.createCheck(RecipeType.BLASTING);
+
     public MinerRing() {
         super(defaultSingleProperties().component(EnigmaticComponents.MINER_POINT, 0));
+    }
+
+    public static int getPoint(ItemStack stack) {
+        if (stack.isEmpty()) return 0;
+        if (!stack.has(EnigmaticComponents.MINER_POINT)) return 0;
+        int durability = stack.getOrDefault(EnigmaticComponents.MINER_POINT, 0);
+        durability = Math.clamp(durability, 0, MAX_POINT);
+        stack.set(EnigmaticComponents.MINER_POINT, durability);
+        return durability;
+    }
+
+    public static void setPoint(ItemStack stack, int damage) {
+        stack.set(EnigmaticComponents.MINER_POINT, Mth.clamp(damage, 0, MAX_POINT));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -107,19 +121,6 @@ public class MinerRing extends BaseCurioItem {
         if (getPoint(stack) < 64 && entity.tickCount % 100 == 0) setPoint(stack, getPoint(stack) + 1);
     }
 
-    public static int getPoint(ItemStack stack) {
-        if (stack.isEmpty()) return 0;
-        if (!stack.has(EnigmaticComponents.MINER_POINT)) return 0;
-        int durability = stack.getOrDefault(EnigmaticComponents.MINER_POINT, 0);
-        durability = Math.clamp(durability, 0, MAX_POINT);
-        stack.set(EnigmaticComponents.MINER_POINT, durability);
-        return durability;
-    }
-
-    public static void setPoint(ItemStack stack, int damage) {
-        stack.set(EnigmaticComponents.MINER_POINT, Mth.clamp(damage, 0, MAX_POINT));
-    }
-
     public boolean isBarVisible(ItemStack stack) {
         return getPoint(stack) > 0;
     }
@@ -137,6 +138,7 @@ public class MinerRing extends BaseCurioItem {
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
         private static final RecipeManager.CachedCheck<SingleRecipeInput, BlastingRecipe> CHECK = RecipeManager.createCheck(RecipeType.BLASTING);
+
         @SubscribeEvent
         private static void onBlockDrop(@NotNull BlockDropsEvent event) {
             ServerLevel level = event.getLevel();

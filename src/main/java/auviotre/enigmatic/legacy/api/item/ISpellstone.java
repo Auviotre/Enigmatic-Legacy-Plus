@@ -9,6 +9,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
@@ -18,12 +20,6 @@ import top.theillusivec4.curios.api.CuriosApi;
 import java.util.concurrent.atomic.AtomicReference;
 
 public interface ISpellstone {
-    Lazy<KeyMapping> KEY_MAPPING = Lazy.of(() -> new KeyMapping(
-            "key.spellstoneAbility",
-            InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_K,
-            "key.categories.misc"
-    ));
 
     static ItemStack get(LivingEntity entity) {
         AtomicReference<ItemStack> ret = new AtomicReference<>(ItemStack.EMPTY);

@@ -86,7 +86,8 @@ public class EnigmaticComponents {
                         if (i != null && i > 0) power -= i;
                     }
                     event.addTooltipLines(Component.translatable("tooltip.enigmaticlegacy.etheriumAttributeAlt", power + "%").withStyle(ChatFormatting.DARK_GREEN));
-                } else event.addTooltipLines(Component.translatable("tooltip.enigmaticlegacy.etheriumAttribute", power + "%").withStyle(ChatFormatting.BLUE));
+                } else
+                    event.addTooltipLines(Component.translatable("tooltip.enigmaticlegacy.etheriumAttribute", power + "%").withStyle(ChatFormatting.BLUE));
             }
         }
 

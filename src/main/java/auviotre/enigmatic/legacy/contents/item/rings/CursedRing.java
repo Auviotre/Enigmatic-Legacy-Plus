@@ -10,8 +10,8 @@ import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.SoulArchive;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
-import auviotre.enigmatic.legacy.packets.toClient.EnigmaticDataSyncPacket;
-import auviotre.enigmatic.legacy.packets.toClient.PermanentDeathPacket;
+import auviotre.enigmatic.legacy.packets.client.EnigmaticDataSyncPacket;
+import auviotre.enigmatic.legacy.packets.client.PermanentDeathPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
@@ -475,7 +475,8 @@ public class CursedRing extends CursedCurioItem {
                             confirmLavaPool = BlockPos.betweenClosedStream(surfacePos.offset(-2, i, -2), surfacePos.offset(2, i, 2))
                                     .map(blockPos -> {
                                         if (fi <= 0) return isInLava(player.level(), blockPos);
-                                        else return player.level().isEmptyBlock(blockPos) || isInLava(player.level(), blockPos);
+                                        else
+                                            return player.level().isEmptyBlock(blockPos) || isInLava(player.level(), blockPos);
                                     })
                                     .reduce((prevResult, nextElement) -> prevResult && nextElement).orElse(false);
                         }

@@ -86,17 +86,17 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
                 });
             } else this.addSlot(new Slot(inventory, k, 8 + k * 18, 142));
         }
+    }
+
+    public void slotsChanged(Container container) {
+        super.slotsChanged(container);
+        if (container == this.loreSlot) this.createResult();
     }    protected final Container loreSlot = new SimpleContainer(1) {
         public void setChanged() {
             super.setChanged();
             LoreInscriberMenu.this.slotsChanged(this);
         }
     };
-
-    public void slotsChanged(Container container) {
-        super.slotsChanged(container);
-        if (container == this.loreSlot) this.createResult();
-    }
 
     public boolean createResult() {
         ItemStack input = this.loreSlot.getItem(0);

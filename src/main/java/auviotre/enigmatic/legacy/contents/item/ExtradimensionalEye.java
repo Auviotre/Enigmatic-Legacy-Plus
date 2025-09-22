@@ -32,7 +32,6 @@ public class ExtradimensionalEye extends BaseItem {
         super(defaultSingleProperties());
     }
 
-
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {

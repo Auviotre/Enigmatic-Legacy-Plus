@@ -1,9 +1,9 @@
-package auviotre.enigmatic.legacy.contents.gui.button;
+package auviotre.enigmatic.legacy.client.screen.button;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
-import auviotre.enigmatic.legacy.packets.toServer.ToggleMagnetEffectKeyPacket;
+import auviotre.enigmatic.legacy.packets.server.ToggleMagnetEffectKeyPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.client.Minecraft;
@@ -17,6 +17,8 @@ import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.client.ICuriosScreen;
@@ -25,6 +27,7 @@ import javax.annotation.Nonnull;
 
 import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
 
+@OnlyIn(Dist.CLIENT)
 public class MagnetRingInventoryButton extends ImageButton {
     public static final WidgetSprites SPRITES = new WidgetSprites(
             EnigmaticLegacy.location("magnet_button"),
