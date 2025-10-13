@@ -1,34 +1,34 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    {
-      "item": "enigmaticlegacyplus:earth_heart_fragment"
-    },
-    {
-      "item": "enigmaticlegacyplus:earth_heart_fragment"
-    },
-    {
-      "item": "enigmaticlegacyplus:earth_heart_fragment"
-    },
-    {
-      "item": "enigmaticlegacyplus:earth_heart_fragment"
-    },
-    {
-      "item": "enigmaticlegacyplus:earth_heart_fragment"
-    },
-    {
-      "item": "enigmaticlegacyplus:earth_heart_fragment"
-    },
-    {
-      "item": "enigmaticlegacyplus:earth_heart_fragment"
-    },
-    {
-      "item": "enigmaticlegacyplus:earth_heart_fragment"
+    "type": "minecraft:crafting_shapeless",
+    "category": "misc",
+    "ingredients": [
+        {
+            "item": "enigmaticlegacyplus:earth_heart_fragment"
+        },
+        {
+            "item": "enigmaticlegacyplus:earth_heart_fragment"
+        },
+        {
+            "item": "enigmaticlegacyplus:earth_heart_fragment"
+        },
+        {
+            "item": "enigmaticlegacyplus:earth_heart_fragment"
+        },
+        {
+            "item": "enigmaticlegacyplus:earth_heart_fragment"
+        },
+        {
+            "item": "enigmaticlegacyplus:earth_heart_fragment"
+        },
+        {
+            "item": "enigmaticlegacyplus:earth_heart_fragment"
+        },
+        {
+            "item": "enigmaticlegacyplus:earth_heart_fragment"
+        }
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:earth_heart"
     }
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:earth_heart"
-  }
 }

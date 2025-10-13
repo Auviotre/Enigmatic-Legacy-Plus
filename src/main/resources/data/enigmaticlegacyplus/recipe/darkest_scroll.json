@@ -1,27 +1,30 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "B": {
-      "item": "minecraft:black_dye"
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "B": {
+            "item": "minecraft:black_dye"
+        },
+        "N": {
+            "item": "minecraft:netherite_scrap"
+        },
+        "T": {
+            "item": "enigmaticlegacyplus:darkest_scroll"
+        },
+        "W": {
+            "item": "minecraft:wither_rose"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:blank_scroll"
+        }
     },
-    "T": {
-      "item": "enigmaticlegacyplus:darkest_scroll"
-    },
-    "W": {
-      "item": "minecraft:wither_rose"
-    },
-    "X": {
-      "item": "enigmaticlegacyplus:blank_scroll"
+    "pattern": [
+        "BNB",
+        "WXW",
+        "BTB"
+    ],
+    "result": {
+        "count": 2,
+        "id": "enigmaticlegacyplus:darkest_scroll"
     }
-  },
-  "pattern": [
-    "BTB",
-    "WXW",
-    "BTB"
-  ],
-  "result": {
-    "count": 3,
-    "id": "enigmaticlegacyplus:darkest_scroll"
-  }
 }

@@ -7,7 +7,8 @@ import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -20,6 +21,7 @@ import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -39,21 +41,17 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
-import static auviotre.enigmatic.legacy.contents.item.etherium.EtheriumSword.TIER;
-
 public class EtheriumHammer extends DiggerItem {
     public EtheriumHammer() {
-        super(TIER, EnigmaticTags.Blocks.ALL_MINEABLE, new Item.Properties().fireResistant().attributes(createAttributes(TIER, 9.0F, -3.0F)
+        super(EtheriumProperties.TIER, EnigmaticTags.Blocks.ALL_MINEABLE, new Item.Properties().fireResistant().attributes(createAttributes(EtheriumProperties.TIER, 9.0F, -3.0F)
         ).component(EnigmaticComponents.ETHERIUM_TOOL, 4));
     }
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammer1", ChatFormatting.GOLD, 3, 1);
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammer2");
-        TooltipHandler.line(list);
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammer", ChatFormatting.GOLD, 3, 1);
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumDisable");
     }
-
 
     public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
         return ItemAbilities.DEFAULT_PICKAXE_ACTIONS.contains(ability) || ability == ItemAbilities.AXE_DIG
@@ -67,14 +65,14 @@ public class EtheriumHammer extends DiggerItem {
     }
 
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
-        if (level instanceof ServerLevel server) this.spawnFlameParticles(server, pos);
+//        if (level instanceof ServerLevel server) this.spawnFlameParticles(server, pos);
         if (miningEntity.isCrouching()) return super.mineBlock(stack, level, state, pos, miningEntity);
         if (miningEntity instanceof Player player && isCorrectToolForDrops(stack, state) && !level.isClientSide()) {
             BlockHitResult hitResult = Item.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);
             if (hitResult.getType() == HitResult.Type.BLOCK) {
                 Helper.destroyBlocks(level, player, hitResult.getDirection(), pos, (objState) -> isCorrectToolForDrops(stack, objState), 3, 1, true, pos, stack, (objPos, objState) -> {
-                    stack.hurtAndBreak(1, miningEntity, EquipmentSlot.MAINHAND);
-                    if (level instanceof ServerLevel server) this.spawnFlameParticles(server, objPos);
+                    Tool tool = stack.get(DataComponents.TOOL);
+                    stack.hurtAndBreak(tool != null ? tool.damagePerBlock() : 1, miningEntity, EquipmentSlot.MAINHAND);
                 });
             }
         }
@@ -97,6 +95,11 @@ public class EtheriumHammer extends DiggerItem {
                     block.destroy(level, pos, state);
                     block.playerDestroy(level, player, pos, state, blockEntity, tool);
                     toolDamageConsumer.accept(pos, state);
+                    if (level instanceof ServerLevel server) {
+                        Vec3 center = pos.getCenter();
+                        BlockParticleOption particle = new BlockParticleOption(ParticleTypes.BLOCK, state);
+                        server.sendParticles(particle, center.x, center.y, center.z, 3, 0.5, 0.5, 0.5, 0);
+                    }
                 }
             }
         }
@@ -117,10 +120,7 @@ public class EtheriumHammer extends DiggerItem {
 
         static void destroyBlocks(Level world, Player player, Direction direction, BlockPos pos, Predicate<BlockState> predicate, int radius, int depth, boolean check, @Nullable BlockPos excludedBlock, ItemStack tool, BiConsumer<BlockPos, BlockState> toolDamageConsumer) {
             for (int a = 0; a < depth; a++) {
-                Vec3i offset = new Vec3i(0, 0, 0);
-                offset.offset(direction.getNormal());
-
-                destroyPlane(world, player, direction, pos.subtract(offset), predicate, radius, check, excludedBlock, tool, toolDamageConsumer);
+                destroyPlane(world, player, direction, pos.relative(direction, -a), predicate, radius, check, excludedBlock, tool, toolDamageConsumer);
             }
         }
     }

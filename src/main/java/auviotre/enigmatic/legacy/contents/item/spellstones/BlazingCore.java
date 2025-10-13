@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
@@ -18,7 +19,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.world.damagesource.DamageEffects;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -35,6 +35,8 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
@@ -45,12 +47,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 public class BlazingCore extends SpellstoneItem {
+    public static ModConfigSpec.DoubleValue damageFeedback;
+    public static ModConfigSpec.IntValue ignitionFeedback;
+    public static ModConfigSpec.DoubleValue vulnerabilityModifier;
 
     public BlazingCore() {
-        super(defaultSingleProperties().rarity(Rarity.RARE));
+        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFFD75E12);
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.blazing_core").push("spellstone.blazingCore");
+        damageFeedback = builder.defineInRange("damageFeedback", 4.0, 0.0, 64.0);
+        ignitionFeedback = builder.defineInRange("ignitionFeedback", 4, 0, 32);
+        vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
+        builder.pop(2);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -73,6 +85,11 @@ public class BlazingCore extends SpellstoneItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.blazingCore8");
         } else TooltipHandler.line(list, "tooltip.enigmaticlegacy.holdShift");
         this.addKeyText(list);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void addTuneTooltip(List<Component> list) {
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.blazingCore1");
     }
 
     public int getCooldown() {
@@ -112,7 +129,7 @@ public class BlazingCore extends SpellstoneItem {
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
             LivingEntity entity = event.getEntity();
             if (!ISpellstone.get(entity).is(EnigmaticItems.BLAZING_CORE) || event.isCanceled()) return;
-            if (!event.getSource().is(DamageTypes.LAVA) && event.getSource().type().effects().equals(DamageEffects.BURNING)) {
+            if (!event.getSource().is(DamageTypes.LAVA) && event.getSource().is(DamageTypeTags.IS_FIRE)) {
                 event.setCanceled(true);
             }
             if (entity instanceof Player player && player.hasInfiniteMaterials()) return;
@@ -141,7 +158,7 @@ public class BlazingCore extends SpellstoneItem {
                 Entity entity = event.getSource().getEntity();
                 if (entity == null) return;
                 if (entity.getType().is(EntityTypeTags.CAN_BREATHE_UNDER_WATER)) {
-                    event.setNewDamage(event.getNewDamage() * (float) CONFIG.SPELLSTONES.BCVulnerabilityModifier.getAsDouble());
+                    event.setNewDamage(event.getNewDamage() * (float) vulnerabilityModifier.getAsDouble());
                 }
             }
         }
@@ -153,8 +170,8 @@ public class BlazingCore extends SpellstoneItem {
             if (entity instanceof LivingEntity attacker && ISpellstone.get(victim).is(EnigmaticItems.BLAZING_CORE) && !attacker.fireImmune()) {
                 DamageSource source = event.getSource();
                 if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.MOB_ATTACK_NO_AGGRO) || source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-                    attacker.hurt(EnigmaticDamageTypes.source(victim.level(), DamageTypes.ON_FIRE, victim), (float) CONFIG.SPELLSTONES.damageFeedback.getAsDouble());
-                    attacker.igniteForSeconds(CONFIG.SPELLSTONES.ignitionFeedback.get());
+                    attacker.hurt(EnigmaticDamageTypes.source(victim.level(), DamageTypes.ON_FIRE, victim), (float) damageFeedback.getAsDouble());
+                    attacker.igniteForSeconds(ignitionFeedback.get());
                 }
             }
         }

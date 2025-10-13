@@ -1,6 +1,8 @@
 package auviotre.enigmatic.legacy.mixin;
 
+import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.scrolls.CursedScroll;
+import auviotre.enigmatic.legacy.contents.item.spellstones.ForgottenIce;
 import auviotre.enigmatic.legacy.contents.item.tools.InfernalShield;
 import auviotre.enigmatic.legacy.contents.item.tools.TotemOfMalice;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -31,6 +33,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
@@ -58,6 +61,21 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntityE
 
     @Shadow
     public abstract float getMaxHealth();
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    public void tickMix(CallbackInfo info) {
+        if (this.level().isClientSide && ForgottenIce.freezingBoost.get() && this.isFullyFrozen() && Math.random() > 0.25D) {
+            this.level().addParticle(ParticleTypes.SNOWFLAKE, this.getRandomX(0.6D), this.getRandomY() + 0.1D, this.getRandomZ(0.6D), 0.0D, -0.05D, 0.0D);
+        }
+        if (!this.canFreeze() && this.getTicksFrozen() > 0) this.setTicksFrozen(0);
+    }
+
+    @Inject(method = "canFreeze", at = @At("RETURN"), cancellable = true)
+    public void canFreezeMix(CallbackInfoReturnable<Boolean> info) {
+        info.setReturnValue(info.getReturnValue() && !ISpellstone.get(this.self()).is(EnigmaticItems.FORGOTTEN_ICE));
+        // && EnchantmentHelper.getEnchantmentLevel(EnigmaticAddonEnchantments.FROST_PROTECTION, this.self()) < 16
+        // !this.self().hasEffect(EnigmaticAddonEffects.FROZEN_HEART_EFFECT) &&
+    }
 
     @Inject(method = "isDamageSourceBlocked", at = @At("HEAD"), cancellable = true)
     private void onDamageSourceBlocking(DamageSource source, CallbackInfoReturnable<Boolean> info) {

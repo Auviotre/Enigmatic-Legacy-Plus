@@ -1,32 +1,32 @@
 {
-  "parent": "minecraft:recipes/root",
-  "criteria": {
-    "has_item": {
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:book"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "minecraft:book"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_the_recipe": {
+            "conditions": {
+                "recipe": "enigmaticlegacyplus:the_acknowledgment"
+            },
+            "trigger": "minecraft:recipe_unlocked"
+        }
     },
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "enigmaticlegacyplus:the_acknowledgment"
-      },
-      "trigger": "minecraft:recipe_unlocked"
+    "requirements": [
+        [
+            "has_the_recipe",
+            "has_item"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "enigmaticlegacyplus:the_acknowledgment"
+        ]
     }
-  },
-  "requirements": [
-    [
-      "has_the_recipe",
-      "has_item"
-    ]
-  ],
-  "rewards": {
-    "recipes": [
-      "enigmaticlegacyplus:the_acknowledgment"
-    ]
-  }
 }

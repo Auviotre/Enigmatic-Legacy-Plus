@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -30,23 +31,34 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 public class TheTwist extends TheAcknowledgment {
+    public static ModConfigSpec.IntValue specialDamageBoost;
+    public static ModConfigSpec.IntValue knockbackModifier;
+
     public TheTwist() {
         super(defaultSingleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.CURSED, true), 8, -1.8F);
     }
 
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.the_twist").push("cursedItems.TheTwist");
+        specialDamageBoost = builder.defineInRange("specialDamageBoost", 300, 0, 1000);
+        knockbackModifier = builder.defineInRange("knockbackModifier", 300, 0, 1000);
+        builder.pop(2);
+    }
+
     public static Multimap<Holder<Attribute>, AttributeModifier> getKnockbackModifier() {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        double modifier = 0.01 * CONFIG.CURSED_ITEMS.knockbackModifier.getAsInt();
+        double modifier = 0.01 * knockbackModifier.getAsInt();
         builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(getLocation(EnigmaticItems.THE_TWIST.get()), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return builder.build();
     }
@@ -57,8 +69,8 @@ public class TheTwist extends TheAcknowledgment {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.fourthCurse"));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.fourthCurseAlteration");
             TooltipHandler.line(list);
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theTwist1", ChatFormatting.GOLD, CONFIG.CURSED_ITEMS.specialDamageBoost.get() + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theTwist2", ChatFormatting.GOLD, CONFIG.CURSED_ITEMS.knockbackModifier.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theTwist1", ChatFormatting.GOLD, specialDamageBoost.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theTwist2", ChatFormatting.GOLD, knockbackModifier.get() + "%");
         } else {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theTwistLore1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theTwistLore2");
@@ -92,12 +104,12 @@ public class TheTwist extends TheAcknowledgment {
         }
 
         @SubscribeEvent
-        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+        private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
             if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES)) {
                 DamageSource source = event.getSource();
                 if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-                    if (attacker.getMainHandItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
-                        event.setNewDamage(event.getNewDamage() * (1 + 0.01F * CONFIG.CURSED_ITEMS.specialDamageBoost.get()));
+                    if (attacker.getMainHandItem().is(EnigmaticItems.THE_TWIST) && EnigmaticHandler.isTheWorthyOne(attacker)) {
+                        event.setAmount(event.getAmount() * (1 + 0.01F * specialDamageBoost.get()));
                     }
                 }
             }

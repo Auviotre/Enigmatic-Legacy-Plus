@@ -1,35 +1,35 @@
 {
-  "anvil_cost": 1,
-  "description": {
-    "translate": "enchantment.enigmaticlegacyplus.wrath"
-  },
-  "effects": {
-    "minecraft:damage": [
-      {
-        "effect": {
-          "type": "minecraft:add",
-          "value": {
-            "type": "minecraft:linear",
-            "base": 1.25,
-            "per_level_above_first": 1.25
-          }
-        }
-      }
-    ]
-  },
-  "exclusive_set": "#minecraft:exclusive_set/damage",
-  "max_cost": {
-    "base": 25,
-    "per_level_above_first": 8
-  },
-  "max_level": 5,
-  "min_cost": {
-    "base": 1,
-    "per_level_above_first": 8
-  },
-  "slots": [
-    "mainhand"
-  ],
-  "supported_items": "#minecraft:enchantable/trident",
-  "weight": 10
+    "anvil_cost": 1,
+    "description": {
+        "translate": "enchantment.enigmaticlegacyplus.wrath"
+    },
+    "effects": {
+        "minecraft:damage": [
+            {
+                "effect": {
+                    "type": "minecraft:add",
+                    "value": {
+                        "type": "minecraft:linear",
+                        "base": 1.25,
+                        "per_level_above_first": 1.25
+                    }
+                }
+            }
+        ]
+    },
+    "exclusive_set": "#minecraft:exclusive_set/damage",
+    "max_cost": {
+        "base": 25,
+        "per_level_above_first": 8
+    },
+    "max_level": 5,
+    "min_cost": {
+        "base": 1,
+        "per_level_above_first": 8
+    },
+    "slots": [
+        "mainhand"
+    ],
+    "supported_items": "#minecraft:enchantable/trident",
+    "weight": 10
 }

@@ -1,33 +1,33 @@
 {
-  "type": "enigmaticlegacyplus:cursed_shaped",
-  "category": "misc",
-  "key": {
-    "C": {
-      "item": "minecraft:crimson_fungus"
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "C": {
+            "item": "minecraft:crimson_fungus"
+        },
+        "G": {
+            "item": "minecraft:ghast_tear"
+        },
+        "P": {
+            "item": "minecraft:blaze_powder"
+        },
+        "S": {
+            "item": "minecraft:golden_sword"
+        },
+        "T": {
+            "item": "minecraft:netherite_ingot"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:twisted_heart"
+        }
     },
-    "G": {
-      "item": "minecraft:ghast_tear"
-    },
-    "P": {
-      "item": "minecraft:blaze_powder"
-    },
-    "S": {
-      "item": "minecraft:golden_sword"
-    },
-    "T": {
-      "item": "minecraft:netherite_ingot"
-    },
-    "X": {
-      "item": "enigmaticlegacyplus:twisted_heart"
+    "pattern": [
+        "CSC",
+        "PXP",
+        "GTG"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:berserk_emblem"
     }
-  },
-  "pattern": [
-    "CSC",
-    "PXP",
-    "GTG"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:berserk_emblem"
-  }
 }

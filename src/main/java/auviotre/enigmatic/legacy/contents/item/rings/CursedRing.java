@@ -1,12 +1,13 @@
 package auviotre.enigmatic.legacy.contents.item.rings;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.entity.PermanentItemEntity;
-import auviotre.enigmatic.legacy.contents.item.SoulCrystal;
-import auviotre.enigmatic.legacy.contents.item.StorageCrystal;
 import auviotre.enigmatic.legacy.contents.item.amulets.EldritchAmulet;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
+import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
+import auviotre.enigmatic.legacy.contents.item.misc.StorageCrystal;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.SoulArchive;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -41,6 +42,7 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
@@ -61,6 +63,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.enchanting.EnchantmentLevelSetEvent;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
@@ -75,13 +79,49 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import java.util.List;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 public class CursedRing extends CursedCurioItem {
     public static final Multimap<Player, ItemLike> POSSESSIONS = ArrayListMultimap.create();
+    public static ModConfigSpec.IntValue painMultiplier;
+    public static ModConfigSpec.DoubleValue neutralAngerRange;
+    public static ModConfigSpec.IntValue armorDebuff;
+    public static ModConfigSpec.IntValue monsterDamageDebuff;
+    public static ModConfigSpec.EnumValue<SoulCrystal.LossMode> soulCrystalsMode;
+    public static ModConfigSpec.BooleanValue enableInsomnia;
+    public static ModConfigSpec.IntValue lootingBonus;
+    public static ModConfigSpec.IntValue fortuneBonus;
+    public static ModConfigSpec.IntValue experienceBonus;
+    public static ModConfigSpec.IntValue enchantingBonus;
+    public static ModConfigSpec.BooleanValue enableSpecialDrops;
+    public static ModConfigSpec.BooleanValue autoEquip;
+    public static ModConfigSpec.BooleanValue ultraHardcore;
+    public static ModConfigSpec.IntValue maxSoulCrystalLoss;
+    public static ModConfigSpec.DoubleValue abyssThreshold;
+    public static ModConfigSpec.BooleanValue forTheWorthyMode;
 
     public CursedRing() {
         super(defaultSingleProperties().rarity(Rarity.EPIC));
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.push("sevenCurses");
+        painMultiplier = builder.defineInRange("painMultiplier", 200, 100, 500);
+        neutralAngerRange = builder.defineInRange("neutralAngerRange", 24.0, 4.0, 100.0);
+        armorDebuff = builder.defineInRange("armorDebuff", 30, 0, 100);
+        monsterDamageDebuff = builder.defineInRange("monsterDamageDebuff", 40, 0, 100);
+        soulCrystalsMode = builder.defineEnum("soulCrystalsMode", SoulCrystal.LossMode.NEED_CURSE_RING);
+        enableInsomnia = builder.define("enableInsomnia", true);
+        lootingBonus = builder.defineInRange("lootingBonus", 1, 0, 10);
+        fortuneBonus = builder.defineInRange("fortuneBonus", 1, 0, 10);
+        experienceBonus = builder.defineInRange("experienceBonus", 300, 0, 1000);
+        enchantingBonus = builder.defineInRange("enchantingBonus", 10, 0, 30);
+        enableSpecialDrops = builder.define("enableSpecialDrops", true);
+        autoEquip = builder.define("autoEquip", false);
+        ultraHardcore = builder.define("ultraHardcore", false);
+        maxSoulCrystalLoss = builder.defineInRange("maxSoulCrystalLoss", 9, 0, 10);
+        abyssThreshold = builder.defineInRange("abyssThreshold", 0.995, 0.0, 1.0);
+        forTheWorthyMode = builder.define("forTheWorthy", false);
+        builder.pop();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -89,22 +129,22 @@ public class CursedRing extends CursedCurioItem {
         TooltipHandler.line(list);
         if (Screen.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing3");
-            int multiplier = CONFIG.SEVEN_CURSES.painMultiplier.getAsInt();
+            int multiplier = painMultiplier.getAsInt();
             if (multiplier == 200) TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing4");
             else
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing4_alt", ChatFormatting.GOLD, multiplier + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing5");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing6", ChatFormatting.GOLD, CONFIG.SEVEN_CURSES.armorDebuff.get() + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing7", ChatFormatting.GOLD, CONFIG.SEVEN_CURSES.monsterDamageDebuff.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing6", ChatFormatting.GOLD, armorDebuff.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing7", ChatFormatting.GOLD, monsterDamageDebuff.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing8");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing9");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing10");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing11");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing12", ChatFormatting.GOLD, CONFIG.SEVEN_CURSES.lootingBonus.get());
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing13", ChatFormatting.GOLD, CONFIG.SEVEN_CURSES.fortuneBonus.get());
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing14", ChatFormatting.GOLD, CONFIG.SEVEN_CURSES.experienceBonus.get() + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing15", ChatFormatting.GOLD, CONFIG.SEVEN_CURSES.enchantingBonus.get());
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing12", ChatFormatting.GOLD, lootingBonus.get());
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing13", ChatFormatting.GOLD, fortuneBonus.get());
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing14", ChatFormatting.GOLD, experienceBonus.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing15", ChatFormatting.GOLD, enchantingBonus.get());
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing16");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing17");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing18");
@@ -128,7 +168,7 @@ public class CursedRing extends CursedCurioItem {
     }
 
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (entity instanceof LivingEntity livingEntity && CONFIG.SEVEN_CURSES.autoEquip.get()) {
+        if (entity instanceof LivingEntity livingEntity && autoEquip.get()) {
             if (livingEntity instanceof Player player && (player.isCreative() || player.isSpectator())) return;
             if (!EnigmaticHandler.hasCurio(livingEntity, this)) {
                 if (EnigmaticHandler.tryForceEquip(livingEntity, stack.copy())) stack.shrink(1);
@@ -144,8 +184,8 @@ public class CursedRing extends CursedCurioItem {
         List<LivingEntity> genericMobs = player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(5));
         for (LivingEntity mob : genericMobs) {
             double visibility = player.getVisibilityPercent(mob);
-            double noCheckDistance = Math.max(CONFIG.SEVEN_CURSES.neutralAngerRange.getAsDouble() / 6.0, 2);
-            double angerDistance = Math.max(CONFIG.SEVEN_CURSES.neutralAngerRange.getAsDouble() * visibility, noCheckDistance);
+            double noCheckDistance = Math.max(neutralAngerRange.getAsDouble() / 6.0, 2);
+            double angerDistance = Math.max(neutralAngerRange.getAsDouble() * visibility, noCheckDistance);
             if (!player.hasLineOfSight(mob) && player.distanceTo(mob) > 4) continue;
             if (mob.distanceToSqr(player.getX(), player.getY(), player.getZ()) <= angerDistance * angerDistance) {
                 if (mob instanceof Piglin piglin) {
@@ -167,11 +207,22 @@ public class CursedRing extends CursedCurioItem {
                 }
             }
         }
+        if (forTheWorthyMode.get()) {
+            List<EnderMan> endermen = player.level().getEntitiesOfClass(EnderMan.class, player.getBoundingBox().inflate(32));
+            for (EnderMan enderman : endermen) {
+                if (player.getRandom().nextDouble() <= (0.0025)) {
+                    if (enderman.teleportTowards(player) && player.hasLineOfSight(enderman)) {
+                        EnigmaticHandler.setCurseBoosted(enderman, true, player);
+                        enderman.setTarget(player);
+                    }
+                }
+            }
+        }
     }
 
     private Multimap<Holder<Attribute>, AttributeModifier> getArmorModifiers() {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        double modifier = -0.01 * CONFIG.SEVEN_CURSES.armorDebuff.getAsInt();
+        double modifier = -0.01 * armorDebuff.getAsInt();
         builder.put(Attributes.ARMOR, new AttributeModifier(getLocation(this), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(getLocation(this), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return builder.build();
@@ -179,6 +230,10 @@ public class CursedRing extends CursedCurioItem {
 
     public ICurio.DropRule getDropRule(SlotContext context, DamageSource source, boolean recentlyHit, ItemStack stack) {
         return ICurio.DropRule.ALWAYS_KEEP;
+    }
+
+    public boolean canEquip(SlotContext context, ItemStack stack) {
+        return !EnigmaticHandler.isTheBlessedOne(context.entity()) && super.canEquip(context, stack);
     }
 
     public boolean canUnequip(@NotNull SlotContext context, ItemStack stack) {
@@ -201,11 +256,11 @@ public class CursedRing extends CursedCurioItem {
     }
 
     public int getLootingLevel(SlotContext context, @Nullable LootContext lootContext, ItemStack stack) {
-        return super.getLootingLevel(context, lootContext, stack) + CONFIG.SEVEN_CURSES.lootingBonus.getAsInt();
+        return super.getLootingLevel(context, lootContext, stack) + lootingBonus.getAsInt();
     }
 
     public int getFortuneLevel(SlotContext context, LootContext lootContext, ItemStack stack) {
-        return super.getFortuneLevel(context, lootContext, stack) + CONFIG.SEVEN_CURSES.fortuneBonus.getAsInt();
+        return super.getFortuneLevel(context, lootContext, stack) + fortuneBonus.getAsInt();
     }
 
     @Mod(value = EnigmaticLegacy.MODID)
@@ -221,7 +276,10 @@ public class CursedRing extends CursedCurioItem {
         @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
         private static void onConfirmedDeath(@NotNull LivingDeathEvent event) {
             if (event.getEntity() instanceof ServerPlayer player) {
-                if (event.isCanceled()) POSSESSIONS.removeAll(player);
+                if (event.isCanceled()) {
+                    POSSESSIONS.removeAll(player);
+                    return;
+                }
 
                 if (EnigmaticHandler.hasCurio(player, EnigmaticItems.ENIGMATIC_AMULET) || EnigmaticHandler.hasCurio(player, EnigmaticItems.ASCENSION_AMULET))
                     POSSESSIONS.put(player, EnigmaticItems.ENIGMATIC_AMULET);
@@ -250,7 +308,7 @@ public class CursedRing extends CursedCurioItem {
                 if (POSSESSIONS.containsEntry(player, EnigmaticItems.ENIGMATIC_AMULET) && !event.getDrops().isEmpty()) {
                     ItemStack soulCrystal = dropSoulCrystal ? SoulCrystal.createCrystalFrom(player) : ItemStack.EMPTY;
                     ItemStack storageCrystal = StorageCrystal.storeDropsOnCrystal(event.getDrops(), player, soulCrystal);
-                    PermanentItemEntity entity = new PermanentItemEntity(dimPoint.world, dimPoint.getPosX(), dimPoint.getPosY() + 1.5, dimPoint.getPosZ(), storageCrystal);
+                    PermanentItemEntity entity = new PermanentItemEntity(dimPoint.world, dimPoint.getPosX(), dimPoint.getPosY() + 1, dimPoint.getPosZ(), storageCrystal);
                     entity.setThrowerId(player.getUUID());
                     entity.setOwnerId(player.getUUID());
                     dimPoint.world.addFreshEntity(entity);
@@ -259,7 +317,7 @@ public class CursedRing extends CursedCurioItem {
                     SoulArchive.getInstance().addItem(entity);
                 } else if (dropSoulCrystal) {
                     ItemStack soulCrystal = SoulCrystal.createCrystalFrom(player);
-                    PermanentItemEntity entity = new PermanentItemEntity(dimPoint.world, dimPoint.getPosX(), dimPoint.getPosY() + 1.5, dimPoint.getPosZ(), soulCrystal);
+                    PermanentItemEntity entity = new PermanentItemEntity(dimPoint.world, dimPoint.getPosX(), dimPoint.getPosY() + 1, dimPoint.getPosZ(), soulCrystal);
                     entity.setThrowerId(player.getUUID());
                     entity.setOwnerId(player.getUUID());
                     dimPoint.world.addFreshEntity(entity);
@@ -309,14 +367,14 @@ public class CursedRing extends CursedCurioItem {
         private static void onTicked(EntityTickEvent.@NotNull Post event) {
             if (event.getEntity() instanceof Player player && player.isAlive() && EnigmaticHandler.isTheCursedOne(player)) {
                 if (player.isOnFire()) player.setRemainingFireTicks(player.getRemainingFireTicks() + 2);
-                if (CONFIG.SEVEN_CURSES.enableInsomnia.get() && player.isSleeping()) {
+                if (enableInsomnia.get() && player.isSleeping()) {
                     if (player.getSleepTimer() == 8 && player instanceof ServerPlayer)
                         player.sendSystemMessage(Component.translatable("message.enigmaticlegacy.cursed_sleep").withStyle(ChatFormatting.RED));
                     else if (player.getSleepTimer() > 95) player.sleepCounter = 95;
                 }
             }
 
-            if (event.getEntity() instanceof LivingEntity entity) {
+            if (event.getEntity() instanceof LivingEntity entity && entity.isAlive()) {
                 EnigmaticData data = entity.getData(EnigmaticAttachments.ENIGMATIC_DATA);
                 if (EnigmaticHandler.isTheCursedOne(entity)) data.incrementTimeWithCurses();
                 else data.incrementTimeWithoutCurses();
@@ -341,6 +399,7 @@ public class CursedRing extends CursedCurioItem {
 
         @SubscribeEvent
         private static void onDamageIncoming(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             DamageSource source = event.getSource();
             if (source.getDirectEntity() instanceof LivingEntity entity && (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK))) {
                 if (EnigmaticHandler.isCursedItem(entity.getMainHandItem()) && !EnigmaticHandler.isTheCursedOne(entity)) {
@@ -351,19 +410,22 @@ public class CursedRing extends CursedCurioItem {
                     event.setCanceled(true);
                 }
             }
-        }
 
-        @SubscribeEvent
-        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
             if (EnigmaticHandler.isTheCursedOne(event.getEntity())) {
-                float multiplier = 0.01F * CONFIG.SEVEN_CURSES.painMultiplier.getAsInt();
-                event.setNewDamage(event.getNewDamage() * multiplier);
+                float multiplier = 0.01F * painMultiplier.getAsInt();
+                event.setAmount(event.getAmount() * multiplier);
+            }
+
+            if (event.getSource().getEntity() instanceof LivingEntity attacker) {
+                if (!EnigmaticHandler.isCurseBoosted(event.getEntity()) && EnigmaticHandler.isTheWorthyOne(attacker)) {
+                    EnigmaticHandler.setCurseBoosted(event.getEntity(), true, attacker);
+                }
             }
             if (event.getEntity() instanceof Monster || event.getEntity() instanceof EnderDragon) {
                 if (event.getSource().getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheCursedOne(entity)) {
                     if (!entity.getMainHandItem().is(EnigmaticTags.Items.BYPASS_FOURTH_CURSE)) {
-                        float modifier = 1.0F - 0.01F * CONFIG.SEVEN_CURSES.monsterDamageDebuff.getAsInt();
-                        event.setNewDamage(event.getNewDamage() * modifier);
+                        float modifier = 1.0F - 0.01F * monsterDamageDebuff.getAsInt();
+                        event.setAmount(event.getAmount() * modifier);
                     }
                 }
             }
@@ -373,7 +435,7 @@ public class CursedRing extends CursedCurioItem {
         private static void onExperienceDrop(@NotNull LivingExperienceDropEvent event) {
             Player player = event.getAttackingPlayer();
             if (EnigmaticHandler.isTheCursedOne(player)) {
-                float modifier = 0.01F * CONFIG.SEVEN_CURSES.experienceBonus.getAsInt() + 1;
+                float modifier = 0.01F * experienceBonus.getAsInt() + 1;
                 event.setDroppedExperience(event.getDroppedExperience() + Mth.floor(event.getOriginalExperience() * modifier));
             }
             if (event.getEntity() instanceof ServerPlayer dropper) {
@@ -412,7 +474,7 @@ public class CursedRing extends CursedCurioItem {
                     }
                     if (!data.getBoolean("CursedRingGift")) {
                         ItemStack stack = EnigmaticItems.CURSED_RING.toStack();
-                        if (CONFIG.SEVEN_CURSES.ultraHardcore.get()) EnigmaticHandler.tryForceEquip(player, stack);
+                        if (ultraHardcore.get()) EnigmaticHandler.tryForceEquip(player, stack);
                         else {
                             if (player.getInventory().getItem(7).isEmpty()) {
                                 player.getInventory().setItem(7, stack);
@@ -445,7 +507,7 @@ public class CursedRing extends CursedCurioItem {
                     break;
                 }
             if (shouldBoost)
-                event.setEnchantLevel(event.getEnchantLevel() + CONFIG.SEVEN_CURSES.enchantingBonus.get());
+                event.setEnchantLevel(event.getEnchantLevel() + enchantingBonus.get());
         }
 
         @SubscribeEvent

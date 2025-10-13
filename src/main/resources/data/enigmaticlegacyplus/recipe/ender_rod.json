@@ -1,24 +1,24 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "A": {
-      "item": "enigmaticlegacyplus:astral_dust"
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:astral_dust"
+        },
+        "B": {
+            "item": "minecraft:blaze_rod"
+        },
+        "X": {
+            "item": "minecraft:ender_eye"
+        }
     },
-    "B": {
-      "item": "minecraft:blaze_rod"
-    },
-    "X": {
-      "item": "minecraft:ender_eye"
+    "pattern": [
+        "  B",
+        "AXA",
+        "B  "
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:ender_rod"
     }
-  },
-  "pattern": [
-    "  B",
-    "AXA",
-    "B  "
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:ender_rod"
-  }
 }

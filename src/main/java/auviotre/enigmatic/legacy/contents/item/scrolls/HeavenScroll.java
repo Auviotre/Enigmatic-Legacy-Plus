@@ -50,8 +50,8 @@ public class HeavenScroll extends BaseCurioItem {
         } else TooltipHandler.holdShift(list);
     }
 
-    public boolean canEquip(SlotContext slotContext, ItemStack stack) {
-        return super.canEquip(slotContext, stack) && !EnigmaticHandler.hasCurio(slotContext.entity(), EnigmaticItems.FABULOUS_SCROLL);
+    public boolean canEquip(SlotContext context, ItemStack stack) {
+        return super.canEquip(context, stack) && !EnigmaticHandler.hasCurio(context.entity(), EnigmaticItems.FABULOUS_SCROLL);
     }
 
     public void onUnequip(@NotNull SlotContext context, ItemStack newStack, ItemStack stack) {

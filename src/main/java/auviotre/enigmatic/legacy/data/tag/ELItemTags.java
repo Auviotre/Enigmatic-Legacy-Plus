@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.data.tag;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.compat.farmersdelight.FDCompat;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import top.theillusivec4.curios.api.CuriosTags;
+import vectorwing.farmersdelight.common.tag.ModTags;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
@@ -35,17 +37,20 @@ public class ELItemTags extends ItemTagsProvider {
         );
         this.tag(ItemTags.LECTERN_BOOKS).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_INFINITUM.get());
         this.tag(ItemTags.VANISHING_ENCHANTABLE).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_INFINITUM.get(), INFERNAL_SHIELD.get());
-        this.tag(ItemTags.DURABILITY_ENCHANTABLE).add(INFERNAL_SHIELD.get(), MAJESTIC_ELYTRA.get(), ETHERIUM_HAMMER.get());
-        this.tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(MAJESTIC_ELYTRA.get());
+        this.tag(ItemTags.DURABILITY_ENCHANTABLE).add(INFERNAL_SHIELD.get(), ETHERIUM_HAMMER.get(), MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
+        this.tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
         this.tag(ItemTags.SWORDS).add(EXECUTION_AXE.get(), ENDER_SLAYER.get(), ETHERIUM_SWORD.get());
+        this.tag(ItemTags.HOES).add(ETHERIUM_SCYTHE.get());
         this.tag(ItemTags.SWORD_ENCHANTABLE).add(THE_INFINITUM.get());
         this.tag(ItemTags.MINING_ENCHANTABLE).add(ETHERIUM_HAMMER.get());
         this.tag(ItemTags.MINING_LOOT_ENCHANTABLE).add(ETHERIUM_HAMMER.get());
+        this.tag(ItemTags.SHARP_WEAPON_ENCHANTABLE).add(ETHERIUM_SCYTHE.get(), THE_INFINITUM.get());
         this.tag(ItemTags.WEAPON_ENCHANTABLE).add(ETHERIUM_HAMMER.get());
         this.tag(ItemTags.HEAD_ARMOR).add(ETHERIUM_HELMET.get());
         this.tag(ItemTags.CHEST_ARMOR).add(ETHERIUM_CHESTPLATE.get());
         this.tag(ItemTags.LEG_ARMOR).add(ETHERIUM_LEGGINGS.get());
         this.tag(ItemTags.FOOT_ARMOR).add(ETHERIUM_BOOTS.get());
+        this.tag(ItemTags.COMPASSES).add(SOUL_COMPASS.get());
 
         this.tag(Tags.Items.RAW_MATERIALS).add(RAW_ETHERIUM.get());
         this.tag(Tags.Items.INGOTS).add(ETHERIUM_INGOT.get(), EVIL_INGOT.get());
@@ -54,7 +59,7 @@ public class ELItemTags extends ItemTagsProvider {
         this.tag(Tags.Items.RODS).add(ENDER_ROD.get());
         this.tag(Tags.Items.MINING_TOOL_TOOLS).add(ETHERIUM_HAMMER.get());
 
-        this.tag(EnigmaticTags.Items.ARMOR_CHECK_EXCLUSION).add(Items.ELYTRA, MAJESTIC_ELYTRA.get());
+        this.tag(EnigmaticTags.Items.ARMOR_CHECK_EXCLUSION).add(Items.ELYTRA, MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
         this.tag(EnigmaticTags.Items.BYPASS_FOURTH_CURSE).add(
                 THE_TWIST.get(),
                 THE_INFINITUM.get()
@@ -63,14 +68,16 @@ public class ELItemTags extends ItemTagsProvider {
                 GOLEM_HEART.get(), BLAZING_CORE.get(),
                 OCEAN_STONE.get(), ANGEL_BLESSING.get(),
                 EYE_OF_NEBULA.get(), VOID_PEARL.get(),
-                FORGOTTEN_ICE.get(), LOST_ENGINE.get()
+                FORGOTTEN_ICE.get(), REVIVAL_LEAF.get(),
+                LOST_ENGINE.get(), THE_CUBE.get()
         );
         this.tag(EnigmaticTags.Items.SCROLLS).add(
                 XP_SCROLL.get(),
                 HEAVEN_SCROLL.get(),
                 FABULOUS_SCROLL.get(),
                 CURSED_SCROLL.get(),
-                AVARICE_SCROLL.get()
+                AVARICE_SCROLL.get(),
+                CURSED_XP_SCROLL.get()
         );
         this.tag(EnigmaticTags.Items.AMULETS).add(
                 UNWITNESSED_AMULET.get(),
@@ -101,9 +108,14 @@ public class ELItemTags extends ItemTagsProvider {
         this.tag(CuriosTags.CHARM).addTag(EnigmaticTags.Items.AMULETS).add(
                 MINING_CHARM.get(),
                 MONSTER_CHARM.get(),
+                FORGER_GEM.get(),
                 BERSERK_EMBLEM.get(),
-                ENCHANTER_PEARL.get()
+                ENCHANTER_PEARL.get(),
+                SPELLTUNER.get()
         );
-        this.tag(CuriosTags.BACK).add(MAJESTIC_ELYTRA.get());
+        this.tag(CuriosTags.BACK).add(MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
+
+
+        this.tag(ModTags.KNIVES).add(FDCompat.Items.ETHERIUM_MACHETE.get());
     }
 }

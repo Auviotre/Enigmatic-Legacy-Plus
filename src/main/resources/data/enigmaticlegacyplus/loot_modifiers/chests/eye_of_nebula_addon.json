@@ -1,23 +1,23 @@
 {
-  "type": "neoforge:add_table",
-  "conditions": [
-    {
-      "condition": "minecraft:any_of",
-      "terms": [
+    "type": "neoforge:add_table",
+    "conditions": [
         {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:chests/stronghold_crossing"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:chests/stronghold_corridor"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:chests/end_city_treasure"
+            "condition": "minecraft:any_of",
+            "terms": [
+                {
+                    "condition": "neoforge:loot_table_id",
+                    "loot_table_id": "minecraft:chests/stronghold_crossing"
+                },
+                {
+                    "condition": "neoforge:loot_table_id",
+                    "loot_table_id": "minecraft:chests/stronghold_corridor"
+                },
+                {
+                    "condition": "neoforge:loot_table_id",
+                    "loot_table_id": "minecraft:chests/end_city_treasure"
+                }
+            ]
         }
-      ]
-    }
-  ],
-  "table": "enigmaticlegacyplus:chests/eye_of_nebula_addon"
+    ],
+    "table": "enigmaticlegacyplus:chests/eye_of_nebula_addon"
 }

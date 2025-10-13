@@ -26,6 +26,9 @@ public record ScrollKeyPacket() implements CustomPacketPayload {
                     if (EnigmaticHandler.hasCurio(serverPlayer, EnigmaticItems.XP_SCROLL)) {
                         ItemStack curio = EnigmaticHandler.getCurio(serverPlayer, EnigmaticItems.XP_SCROLL);
                         XpScroll.trigger(player.level(), curio, serverPlayer, InteractionHand.MAIN_HAND, false);
+                    } else if (EnigmaticHandler.hasCurio(serverPlayer, EnigmaticItems.CURSED_XP_SCROLL)) {
+                        ItemStack curio = EnigmaticHandler.getCurio(serverPlayer, EnigmaticItems.CURSED_XP_SCROLL);
+                        XpScroll.trigger(player.level(), curio, serverPlayer, InteractionHand.MAIN_HAND, false);
                     }
                 }
             });

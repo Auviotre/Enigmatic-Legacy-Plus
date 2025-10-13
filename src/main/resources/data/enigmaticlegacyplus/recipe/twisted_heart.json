@@ -1,30 +1,30 @@
 {
-  "type": "enigmaticlegacyplus:cursed_shaped",
-  "category": "misc",
-  "key": {
-    "B": {
-      "item": "minecraft:blaze_powder"
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "B": {
+            "item": "minecraft:blaze_powder"
+        },
+        "E": {
+            "item": "minecraft:ender_eye"
+        },
+        "R": {
+            "item": "minecraft:redstone"
+        },
+        "T": {
+            "item": "minecraft:ghast_tear"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:earth_heart"
+        }
     },
-    "E": {
-      "item": "minecraft:ender_eye"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "T": {
-      "item": "minecraft:ghast_tear"
-    },
-    "X": {
-      "item": "enigmaticlegacyplus:earth_heart"
+    "pattern": [
+        " T ",
+        "BXB",
+        "RER"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:twisted_heart"
     }
-  },
-  "pattern": [
-    " T ",
-    "BXB",
-    "RER"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:twisted_heart"
-  }
 }

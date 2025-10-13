@@ -1,8 +1,8 @@
 {
-  "values": [
-    "#minecraft:mineable/pickaxe",
-    "#minecraft:mineable/axe",
-    "#minecraft:mineable/shovel",
-    "#minecraft:mineable/hoe"
-  ]
+    "values": [
+        "#minecraft:mineable/pickaxe",
+        "#minecraft:mineable/axe",
+        "#minecraft:mineable/shovel",
+        "#minecraft:mineable/hoe"
+    ]
 }

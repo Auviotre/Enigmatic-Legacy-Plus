@@ -1,0 +1,33 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:astral_dust"
+        },
+        "B": {
+            "item": "minecraft:blaze_powder"
+        },
+        "C": {
+            "item": "minecraft:cake"
+        },
+        "F": {
+            "item": "minecraft:chorus_fruit"
+        },
+        "G": {
+            "item": "minecraft:ghast_tear"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:cosmic_heart"
+        }
+    },
+    "pattern": [
+        "GBG",
+        "ACA",
+        "FXF"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:cosmic_cake"
+    }
+}

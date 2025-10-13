@@ -67,7 +67,7 @@ public class SpecialLootModifier extends LootModifier {
             if (SUSPICIOUS_TABLES.stream().anyMatch(table -> table.equals(context.getQueriedLootTableId()))) {
                 if (context.getRandom().nextFloat() < 0.075F) {
                     list.clear();
-                    if (context.getRandom().nextFloat() < 0.2F) list.add(EnigmaticItems.EARTH_HEART.toStack());
+                    if (context.getRandom().nextFloat() < 0.25F) list.add(EnigmaticItems.EARTH_HEART.toStack());
                     else list.add(EnigmaticItems.EARTH_HEART_FRAGMENT.toStack());
                 }
             }

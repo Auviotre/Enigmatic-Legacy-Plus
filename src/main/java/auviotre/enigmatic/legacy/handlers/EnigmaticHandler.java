@@ -1,9 +1,11 @@
 package auviotre.enigmatic.legacy.handlers;
 
-import auviotre.enigmatic.legacy.ELConfig;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.event.LivingCurseBoostEvent;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
-import auviotre.enigmatic.legacy.contents.item.SoulCrystal;
+import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
+import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.item.tools.InfernalShield;
 import auviotre.enigmatic.legacy.registries.*;
 import net.minecraft.client.Minecraft;
@@ -54,8 +56,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import net.neoforged.neoforgespi.language.ModFileScanData;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -69,6 +76,7 @@ import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -86,20 +94,36 @@ public interface EnigmaticHandler {
         return !stack.isEmpty() && stack.has(EnigmaticComponents.CURSED) && stack.getOrDefault(EnigmaticComponents.CURSED, false);
     }
 
-    static boolean isTheBlessedOne(Player player) {
+    static boolean isTheBlessedOne(LivingEntity entity) {
         return false;
     }
 
     static boolean isTheWorthyOne(LivingEntity entity) {
-        return isTheCursedOne(entity) && getSufferingFraction(entity) >= 0.995;
+        return isTheCursedOne(entity) && getSufferingFraction(entity) >= CursedRing.abyssThreshold.get();
     }
 
     static boolean isEldritchItem(@NotNull ItemStack stack) {
         return !stack.isEmpty() && stack.has(EnigmaticComponents.ELDRITCH) && stack.getOrDefault(EnigmaticComponents.ELDRITCH, false);
     }
 
-    static boolean isTheOne(Player player) {
-        return isTheCursedOne(player) || isTheBlessedOne(player);
+    static boolean isTheOne(LivingEntity entity) {
+        return isTheCursedOne(entity) || isTheBlessedOne(entity);
+    }
+
+    static boolean isCurseBoosted(LivingEntity entity) {
+        if (!CursedRing.forTheWorthyMode.get()) {
+            entity.getPersistentData().remove("CurseBoost");
+            return false;
+        }
+        return entity.getPersistentData().getBoolean("CurseBoost");
+    }
+
+    static void setCurseBoosted(LivingEntity entity, boolean boost, LivingEntity player) {
+        if (!CursedRing.forTheWorthyMode.get()) return;
+        if (entity instanceof Mob mob && mob.isNoAi()) return;
+        LivingCurseBoostEvent event = new LivingCurseBoostEvent(entity, player);
+        NeoForge.EVENT_BUS.post(event);
+        if (!event.isCanceled()) entity.getPersistentData().putBoolean("CurseBoost", boost);
     }
 
     static boolean hasCurio(@Nullable LivingEntity entity, ItemLike itemLike) {
@@ -179,7 +203,7 @@ public interface EnigmaticHandler {
 
     static boolean isAffectedBySoulLoss(@NotNull Player player, boolean hadRing) {
         boolean keepInventory = player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY);
-        return switch (ELConfig.CONFIG.SEVEN_CURSES.soulCrystalsMode.get()) {
+        return switch (CursedRing.soulCrystalsMode.get()) {
             case ALWAYS_LOSS -> true;
             case NEED_CURSE_RING -> hadRing && !keepInventory;
             case NEED_CURSE_RING_AND_IGNORE_KEEPINVENTORY -> hadRing;
@@ -188,7 +212,7 @@ public interface EnigmaticHandler {
 
     static boolean canDropSoulCrystal(Player player, boolean hadRing) {
         if (isAffectedBySoulLoss(player, hadRing)) {
-            int maxCrystalLoss = ELConfig.CONFIG.SEVEN_CURSES.maxSoulCrystalLoss.getAsInt();
+            int maxCrystalLoss = CursedRing.maxSoulCrystalLoss.getAsInt();
             return SoulCrystal.getLostCrystals(player) < maxCrystalLoss;
         }
         return false;
@@ -510,5 +534,39 @@ public interface EnigmaticHandler {
             }
         }
         return false;
+    }
+
+    static void dispatchConfig(String modid, ModConfigSpec.Builder builder, ModConfig.Type type) {
+        for (ModFileScanData.AnnotationData annotationData : retainAnnotations(modid)) {
+            try {
+                Class<?> retainerClass = Class.forName(annotationData.clazz().getClassName());
+                String methodName = annotationData.memberName().split("\\(")[0];
+
+                boolean receiveClient;
+                if (annotationData.annotationData().get("receiveClient") != null) {
+                    receiveClient = (boolean) annotationData.annotationData().get("receiveClient");
+                } else {
+                    receiveClient = SubscribeConfig.defaultReceiveClient;
+                }
+                Method method = retainerClass.getDeclaredMethod(methodName, ModConfigSpec.Builder.class, ModConfig.Type.class);
+
+                if (type != ModConfig.Type.CLIENT || receiveClient) {
+                    method.invoke(null, builder, type);
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    static List<ModFileScanData.AnnotationData> retainAnnotations(String modid) {
+        ModFileScanData modFileInfo = ModList.get().getModFileById(modid).getFile().getScanResult();
+        List<ModFileScanData.AnnotationData> list = new ArrayList<>();
+        for (ModFileScanData.AnnotationData annotation : modFileInfo.getAnnotations()) {
+            if (annotation.annotationType().getClassName().equals(SubscribeConfig.class.getName())) {
+                list.add(annotation);
+            }
+        }
+        return list;
     }
 }

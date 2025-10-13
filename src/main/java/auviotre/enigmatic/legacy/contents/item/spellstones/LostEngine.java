@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -13,13 +14,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -30,7 +27,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
@@ -41,6 +37,8 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -49,15 +47,24 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.jetbrains.annotations.NotNull;
-import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 
 public class LostEngine extends SpellstoneItem {
+    public static ModConfigSpec.IntValue bonusCritMultiplier;
+    public static ModConfigSpec.DoubleValue vulnerabilityModifier;
 
     public LostEngine() {
-        super(defaultSingleProperties().rarity(Rarity.RARE));
+        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFFEF9F4D);
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.lost_engine").push("spellstone.lostEngine");
+        bonusCritMultiplier = builder.defineInRange("bonusCritMultiplier", 50, 0, 200);
+        vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.5, 1.0, 20.0);
+        builder.pop(2);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -73,12 +80,17 @@ public class LostEngine extends SpellstoneItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.lostEngine1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.lostEngine2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.lostEngine3");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.lostEngine4", ChatFormatting.GOLD, "40%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.lostEngine4", ChatFormatting.GOLD, bonusCritMultiplier.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.lostEngine5");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.lostEngine6");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.lostEngine7");
         } else TooltipHandler.line(list, "tooltip.enigmaticlegacy.holdShift");
         this.addKeyText(list);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void addTuneTooltip(List<Component> list) {
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.lostEngine4", ChatFormatting.GOLD, "30%");
     }
 
     public int getCooldown() {
@@ -116,9 +128,9 @@ public class LostEngine extends SpellstoneItem {
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.LOST_ENGINE)) {
                 DamageSource source = event.getSource();
                 if (source.is(Tags.DamageTypes.IS_MAGIC)) {
-                    event.setNewDamage(event.getNewDamage() * 2.5F);
+                    event.setNewDamage(event.getNewDamage() * (float) vulnerabilityModifier.getAsDouble());
                 } else if (source.is(DamageTypeTags.IS_LIGHTNING)) {
-                    event.setNewDamage(event.getNewDamage() * 2.0F);
+                    event.setNewDamage(event.getNewDamage() * (float) vulnerabilityModifier.getAsDouble());
                 }
             }
         }
@@ -161,7 +173,7 @@ public class LostEngine extends SpellstoneItem {
         @SubscribeEvent
         private static void onCriticalHit(@NotNull CriticalHitEvent event) {
             if (EnigmaticHandler.hasCurio(event.getEntity(), EnigmaticItems.LOST_ENGINE)) {
-                event.setDamageMultiplier(event.getDamageMultiplier() + 0.4F);
+                event.setDamageMultiplier(event.getDamageMultiplier() + 0.01F * bonusCritMultiplier.get());
             }
         }
 
@@ -182,28 +194,6 @@ public class LostEngine extends SpellstoneItem {
         private static void onDamageLowest(LivingDamageEvent.@NotNull Pre event) {
             LivingEntity victim = event.getEntity();
             if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.LOST_ENGINE) && event.getSource().is(DamageTypeTags.IS_LIGHTNING)) {
-                if (victim instanceof ServerPlayer player && player.level() instanceof ServerLevel server) {
-                    for (NonNullList<ItemStack> compartment : player.getInventory().compartments) {
-                        for (ItemStack itemStack : compartment) {
-                            double modifier = itemStack.getItem() instanceof ArmorItem ? 1.2 : 2;
-                            itemStack.hurtAndBreak((int) (itemStack.getMaxDamage() * modifier), server, player, item -> {
-                            });
-                            if (itemStack.has(DataComponents.UNBREAKABLE)) {
-                                itemStack.remove(DataComponents.UNBREAKABLE);
-                            }
-                        }
-                    }
-                    CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
-                        int slots = handler.getEquippedCurios().getSlots();
-                        for (int i = 0; i < slots; i++) {
-                            ItemStack stackInSlot = handler.getEquippedCurios().getStackInSlot(i);
-                            if (!stackInSlot.is(EnigmaticItems.CURSED_RING)) {
-                                stackInSlot.hurtAndBreak(stackInSlot.getMaxDamage() * 2, server, player, item -> {
-                                });
-                            }
-                        }
-                    });
-                }
                 event.setNewDamage(event.getNewDamage() * (victim.getRandom().nextInt(4) + 4) + victim.getMaxHealth());
             }
         }

@@ -1,0 +1,17 @@
+{
+    "values": [
+        "#minecraft:is_fall",
+        "#minecraft:is_drowning",
+        "#minecraft:is_drowning",
+        "#minecraft:burn_from_stepping",
+        "minecraft:on_fire",
+        "minecraft:in_fire",
+        "minecraft:lava",
+        "minecraft:cramming",
+        "minecraft:fly_into_wall",
+        "minecraft:cactus",
+        "minecraft:in_wall",
+        "minecraft:falling_block",
+        "minecraft:sweet_berry_bush"
+    ]
+}

@@ -20,23 +20,17 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMenu> implements ContainerListener {
     private static final ResourceLocation TEXTURE = EnigmaticLegacy.location("textures/gui/lore_inscriber.png");
-    private final ResourceLocation texture;
     private EditBox name;
 
     public LoreInscriberScreen(LoreInscriberMenu container, Inventory Inventory, Component title) {
-        this(container, Inventory, title, LoreInscriberScreen.TEXTURE);
-        this.titleLabelX = 60;
-    }
-
-    private LoreInscriberScreen(LoreInscriberMenu container, Inventory Inventory, Component title, ResourceLocation location) {
         super(container, Inventory, title);
-        this.texture = location;
+        this.titleLabelX = 60;
     }
 
     protected void subInit() {
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        this.name = new EditBox(this.font, i + 55, j + 30, 95, 12, Component.translatable("container.repair"));
+        this.name = new EditBox(this.font, i + 55, j + 30, 95, 12, Component.translatable("gui.enigmaticlegacy.lore_inscriber"));
         this.name.setCanLoseFocus(false);
         this.name.setTextColor(-1);
         this.name.setTextColorUneditable(-1);
@@ -59,7 +53,6 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
     }
 
     public void render(GuiGraphics graphics, int x, int y, float partialTick) {
-        this.renderBackground(graphics, x, y, partialTick);
         super.render(graphics, x, y, partialTick);
         RenderSystem.disableBlend();
         this.renderNameField(graphics, x, y, partialTick);
@@ -68,13 +61,13 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
 
     protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
         RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, this.texture);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        graphics.blit(this.texture, i, j, 0, 0, this.imageWidth, this.imageHeight);
-        graphics.blit(this.texture, i + 52, j + 26, 0, this.imageHeight + (this.menu.getSlot(0).hasItem() ? 0 : 16), 102, 16);
+        graphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(TEXTURE, i + 52, j + 26, 0, this.imageHeight + (this.menu.getSlot(0).hasItem() ? 0 : 16), 102, 16);
         if (this.menu.getSlot(0).hasItem() && !this.menu.getSlot(1).hasItem()) {
-            graphics.blit(this.texture, i + 71, j + 49, this.imageWidth, 0, 28, 21);
+            graphics.blit(TEXTURE, i + 71, j + 49, this.imageWidth, 0, 28, 21);
         }
     }
 
@@ -123,6 +116,5 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
     }
 
     public void dataChanged(AbstractContainerMenu menu, int i, int i1) {
-        // NO-OP
     }
 }

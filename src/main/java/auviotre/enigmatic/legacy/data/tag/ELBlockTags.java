@@ -21,11 +21,13 @@ public class ELBlockTags extends BlockTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(
                 EnigmaticBlocks.DIMENSIONAL_ANCHOR.get(),
+                EnigmaticBlocks.SPELLSTONE_TABLE.get(),
                 EnigmaticBlocks.ETHERIUM_ORE.get(),
                 EnigmaticBlocks.ETHERIUM_BLOCK.get()
         );
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
                 EnigmaticBlocks.DIMENSIONAL_ANCHOR.get(),
+                EnigmaticBlocks.SPELLSTONE_TABLE.get(),
                 EnigmaticBlocks.ETHERIUM_ORE.get(),
                 EnigmaticBlocks.ETHERIUM_BLOCK.get()
         );

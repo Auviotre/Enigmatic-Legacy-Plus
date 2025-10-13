@@ -13,9 +13,15 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 
 public abstract class SpellstoneItem extends BaseCurioItem implements ISpellstone {
+    private final int tunerColor;
 
-    public SpellstoneItem(Properties properties) {
-        super(properties);
+    public SpellstoneItem(Properties properties, int color) {
+        super(properties.fireResistant());
+        this.tunerColor = color;
+    }
+
+    public int getColor() {
+        return this.tunerColor;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -27,12 +33,14 @@ public abstract class SpellstoneItem extends BaseCurioItem implements ISpellston
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
+    abstract public void addTuneTooltip(List<Component> list);
 
     public boolean isEnchantable(ItemStack stack) {
         return false;
     }
 
-    public boolean canEquip(SlotContext slotContext, ItemStack stack) {
-        return super.canEquip(slotContext, stack) && ISpellstone.get(slotContext.entity()).isEmpty();
+    public boolean canEquip(SlotContext context, ItemStack stack) {
+        return super.canEquip(context, stack) && ISpellstone.get(context.entity()).isEmpty();
     }
 }

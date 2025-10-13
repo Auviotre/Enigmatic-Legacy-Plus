@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "enigmaticlegacyplus:item/eldritch/chaos_elytra_0"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "enigmaticlegacyplus:eldritch_open": 0
+      },
+      "model": "enigmaticlegacyplus:item/chaos_elytra_0"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:eldritch_open": 0.5
+      },
+      "model": "enigmaticlegacyplus:item/chaos_elytra_1"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:eldritch_open": 1
+      },
+      "model": "enigmaticlegacyplus:item/chaos_elytra_2"
+    }
+  ]
+}

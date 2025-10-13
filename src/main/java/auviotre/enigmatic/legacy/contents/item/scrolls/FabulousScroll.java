@@ -48,7 +48,7 @@ public class FabulousScroll extends HeavenScroll {
         }
     }
 
-    public boolean canEquip(SlotContext slotContext, ItemStack stack) {
-        return super.canEquip(slotContext, stack) && !EnigmaticHandler.hasCurio(slotContext.entity(), EnigmaticItems.HEAVEN_SCROLL);
+    public boolean canEquip(SlotContext context, ItemStack stack) {
+        return super.canEquip(context, stack) && !EnigmaticHandler.hasCurio(context.entity(), EnigmaticItems.HEAVEN_SCROLL);
     }
 }

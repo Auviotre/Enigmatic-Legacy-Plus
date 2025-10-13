@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "enigmaticlegacyplus:item/spelltuner_overlay",
+    "layer1": "enigmaticlegacyplus:item/spelltuner"
+  }
+}

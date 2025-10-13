@@ -1,27 +1,27 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "L": {
-      "item": "minecraft:lapis_lazuli"
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "L": {
+            "item": "minecraft:lapis_lazuli"
+        },
+        "Q": {
+            "item": "minecraft:quartz"
+        },
+        "T": {
+            "item": "minecraft:ghast_tear"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:golden_ring"
+        }
     },
-    "Q": {
-      "item": "minecraft:quartz"
-    },
-    "T": {
-      "item": "minecraft:ghast_tear"
-    },
-    "X": {
-      "item": "enigmaticlegacyplus:golden_ring"
+    "pattern": [
+        "QLQ",
+        "QXQ",
+        "LTL"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:quartz_ring"
     }
-  },
-  "pattern": [
-    "QLQ",
-    "QXQ",
-    "LTL"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:quartz_ring"
-  }
 }

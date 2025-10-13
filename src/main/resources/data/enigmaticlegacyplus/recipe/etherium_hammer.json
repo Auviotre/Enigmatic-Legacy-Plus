@@ -1,21 +1,21 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "equipment",
-  "key": {
-    "R": {
-      "item": "enigmaticlegacyplus:ender_rod"
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+        "R": {
+            "item": "enigmaticlegacyplus:ender_rod"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:etherium_ingot"
+        }
     },
-    "X": {
-      "item": "enigmaticlegacyplus:etherium_ingot"
+    "pattern": [
+        "XXX",
+        "XRX",
+        " R "
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:etherium_hammer"
     }
-  },
-  "pattern": [
-    "XXX",
-    "XRX",
-    " R "
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:etherium_hammer"
-  }
 }

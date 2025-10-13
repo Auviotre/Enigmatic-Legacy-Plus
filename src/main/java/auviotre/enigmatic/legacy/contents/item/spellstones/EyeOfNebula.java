@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -29,6 +30,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -38,11 +41,26 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 public class EyeOfNebula extends SpellstoneItem {
+    public static ModConfigSpec.IntValue magicBoost;
+    public static ModConfigSpec.IntValue magicResistance;
+    public static ModConfigSpec.IntValue dodgeProbability;
+    public static ModConfigSpec.IntValue attackEmpower;
+    public static ModConfigSpec.DoubleValue vulnerabilityModifier;
+
     public EyeOfNebula() {
-        super(defaultSingleProperties().rarity(Rarity.RARE));
+        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFF0BDDB8);
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.eye_of_nebula").push("spellstone.eyeOfNebula");
+        magicBoost = builder.defineInRange("magicBoost", 40, 0, 100);
+        magicResistance = builder.defineInRange("magicResistance", 65, 0, 100);
+        dodgeProbability = builder.defineInRange("dodgeProbability", 15, 0, 100);
+        attackEmpower = builder.defineInRange("attackEmpower", 150, 0, 1000);
+        vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
+        builder.pop(2);
     }
 
     private static void dodgeTeleport(ServerLevel level, Entity target, LivingEntity porter) {
@@ -77,15 +95,20 @@ public class EyeOfNebula extends SpellstoneItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneCooldown", ChatFormatting.GOLD, String.format("%.01f", 0.05F * getCooldown()));
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstonePassive");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula1", ChatFormatting.GOLD, CONFIG.SPELLSTONES.magicBoost.get() + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula2", ChatFormatting.GOLD, CONFIG.SPELLSTONES.magicResistance.get() + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula3", ChatFormatting.GOLD, CONFIG.SPELLSTONES.dodgeProbability.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula1", ChatFormatting.GOLD, magicBoost.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula2", ChatFormatting.GOLD, magicResistance.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula3", ChatFormatting.GOLD, dodgeProbability.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula4");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula5", ChatFormatting.GOLD, CONFIG.SPELLSTONES.attackEmpower.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula5", ChatFormatting.GOLD, attackEmpower.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula6");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula7");
         } else TooltipHandler.line(list, "tooltip.enigmaticlegacy.holdShift");
         this.addKeyText(list);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void addTuneTooltip(List<Component> list) {
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula2", ChatFormatting.GOLD, (magicResistance.get() + 5) / 2 + "%");
     }
 
     public int getCooldown() {
@@ -126,12 +149,24 @@ public class EyeOfNebula extends SpellstoneItem {
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
             LivingEntity victim = event.getEntity();
             if (ISpellstone.get(victim).is(EnigmaticItems.EYE_OF_NEBULA)) {
-                if (victim.getRandom().nextFloat() < 0.01F * CONFIG.SPELLSTONES.dodgeProbability.get() && !event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+                if (victim.getRandom().nextFloat() < 0.01F * dodgeProbability.get() && !event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
                     Entity causer = event.getSource().getEntity();
                     if (causer != null && causer.level() instanceof ServerLevel level)
                         dodgeTeleport(level, causer, victim);
                     victim.invulnerableTime = 20;
                     event.setCanceled(true);
+                }
+            }
+
+            if (event.getSource().getEntity() instanceof LivingEntity attacker && ISpellstone.get(attacker).is(EnigmaticItems.EYE_OF_NEBULA)) {
+                if (attacker.getData(EnigmaticAttachments.ENIGMATIC_DATA).getNebulaPower()) {
+                    event.setAmount(event.getAmount() * (1.0F + 0.01F * attackEmpower.get()));
+                    if (attacker instanceof Player player) player.magicCrit(victim);
+                    attacker.getData(EnigmaticAttachments.ENIGMATIC_DATA).setNebulaPower(false);
+                }
+
+                if (event.getSource().is(Tags.DamageTypes.IS_MAGIC)) {
+                    event.setAmount(event.getAmount() * (1.0F + 0.01F * magicBoost.get()));
                 }
             }
         }
@@ -141,27 +176,16 @@ public class EyeOfNebula extends SpellstoneItem {
             LivingEntity victim = event.getEntity();
             if (ISpellstone.get(victim).is(EnigmaticItems.EYE_OF_NEBULA)) {
                 if (event.getSource().is(Tags.DamageTypes.IS_MAGIC))
-                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * CONFIG.SPELLSTONES.magicResistance.get()));
+                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * magicResistance.get()));
                 if (victim.isInWater())
-                    event.setNewDamage(event.getNewDamage() * (float) CONFIG.SPELLSTONES.EONVulnerabilityModifier.getAsDouble());
-            }
-
-            if (event.getSource().getEntity() instanceof LivingEntity attacker && ISpellstone.get(attacker).is(EnigmaticItems.EYE_OF_NEBULA)) {
-                if (attacker.getData(EnigmaticAttachments.ENIGMATIC_DATA).getNebulaPower()) {
-                    event.setNewDamage(event.getNewDamage() * (1.0F + 0.01F * CONFIG.SPELLSTONES.attackEmpower.get()));
-                    if (attacker instanceof Player player) player.magicCrit(victim);
-                    attacker.getData(EnigmaticAttachments.ENIGMATIC_DATA).setNebulaPower(false);
-                }
-
-                if (event.getSource().is(Tags.DamageTypes.IS_MAGIC)) {
-                    event.setNewDamage(event.getNewDamage() * (1.0F + 0.01F * CONFIG.SPELLSTONES.magicBoost.get()));
-                }
+                    event.setNewDamage(event.getNewDamage() * (float) vulnerabilityModifier.getAsDouble());
             }
         }
 
         @SubscribeEvent
         private static void onTeleport(EntityTeleportEvent.@NotNull EnderPearl event) {
-            if (ISpellstone.get(event.getPlayer()).is(EnigmaticItems.EYE_OF_NEBULA)) {
+            ItemStack stack = ISpellstone.get(event.getPlayer());
+            if (stack.is(EnigmaticItems.EYE_OF_NEBULA) || stack.is(EnigmaticItems.THE_CUBE)) {
                 event.setAttackDamage(0);
             }
         }

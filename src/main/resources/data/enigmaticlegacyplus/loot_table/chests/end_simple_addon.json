@@ -1,85 +1,85 @@
 {
-  "type": "minecraft:chest",
-  "pools": [
-    {
-      "bonus_rolls": 0.0,
-      "entries": [
+    "type": "minecraft:chest",
+    "pools": [
         {
-          "type": "minecraft:item",
-          "name": "enigmaticlegacyplus:mending_mixture",
-          "weight": 30
-        },
-        {
-          "type": "minecraft:item",
-          "name": "enigmaticlegacyplus:recall_potion",
-          "weight": 15
-        },
-        {
-          "type": "minecraft:item",
-          "name": "enigmaticlegacyplus:lore_inscriber",
-          "weight": 10
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 2.0,
-                "min": 0.0
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "enigmaticlegacyplus:etherium_ingot",
-          "weight": 10
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 4.0,
-                "min": 1.0
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "enigmaticlegacyplus:astral_dust",
-          "weight": 80
-        },
-        {
-          "type": "minecraft:item",
-          "conditions": [
-            {
-              "chance": 0.5,
-              "condition": "minecraft:random_chance"
-            }
-          ],
-          "name": "enigmaticlegacyplus:astral_fruit",
-          "weight": 20
-        },
-        {
-          "type": "minecraft:item",
-          "conditions": [
-            {
-              "chance": 0.4,
-              "condition": "minecraft:random_chance"
-            }
-          ],
-          "name": "enigmaticlegacyplus:ender_rod",
-          "weight": 15
-        },
-        {
-          "type": "minecraft:empty",
-          "weight": 60
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "enigmaticlegacyplus:mending_mixture",
+                    "weight": 30
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "enigmaticlegacyplus:recall_potion",
+                    "weight": 15
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "enigmaticlegacyplus:lore_inscriber",
+                    "weight": 10
+                },
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "add": false,
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "max": 2.0,
+                                "min": 0.0
+                            },
+                            "function": "minecraft:set_count"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:etherium_ingot",
+                    "weight": 10
+                },
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "add": false,
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "max": 4.0,
+                                "min": 1.0
+                            },
+                            "function": "minecraft:set_count"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:astral_dust",
+                    "weight": 80
+                },
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.5,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:astral_fruit",
+                    "weight": 20
+                },
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.4,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:ender_rod",
+                    "weight": 15
+                },
+                {
+                    "type": "minecraft:empty",
+                    "weight": 60
+                }
+            ],
+            "rolls": 1.0
         }
-      ],
-      "rolls": 1.0
-    }
-  ],
-  "random_sequence": "enigmaticlegacyplus:chests/end_simple_addon"
+    ],
+    "random_sequence": "enigmaticlegacyplus:chests/end_simple_addon"
 }

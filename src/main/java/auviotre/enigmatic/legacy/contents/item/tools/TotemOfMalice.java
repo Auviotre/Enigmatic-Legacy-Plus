@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -25,16 +26,30 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class TotemOfMalice extends BaseCursedItem {
+    public static ModConfigSpec.IntValue specialDamageBoost;
+    public static ModConfigSpec.IntValue specialDamageResistance;
+
     public TotemOfMalice() {
         super(defaultSingleProperties().rarity(Rarity.RARE).fireResistant()
                 .component(EnigmaticComponents.MALICE_DURABILITY, 0).component(EnigmaticComponents.MALICE_MAX_DURABILITY, 8));
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.totem_of_malice").push("cursedItems.totemOfMalice");
+        specialDamageBoost = builder.defineInRange("specialDamageBoost", 80, 0, 200);
+        specialDamageResistance = builder.defineInRange("specialDamageResistance", 50, 0, 100);
+        builder.pop(2);
     }
 
     public static void hurtAndBreak(ItemStack stack, LivingEntity entity) {
@@ -70,8 +85,8 @@ public class TotemOfMalice extends BaseCursedItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice1");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice2", ChatFormatting.GOLD, "80%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice3", ChatFormatting.GOLD, "50%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice2", ChatFormatting.GOLD, specialDamageBoost.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice3", ChatFormatting.GOLD, specialDamageResistance.get() + "%");
             TooltipHandler.line(list);
             if (getDurability(stack) > 0) {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice4");
@@ -128,18 +143,26 @@ public class TotemOfMalice extends BaseCursedItem {
         }
 
         @SubscribeEvent
+        private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
+            LivingEntity victim = event.getEntity();
+            Entity entity = event.getSource().getEntity();
+            if (!(entity instanceof LivingEntity attacker)) return;
+            if (EnigmaticHandler.hasItem(attacker, EnigmaticItems.TOTEM_OF_MALICE) || EnigmaticHandler.hasCurio(attacker, EnigmaticItems.TOTEM_OF_MALICE)) {
+                if (victim.getType().is(EntityTypeTags.ILLAGER)) {
+                    event.setAmount(event.getAmount() * (1.0F + 0.01F * specialDamageBoost.get()));
+                }
+            }
+        }
+
+        @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
             LivingEntity victim = event.getEntity();
             Entity entity = event.getSource().getEntity();
             if (!(entity instanceof LivingEntity attacker)) return;
             if (EnigmaticHandler.hasItem(victim, EnigmaticItems.TOTEM_OF_MALICE) || EnigmaticHandler.hasCurio(victim, EnigmaticItems.TOTEM_OF_MALICE)) {
                 if (attacker.getType().is(EntityTypeTags.ILLAGER)) {
-                    event.setNewDamage(event.getNewDamage() * 0.5F);
-                }
-            }
-            if (EnigmaticHandler.hasItem(attacker, EnigmaticItems.TOTEM_OF_MALICE) || EnigmaticHandler.hasCurio(attacker, EnigmaticItems.TOTEM_OF_MALICE)) {
-                if (victim.getType().is(EntityTypeTags.ILLAGER)) {
-                    event.setNewDamage(event.getNewDamage() * 1.8F);
+                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * specialDamageResistance.get()));
                 }
             }
         }

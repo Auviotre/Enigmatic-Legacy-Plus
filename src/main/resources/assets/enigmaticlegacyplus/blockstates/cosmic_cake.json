@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "bites=0": {
+      "model": "enigmaticlegacyplus:block/cosmic_cake"
+    },
+    "bites=1": {
+      "model": "enigmaticlegacyplus:block/cosmic_cake_slice_1"
+    },
+    "bites=2": {
+      "model": "enigmaticlegacyplus:block/cosmic_cake_slice_2"
+    },
+    "bites=3": {
+      "model": "enigmaticlegacyplus:block/cosmic_cake_slice_3"
+    },
+    "bites=4": {
+      "model": "enigmaticlegacyplus:block/cosmic_cake_slice_4"
+    },
+    "bites=5": {
+      "model": "enigmaticlegacyplus:block/cosmic_cake_slice_5"
+    },
+    "bites=6": {
+      "model": "enigmaticlegacyplus:block/cosmic_cake_slice_6"
+    }
+  }
+}

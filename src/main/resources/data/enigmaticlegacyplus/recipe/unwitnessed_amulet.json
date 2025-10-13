@@ -1,24 +1,24 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "G": {
-      "item": "enigmaticlegacyplus:earth_heart_fragment"
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "G": {
+            "item": "enigmaticlegacyplus:earth_heart_fragment"
+        },
+        "N": {
+            "item": "minecraft:gold_nugget"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:enigmatic_amulet"
+        }
     },
-    "N": {
-      "item": "minecraft:gold_nugget"
-    },
-    "X": {
-      "item": "enigmaticlegacyplus:enigmatic_amulet"
+    "pattern": [
+        "NGN",
+        "GXG",
+        "NGN"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:unwitnessed_amulet"
     }
-  },
-  "pattern": [
-    "NGN",
-    "GXG",
-    "NGN"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:unwitnessed_amulet"
-  }
 }

@@ -1,32 +1,32 @@
 {
-  "parent": "minecraft:recipes/root",
-  "criteria": {
-    "has_item": {
-      "conditions": {
-        "items": [
-          {
-            "items": "enigmaticlegacyplus:earth_heart_fragment"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:earth_heart_fragment"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_the_recipe": {
+            "conditions": {
+                "recipe": "enigmaticlegacyplus:unwitnessed_amulet"
+            },
+            "trigger": "minecraft:recipe_unlocked"
+        }
     },
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "enigmaticlegacyplus:unwitnessed_amulet"
-      },
-      "trigger": "minecraft:recipe_unlocked"
+    "requirements": [
+        [
+            "has_the_recipe",
+            "has_item"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "enigmaticlegacyplus:unwitnessed_amulet"
+        ]
     }
-  },
-  "requirements": [
-    [
-      "has_the_recipe",
-      "has_item"
-    ]
-  ],
-  "rewards": {
-    "recipes": [
-      "enigmaticlegacyplus:unwitnessed_amulet"
-    ]
-  }
 }

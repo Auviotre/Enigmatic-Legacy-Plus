@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
@@ -25,14 +26,18 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import org.jetbrains.annotations.NotNull;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,26 +53,43 @@ public class ExecutionAxe extends SwordItem {
             WitherSkeleton.class, Items.WITHER_SKELETON_SKULL,
             EnderDragon.class, Items.DRAGON_HEAD
     );
+    public static ModConfigSpec.IntValue beheadingBase;
+    public static ModConfigSpec.IntValue beheadingBonus;
 
     public ExecutionAxe() {
         super(Tiers.NETHERITE, new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON).attributes(createAttributes(Tiers.NETHERITE, 5.0F, -2.4F)));
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.execution_axe").push("else.executionAxe");
+        beheadingBase = builder.defineInRange("beheadingBase", 10, 0, 50);
+        beheadingBonus = builder.defineInRange("beheadingBonus", 5, 0, 20);
+        builder.pop(2);
+    }
+
+    public static int getLootingLevel(LivingEntity entity, Level level) {
+        int loot = 0;
+        Holder.Reference<Enchantment> holder = EnigmaticHandler.get(level, Registries.ENCHANTMENT, Enchantments.LOOTING);
+        loot += EnchantmentHelper.getEnchantmentLevel(holder, entity);
+        loot += CuriosApi.getCuriosInventory(Minecraft.getInstance().player).map(handler -> handler.getLootingLevel(null)).orElse(0);
+        return loot;
     }
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.executionAxe1");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.executionAxe2", ChatFormatting.GOLD, "5%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.executionAxe2", ChatFormatting.GOLD, beheadingBonus.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.executionAxe3");
         } else {
             TooltipHandler.holdShift(list);
             TooltipHandler.line(list);
         }
 
-        int looting = 10;
+        int looting = beheadingBase.get();
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().level != null) {
-            Holder.Reference<Enchantment> holder = EnigmaticHandler.get(Minecraft.getInstance().level, Registries.ENCHANTMENT, Enchantments.LOOTING);
-            looting += 5 * EnchantmentHelper.getEnchantmentLevel(holder, Minecraft.getInstance().player);
+            looting += beheadingBonus.get() * getLootingLevel(Minecraft.getInstance().player, Minecraft.getInstance().level);
         }
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.executionAxeBeheadingChance", ChatFormatting.GOLD, looting + "%");
         TooltipHandler.line(list);
@@ -87,8 +109,8 @@ public class ExecutionAxe extends SwordItem {
                 ItemStack item = attacker.getMainHandItem();
                 Item skull = SKULL_MAP.get(victim.getClass()).asItem();
                 Collection<ItemEntity> drops = event.getDrops();
-                int looting = EnchantmentHelper.getEnchantmentLevel(EnigmaticHandler.get(attacker.level(), Registries.ENCHANTMENT, Enchantments.LOOTING), attacker);
-                if (item.is(EnigmaticItems.EXECUTION_AXE) && attacker.getRandom().nextInt(100) < 10 + looting * 5 && drops.stream().noneMatch(entity -> entity.getItem().is(skull))) {
+                int looting = getLootingLevel(attacker, attacker.level());
+                if (item.is(EnigmaticItems.EXECUTION_AXE) && attacker.getRandom().nextInt(100) < beheadingBase.get() + looting * beheadingBonus.get() && drops.stream().noneMatch(entity -> entity.getItem().is(skull))) {
                     ItemEntity itemEntity = new ItemEntity(victim.level(), victim.getX(), victim.getY(), victim.getZ(), skull.getDefaultInstance());
                     itemEntity.setDefaultPickUpDelay();
                     drops.add(itemEntity);

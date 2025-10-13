@@ -12,6 +12,7 @@ public interface EnigmaticLootTables {
 
     interface Chests {
         ResourceKey<LootTable> OVERWORLD_SIMPLE = key("overworld_simple");
+        ResourceKey<LootTable> NETHER_SIMPLE = key("nether_simple");
         ResourceKey<LootTable> END_SIMPLE = key("end_simple");
 
         ResourceKey<LootTable> DARKEST_SCROLL = key("darkest_scroll");
@@ -22,6 +23,7 @@ public interface EnigmaticLootTables {
         ResourceKey<LootTable> EYE_OF_NEBULA = key("eye_of_nebula");
         ResourceKey<LootTable> VOID_PEARL = key("void_pearl");
         ResourceKey<LootTable> FORGOTTEN_ICE = key("forgotten_ice");
+        ResourceKey<LootTable> REVIVAL_LEAF = key("revival_leaf");
         ResourceKey<LootTable> LOST_ENGINE = key("lost_engine");
 
         private static ResourceKey<LootTable> key(String name) {

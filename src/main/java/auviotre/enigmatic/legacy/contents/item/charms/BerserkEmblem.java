@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -25,17 +26,33 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 public class BerserkEmblem extends CursedCurioItem {
+    public static ModConfigSpec.DoubleValue attackDamage;
+    public static ModConfigSpec.DoubleValue attackSpeed;
+    public static ModConfigSpec.DoubleValue movementSpeed;
+    public static ModConfigSpec.DoubleValue damageResistance;
+
     public BerserkEmblem() {
         super(defaultSingleProperties().rarity(Rarity.RARE).fireResistant());
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.berserk_emblem").push("cursedItems.berserkEmblem");
+        attackDamage = builder.defineInRange("attackDamage", 1.0, 0, 10.0);
+        attackSpeed = builder.defineInRange("attackSpeed", 1.0, 0, 10.0);
+        movementSpeed = builder.defineInRange("movementSpeed", 0.5, 0, 10.0);
+        damageResistance = builder.defineInRange("damageResistance", 0.5, 0, 1.0);
+        builder.pop(2);
     }
 
     public static float getMissingHealthPool(@NotNull LivingEntity entity) {
@@ -45,8 +62,8 @@ public class BerserkEmblem extends CursedCurioItem {
     private Multimap<Holder<Attribute>, AttributeModifier> createAttributeMap(LivingEntity entity) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         float missingHealthPool = getMissingHealthPool(entity);
-        attributes.put(Attributes.ATTACK_SPEED, new AttributeModifier(getLocation(this), missingHealthPool * CONFIG.CURSED_ITEMS.BEAttackSpeed.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-        attributes.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(getLocation(this), missingHealthPool * CONFIG.CURSED_ITEMS.BEMovementSpeed.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        attributes.put(Attributes.ATTACK_SPEED, new AttributeModifier(getLocation(this), missingHealthPool * attackSpeed.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        attributes.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(getLocation(this), missingHealthPool * movementSpeed.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         return attributes;
     }
 
@@ -54,10 +71,10 @@ public class BerserkEmblem extends CursedCurioItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (Screen.hasShiftDown()) {
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm1", ChatFormatting.GOLD, String.format("%.1f%%", CONFIG.CURSED_ITEMS.BEAttackDamage.get()));
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm2", ChatFormatting.GOLD, String.format("%.1f%%", CONFIG.CURSED_ITEMS.BEAttackSpeed.get()));
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm3", ChatFormatting.GOLD, String.format("%.1f%%", CONFIG.CURSED_ITEMS.BEMovementSpeed.get()));
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm4", ChatFormatting.GOLD, String.format("%.1f%%", CONFIG.CURSED_ITEMS.BEDamageResistance.get()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm1", ChatFormatting.GOLD, String.format("%.1f%%", attackDamage.get()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm2", ChatFormatting.GOLD, String.format("%.1f%%", attackSpeed.get()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm3", ChatFormatting.GOLD, String.format("%.1f%%", movementSpeed.get()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm4", ChatFormatting.GOLD, String.format("%.1f%%", damageResistance.get()));
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm5");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm6");
@@ -69,10 +86,10 @@ public class BerserkEmblem extends CursedCurioItem {
                 int percentage = (int) (missingPool * 100F);
                 TooltipHandler.line(list);
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm7");
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm1", ChatFormatting.GOLD, String.format("%.1f%%", percentage * CONFIG.CURSED_ITEMS.BEAttackDamage.get()));
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm2", ChatFormatting.GOLD, String.format("%.1f%%", percentage * CONFIG.CURSED_ITEMS.BEAttackSpeed.get()));
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm3", ChatFormatting.GOLD, String.format("%.1f%%", percentage * CONFIG.CURSED_ITEMS.BEMovementSpeed.get()));
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm4", ChatFormatting.GOLD, String.format("%.1f%%", percentage * CONFIG.CURSED_ITEMS.BEDamageResistance.get()));
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm1", ChatFormatting.GOLD, String.format("%.1f%%", percentage * attackDamage.get()));
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm2", ChatFormatting.GOLD, String.format("%.1f%%", percentage * attackSpeed.get()));
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm3", ChatFormatting.GOLD, String.format("%.1f%%", percentage * movementSpeed.get()));
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm4", ChatFormatting.GOLD, String.format("%.1f%%", percentage * damageResistance.get()));
             }
         TooltipHandler.line(list);
         TooltipHandler.cursedOnly(list, stack);
@@ -93,14 +110,18 @@ public class BerserkEmblem extends CursedCurioItem {
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
         @SubscribeEvent
+        private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            Entity entity = event.getSource().getEntity();
+            if (entity instanceof LivingEntity attacker && EnigmaticHandler.hasCurio(attacker, EnigmaticItems.BERSERK_EMBLEM)) {
+                event.setAmount(event.getAmount() * (1.0F + (getMissingHealthPool(attacker) * (float) attackDamage.getAsDouble())));
+            }
+        }
+
+        @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
             LivingEntity victim = event.getEntity();
             if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.BERSERK_EMBLEM)) {
-                event.setNewDamage(event.getNewDamage() * (1.0F - (getMissingHealthPool(victim) * (float) CONFIG.CURSED_ITEMS.BEDamageResistance.getAsDouble())));
-            }
-            Entity entity = event.getSource().getEntity();
-            if (entity instanceof LivingEntity attacker && EnigmaticHandler.hasCurio(attacker, EnigmaticItems.BERSERK_EMBLEM)) {
-                event.setNewDamage(event.getNewDamage() * (1.0F + (getMissingHealthPool(attacker) * (float) CONFIG.CURSED_ITEMS.BEAttackDamage.getAsDouble())));
+                event.setNewDamage(event.getNewDamage() * (1.0F - (getMissingHealthPool(victim) * (float) damageResistance.getAsDouble())));
             }
         }
     }

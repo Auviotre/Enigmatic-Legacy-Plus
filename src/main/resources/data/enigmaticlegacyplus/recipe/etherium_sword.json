@@ -1,24 +1,24 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "equipment",
-  "key": {
-    "D": {
-      "item": "minecraft:diamond"
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+        "D": {
+            "item": "minecraft:diamond"
+        },
+        "R": {
+            "item": "enigmaticlegacyplus:ender_rod"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:etherium_ingot"
+        }
     },
-    "R": {
-      "item": "enigmaticlegacyplus:ender_rod"
-    },
-    "X": {
-      "item": "enigmaticlegacyplus:etherium_ingot"
+    "pattern": [
+        " X ",
+        "DXD",
+        " R "
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:etherium_sword"
     }
-  },
-  "pattern": [
-    " X ",
-    "DXD",
-    " R "
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:etherium_sword"
-  }
 }

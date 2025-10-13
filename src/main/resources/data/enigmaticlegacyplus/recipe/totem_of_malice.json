@@ -1,24 +1,24 @@
 {
-  "type": "enigmaticlegacyplus:cursed_shaped",
-  "category": "misc",
-  "key": {
-    "E": {
-      "item": "enigmaticlegacyplus:evil_essence"
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "E": {
+            "item": "enigmaticlegacyplus:evil_essence"
+        },
+        "N": {
+            "item": "minecraft:netherite_ingot"
+        },
+        "X": {
+            "item": "minecraft:totem_of_undying"
+        }
     },
-    "N": {
-      "item": "minecraft:netherite_ingot"
-    },
-    "X": {
-      "item": "minecraft:totem_of_undying"
+    "pattern": [
+        " N ",
+        "EXE",
+        " N "
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:totem_of_malice"
     }
-  },
-  "pattern": [
-    " N ",
-    "EXE",
-    " N "
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:totem_of_malice"
-  }
 }

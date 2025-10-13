@@ -1,33 +1,33 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "B": {
-      "item": "minecraft:ink_sac"
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "B": {
+            "item": "minecraft:ink_sac"
+        },
+        "E": {
+            "item": "minecraft:experience_bottle"
+        },
+        "I": {
+            "item": "minecraft:feather"
+        },
+        "M": {
+            "item": "minecraft:emerald"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:blank_scroll"
+        },
+        "Y": {
+            "item": "minecraft:ender_eye"
+        }
     },
-    "E": {
-      "item": "minecraft:experience_bottle"
-    },
-    "I": {
-      "item": "minecraft:feather"
-    },
-    "M": {
-      "item": "minecraft:emerald"
-    },
-    "X": {
-      "item": "enigmaticlegacyplus:blank_scroll"
-    },
-    "Y": {
-      "item": "minecraft:ender_eye"
+    "pattern": [
+        "EYE",
+        "BXI",
+        "EME"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:xp_scroll"
     }
-  },
-  "pattern": [
-    "EYE",
-    "BXI",
-    "EME"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:xp_scroll"
-  }
 }

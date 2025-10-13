@@ -1,20 +1,16 @@
 package auviotre.enigmatic.legacy.api.item;
 
+import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
-import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.glfw.GLFW;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -41,10 +37,14 @@ public interface ISpellstone {
 
     default void triggerActiveAbility(ServerLevel level, @NotNull ServerPlayer player, ItemStack stack) {
         ItemCooldowns cooldowns = player.getCooldowns();
-        if (getCooldown() > 0 && !cooldowns.isOnCooldown(stack.getItem())) {
+        int cooldown = getCooldown();
+        if (cooldown > 0 && !cooldowns.isOnCooldown(stack.getItem())) {
+            cooldown = player.hasInfiniteMaterials() ? 15 : cooldown;
+            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.SPELLTUNER)) cooldown = (int) (cooldown * 0.9F);
+            int finalCooldown = cooldown;
             BuiltInRegistries.ITEM.forEach(item -> {
                 if (item.getDefaultInstance().is(EnigmaticTags.Items.SPELLSTONES)) {
-                    cooldowns.addCooldown(item, player.hasInfiniteMaterials() ? 15 : getCooldown());
+                    cooldowns.addCooldown(item, finalCooldown);
                 }
             });
         }

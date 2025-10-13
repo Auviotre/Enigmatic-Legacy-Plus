@@ -1,15 +1,15 @@
 {
-  "type": "neoforge:add_table",
-  "conditions": [
-    {
-      "condition": "minecraft:any_of",
-      "terms": [
+    "type": "neoforge:add_table",
+    "conditions": [
         {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:chests/bastion_treasure"
+            "condition": "minecraft:any_of",
+            "terms": [
+                {
+                    "condition": "neoforge:loot_table_id",
+                    "loot_table_id": "minecraft:chests/bastion_treasure"
+                }
+            ]
         }
-      ]
-    }
-  ],
-  "table": "enigmaticlegacyplus:chests/darkest_scroll_addon"
+    ],
+    "table": "enigmaticlegacyplus:chests/darkest_scroll_addon"
 }

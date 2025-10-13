@@ -1,7 +1,7 @@
 package auviotre.enigmatic.legacy.contents.effect;
 
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
-import net.minecraft.world.damagesource.DamageEffects;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,7 +24,7 @@ public class MoltenHeart extends MobEffect {
     @SubscribeEvent
     public void onEntityHurt(@NotNull LivingIncomingDamageEvent event) {
         if (event.getEntity().hasEffect(EnigmaticEffects.MOLTEN_HEART)) {
-            if (event.getSource().type().effects().equals(DamageEffects.BURNING)) {
+            if (event.getSource().is(DamageTypeTags.IS_FIRE)) {
                 event.setCanceled(true);
             }
         }

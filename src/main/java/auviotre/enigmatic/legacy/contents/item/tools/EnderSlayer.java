@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -29,6 +30,8 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.SimpleTier;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -40,15 +43,23 @@ import java.util.List;
 
 public class EnderSlayer extends SwordItem {
     public static final Tier TIER = new SimpleTier(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1876, 8.5F, 3.5F, 12, () -> Ingredient.of(Blocks.OBSIDIAN));
+    public static ModConfigSpec.IntValue specialDamageBoost;
 
     public EnderSlayer() {
         super(TIER, new Item.Properties().fireResistant().rarity(Rarity.RARE).component(EnigmaticComponents.CURSED, true).attributes(createAttributes(TIER, 3.5F, -2.6F)));
     }
 
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.ender_slayer").push("cursedItems.enderSlayer");
+        specialDamageBoost = builder.defineInRange("specialDamageBoost", 150, 0, 1000);
+        builder.pop(2);
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.enderSlayer3", ChatFormatting.GOLD, "150%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.enderSlayer3", ChatFormatting.GOLD, specialDamageBoost.get() + "%");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.enderSlayer5");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.enderSlayer6");
@@ -84,7 +95,7 @@ public class EnderSlayer extends SwordItem {
                         cooldowns.addCooldown(EnigmaticItems.RECALL_POTION.get(), 400);
                         cooldowns.addCooldown(EnigmaticItems.TWISTED_MIRROR.get(), 400);
                         cooldowns.addCooldown(EnigmaticItems.EYE_OF_NEBULA.get(), 400);
-                        //                    cooldowns.addCooldown(EnigmaticItems.THE_CUBE.get(), 400);
+                        cooldowns.addCooldown(EnigmaticItems.THE_CUBE.get(), 400);
                     } else if (event.getEntity() instanceof EnderMan || event.getEntity() instanceof Shulker) {
                         event.getEntity().getPersistentData().putInt("EnderSlayerTeleportForbidden", 400);
                     }
@@ -98,7 +109,7 @@ public class EnderSlayer extends SwordItem {
                                     man.getPersistentData().putBoolean("EnderSlayerVictim", true);
                                 }
                             }
-                            event.setNewDamage(event.getNewDamage() * 2.5F);
+                            event.setNewDamage(event.getNewDamage() * (1.0F + 0.01F * specialDamageBoost.get()));
                         }
                     }
                 }

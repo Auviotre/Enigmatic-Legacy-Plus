@@ -10,16 +10,11 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
     private boolean magnetRingEffect = false;
     private boolean nebulaPower = false;
     private boolean isElytraBoosting = false;
+    private boolean isForbiddenCursed = false;
     private long timeWithCurses, timeWithoutCurses;
     private int fireImmunityTimer = 0;
     private int fireImmunityTimerLast = 0;
     private int inBeaconRange = 0;
-
-//    public void init() {
-//        this.magnetRingEffect = false;
-//        this.nebulaPower
-//        this.timeWithCurses = timeWithoutCurses = 0L;
-//    }
 
     public boolean isMagnetRingEnable() {
         return magnetRingEffect;
@@ -55,6 +50,14 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
 
     public void setElytraBoosting(boolean boosting) {
         this.isElytraBoosting = boosting;
+    }
+
+    public boolean isForbiddenCursed() {
+        return this.isForbiddenCursed;
+    }
+
+    public void setForbiddenCursed(boolean forbidden) {
+        this.isForbiddenCursed = forbidden;
     }
 
     public boolean isInBeaconRange() {
@@ -107,6 +110,7 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         tag.putBoolean("MagnetRingEffect", this.magnetRingEffect);
         tag.putBoolean("NebulaPower", this.nebulaPower);
         tag.putBoolean("ElytraBoosting", this.isElytraBoosting);
+        tag.putBoolean("isForbiddenCursed", this.isForbiddenCursed);
         tag.putInt("FireImmunityTimer", this.fireImmunityTimer);
         tag.putInt("FireImmunityTimerLast", this.fireImmunityTimerLast);
         tag.putInt("InBeaconRangeTick", this.inBeaconRange);
@@ -119,6 +123,7 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         this.magnetRingEffect = tag.getBoolean("MagnetRingEffect");
         this.nebulaPower = tag.getBoolean("NebulaPower");
         this.isElytraBoosting = tag.getBoolean("ElytraBoosting");
+        this.isForbiddenCursed = tag.getBoolean("isForbiddenCursed");
         this.fireImmunityTimer = tag.getInt("FireImmunityTimer");
         this.fireImmunityTimerLast = tag.getInt("FireImmunityTimerLast");
         this.inBeaconRange = tag.getInt("InBeaconRangeTick");

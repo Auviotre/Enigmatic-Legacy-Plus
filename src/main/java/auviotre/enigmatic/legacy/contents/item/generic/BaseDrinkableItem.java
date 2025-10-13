@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class BaseDrinkableItem extends BaseItem {
 
@@ -21,7 +22,7 @@ public class BaseDrinkableItem extends BaseItem {
         super(properties);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (this.canDrink(level, player, stack))
             return ItemUtils.startUsingInstantly(level, player, hand);
@@ -63,6 +64,6 @@ public class BaseDrinkableItem extends BaseItem {
         return true;
     }
 
-    public void onConsumed(Level level, Player player, ItemStack stack) {
+    public void onConsumed(Level level, @NotNull Player player, ItemStack stack) {
     }
 }

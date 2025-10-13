@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.amulets;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -37,6 +38,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
@@ -46,9 +49,21 @@ import java.util.List;
 import java.util.Map;
 
 public class EldritchAmulet extends BaseCurioItem {
+    public static ModConfigSpec.IntValue attackDamage;
+    public static ModConfigSpec.IntValue lifeSteal;
+
     public EldritchAmulet() {
         super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true));
     }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.eldritch_amulet").push("abyssItems.eldritchAmulet");
+        attackDamage = builder.defineInRange("attackDamage", 20, 0, 100);
+        lifeSteal = builder.defineInRange("lifeSteal", 15, 0, 100);
+        builder.pop(2);
+    }
+
 
     private static Map<String, NonNullList<ItemStack>> inventoryMap(Player player) {
         Map<String, NonNullList<ItemStack>> inventories = new HashMap<>();
@@ -117,8 +132,8 @@ public class EldritchAmulet extends BaseCurioItem {
         TooltipHandler.worthyOnly(list, stack);
         TooltipHandler.line(list);
         list.add(Component.translatable("curios.modifiers.charm").withStyle(ChatFormatting.GOLD));
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmuletStat1");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmuletStat2");
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmuletStat1", ChatFormatting.GOLD, attackDamage.getAsInt() + "%");
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmuletStat2", ChatFormatting.GOLD, lifeSteal.getAsInt() + "%");
     }
 
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
@@ -156,7 +171,7 @@ public class EldritchAmulet extends BaseCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getModifiers() {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
-        map.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(getLocation(this), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        map.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(getLocation(this), attackDamage.getAsInt() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return map;
     }
 
@@ -167,7 +182,7 @@ public class EldritchAmulet extends BaseCurioItem {
         private static void onDamagePost(LivingDamageEvent.@NotNull Post event) {
             if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && !attacker.level().isClientSide()) {
                 if (EnigmaticHandler.hasCurio(attacker, EnigmaticItems.ELDRITCH_AMULET))
-                    attacker.heal(event.getNewDamage() * 0.15F);
+                    attacker.heal(event.getNewDamage() * 0.01F * lifeSteal.get());
             }
         }
     }

@@ -1,35 +1,35 @@
 {
-  "criteria": {
-    "has_item": {
-      "conditions": {
-        "items": [
-          {
-            "items": "enigmaticlegacyplus:unwitnessed_amulet"
-          }
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:unwitnessed_amulet"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "announce_to_chat": false,
+        "background": "minecraft:textures/block/end_stone_bricks.png",
+        "description": {
+            "translate": "advancement.enigmaticlegacy.root.desc"
+        },
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:unwitnessed_amulet"
+        },
+        "show_toast": false,
+        "title": {
+            "translate": "advancement.enigmaticlegacy.root.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_item"
         ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    }
-  },
-  "display": {
-    "announce_to_chat": false,
-    "background": "minecraft:textures/block/end_stone_bricks.png",
-    "description": {
-      "translate": "advancement.enigmaticlegacy.root.desc"
-    },
-    "icon": {
-      "count": 1,
-      "id": "enigmaticlegacyplus:unwitnessed_amulet"
-    },
-    "show_toast": false,
-    "title": {
-      "translate": "advancement.enigmaticlegacy.root.title"
-    }
-  },
-  "requirements": [
-    [
-      "has_item"
-    ]
-  ],
-  "sends_telemetry_event": true
+    ],
+    "sends_telemetry_event": true
 }

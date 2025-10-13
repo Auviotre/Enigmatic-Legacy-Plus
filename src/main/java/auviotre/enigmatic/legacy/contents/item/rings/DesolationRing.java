@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.rings;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -23,6 +24,8 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
@@ -35,8 +38,17 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 public class DesolationRing extends BaseCurioItem {
+    public static ModConfigSpec.IntValue effectiveRange;
+
     public DesolationRing() {
         super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true));
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.desolation_ring").push("abyssItems.desolationRing");
+        effectiveRange = builder.defineInRange("effectiveRange", 64, 1, 128);
+        builder.pop(2);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -79,7 +91,7 @@ public class DesolationRing extends BaseCurioItem {
         private static void onPlayerTick(EntityTickEvent.@NotNull Pre event) {
             if (event.getEntity() instanceof LivingEntity entity) {
                 if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.DESOLATION_RING))
-                    BOXES.put(entity, entity.getBoundingBox().inflate(64));
+                    BOXES.put(entity, entity.getBoundingBox().inflate(effectiveRange.get()));
                 else BOXES.remove(entity);
             }
             if (event.getEntity() instanceof ItemEntity itemEntity) {

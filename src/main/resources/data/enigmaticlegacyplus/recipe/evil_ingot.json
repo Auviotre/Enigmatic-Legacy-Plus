@@ -1,24 +1,24 @@
 {
-  "type": "enigmaticlegacyplus:cursed_shaped",
-  "category": "misc",
-  "key": {
-    "E": {
-      "item": "enigmaticlegacyplus:evil_essence"
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "E": {
+            "item": "enigmaticlegacyplus:evil_essence"
+        },
+        "G": {
+            "item": "minecraft:ghast_tear"
+        },
+        "X": {
+            "item": "minecraft:netherite_ingot"
+        }
     },
-    "G": {
-      "item": "minecraft:ghast_tear"
-    },
-    "X": {
-      "item": "minecraft:netherite_ingot"
+    "pattern": [
+        "GEG",
+        "EXE",
+        "GEG"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:evil_ingot"
     }
-  },
-  "pattern": [
-    "GEG",
-    "EXE",
-    "GEG"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:evil_ingot"
-  }
 }

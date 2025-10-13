@@ -1,28 +1,28 @@
 {
-  "type": "enigmaticlegacyplus:shapeless_no_remain",
-  "category": "misc",
-  "ingredients": [
-    {
-      "item": "minecraft:dragon_breath"
-    },
-    {
-      "item": "minecraft:glistering_melon_slice"
-    },
-    {
-      "tag": "c:gems/prismarine"
-    },
-    {
-      "item": "minecraft:phantom_membrane"
-    },
-    {
-      "item": "minecraft:blaze_powder"
-    },
-    {
-      "item": "minecraft:ghast_tear"
+    "type": "enigmaticlegacyplus:shapeless_no_remain",
+    "category": "misc",
+    "ingredients": [
+        {
+            "item": "minecraft:dragon_breath"
+        },
+        {
+            "item": "minecraft:glistering_melon_slice"
+        },
+        {
+            "tag": "c:gems/prismarine"
+        },
+        {
+            "item": "minecraft:phantom_membrane"
+        },
+        {
+            "item": "minecraft:blaze_powder"
+        },
+        {
+            "item": "minecraft:ghast_tear"
+        }
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:mending_mixture"
     }
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:mending_mixture"
-  }
 }

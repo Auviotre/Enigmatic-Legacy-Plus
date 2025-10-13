@@ -1,6 +1,6 @@
 package auviotre.enigmatic.legacy.contents.loot.modifiers;
 
-import auviotre.enigmatic.legacy.ELConfig;
+import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.MapCodec;
@@ -35,7 +35,7 @@ public class AddCurseLootModifier extends AddTableLootModifier {
     }
 
     protected @Nonnull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> list, LootContext context) {
-        if (!ELConfig.CONFIG.SEVEN_CURSES.enableSpecialDrops.get()) return list;
+        if (!CursedRing.enableSpecialDrops.get()) return list;
         if (!context.hasParam(LootContextParams.ATTACKING_ENTITY)) return list;
         Entity entity = context.getParam(LootContextParams.ATTACKING_ENTITY);
         if (entity instanceof LivingEntity attacker && EnigmaticHandler.isTheCursedOne(attacker)) {

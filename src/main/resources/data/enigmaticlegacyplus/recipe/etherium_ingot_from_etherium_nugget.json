@@ -1,19 +1,19 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "group": "etherium_ingot",
-  "key": {
-    "#": {
-      "item": "enigmaticlegacyplus:etherium_nugget"
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "group": "etherium_ingot",
+    "key": {
+        "#": {
+            "item": "enigmaticlegacyplus:etherium_nugget"
+        }
+    },
+    "pattern": [
+        "###",
+        "###",
+        "###"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:etherium_ingot"
     }
-  },
-  "pattern": [
-    "###",
-    "###",
-    "###"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:etherium_ingot"
-  }
 }

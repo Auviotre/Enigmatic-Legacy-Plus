@@ -1,12 +1,12 @@
 {
-  "entities": [
-    "minecraft:player"
-  ],
-  "slots": [
-    "charm",
-    "ring",
-    "back",
-    "scroll",
-    "spellstone"
-  ]
+    "entities": [
+        "minecraft:player"
+    ],
+    "slots": [
+        "charm",
+        "ring",
+        "back",
+        "scroll",
+        "spellstone"
+    ]
 }

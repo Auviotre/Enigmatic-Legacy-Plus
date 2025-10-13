@@ -1,11 +1,13 @@
 package auviotre.enigmatic.legacy.contents.gui;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.tools.LoreInscriber;
 import auviotre.enigmatic.legacy.registries.EnigmaticMenus;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
@@ -16,11 +18,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.Nullable;
 
 public class LoreInscriberMenu extends AbstractContainerMenu {
     public final Player player;
     protected final ResultContainer result = new ResultContainer();
+    protected final Container loreSlot = new SimpleContainer(1) {
+        public void setChanged() {
+            super.setChanged();
+            LoreInscriberMenu.this.slotsChanged(this);
+        }
+    };
     protected final ContainerLevelAccess access;
     private String unParsedInputField;
 
@@ -32,12 +39,8 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
         this(syncID, inventory, ContainerLevelAccess.create(inventory.player.level(), inventory.player.blockPosition()));
     }
 
-    private LoreInscriberMenu(int id, Inventory Inventory, ContainerLevelAccess worldPosCallable) {
-        this(EnigmaticMenus.LORE_INSCRIBER_MENU.get(), id, Inventory, worldPosCallable);
-    }
-
-    private LoreInscriberMenu(@Nullable MenuType<?> menuType, int id, Inventory inventory, ContainerLevelAccess access) {
-        super(menuType, id);
+    private LoreInscriberMenu(int id, Inventory inventory, ContainerLevelAccess access) {
+        super(EnigmaticMenus.LORE_INSCRIBER_MENU.get(), id);
 
         this.access = access;
         this.player = inventory.player;
@@ -45,25 +48,25 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof LoreInscriber.Fragment;
             }
-
             public int getMaxStackSize() {
                 return 1;
+            }
+            public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+                return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_lore_fragment_slot"));
             }
         });
         this.addSlot(new Slot(this.result, 1, 116, 51) {
             public boolean mayPlace(ItemStack stack) {
                 return false;
             }
-
             public boolean mayPickup(Player playerIn) {
                 return this.hasItem();
             }
-
             public void onTake(Player thePlayer, ItemStack stack) {
                 this.setChanged();
                 LoreInscriberMenu.this.loreSlot.setItem(0, ItemStack.EMPTY);
                 if (!player.level().isClientSide)
-                    player.level().playSound(null, player.blockPosition(), SoundEvents.ANVIL_LAND, SoundSource.PLAYERS, 1.0F, 0.9F + player.getRandom().nextFloat() * 0.1F);
+                    player.level().playSound(null, player.blockPosition(), SoundEvents.ANVIL_USE, SoundSource.PLAYERS, 1.0F, 0.9F + player.getRandom().nextFloat() * 0.1F);
             }
         });
 
@@ -91,12 +94,7 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
     public void slotsChanged(Container container) {
         super.slotsChanged(container);
         if (container == this.loreSlot) this.createResult();
-    }    protected final Container loreSlot = new SimpleContainer(1) {
-        public void setChanged() {
-            super.setChanged();
-            LoreInscriberMenu.this.slotsChanged(this);
-        }
-    };
+    }
 
     public boolean createResult() {
         ItemStack input = this.loreSlot.getItem(0);
@@ -175,15 +173,7 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
 
     public void removed(Player player) {
         super.removed(player);
-        if (player instanceof ServerPlayer) {
-            ItemStack stack = this.loreSlot.getItem(0);
-            if (!stack.isEmpty()) {
-                if (player.isAlive() && !((ServerPlayer) player).hasDisconnected())
-                    player.getInventory().placeItemBackInInventory(stack);
-                else player.drop(stack, false);
-                this.loreSlot.setItem(0, ItemStack.EMPTY);
-            }
-        }
+        this.access.execute((level, pos) -> this.clearContainer(player, this.loreSlot));
     }
 
     public static class Provider implements MenuProvider {
@@ -201,8 +191,4 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
             return this.name;
         }
     }
-
-
-
-
 }

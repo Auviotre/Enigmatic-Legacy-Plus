@@ -16,7 +16,6 @@ import org.joml.Matrix4f;
 @OnlyIn(Dist.CLIENT)
 public class DimensionalAnchorRender implements BlockEntityRenderer<DimensionalAnchorEntity> {
     public DimensionalAnchorRender(BlockEntityRendererProvider.Context context) {
-        // NO-OP
     }
 
     public void render(DimensionalAnchorEntity entity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {

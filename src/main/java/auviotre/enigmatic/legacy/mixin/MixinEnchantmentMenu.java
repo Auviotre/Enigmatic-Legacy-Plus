@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
-@Mixin(EnchantmentMenu.class)
+@Mixin(value = EnchantmentMenu.class, priority = 100000)
 public abstract class MixinEnchantmentMenu extends AbstractContainerMenu {
     @Shadow
     @Final
@@ -56,8 +56,8 @@ public abstract class MixinEnchantmentMenu extends AbstractContainerMenu {
         if (!this.getType().equals(MenuType.ENCHANTMENT)) return;
         if (EnigmaticHandler.hasCurio(player, EnigmaticItems.ENCHANTER_PEARL)) {
             ItemStack input = this.enchantSlots.getItem(0);
-            int i = id + 1;
-            if (this.costs[id] <= 0 || input.isEmpty() || (player.experienceLevel < i || player.experienceLevel < this.costs[id]) && !player.hasInfiniteMaterials()) {
+            int cost = id + 1;
+            if (this.costs[id] <= 0 || input.isEmpty() || (player.experienceLevel < cost || player.experienceLevel < this.costs[id]) && !player.hasInfiniteMaterials()) {
                 info.setReturnValue(false);
                 return;
             }
@@ -67,7 +67,7 @@ public abstract class MixinEnchantmentMenu extends AbstractContainerMenu {
                     RegistryAccess registryAccess = level.registryAccess();
                     Registry<Enchantment> enchantments = registryAccess.registryOrThrow(Registries.ENCHANTMENT);
                     ItemStack doubleEnchanted = EnchantmentHelper.enchantItem(player.getRandom(), input.copy(), Math.min(this.costs[id] + 7, 40), enchantments.holders().map(holders -> holders));
-                    player.onEnchantmentPerformed(input, i);
+                    player.onEnchantmentPerformed(input, cost);
                     ItemStack output = input.getItem().applyEnchantments(input, list);
 
                     output = EnigmaticHandler.mergeEnchantments(output, doubleEnchanted, false, false);
@@ -76,7 +76,7 @@ public abstract class MixinEnchantmentMenu extends AbstractContainerMenu {
 
                     player.awardStat(Stats.ENCHANT_ITEM);
                     if (player instanceof ServerPlayer serverPlayer) {
-                        CriteriaTriggers.ENCHANTED_ITEM.trigger(serverPlayer, output, i);
+                        CriteriaTriggers.ENCHANTED_ITEM.trigger(serverPlayer, output, cost);
                     }
 
                     this.enchantSlots.setChanged();
@@ -89,7 +89,7 @@ public abstract class MixinEnchantmentMenu extends AbstractContainerMenu {
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "getGoldCount", cancellable = true)
+    @Inject(at = @At("RETURN"), method = "getGoldCount", cancellable = true)
     public void onGetLapisCount(CallbackInfoReturnable<Integer> info) {
         if (!this.getType().equals(MenuType.ENCHANTMENT)) return;
         Player player = null;

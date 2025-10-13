@@ -83,10 +83,13 @@ public class MinerRing extends BaseCurioItem {
 
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
         if (action != ClickAction.PRIMARY && slot.mayPickup(player) && slot.hasItem()) {
-            if (other.getBurnTime(RecipeType.BLASTING) > 400 && getPoint(stack) < MAX_POINT) {
-                other.consume(1, player);
-                setPoint(stack, getPoint(stack) + other.getBurnTime(RecipeType.BLASTING) / 400);
-                player.playSound(SoundEvents.GENERIC_BURN, 1.0F, 0.8F + 0.4F * player.getRandom().nextFloat());
+            if (other.getBurnTime(RecipeType.BLASTING) > 200 && getPoint(stack) < MAX_POINT) {
+                setPoint(stack, getPoint(stack) + other.getBurnTime(RecipeType.BLASTING) / 200);
+                ItemStack remain = other.getCraftingRemainingItem();
+                if (remain.isEmpty()) other.consume(1, player);
+                else access.set(remain);
+                player.playSound(SoundEvents.GENERIC_BURN, 1.0F, 0.9F + 0.5F * player.getRandom().nextFloat());
+                return true;
             }
         }
         return super.overrideOtherStackedOnMe(stack, other, slot, action, player, access);

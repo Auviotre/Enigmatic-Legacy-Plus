@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -28,6 +29,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
@@ -36,11 +39,30 @@ import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 public class GolemHeart extends SpellstoneItem {
+    public static ModConfigSpec.DoubleValue defaultArmorBonus;
+    public static ModConfigSpec.DoubleValue superArmorBonus;
+    public static ModConfigSpec.DoubleValue superArmorToughnessBonus;
+    public static ModConfigSpec.DoubleValue knockbackResistance;
+    public static ModConfigSpec.IntValue meleeResistance;
+    public static ModConfigSpec.IntValue explosionResistance;
+    public static ModConfigSpec.DoubleValue GHVulnerabilityModifier;
+
     public GolemHeart() {
-        super(defaultSingleProperties().rarity(Rarity.RARE));
+        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFFE40B0B);
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.golem_heart").push("spellstone.golemHeart");
+        defaultArmorBonus = builder.defineInRange("defaultArmorBonus", 4.0, 0, 20);
+        superArmorBonus = builder.defineInRange("superArmorBonus", 16.0, 0, 100);
+        superArmorToughnessBonus = builder.defineInRange("superArmorToughnessBonus", 4.0, 0.0, 20.0);
+        knockbackResistance = builder.defineInRange("knockbackResistance", 0.9, 0.0, 1.0);
+        meleeResistance = builder.defineInRange("meleeResistance", 25, 0, 100);
+        explosionResistance = builder.defineInRange("explosionResistance", 40, 0, 100);
+        GHVulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
+        builder.pop(2);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -53,17 +75,23 @@ public class GolemHeart extends SpellstoneItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneCooldown", ChatFormatting.GOLD, String.format("%.01f", 0.05F * getCooldown()));
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstonePassive");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart1", ChatFormatting.GOLD, String.format("%.1f", CONFIG.SPELLSTONES.defaultArmorBonus.getAsDouble()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart1", ChatFormatting.GOLD, String.format("%.1f", defaultArmorBonus.getAsDouble()));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart2");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart3", ChatFormatting.GOLD, String.format("%.1f", CONFIG.SPELLSTONES.superArmorBonus.getAsDouble()), String.format("%.1f", CONFIG.SPELLSTONES.superArmorToughnessBonus.getAsDouble()));
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart4", ChatFormatting.GOLD, CONFIG.SPELLSTONES.explosionResistance.get() + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart5", ChatFormatting.GOLD, CONFIG.SPELLSTONES.meleeResistance.get() + "%");
-            double resistance = CONFIG.SPELLSTONES.knockbackResistance.getAsDouble() * 100;
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart3", ChatFormatting.GOLD, String.format("%.1f", superArmorBonus.getAsDouble()), String.format("%.1f", superArmorToughnessBonus.getAsDouble()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart4", ChatFormatting.GOLD, explosionResistance.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart5", ChatFormatting.GOLD, meleeResistance.get() + "%");
+            double resistance = knockbackResistance.getAsDouble() * 100;
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart6", ChatFormatting.GOLD, String.format("%.0f%%", resistance));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart7");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart8");
         } else TooltipHandler.line(list, "tooltip.enigmaticlegacy.holdShift");
         this.addKeyText(list);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void addTuneTooltip(List<Component> list) {
+        double resistance = knockbackResistance.getAsDouble() * 50;
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart6", ChatFormatting.GOLD, String.format("%.0f%%", resistance));
     }
 
     public int getCooldown() {
@@ -89,17 +117,17 @@ public class GolemHeart extends SpellstoneItem {
 
     private Multimap<Holder<Attribute>, AttributeModifier> getArmorDefaultModifiers() {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(Attributes.ARMOR, new AttributeModifier(getLocation(this), CONFIG.SPELLSTONES.defaultArmorBonus.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(getLocation(this), CONFIG.SPELLSTONES.knockbackResistance.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.ARMOR, new AttributeModifier(getLocation(this), defaultArmorBonus.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(getLocation(this), knockbackResistance.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }
 
     private Multimap<Holder<Attribute>, AttributeModifier> getFullArmorModifiers() {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         ResourceLocation noArmor = EnigmaticLegacy.location("golem_heart_without_armor");
-        builder.put(Attributes.ARMOR, new AttributeModifier(noArmor, CONFIG.SPELLSTONES.superArmorBonus.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(noArmor, CONFIG.SPELLSTONES.superArmorToughnessBonus.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(noArmor, CONFIG.SPELLSTONES.knockbackResistance.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.ARMOR, new AttributeModifier(noArmor, superArmorBonus.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(noArmor, superArmorToughnessBonus.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(noArmor, knockbackResistance.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }
 
@@ -119,11 +147,11 @@ public class GolemHeart extends SpellstoneItem {
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.GOLEM_HEART)) {
                 DamageSource source = event.getSource();
                 if (EnigmaticHandler.hasNoArmor(event.getEntity()) && source.is(DamageTypeTags.IS_EXPLOSION)) {
-                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * CONFIG.SPELLSTONES.explosionResistance.getAsInt()));
+                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * explosionResistance.getAsInt()));
                 } else if (source.is(Tags.DamageTypes.IS_MAGIC)) {
-                    event.setNewDamage((float) (event.getNewDamage() * CONFIG.SPELLSTONES.GHVulnerabilityModifier.getAsDouble()));
+                    event.setNewDamage((float) (event.getNewDamage() * GHVulnerabilityModifier.getAsDouble()));
                 } else if (source.is(EnigmaticTags.DamageTypes.GOLEM_HEART_IS_MELEE)) {
-                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * CONFIG.SPELLSTONES.meleeResistance.getAsInt()));
+                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * meleeResistance.getAsInt()));
                 }
             }
         }

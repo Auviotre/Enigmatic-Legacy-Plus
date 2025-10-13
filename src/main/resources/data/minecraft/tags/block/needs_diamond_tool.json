@@ -1,7 +1,8 @@
 {
-  "values": [
-    "enigmaticlegacyplus:dimensional_anchor",
-    "enigmaticlegacyplus:etherium_ore",
-    "enigmaticlegacyplus:etherium_block"
-  ]
+    "values": [
+        "enigmaticlegacyplus:dimensional_anchor",
+        "enigmaticlegacyplus:spellstone_table",
+        "enigmaticlegacyplus:etherium_ore",
+        "enigmaticlegacyplus:etherium_block"
+    ]
 }

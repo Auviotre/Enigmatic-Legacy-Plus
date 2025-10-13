@@ -1,0 +1,53 @@
+package auviotre.enigmatic.legacy.mixin;
+
+import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.*;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@Mixin(AnvilMenu.class)
+public abstract class MixinAnvilMenu extends ItemCombinerMenu {
+    @Shadow
+    @Final
+    private DataSlot cost;
+
+    public MixinAnvilMenu(@Nullable MenuType<?> type, int containerId, Inventory playerInventory, ContainerLevelAccess access) {
+        super(type, containerId, playerInventory, access);
+    }
+
+    @Inject(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/AnvilMenu;broadcastChanges()V"))
+    public void createResultMix(CallbackInfo ci) {
+        if (EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_GEM)) {
+            int xp = 0;
+            for (int i = 1; i < this.cost.get(); i++) xp += getXp(i);
+            this.cost.set(Math.max(1, getExpLevel(xp / 2)));
+        }
+    }
+
+    private int getXp(int experienceLevel) {
+        if (experienceLevel >= 30) {
+            return 112 + (experienceLevel - 30) * 9;
+        } else {
+            return experienceLevel >= 15 ? 37 + (experienceLevel - 15) * 5 : 7 + experienceLevel * 2;
+        }
+    }
+
+    private int getExpLevel(long experience) {
+        int experienceLevel = 0;
+        int neededForNext;
+        while (true) {
+            if (experienceLevel >= 30) neededForNext = 112 + (experienceLevel - 30) * 9;
+            else neededForNext = experienceLevel >= 15 ? 37 + (experienceLevel - 15) * 5 : 7 + experienceLevel * 2;
+            if (experience < neededForNext) return experienceLevel;
+            experienceLevel++;
+            experience -= neededForNext;
+        }
+    }
+}

@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -27,6 +28,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
@@ -35,22 +37,39 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 public class OceanStone extends SpellstoneItem {
+    public static ModConfigSpec.IntValue underwaterCreaturesResistance;
+    public static ModConfigSpec.DoubleValue xpCostModifier;
+    public static ModConfigSpec.BooleanValue preventOxygenBarRender;
+    public static ModConfigSpec.DoubleValue OSVulnerabilityModifier;
+
     public OceanStone() {
-        super(defaultSingleProperties().rarity(Rarity.RARE));
+        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFF35ACF7);
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.ocean_stone").push("spellstone.oceanStone");
+        underwaterCreaturesResistance = builder.defineInRange("underwaterCreaturesResistance", 40, 0, 100);
+        xpCostModifier = builder.defineInRange("xpCostModifier", 1.0, 0, 10.0);
+        preventOxygenBarRender = builder.define("preventOxygenBarRender", false);
+        OSVulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
+        builder.pop(2);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -63,7 +82,7 @@ public class OceanStone extends SpellstoneItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneCooldown", ChatFormatting.GOLD, String.format("%.01f", 0.05F * getCooldown()));
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstonePassive");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.oceanStone1", ChatFormatting.GOLD, CONFIG.SPELLSTONES.underwaterCreaturesResistance.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.oceanStone1", ChatFormatting.GOLD, underwaterCreaturesResistance.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.oceanStone2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.oceanStone3");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.oceanStone4");
@@ -72,6 +91,12 @@ public class OceanStone extends SpellstoneItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.oceanStone7");
         } else TooltipHandler.line(list, "tooltip.enigmaticlegacy.holdShift");
         this.addKeyText(list);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void addTuneTooltip(List<Component> list) {
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.oceanStone2");
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.oceanStone6");
     }
 
     public int getCooldown() {
@@ -85,7 +110,7 @@ public class OceanStone extends SpellstoneItem {
             if (!level.getLevelData().isThundering()) {
                 boolean paybackReceived = false;
                 if (player.totalExperience >= 200) {
-                    player.giveExperiencePoints((int) (-200 * CONFIG.SPELLSTONES.xpCostModifier.getAsDouble()));
+                    player.giveExperiencePoints((int) (-200 * xpCostModifier.getAsDouble()));
                     paybackReceived = true;
                 }
 
@@ -107,7 +132,7 @@ public class OceanStone extends SpellstoneItem {
         LivingEntity entity = context.entity();
         if (EnigmaticHandler.hasCurio(entity, this)) {
             if (entity.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value())) {
-                entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 200, 0, true, false));
+                entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 210, 0, true, false));
                 entity.setAirSupply(entity.getMaxAirSupply());
             }
             entity.getAttributes().addTransientAttributeModifiers(this.getModifiers(entity));
@@ -117,8 +142,8 @@ public class OceanStone extends SpellstoneItem {
     public Multimap<Holder<Attribute>, AttributeModifier> getModifiers(LivingEntity entity) {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
         Holder.Reference<Enchantment> holder = EnigmaticHandler.get(entity.level(), Registries.ENCHANTMENT, Enchantments.AQUA_AFFINITY);
-        boolean flag = EnchantmentHelper.getEnchantmentLevel(holder, entity) > 0;
-        map.put(Attributes.GRAVITY, new AttributeModifier(getLocation(this), entity.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()) ? -1.0F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        boolean flag = EnchantmentHelper.getEnchantmentLevel(holder, entity) <= 0;
+        map.put(Attributes.GRAVITY, new AttributeModifier(getLocation(this), entity.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()) ? -0.98F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(Attributes.SUBMERGED_MINING_SPEED, new AttributeModifier(getLocation(this), flag ? 4.0F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(getLocation(this), 1.5F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return map;
@@ -140,10 +165,19 @@ public class OceanStone extends SpellstoneItem {
                 Entity entity = event.getSource().getEntity();
                 if (entity == null) return;
                 if (entity.getType().is(EntityTypeTags.CAN_BREATHE_UNDER_WATER)) {
-                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * CONFIG.SPELLSTONES.underwaterCreaturesResistance.get()));
+                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * underwaterCreaturesResistance.get()));
                 } else if (event.getSource().type().effects().equals(DamageEffects.BURNING)) {
-                    event.setNewDamage((float) (event.getNewDamage() * CONFIG.SPELLSTONES.OSVulnerabilityModifier.getAsDouble()));
+                    event.setNewDamage((float) (event.getNewDamage() * OSVulnerabilityModifier.getAsDouble()));
                 }
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.HIGHEST)
+        private static void getBreakSpeed(PlayerEvent.@NotNull BreakSpeed event) {
+            LivingEntity entity = event.getEntity();
+            if (ISpellstone.get(entity).is(EnigmaticItems.OCEAN_STONE)) {
+                if (entity instanceof Player player && !player.onGround() && player.isInWater())
+                    event.setNewSpeed(event.getOriginalSpeed() * 4.0F);
             }
         }
     }

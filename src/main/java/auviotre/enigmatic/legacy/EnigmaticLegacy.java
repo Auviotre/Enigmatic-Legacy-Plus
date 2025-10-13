@@ -1,8 +1,14 @@
 package auviotre.enigmatic.legacy;
 
 import auviotre.enigmatic.legacy.client.ClientConfig;
-import auviotre.enigmatic.legacy.contents.item.SoulCrystal;
+import auviotre.enigmatic.legacy.compat.CompatHandler;
 import auviotre.enigmatic.legacy.contents.item.amulets.EnigmaticAmulet;
+import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
+import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
+import auviotre.enigmatic.legacy.contents.item.rings.DesolationRing;
+import auviotre.enigmatic.legacy.contents.item.spellstones.TheCube;
+import auviotre.enigmatic.legacy.contents.item.tools.ChaosElytra;
+import auviotre.enigmatic.legacy.contents.item.tools.SoulCompass;
 import auviotre.enigmatic.legacy.handlers.SoulArchive;
 import auviotre.enigmatic.legacy.packets.ClientPayloadHandler;
 import auviotre.enigmatic.legacy.packets.client.*;
@@ -53,28 +59,32 @@ public class EnigmaticLegacy {
         EnigmaticSounds.SOUNDS.register(modEventBus);
         EnigmaticEffects.EFFECTS.register(modEventBus);
         EnigmaticPotions.POTIONS.register(modEventBus);
+        EnigmaticRecipes.RECIPE_TYPES.register(modEventBus);
         EnigmaticEntities.ENTITY_TYPES.register(modEventBus);
         EnigmaticComponents.COMPONENTS.register(modEventBus);
         EnigmaticTabs.CREATIVE_MODE_TABS.register(modEventBus);
-        EnigmaticRecipes.RECIPE_SERIALIZER.register(modEventBus);
+        EnigmaticRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         EnigmaticParticles.PARTICLE_TYPES.register(modEventBus);
         EnigmaticAttachments.ATTACHMENT_TYPES.register(modEventBus);
         EnigmaticBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         EnigmaticLootModifiers.LOOT_MODIFIERS.register(modEventBus);
         EnigmaticLootConditions.LOOT_CONDITIONS.register(modEventBus);
 
+        NeoForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::interMod);
         modEventBus.addListener(this::onPacketSetup);
         modEventBus.addListener(this::onLoadComplete);
-        container.registerConfig(ModConfig.Type.COMMON, ELConfig.SPEC);
-        NeoForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
+
+        container.registerConfig(ModConfig.Type.COMMON, ELConfig.SPEC);
         if (FMLEnvironment.dist.isClient()) {
             modEventBus.addListener(this::onClientSetup);
             container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
             container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         }
+
+        CompatHandler.getInstance().register(modEventBus);
     }
 
     public static ResourceLocation location(String path) {
@@ -96,7 +106,7 @@ public class EnigmaticLegacy {
     }
 
     public void onPacketSetup(final RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar("1.0").optional();
+        PayloadRegistrar registrar = event.registrar(MODID + ".1.0").optional();
         registrar.playToServer(EnderRingKeyPacket.TYPE, EnderRingKeyPacket.STREAM_CODEC, EnderRingKeyPacket::handle);
         registrar.playToServer(ToggleMagnetEffectKeyPacket.TYPE, ToggleMagnetEffectKeyPacket.STREAM_CODEC, ToggleMagnetEffectKeyPacket::handle);
         registrar.playToServer(SpellstoneKeyPacket.TYPE, SpellstoneKeyPacket.STREAM_CODEC, SpellstoneKeyPacket::handle);
@@ -109,6 +119,9 @@ public class EnigmaticLegacy {
         registrar.playToClient(PlayerMotionPacket.TYPE, PlayerMotionPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(PermanentDeathPacket.TYPE, PermanentDeathPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(TotemOfMalicePacket.TYPE, TotemOfMalicePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(SoulCompassUpdatePacket.TYPE, SoulCompassUpdatePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(ChaosDescendingPacket.TYPE, ChaosDescendingPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(TheCubeRevivePacket.TYPE, TheCubeRevivePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -123,17 +136,25 @@ public class EnigmaticLegacy {
             event.insertAfter(EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.MAGENTA), EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.GREEN), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.GREEN), EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.BLACK), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.BLACK), EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.BLUE), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(EnigmaticItems.SPELLTUNER.toStack(), EnigmaticBlocks.SPELLSTONE_TABLE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticItems.ASTRAL_DUST.toStack(), EnigmaticBlocks.ASTRAL_DUST_SACK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(EnigmaticItems.COSMIC_HEART.toStack(), EnigmaticBlocks.COSMIC_CAKE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertBefore(EnigmaticItems.RAW_ETHERIUM.toStack(), EnigmaticBlocks.ETHERIUM_ORE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticItems.ETHERIUM_NUGGET.toStack(), EnigmaticBlocks.ETHERIUM_BLOCK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticBlocks.ETHERIUM_BLOCK.toStack(), EnigmaticBlocks.DIMENSIONAL_ANCHOR.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
     }
 
-
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         SoulCrystal.ATTRIBUTE_DISPATCHER.clear();
         SoulArchive.initialize(event.getServer());
+        CursedRing.POSSESSIONS.clear();
+        DesolationRing.Events.BOXES.clear();
+        SoulCompass.Events.LAST_SOUL_COMPASS_UPDATE.clear();
+        TheCube.clearLocationCache();
+        TheCube.Events.LAST_HEALTH.clear();
+        ChaosElytra.Events.TICK_MAP.clear();
+        ChaosElytra.Events.MOVEMENT_MAP.clear();
     }
 }

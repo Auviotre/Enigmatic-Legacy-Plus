@@ -1,33 +1,33 @@
 {
-  "type": "enigmaticlegacyplus:cursed_shaped",
-  "category": "misc",
-  "key": {
-    "A": {
-      "item": "enigmaticlegacyplus:abyssal_heart"
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:abyssal_heart"
+        },
+        "C": {
+            "item": "enigmaticlegacyplus:cosmic_heart"
+        },
+        "E": {
+            "item": "enigmaticlegacyplus:evil_essence"
+        },
+        "I": {
+            "item": "minecraft:netherite_ingot"
+        },
+        "V": {
+            "item": "enigmaticlegacyplus:void_pearl"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:golden_ring"
+        }
     },
-    "C": {
-      "item": "enigmaticlegacyplus:cosmic_heart"
-    },
-    "E": {
-      "item": "enigmaticlegacyplus:evil_essence"
-    },
-    "I": {
-      "item": "minecraft:netherite_ingot"
-    },
-    "V": {
-      "item": "enigmaticlegacyplus:void_pearl"
-    },
-    "X": {
-      "item": "enigmaticlegacyplus:golden_ring"
+    "pattern": [
+        "CAC",
+        "IXI",
+        "EVE"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:desolation_ring"
     }
-  },
-  "pattern": [
-    "CAC",
-    "IXI",
-    "EVE"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:desolation_ring"
-  }
 }

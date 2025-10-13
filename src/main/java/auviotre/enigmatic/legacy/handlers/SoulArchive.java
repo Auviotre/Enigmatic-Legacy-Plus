@@ -2,6 +2,9 @@ package auviotre.enigmatic.legacy.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.entity.PermanentItemEntity;
+import auviotre.enigmatic.legacy.contents.item.tools.SoulCompass;
+import auviotre.enigmatic.legacy.packets.client.SoulCompassUpdatePacket;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -13,10 +16,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelResource;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.Contract;
@@ -50,6 +56,17 @@ public class SoulArchive {
     public static void initialize(MinecraftServer server) {
         instance = new SoulArchive(server.getWorldPath(LevelResource.ROOT).toFile());
         instance.load();
+    }
+
+    public static Optional<Tuple<UUID, BlockPos>> updateSoulCompass(ServerPlayer player) {
+        var optional = SoulArchive.getInstance().findNearest(player, player.blockPosition());
+        if (optional.isEmpty())
+            optional = SoulArchive.getInstance().findNearest(player.level(), player.blockPosition());
+        boolean noValid = optional.isEmpty();
+        BlockPos pos = noValid ? BlockPos.ZERO : optional.get().getB();
+        PacketDistributor.sendToPlayer(player, new SoulCompassUpdatePacket(noValid, pos));
+        SoulCompass.Events.LAST_SOUL_COMPASS_UPDATE.put(player, player.tickCount);
+        return optional;
     }
 
     public Optional<Tuple<UUID, BlockPos>> findNearest(Player player, BlockPos pos) {
@@ -115,11 +132,13 @@ public class SoulArchive {
     }
 
     private void synchronize() {
-//		ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers().forEach(player -> {
-//			if (SuperpositionHandler.hasCurio(player, EnigmaticItems.SOUL_COMPASS)) {
-//				SuperpositionHandler.updateSoulCompass(player);
-//			}
-//		});
+        if (ServerLifecycleHooks.getCurrentServer() != null) {
+            ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers().forEach(player -> {
+                if (EnigmaticHandler.hasCurio(player, EnigmaticItems.SOUL_COMPASS)) {
+                    updateSoulCompass(player);
+                }
+            });
+        }
     }
 
     public void addItem(PermanentItemEntity item) {

@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "D": {
+            "item": "minecraft:diamond"
+        },
+        "I": {
+            "item": "minecraft:iron_ingot"
+        },
+        "N": {
+            "item": "minecraft:netherite_scrap"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:quartz_ring"
+        }
+    },
+    "pattern": [
+        " D ",
+        "IDI",
+        "NXN"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:forger_gem"
+    }
+}

@@ -1,32 +1,32 @@
 {
-  "parent": "minecraft:recipes/root",
-  "criteria": {
-    "has_etherium_ingot": {
-      "conditions": {
-        "items": [
-          {
-            "items": "enigmaticlegacyplus:etherium_ingot"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "has_etherium_ingot": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:etherium_ingot"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_the_recipe": {
+            "conditions": {
+                "recipe": "enigmaticlegacyplus:etherium_block"
+            },
+            "trigger": "minecraft:recipe_unlocked"
+        }
     },
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "enigmaticlegacyplus:etherium_block"
-      },
-      "trigger": "minecraft:recipe_unlocked"
+    "requirements": [
+        [
+            "has_the_recipe",
+            "has_etherium_ingot"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "enigmaticlegacyplus:etherium_block"
+        ]
     }
-  },
-  "requirements": [
-    [
-      "has_the_recipe",
-      "has_etherium_ingot"
-    ]
-  ],
-  "rewards": {
-    "recipes": [
-      "enigmaticlegacyplus:etherium_block"
-    ]
-  }
 }

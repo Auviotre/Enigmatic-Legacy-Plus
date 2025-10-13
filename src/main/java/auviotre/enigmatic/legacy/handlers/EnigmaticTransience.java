@@ -1,7 +1,7 @@
 package auviotre.enigmatic.legacy.handlers;
 
-import auviotre.enigmatic.legacy.ELConfig;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -54,7 +54,7 @@ public class EnigmaticTransience {
     }
 
     public boolean isPermanentlyDead() {
-        return ELConfig.CONFIG.SEVEN_CURSES.maxSoulCrystalLoss.getAsInt() >= 10 && this.isPermanentlyDead;
+        return CursedRing.maxSoulCrystalLoss.getAsInt() >= 10 && this.isPermanentlyDead;
     }
 
     public void setPermanentlyDead(boolean isPermanentlyDead) {

@@ -15,11 +15,13 @@ public class EnigmaticDamageTypes {
     public static final ResourceKey<DamageType> EVIL_CURSE = key("evil_curse");
     public static final ResourceKey<DamageType> NEMESIS_CURSE = key("nemesis_curse");
     public static final ResourceKey<DamageType> DARKNESS = key("darkness");
+    public static final ResourceKey<DamageType> ABYSS = key("abyss");
 
     public static void bootstrap(BootstrapContext<DamageType> context) {
         context.register(EVIL_CURSE, new DamageType("enigmaticlegacy.evil_curse", 0.0F));
         context.register(NEMESIS_CURSE, new DamageType("enigmaticlegacy.nemesis_curse", 0.0F));
         context.register(DARKNESS, new DamageType("enigmaticlegacy.darkness", 0.0F));
+        context.register(ABYSS, new DamageType("enigmaticlegacy.abyss", 0.0F));
     }
 
     public static DamageSource source(Level level, ResourceKey<DamageType> type) {

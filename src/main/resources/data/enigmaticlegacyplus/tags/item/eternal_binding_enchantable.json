@@ -1,40 +1,40 @@
 {
-  "values": [
-    "enigmaticlegacyplus:totem_of_malice",
-    "#curios:scroll",
-    "#curios:ring",
-    "#curios:charm",
-    {
-      "id": "#curios:back",
-      "required": false
-    },
-    {
-      "id": "#curios:belt",
-      "required": false
-    },
-    {
-      "id": "#curios:body",
-      "required": false
-    },
-    {
-      "id": "#curios:bracelet",
-      "required": false
-    },
-    {
-      "id": "#curios:curio",
-      "required": false
-    },
-    {
-      "id": "#curios:hands",
-      "required": false
-    },
-    {
-      "id": "#curios:head",
-      "required": false
-    },
-    {
-      "id": "#curios:necklace",
-      "required": false
-    }
-  ]
+    "values": [
+        "enigmaticlegacyplus:totem_of_malice",
+        "#curios:scroll",
+        "#curios:ring",
+        "#curios:charm",
+        {
+            "id": "#curios:back",
+            "required": false
+        },
+        {
+            "id": "#curios:belt",
+            "required": false
+        },
+        {
+            "id": "#curios:body",
+            "required": false
+        },
+        {
+            "id": "#curios:bracelet",
+            "required": false
+        },
+        {
+            "id": "#curios:curio",
+            "required": false
+        },
+        {
+            "id": "#curios:hands",
+            "required": false
+        },
+        {
+            "id": "#curios:head",
+            "required": false
+        },
+        {
+            "id": "#curios:necklace",
+            "required": false
+        }
+    ]
 }

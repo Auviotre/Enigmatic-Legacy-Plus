@@ -2,8 +2,8 @@ package auviotre.enigmatic.legacy.contents.entity;
 
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.contents.item.SoulCrystal;
-import auviotre.enigmatic.legacy.contents.item.StorageCrystal;
+import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
+import auviotre.enigmatic.legacy.contents.item.misc.StorageCrystal;
 import auviotre.enigmatic.legacy.handlers.SoulArchive;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEntities;

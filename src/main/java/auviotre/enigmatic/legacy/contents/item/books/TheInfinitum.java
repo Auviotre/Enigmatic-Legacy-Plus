@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -33,24 +34,40 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 public class TheInfinitum extends TheAcknowledgment {
+    public static ModConfigSpec.IntValue specialDamageBoost;
+    public static ModConfigSpec.IntValue knockbackModifier;
+    public static ModConfigSpec.IntValue lifeSteal;
+    public static ModConfigSpec.IntValue undeadProbability;
+
     public TheInfinitum() {
         super(defaultSingleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true), 15, -2.0F);
     }
 
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.the_infinitum").push("abyssItems.TheInfinitum");
+        specialDamageBoost = builder.defineInRange("specialDamageBoost", 200, 0, 1000);
+        knockbackModifier = builder.defineInRange("knockbackModifier", 200, 0, 1000);
+        lifeSteal = builder.defineInRange("lifeSteal", 10, 0, 100);
+        undeadProbability = builder.defineInRange("undeadProbability", 80, 0, 100);
+        builder.pop(2);
+    }
+
     public static Multimap<Holder<Attribute>, AttributeModifier> getKnockbackModifier() {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        double modifier = 0.01 * CONFIG.CURSED_ITEMS.knockbackModifier.getAsInt() / 1.5F;
+        double modifier = 0.01 * knockbackModifier.getAsInt();
         builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(getLocation(EnigmaticItems.THE_INFINITUM.get()), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return builder.build();
     }
@@ -70,13 +87,13 @@ public class TheInfinitum extends TheAcknowledgment {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.fourthCurse"));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.fourthCurseAlteration");
             TooltipHandler.line(list);
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theTwist1", ChatFormatting.GOLD, String.format("%d%%", CONFIG.CURSED_ITEMS.specialDamageBoost.get() * 2 / 3));
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum1", ChatFormatting.GOLD, String.format("%d%%", CONFIG.CURSED_ITEMS.knockbackModifier.get() * 2 / 3));
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum2", ChatFormatting.GOLD, "10%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theTwist1", ChatFormatting.GOLD, String.format("%d%%", specialDamageBoost.get()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum1", ChatFormatting.GOLD, String.format("%d%%", knockbackModifier.get()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum2", ChatFormatting.GOLD, lifeSteal.get() + "%");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum3");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum4");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum5", ChatFormatting.GOLD, "85%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum5", ChatFormatting.GOLD, undeadProbability.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum6");
         } else {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitumLore");
@@ -117,7 +134,8 @@ public class TheInfinitum extends TheAcknowledgment {
         private static void onDeath(@NotNull LivingDeathEvent event) {
             if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheWorthyOne(entity)) {
                 if (entity.getMainHandItem().is(EnigmaticItems.THE_INFINITUM) || entity.getOffhandItem().is(EnigmaticItems.THE_INFINITUM)) {
-                    if (entity.getRandom().nextFloat() < 0.85F) {
+                    if (event.getSource().is(Tags.DamageTypes.IS_TECHNICAL)) return;
+                    if (entity.getRandom().nextInt(100) < undeadProbability.get()) {
                         event.setCanceled(true);
                         entity.setHealth(1);
                     }
@@ -126,12 +144,12 @@ public class TheInfinitum extends TheAcknowledgment {
         }
 
         @SubscribeEvent
-        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+        private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
             if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES)) {
                 DamageSource source = event.getSource();
                 if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
                     if (attacker.getMainHandItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
-                        event.setNewDamage(event.getNewDamage() * (1 + 0.01F * CONFIG.CURSED_ITEMS.specialDamageBoost.get() / 1.5F));
+                        event.setAmount(event.getAmount() * (1 + 0.01F * specialDamageBoost.get()));
                     }
                 }
             }
@@ -142,7 +160,7 @@ public class TheInfinitum extends TheAcknowledgment {
             DamageSource source = event.getSource();
             if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
                 if (attacker.getMainHandItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
-                    attacker.heal(event.getNewDamage() * 0.1F);
+                    attacker.heal(event.getNewDamage() * 0.01F * lifeSteal.get());
                     Holder<MobEffect> debuff = EnigmaticHandler.getRandomDebuff(attacker);
                     MobEffectInstance instance = new MobEffectInstance(debuff, 200, 0, false, true);
                     event.getEntity().addEffect(instance);

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.scrolls;
 
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -23,20 +24,35 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 
 public class XpScroll extends BaseCurioItem {
+    public static ModConfigSpec.DoubleValue magneticRange;
+
     public XpScroll() {
         super(defaultSingleProperties().rarity(Rarity.UNCOMMON).component(EnigmaticComponents.XP_SCROLL_STORED, 0L));
+    }
+
+    public XpScroll(Properties properties) {
+        super(properties.component(EnigmaticComponents.XP_SCROLL_STORED, 0L));
+    }
+
+    @SubscribeConfig(receiveClient = true)
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.xp_scroll").push("else.xpScroll");
+        magneticRange = builder.defineInRange("magneticRange", 16.0, 1.0, 256.0);
+        builder.pop(2);
     }
 
     public static void trigger(Level level, ItemStack stack, Player player, InteractionHand hand, boolean swing) {
         RandomSource random = player.getRandom();
         if (!player.isCrouching()) {
-            if (Boolean.TRUE.equals(stack.get(EnigmaticComponents.XP_SCROLL_MODE)))
+            if (stack.getOrDefault(EnigmaticComponents.XP_SCROLL_MODE, false))
                 stack.set(EnigmaticComponents.XP_SCROLL_MODE, false);
             else stack.set(EnigmaticComponents.XP_SCROLL_MODE, true);
             level.playSound(null, player.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 0.8F + (random.nextFloat() * 0.2F));
@@ -50,6 +66,18 @@ public class XpScroll extends BaseCurioItem {
             }
         }
         if (swing) player.swing(hand);
+    }
+
+    protected static int getExpLevel(long experience) {
+        int experienceLevel = 0;
+        int neededForNext;
+        while (true) {
+            if (experienceLevel >= 30) neededForNext = 112 + (experienceLevel - 30) * 9;
+            else neededForNext = experienceLevel >= 15 ? 37 + (experienceLevel - 15) * 5 : 7 + experienceLevel * 2;
+            if (experience < neededForNext) return experienceLevel;
+            experienceLevel++;
+            experience -= neededForNext;
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -75,8 +103,7 @@ public class XpScroll extends BaseCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScroll10");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScroll11");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScroll12", ChatFormatting.GOLD, 16);
-            TooltipHandler.line(list);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScroll12", ChatFormatting.GOLD, String.format("%.0f", magneticRange.getAsDouble()));
         } else TooltipHandler.holdShift(list);
 
         TooltipHandler.line(list);
@@ -97,7 +124,6 @@ public class XpScroll extends BaseCurioItem {
         ItemStack stack = player.getItemInHand(handIn);
         XpScroll.trigger(world, stack, player, handIn, true);
         return InteractionResultHolder.success(stack);
-
     }
 
     public void curioTick(SlotContext context, ItemStack stack) {
@@ -105,8 +131,9 @@ public class XpScroll extends BaseCurioItem {
             return;
 
         Level level = player.level();
+        int forNextLevel = player.getXpNeededForNextLevel();
         if (stack.getOrDefault(EnigmaticComponents.XP_SCROLL_MODE, false)) {
-            int take = (int) Math.max(1, Math.ceil(player.getXpNeededForNextLevel() * player.experienceProgress));
+            int take = forNextLevel / 3;
             if (player.experienceLevel == 0) take = 1;
             if (player.totalExperience >= take) {
                 player.giveExperiencePoints(-take);
@@ -116,19 +143,20 @@ public class XpScroll extends BaseCurioItem {
             }
         } else {
             long stored = stack.getOrDefault(EnigmaticComponents.XP_SCROLL_STORED, 0L);
-            int needed = player.getXpNeededForNextLevel();
+            int needed = forNextLevel / 3;
             if (stored >= needed) {
                 stack.set(EnigmaticComponents.XP_SCROLL_STORED, stored - needed);
                 player.giveExperiencePoints(needed);
             } else if (stored > 0) {
-                int take = (int) Math.max(1, stored / 10);
+                int take = (int) Math.max(1, stored / 2);
                 stack.set(EnigmaticComponents.XP_SCROLL_STORED, stored - take);
                 player.giveExperiencePoints(take);
             }
         }
-
-        List<ExperienceOrb> orbs = level.getEntitiesOfClass(ExperienceOrb.class, player.getBoundingBox().inflate(16), Entity::isAlive);
+        double range = magneticRange.get();
+        List<ExperienceOrb> orbs = level.getEntitiesOfClass(ExperienceOrb.class, player.getBoundingBox().inflate(range), Entity::isAlive);
         for (ExperienceOrb orb : orbs) {
+            if (orb.distanceTo(player) > range) continue;
             player.takeXpDelay = 0;
             orb.playerTouch(player);
         }
@@ -140,17 +168,5 @@ public class XpScroll extends BaseCurioItem {
 
     public boolean canEquipFromUse(SlotContext context, ItemStack stack) {
         return false;
-    }
-
-    private int getExpLevel(long experience) {
-        int experienceLevel = 0;
-        int neededForNext;
-        while (true) {
-            if (experienceLevel >= 30) neededForNext = 112 + (experienceLevel - 30) * 9;
-            else neededForNext = experienceLevel >= 15 ? 37 + (experienceLevel - 15) * 5 : 7 + experienceLevel * 2;
-            if (experience < neededForNext) return experienceLevel;
-            experienceLevel++;
-            experience -= neededForNext;
-        }
     }
 }

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.rings;
 
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -16,18 +17,40 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 public class MagnetRing extends BaseCurioItem {
+    public static ModConfigSpec.DoubleValue magneticRange;
+    public static ModConfigSpec.IntValue buttonOffsetX;
+    public static ModConfigSpec.IntValue buttonOffsetY;
+    public static ModConfigSpec.IntValue buttonOffsetXCreative;
+    public static ModConfigSpec.IntValue buttonOffsetYCreative;
+
+    @SubscribeConfig(receiveClient = true)
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        if (type == ModConfig.Type.CLIENT) {
+            builder.push("magnetButton");
+            buttonOffsetX = builder.defineInRange("OffsetX", 0, -1024, 1024);
+            buttonOffsetY = builder.defineInRange("OffsetY", 0, -1024, 1024);
+            buttonOffsetXCreative = builder.defineInRange("OffsetXCreative", 0, -1024, 1024);
+            buttonOffsetYCreative = builder.defineInRange("OffsetYCreative", 0, -1024, 1024);
+            builder.pop();
+        } else {
+            builder.translation("item.enigmaticlegacyplus.magnet_ring").push("else.magnetRing");
+            magneticRange = builder.defineInRange("magneticRange", 8.0, 1.0, 256.0);
+            builder.pop(2);
+        }
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.magnetRing1", ChatFormatting.GOLD, String.format("%.0f", CONFIG.ELSE.magnetRingRange.get()));
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.magnetRing1", ChatFormatting.GOLD, String.format("%.0f", magneticRange.get()));
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.magnetRing2");
     }
 
@@ -41,7 +64,7 @@ public class MagnetRing extends BaseCurioItem {
         double x = entity.getX();
         double y = entity.getY() + 0.75;
         double z = entity.getZ();
-        double r = CONFIG.ELSE.magnetRingRange.get();
+        double r = magneticRange.get();
         List<ItemEntity> items = entity.level().getEntitiesOfClass(ItemEntity.class, new AABB(x - r, y - r, z - r, x + r, y + r, z + r));
         int pulled = 0;
         for (ItemEntity item : items)

@@ -1,33 +1,33 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "A": {
-      "item": "minecraft:amethyst_shard"
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "minecraft:amethyst_shard"
+        },
+        "B": {
+            "item": "minecraft:dragon_breath"
+        },
+        "D": {
+            "item": "enigmaticlegacyplus:astral_dust"
+        },
+        "E": {
+            "item": "enigmaticlegacyplus:etherium_ingot"
+        },
+        "V": {
+            "item": "enigmaticlegacyplus:cosmic_heart"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:enigmatic_amulet"
+        }
     },
-    "B": {
-      "item": "minecraft:dragon_breath"
-    },
-    "D": {
-      "item": "enigmaticlegacyplus:astral_dust"
-    },
-    "E": {
-      "item": "enigmaticlegacyplus:etherium_ingot"
-    },
-    "V": {
-      "item": "enigmaticlegacyplus:cosmic_heart"
-    },
-    "X": {
-      "item": "enigmaticlegacyplus:enigmatic_amulet"
+    "pattern": [
+        "ADA",
+        "EXE",
+        "BVB"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:ascension_amulet"
     }
-  },
-  "pattern": [
-    "ADA",
-    "EXE",
-    "BVB"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:ascension_amulet"
-  }
 }

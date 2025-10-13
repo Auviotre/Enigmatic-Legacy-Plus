@@ -1,22 +1,63 @@
 {
-  "type": "minecraft:chest",
-  "pools": [
-    {
-      "bonus_rolls": 0.0,
-      "entries": [
+    "type": "minecraft:chest",
+    "pools": [
         {
-          "type": "minecraft:item",
-          "conditions": [
-            {
-              "chance": 0.046,
-              "condition": "minecraft:random_chance"
-            }
-          ],
-          "name": "enigmaticlegacyplus:blazing_core"
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "baseChance": 0.046,
+                            "bonusChance": 0.018,
+                            "condition": "enigmaticlegacyplus:spellstone"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:blazing_core",
+                    "weight": 90
+                },
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "baseChance": 0.0115,
+                            "bonusChance": 0.009,
+                            "condition": "enigmaticlegacyplus:spellstone"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:spellcore",
+                    "weight": 10
+                }
+            ],
+            "rolls": 1.0
+        },
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.063999996,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "add": false,
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "max": 3.0,
+                                "min": 1.0
+                            },
+                            "function": "minecraft:set_count"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:spellstone_debris"
+                }
+            ],
+            "rolls": 1.0
         }
-      ],
-      "rolls": 1.0
-    }
-  ],
-  "random_sequence": "enigmaticlegacyplus:chests/blazing_core_addon"
+    ],
+    "random_sequence": "enigmaticlegacyplus:chests/blazing_core_addon"
 }

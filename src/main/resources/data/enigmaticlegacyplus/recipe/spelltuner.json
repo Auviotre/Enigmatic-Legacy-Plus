@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+        "A": {
+            "item": "minecraft:amethyst_shard"
+        },
+        "S": {
+            "item": "enigmaticlegacyplus:spellstone_debris"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:spellcore"
+        }
+    },
+    "pattern": [
+        "SAA",
+        "AXA",
+        "AAS"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:spelltuner"
+    }
+}

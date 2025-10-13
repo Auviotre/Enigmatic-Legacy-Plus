@@ -1,0 +1,33 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "equipment",
+    "key": {
+        "G": {
+            "item": "minecraft:gold_ingot"
+        },
+        "N": {
+            "item": "minecraft:netherite_ingot"
+        },
+        "P": {
+            "item": "minecraft:blaze_powder"
+        },
+        "S": {
+            "item": "minecraft:soul_lantern"
+        },
+        "T": {
+            "item": "enigmaticlegacyplus:twisted_heart"
+        },
+        "X": {
+            "item": "minecraft:compass"
+        }
+    },
+    "pattern": [
+        " S ",
+        "PXP",
+        "GTN"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:soul_compass"
+    }
+}

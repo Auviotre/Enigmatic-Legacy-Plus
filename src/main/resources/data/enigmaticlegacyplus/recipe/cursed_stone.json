@@ -1,33 +1,33 @@
 {
-  "type": "enigmaticlegacyplus:cursed_shaped",
-  "category": "misc",
-  "key": {
-    "E": {
-      "item": "enigmaticlegacyplus:evil_essence"
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "E": {
+            "item": "enigmaticlegacyplus:evil_essence"
+        },
+        "L": {
+            "item": "minecraft:lava_bucket"
+        },
+        "P": {
+            "item": "minecraft:prismarine_crystals"
+        },
+        "S": {
+            "item": "minecraft:stone"
+        },
+        "T": {
+            "item": "enigmaticlegacyplus:twisted_heart"
+        },
+        "X": {
+            "item": "minecraft:nether_star"
+        }
     },
-    "L": {
-      "item": "minecraft:lava_bucket"
-    },
-    "P": {
-      "item": "minecraft:prismarine_crystals"
-    },
-    "S": {
-      "item": "minecraft:stone"
-    },
-    "T": {
-      "item": "enigmaticlegacyplus:twisted_heart"
-    },
-    "X": {
-      "item": "minecraft:nether_star"
+    "pattern": [
+        "LTL",
+        "ESE",
+        "PXP"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:cursed_stone"
     }
-  },
-  "pattern": [
-    "LTL",
-    "ESE",
-    "PXP"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:cursed_stone"
-  }
 }

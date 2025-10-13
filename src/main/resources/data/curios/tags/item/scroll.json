@@ -1,9 +1,10 @@
 {
-  "values": [
-    "enigmaticlegacyplus:xp_scroll",
-    "enigmaticlegacyplus:heaven_scroll",
-    "enigmaticlegacyplus:fabulous_scroll",
-    "enigmaticlegacyplus:cursed_scroll",
-    "enigmaticlegacyplus:avarice_scroll"
-  ]
+    "values": [
+        "enigmaticlegacyplus:xp_scroll",
+        "enigmaticlegacyplus:heaven_scroll",
+        "enigmaticlegacyplus:fabulous_scroll",
+        "enigmaticlegacyplus:cursed_scroll",
+        "enigmaticlegacyplus:avarice_scroll",
+        "enigmaticlegacyplus:cursed_xp_scroll"
+    ]
 }

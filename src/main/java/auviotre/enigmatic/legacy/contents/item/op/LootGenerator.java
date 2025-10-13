@@ -89,7 +89,6 @@ public class LootGenerator extends BaseItem {
         Level world = context.getLevel();
         ItemStack stack = context.getItemInHand();
         if (player == null) return InteractionResult.FAIL;
-        if (world.isClientSide()) return InteractionResult.SUCCESS;
 
         if (world.getBlockState(context.getClickedPos()).hasBlockEntity()) {
             if (world.getBlockEntity(context.getClickedPos()) instanceof ChestBlockEntity chest && player.isCrouching()) {

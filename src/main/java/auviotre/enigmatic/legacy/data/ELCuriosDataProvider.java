@@ -19,7 +19,7 @@ public class ELCuriosDataProvider extends CuriosDataProvider {
                 "charm", "ring", "back", "scroll", "spellstone"
         );
         this.createSlot("back").size(1);
-        this.createSlot("ring").size(1);
+        this.createSlot("ring").size(2);
         this.createSlot("charm").size(2);
         this.createSlot("scroll").size(0).icon(EnigmaticLegacy.location("slot/empty_scroll_slot"));
         this.createSlot("spellstone").size(0).icon(EnigmaticLegacy.location("slot/empty_spellstone_slot"));

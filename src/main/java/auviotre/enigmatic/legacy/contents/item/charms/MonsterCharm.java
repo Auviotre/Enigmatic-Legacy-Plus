@@ -27,8 +27,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -67,10 +67,11 @@ public class MonsterCharm extends BaseCurioItem {
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
         @SubscribeEvent
-        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+        private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             if (event.getSource().getEntity() instanceof LivingEntity attacker && EnigmaticHandler.hasCurio(attacker, EnigmaticItems.MONSTER_CHARM)) {
                 if (event.getEntity().getType().is(EntityTypeTags.UNDEAD)) {
-                    event.setNewDamage(event.getNewDamage() * 1.25F);
+                    event.setAmount(event.getAmount() * 1.25F);
                 }
             }
         }

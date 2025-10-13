@@ -4,6 +4,10 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
+import auviotre.enigmatic.legacy.contents.item.food.ForbiddenFruit;
+import auviotre.enigmatic.legacy.contents.item.generic.BaseElytraItem;
+import auviotre.enigmatic.legacy.contents.item.spellstones.OceanStone;
+import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.packets.server.EnderRingKeyPacket;
@@ -12,6 +16,7 @@ import auviotre.enigmatic.legacy.packets.server.SpellstoneKeyPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import com.illusivesoulworks.caelus.api.RenderCapeEvent;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -24,6 +29,7 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.FogType;
 import net.neoforged.api.distmarker.Dist;
@@ -40,12 +46,14 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 @Mod(value = EnigmaticLegacy.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = EnigmaticLegacy.MODID, value = Dist.CLIENT)
 public class ClientEventHandler {
-    public static final ResourceLocation ICONS = EnigmaticLegacy.location("textures/gui/icons.png");
+    public static final ResourceLocation FORBIDDEN_FOOD_FULL_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_full");
+    public static final ResourceLocation FORBIDDEN_FOOD_HALF_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_half");
+    public static final ResourceLocation FORBIDDEN_FOOD_EMPTY_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_empty");
+    public static final ResourceLocation LAVA_BAR_PROGRESS_SPRITE = EnigmaticLegacy.location("hud/lava_bar_progress");
+    public static final ResourceLocation LAVA_BAR_BACKGROUND_SPRITE = EnigmaticLegacy.location("hud/lava_bar_background");
     private static boolean spaceDown = false;
 
     @SubscribeEvent
@@ -138,25 +146,30 @@ public class ClientEventHandler {
         }
     }
 
+    @SubscribeEvent
+    private static void renderCape(@NotNull RenderCapeEvent event) {
+        if (!BaseElytraItem.getElytra(event.getEntity()).isEmpty()) event.setCanceled(true);
+    }
+
     @SubscribeEvent(receiveCanceled = true)
     private static void onOverlayRender(RenderGuiLayerEvent.@NotNull Pre event) {
-        LocalPlayer player = Minecraft.getInstance().player;
+        Minecraft minecraft = Minecraft.getInstance();
+        LocalPlayer player = minecraft.player;
         ItemStack spellstone = ISpellstone.get(player);
         GuiGraphics guiGraphics = event.getGuiGraphics();
-        if (event.getName().equals(VanillaGuiLayers.AIR_LEVEL) && CONFIG.SPELLSTONES.preventOxygenBarRender.get()) {
-            if (spellstone.is(EnigmaticItems.OCEAN_STONE) || spellstone.is(EnigmaticItems.VOID_PEARL)) {
+        if (event.getName().equals(VanillaGuiLayers.AIR_LEVEL) && OceanStone.preventOxygenBarRender.get()) {
+            if (Spelltuner.hasTune(player, EnigmaticItems.OCEAN_STONE) || spellstone.is(EnigmaticItems.OCEAN_STONE) || spellstone.is(EnigmaticItems.VOID_PEARL)) {
                 event.setCanceled(true);
             }
-        }
-        if (event.getName().equals(VanillaGuiLayers.EXPERIENCE_LEVEL) && player != null && spellstone.is(EnigmaticItems.BLAZING_CORE)) {
-            if (Minecraft.getInstance().gameMode != null && Minecraft.getInstance().gameMode.hasExperience()) {
+        } else if (event.getName().equals(VanillaGuiLayers.EXPERIENCE_LEVEL) && player != null && spellstone.is(EnigmaticItems.BLAZING_CORE)) {
+            if (minecraft.gameMode != null && minecraft.gameMode.hasExperience()) {
                 EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
                 int timer = data.getFireImmunityTimer();
                 int lastTimer = data.getFireImmunityTimerLast();
                 if (timer == 0 && lastTimer == 0) return;
                 event.setCanceled(true);
                 String title = I18n.get("gui.enigmaticlegacy.blazing_core_bar_title");
-                Font font = Minecraft.getInstance().font;
+                Font font = minecraft.font;
                 int x = (guiGraphics.guiWidth() - font.width(title)) / 2 + 1;
                 int y = guiGraphics.guiHeight() - 31 - 4;
                 int boundaryColor = 5832704;
@@ -166,9 +179,8 @@ public class ClientEventHandler {
                 guiGraphics.drawString(font, title, x, y - 1, boundaryColor);
                 guiGraphics.drawString(font, title, x, y, 16770638);
             }
-        }
-        if (event.getName().equals(VanillaGuiLayers.EXPERIENCE_BAR) && player != null && spellstone.is(EnigmaticItems.BLAZING_CORE)) {
-            if (Minecraft.getInstance().gameMode != null && Minecraft.getInstance().gameMode.hasExperience()) {
+        } else if (event.getName().equals(VanillaGuiLayers.EXPERIENCE_BAR) && player != null && spellstone.is(EnigmaticItems.BLAZING_CORE)) {
+            if (minecraft.gameMode != null && minecraft.gameMode.hasExperience()) {
                 EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
                 int timer = data.getFireImmunityTimer();
                 int lastTimer = data.getFireImmunityTimerLast();
@@ -178,13 +190,49 @@ public class ClientEventHandler {
                 DeltaTracker partialTick = event.getPartialTick();
                 float barFiller = Mth.lerp(partialTick.getGameTimeDeltaTicks(), lastTimer, timer) / cap;
                 barFiller = (float) Math.pow(barFiller, 2);
+                int k = (int) (barFiller * 183.0F);
+                if (k <= 0) {
+                    event.setCanceled(false);
+                    return;
+                }
                 int x = guiGraphics.guiWidth() / 2 - 91;
                 int y = guiGraphics.guiHeight() - 32 + 3;
+                RenderSystem.enableBlend();
+                guiGraphics.blitSprite(LAVA_BAR_BACKGROUND_SPRITE, 182, 5, 0, 0, x, y, 182, 5);
+                guiGraphics.blitSprite(LAVA_BAR_PROGRESS_SPRITE, 182, 5, 0, 0, x, y, k, 5);
+                RenderSystem.disableBlend();
+            }
+        } else if (event.getName().equals(VanillaGuiLayers.FOOD_LEVEL) && minecraft.gameMode != null && minecraft.gameMode.canHurtPlayer()) {
+            if (ForbiddenFruit.isForbiddenCursed(player)) {
+                event.setCanceled(true);
 
-                RenderSystem.setShaderTexture(0, ICONS);
-                int k = (int) (barFiller * 183.0F);
-                guiGraphics.blit(ICONS, x, y, 0, 0, 182, 5);
-                if (k > 0) guiGraphics.blit(ICONS, x, y, 0, 5, k, 5);
+                int width = guiGraphics.guiWidth();
+                int height = guiGraphics.guiHeight();
+                RenderSystem.enableBlend();
+                int left = width / 2 + 91;
+                int top = height - minecraft.gui.rightHeight;
+                minecraft.gui.rightHeight += 10;
+                FoodData stats = player.getFoodData();
+                int level = stats.getFoodLevel();
+
+                int barPx = 8;
+                int barNum = 10;
+
+                for (int i = 0; i < barNum; ++i) {
+                    int idx = i * 2 + 1;
+                    int x = left - i * barPx - 9;
+                    int y = top;
+                    if (minecraft.gui.getGuiTicks() % (level * 3 + 1) == 0) {
+                        y = top + (player.getRandom().nextInt(3) - 1);
+                    }
+                    guiGraphics.blitSprite(FORBIDDEN_FOOD_EMPTY_SPRITE, x, y, 9, 9);
+                    if (idx < level) {
+                        guiGraphics.blitSprite(FORBIDDEN_FOOD_FULL_SPRITE, x, y, 9, 9);
+                    } else if (idx == level) {
+                        guiGraphics.blitSprite(FORBIDDEN_FOOD_HALF_SPRITE, x, y, 9, 9);
+                    }
+                }
+                RenderSystem.disableBlend();
             }
         }
     }

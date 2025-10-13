@@ -1,17 +1,17 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "equipment",
-  "key": {
-    "X": {
-      "item": "enigmaticlegacyplus:etherium_ingot"
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+        "X": {
+            "item": "enigmaticlegacyplus:etherium_ingot"
+        }
+    },
+    "pattern": [
+        "XXX",
+        "X X"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:etherium_helmet"
     }
-  },
-  "pattern": [
-    "XXX",
-    "X X"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:etherium_helmet"
-  }
 }

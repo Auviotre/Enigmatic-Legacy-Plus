@@ -1,13 +1,13 @@
 {
-  "type": "minecraft:blasting",
-  "category": "misc",
-  "cookingtime": 200,
-  "experience": 0.8,
-  "ingredient": {
-    "item": "enigmaticlegacyplus:etherium_ore"
-  },
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:raw_etherium"
-  }
+    "type": "minecraft:blasting",
+    "category": "misc",
+    "cookingtime": 200,
+    "experience": 0.8,
+    "ingredient": {
+        "item": "enigmaticlegacyplus:etherium_ore"
+    },
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:raw_etherium"
+    }
 }

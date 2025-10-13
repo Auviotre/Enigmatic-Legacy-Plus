@@ -3,18 +3,23 @@
   "package": "auviotre.enigmatic.legacy.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "MixinAnvilMenu",
     "MixinBeaconBlockEntity",
     "MixinEnchantmentMenu",
-    "MixinEnderDragon",
-    "MixinHoglinAi",
+    "MixinEntity",
     "MixinItemStack",
     "MixinLivingEntity",
     "MixinMob",
-    "MixinPiglinAi",
     "MixinPlayer",
     "MixinPlayerList",
     "MixinServerPlayer",
-    "MixinVillager"
+    "compat.MixinApothMenu",
+    "entity.MixinEnderDragon",
+    "entity.MixinHoglinAi",
+    "entity.MixinPhantomSpawner",
+    "entity.MixinPiglinAi",
+    "entity.MixinSwellGoal",
+    "entity.MixinVillager"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -24,6 +29,7 @@
   },
   "client": [
     "MixinGuiBookLanding",
-    "MixinWorldListEntry"
+    "MixinWorldListEntry",
+    "compat.MixinApothScreen"
   ]
 }

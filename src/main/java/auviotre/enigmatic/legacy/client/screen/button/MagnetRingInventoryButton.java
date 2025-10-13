@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.client.screen.button;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
+import auviotre.enigmatic.legacy.contents.item.rings.MagnetRing;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.packets.server.ToggleMagnetEffectKeyPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
@@ -25,15 +26,13 @@ import top.theillusivec4.curios.api.client.ICuriosScreen;
 
 import javax.annotation.Nonnull;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 @OnlyIn(Dist.CLIENT)
 public class MagnetRingInventoryButton extends ImageButton {
     public static final WidgetSprites SPRITES = new WidgetSprites(
-            EnigmaticLegacy.location("magnet_button"),
-            EnigmaticLegacy.location("magnet_button_off"),
-            EnigmaticLegacy.location("magnet_button_highlighted"),
-            EnigmaticLegacy.location("magnet_button_off_highlighted")
+            EnigmaticLegacy.location("button/magnet_button"),
+            EnigmaticLegacy.location("button/magnet_button_off"),
+            EnigmaticLegacy.location("button/magnet_button_highlighted"),
+            EnigmaticLegacy.location("button/magnet_button_off_highlighted")
     );
     protected final AbstractContainerScreen<?> parentGui;
     protected boolean isRecipeBookVisible = false;
@@ -85,8 +84,8 @@ public class MagnetRingInventoryButton extends ImageButton {
     }
 
     public Tuple<Integer, Integer> getOffsets(boolean creative) {
-        int x = creative ? 147 + CONFIG.ELSE.magnetButtonOffsetXCreative.get() : 127 + CONFIG.ELSE.magnetButtonOffsetX.get();
-        int y = creative ? 5 + CONFIG.ELSE.magnetButtonOffsetYCreative.get() : 61 + CONFIG.ELSE.magnetButtonOffsetY.get();
+        int x = creative ? 147 + MagnetRing.buttonOffsetXCreative.get() : 127 + MagnetRing.buttonOffsetX.get();
+        int y = creative ? 5 + MagnetRing.buttonOffsetYCreative.get() : 61 + MagnetRing.buttonOffsetY.get();
         return new Tuple<>(x, y);
     }
 }

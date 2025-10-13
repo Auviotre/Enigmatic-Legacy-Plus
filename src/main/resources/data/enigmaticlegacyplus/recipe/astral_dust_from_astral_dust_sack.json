@@ -1,14 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "group": "astral_dust",
-  "ingredients": [
-    {
-      "item": "enigmaticlegacyplus:astral_dust_sack"
+    "type": "minecraft:crafting_shapeless",
+    "category": "misc",
+    "group": "astral_dust",
+    "ingredients": [
+        {
+            "item": "enigmaticlegacyplus:astral_dust_sack"
+        }
+    ],
+    "result": {
+        "count": 9,
+        "id": "enigmaticlegacyplus:astral_dust"
     }
-  ],
-  "result": {
-    "count": 9,
-    "id": "enigmaticlegacyplus:astral_dust"
-  }
 }

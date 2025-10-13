@@ -57,7 +57,7 @@ public class LoreInscriber extends BaseItem {
         ItemStack stack = player.getItemInHand(hand);
         player.swing(hand);
         if (!level.isClientSide)
-            player.openMenu(new LoreInscriberMenu.Provider(Component.translatable("gui.enigmaticlegacy.lore_inscriber")));
+            player.openMenu(new LoreInscriberMenu.Provider(Component.translatable("gui.enigmaticlegacy.lore_inscriber").withStyle(ChatFormatting.GRAY)));
         return InteractionResultHolder.success(stack);
     }
 

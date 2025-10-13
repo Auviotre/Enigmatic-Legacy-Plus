@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.handlers;
 
+import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -47,9 +48,10 @@ public interface TooltipHandler {
         if (Screen.hasShiftDown()) {
             Player player = Minecraft.getInstance().player;
             ChatFormatting color = player != null && EnigmaticHandler.isTheWorthyOne(player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
+            Component percent = Component.literal(String.format("%.01f%%", 100 * CursedRing.abyssThreshold.get())).withStyle(ChatFormatting.GOLD);
             list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly1"));
-            list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly2"));
-            list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly3"));
+            list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly2", percent));
+            list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly3", percent));
             list.add(Component.empty());
             list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly4").withStyle(color).append(Component.literal(EnigmaticHandler.getSufferingTime(player)).withStyle(ChatFormatting.LIGHT_PURPLE)));
             if (stack.isEnchanted()) list.add(Component.empty());

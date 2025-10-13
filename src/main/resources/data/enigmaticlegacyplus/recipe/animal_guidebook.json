@@ -1,27 +1,27 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "A": {
-      "item": "minecraft:apple"
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "minecraft:apple"
+        },
+        "F": {
+            "item": "minecraft:dandelion"
+        },
+        "G": {
+            "item": "minecraft:gold_nugget"
+        },
+        "X": {
+            "item": "minecraft:book"
+        }
     },
-    "F": {
-      "item": "minecraft:dandelion"
-    },
-    "G": {
-      "item": "minecraft:gold_nugget"
-    },
-    "X": {
-      "item": "minecraft:book"
+    "pattern": [
+        " G ",
+        "FXF",
+        " A "
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:animal_guidebook"
     }
-  },
-  "pattern": [
-    " G ",
-    "FXF",
-    " A "
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:animal_guidebook"
-  }
 }

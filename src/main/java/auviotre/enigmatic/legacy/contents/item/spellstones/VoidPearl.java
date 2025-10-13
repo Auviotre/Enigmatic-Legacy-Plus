@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -14,6 +15,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.FlyingMob;
@@ -29,6 +31,9 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
@@ -39,11 +44,26 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.ArrayList;
 import java.util.List;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 public class VoidPearl extends SpellstoneItem {
+    public static ModConfigSpec.DoubleValue shadowRange;
+    public static ModConfigSpec.IntValue darknessDamage;
+    public static ModConfigSpec.IntValue witheringLevel;
+    public static ModConfigSpec.DoubleValue witheringTime;
+    public static ModConfigSpec.IntValue undeadProbability;
+
     public VoidPearl() {
-        super(defaultSingleProperties().rarity(Rarity.RARE));
+        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFF333333);
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.void_pearl").push("spellstone.voidPearl");
+        shadowRange = builder.defineInRange("shadowRange", 16.0, 0.0, 128.0);
+        darknessDamage = builder.defineInRange("darknessDamage", 4, 0, 100);
+        witheringLevel = builder.defineInRange("witheringLevel", 2, 0, 10);
+        witheringTime = builder.defineInRange("witheringTime", 5.0, 0, 120.0);
+        undeadProbability = builder.defineInRange("undeadProbability", 30, 0, 80);
+        builder.pop(2);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -62,9 +82,14 @@ public class VoidPearl extends SpellstoneItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidPearl4");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidPearl5");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidPearl6");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidPearl7", ChatFormatting.GOLD, CONFIG.SPELLSTONES.undeadProbability.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidPearl7", ChatFormatting.GOLD, undeadProbability.get() + "%");
         } else TooltipHandler.line(list, "tooltip.enigmaticlegacy.holdShift");
         this.addKeyText(list);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void addTuneTooltip(List<Component> list) {
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidPearl7", ChatFormatting.GOLD, undeadProbability.get() / 2 + "%");
     }
 
     public void curioTick(SlotContext context, ItemStack stack) {
@@ -79,14 +104,14 @@ public class VoidPearl extends SpellstoneItem {
         }
 
         if (entity.tickCount % 10 == 0) {
-            List<LivingEntity> entities = entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(CONFIG.SPELLSTONES.shadowRange.get()));
+            List<LivingEntity> entities = entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(shadowRange.get()));
             entities.removeIf(victim -> ISpellstone.get(victim).is(this));
             entities.removeIf(victim -> victim instanceof OwnableEntity ownable && entity == ownable.getOwner());
             entities.remove(entity);
             for (LivingEntity victim : entities) {
                 if (victim.level().getMaxLocalRawBrightness(victim.blockPosition(), 0) < 3 || victim instanceof FlyingMob) {
                     if (!(entity instanceof Player player) || !(victim instanceof Player vPlayer) || player.canHarmPlayer(vPlayer)) {
-                        if (victim.hurt(EnigmaticDamageTypes.source(victim.level(), EnigmaticDamageTypes.DARKNESS, entity), CONFIG.SPELLSTONES.darknessDamage.getAsInt())) {
+                        if (victim.hurt(EnigmaticDamageTypes.source(victim.level(), EnigmaticDamageTypes.DARKNESS, entity), darknessDamage.getAsInt())) {
                             entity.level().playSound(null, victim.blockPosition(), SoundEvents.PHANTOM_BITE, SoundSource.PLAYERS, 1.0F, 0.3F + entity.getRandom().nextFloat() * 0.4F);
 
                             victim.addEffect(new MobEffectInstance(MobEffects.WITHER, 80, 1, false, true), entity);
@@ -121,7 +146,7 @@ public class VoidPearl extends SpellstoneItem {
         private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
             if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && event.getSource().is(DamageTypeTags.IS_PLAYER_ATTACK)) {
                 if (ISpellstone.get(attacker).is(EnigmaticItems.VOID_PEARL)) {
-                    event.getEntity().addEffect(new MobEffectInstance(MobEffects.WITHER, (int) (CONFIG.SPELLSTONES.witheringTime.get() * 20), CONFIG.SPELLSTONES.witheringLevel.get(), false, true), attacker);
+                    event.getEntity().addEffect(new MobEffectInstance(MobEffects.WITHER, (int) (witheringTime.get() * 20), witheringLevel.get(), false, true), attacker);
                 }
             }
         }
@@ -129,7 +154,8 @@ public class VoidPearl extends SpellstoneItem {
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         private static void onLivingDeath(@NotNull LivingDeathEvent event) {
             LivingEntity entity = event.getEntity();
-            if (ISpellstone.get(entity).is(EnigmaticItems.VOID_PEARL) && entity.getRandom().nextFloat() < 0.01F * CONFIG.SPELLSTONES.undeadProbability.getAsInt()) {
+            if (ISpellstone.get(entity).is(EnigmaticItems.VOID_PEARL) && entity.getRandom().nextFloat() < 0.01F * undeadProbability.getAsInt()) {
+                if (event.getSource().is(Tags.DamageTypes.IS_TECHNICAL)) return;
                 event.setCanceled(true);
                 entity.setHealth(1);
             }
@@ -137,9 +163,12 @@ public class VoidPearl extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onApplyPotion(MobEffectEvent.@NotNull Applicable event) {
-            if (event.getEffectInstance() == null) return;
-            if (event.getEffectInstance().getEffect().is(EnigmaticTags.Effects.ALWAYS_APPLY)) return;
-            if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.VOID_PEARL)) {
+            MobEffectInstance instance = event.getEffectInstance();
+            if (instance == null) return;
+            if (instance.getEffect().is(EnigmaticTags.Effects.ALWAYS_APPLY)) return;
+            ItemStack stack = ISpellstone.get(event.getEntity());
+            MobEffectCategory category = instance.getEffect().value().getCategory();
+            if (stack.is(EnigmaticItems.VOID_PEARL) || (stack.is(EnigmaticItems.THE_CUBE) && category.equals(MobEffectCategory.HARMFUL))) {
                 event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
             }
         }

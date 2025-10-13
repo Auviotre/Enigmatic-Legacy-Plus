@@ -1,9 +1,11 @@
 {
-  "values": [
-    "#curios:amulets",
-    "enigmaticlegacyplus:mining_charm",
-    "enigmaticlegacyplus:monster_charm",
-    "enigmaticlegacyplus:berserk_emblem",
-    "enigmaticlegacyplus:enchanter_pearl"
-  ]
+    "values": [
+        "#curios:amulets",
+        "enigmaticlegacyplus:mining_charm",
+        "enigmaticlegacyplus:monster_charm",
+        "enigmaticlegacyplus:forger_gem",
+        "enigmaticlegacyplus:berserk_emblem",
+        "enigmaticlegacyplus:enchanter_pearl",
+        "enigmaticlegacyplus:spelltuner"
+    ]
 }

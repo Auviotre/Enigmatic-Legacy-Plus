@@ -1,33 +1,33 @@
 {
-  "type": "enigmaticlegacyplus:cursed_shaped",
-  "category": "misc",
-  "key": {
-    "A": {
-      "item": "enigmaticlegacyplus:abyssal_heart"
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:abyssal_heart"
+        },
+        "C": {
+            "item": "enigmaticlegacyplus:cosmic_heart"
+        },
+        "E": {
+            "item": "enigmaticlegacyplus:evil_essence"
+        },
+        "I": {
+            "item": "minecraft:netherite_ingot"
+        },
+        "P": {
+            "item": "enigmaticlegacyplus:enchanter_pearl"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:the_twist"
+        }
     },
-    "C": {
-      "item": "enigmaticlegacyplus:cosmic_heart"
-    },
-    "E": {
-      "item": "enigmaticlegacyplus:evil_essence"
-    },
-    "I": {
-      "item": "minecraft:netherite_ingot"
-    },
-    "P": {
-      "item": "enigmaticlegacyplus:enchanter_pearl"
-    },
-    "X": {
-      "item": "enigmaticlegacyplus:the_twist"
+    "pattern": [
+        "CPC",
+        "EXE",
+        "IAI"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:the_infinitum"
     }
-  },
-  "pattern": [
-    "CPC",
-    "EXE",
-    "IAI"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:the_infinitum"
-  }
 }

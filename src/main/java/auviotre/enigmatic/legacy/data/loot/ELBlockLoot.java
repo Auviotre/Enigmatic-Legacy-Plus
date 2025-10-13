@@ -20,7 +20,10 @@ public class ELBlockLoot extends BlockLootSubProvider {
     }
 
     protected void generate() {
+        this.add(COSMIC_CAKE.get(), noDrop());
+        this.dropSelf(ASTRAL_DUST_SACK.get());
         this.dropSelf(DIMENSIONAL_ANCHOR.get());
+        this.dropSelf(SPELLSTONE_TABLE.get());
         this.dropSelf(ETHERIUM_BLOCK.get());
         this.add(ETHERIUM_ORE.get(), block -> createOreDrop(block, EnigmaticItems.RAW_ETHERIUM.get()));
     }

@@ -1,10 +1,10 @@
 {
-  "type": "enigmaticlegacyplus:add_curse_loot_table",
-  "conditions": [
-    {
-      "condition": "neoforge:loot_table_id",
-      "loot_table_id": "minecraft:entities/vindicator"
-    }
-  ],
-  "loot_table": "enigmaticlegacyplus:entities/illager_addon"
+    "type": "enigmaticlegacyplus:add_curse_loot_table",
+    "conditions": [
+        {
+            "condition": "neoforge:loot_table_id",
+            "loot_table_id": "minecraft:entities/vindicator"
+        }
+    ],
+    "loot_table": "enigmaticlegacyplus:entities/illager_addon"
 }

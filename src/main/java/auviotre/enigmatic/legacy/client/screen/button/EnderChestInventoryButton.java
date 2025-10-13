@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.client.screen.button;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.contents.item.rings.EnderRing;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.packets.server.EnderRingKeyPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
@@ -25,13 +26,11 @@ import top.theillusivec4.curios.api.client.ICuriosScreen;
 
 import javax.annotation.Nonnull;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 @OnlyIn(Dist.CLIENT)
 public class EnderChestInventoryButton extends ImageButton {
     public static final WidgetSprites SPRITES = new WidgetSprites(
-            EnigmaticLegacy.location("ender_chest_button"),
-            EnigmaticLegacy.location("ender_chest_button_highlighted")
+            EnigmaticLegacy.location("button/ender_chest_button"),
+            EnigmaticLegacy.location("button/ender_chest_button_highlighted")
     );
     protected final AbstractContainerScreen<?> parentGui;
     protected boolean isRecipeBookVisible = false;
@@ -86,8 +85,8 @@ public class EnderChestInventoryButton extends ImageButton {
     }
 
     public Tuple<Integer, Integer> getOffsets(boolean creative) {
-        int x = creative ? 170 + CONFIG.ELSE.enderButtonOffsetXCreative.get() : 150 + CONFIG.ELSE.enderButtonOffsetX.get();
-        int y = creative ? 5 + CONFIG.ELSE.enderButtonOffsetYCreative.get() : 61 + CONFIG.ELSE.enderButtonOffsetY.get();
+        int x = creative ? 170 + EnderRing.buttonOffsetXCreative.get() : 150 + EnderRing.buttonOffsetX.get();
+        int y = creative ? 5 + EnderRing.buttonOffsetYCreative.get() : 61 + EnderRing.buttonOffsetY.get();
         return new Tuple<>(x, y);
     }
 }

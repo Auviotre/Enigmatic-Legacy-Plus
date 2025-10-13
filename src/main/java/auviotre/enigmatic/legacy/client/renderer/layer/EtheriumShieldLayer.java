@@ -1,7 +1,6 @@
 package auviotre.enigmatic.legacy.client.renderer.layer;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.client.ClientConfig;
 import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumArmor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -16,7 +15,6 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -38,7 +36,7 @@ public class EtheriumShieldLayer extends RenderLayer<AbstractClientPlayer, Playe
     }
 
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer player, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (ClientConfig.CONFIG.etheriumShieldRenderLayer.get() && EtheriumArmor.hasShield(player)) {
+        if (EtheriumArmor.etheriumShieldRenderLayer.get() && EtheriumArmor.hasShield(player)) {
             float f = (float) player.tickCount + partialTick;
 
             PlayerModel<AbstractClientPlayer> playerModel = this.model();
@@ -73,7 +71,7 @@ public class EtheriumShieldLayer extends RenderLayer<AbstractClientPlayer, Playe
             this.getParentModel().copyPropertiesTo(playerModel);
             VertexConsumer consumer = buffer.getBuffer(RenderType.energySwirl(TEXTURE, xOffset(f), f * 0.01F));
             playerModel.setupAnim(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-            playerModel.renderToBuffer(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color(255, 255, 255));
+            playerModel.renderToBuffer(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, 0xAAFFFFFF);
             poseStack.popPose();
         }
     }

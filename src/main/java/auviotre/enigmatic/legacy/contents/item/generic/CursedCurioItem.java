@@ -1,15 +1,9 @@
 package auviotre.enigmatic.legacy.contents.item.generic;
 
-import net.minecraft.world.item.ItemStack;
-import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.type.capability.ICurioItem;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 
-public class CursedCurioItem extends BaseCursedItem implements ICurioItem {
+public class CursedCurioItem extends BaseCurioItem {
     public CursedCurioItem(Properties properties) {
-        super(properties);
-    }
-
-    public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
-        return true;
+        super(properties.component(EnigmaticComponents.CURSED, true));
     }
 }

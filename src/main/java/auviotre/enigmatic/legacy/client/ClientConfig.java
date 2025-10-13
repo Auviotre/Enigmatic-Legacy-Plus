@@ -1,5 +1,8 @@
 package auviotre.enigmatic.legacy.client;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -13,9 +16,7 @@ public class ClientConfig {
         CONFIG = pair.getLeft();
     }
 
-    public final ModConfigSpec.BooleanValue etheriumShieldRenderLayer;
-
     ClientConfig(ModConfigSpec.Builder builder) {
-        etheriumShieldRenderLayer = builder.define("etheriumShieldRenderLayer", true);
+        EnigmaticHandler.dispatchConfig(EnigmaticLegacy.MODID, builder, ModConfig.Type.CLIENT);
     }
 }

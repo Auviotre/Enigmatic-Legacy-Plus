@@ -19,17 +19,19 @@ import net.minecraft.resources.ResourceLocation;
 public class ClientProxy extends CommonProxy {
     public void clientInit() {
         try {
-            ResourceLocation ELDRITCH_LOCATION = EnigmaticLegacy.location("eldritch_open");
+            ResourceLocation eldritchLocation = EnigmaticLegacy.location("eldritch_open");
             ClampedItemPropertyFunction taintedFunc = (stack, level, entity, i) -> ITaintable.isTainted(stack) ? 1.0F : 0.0F;
             ClampedItemPropertyFunction eldritchFunc = (stack, level, entity, i) -> entity == null ? 0.0F : stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
             ItemProperties.register(EnigmaticItems.TWISTED_HEART.get(), ITaintable.LOCATION, taintedFunc);
-            ItemProperties.register(EnigmaticItems.ABYSSAL_HEART.get(), ELDRITCH_LOCATION, (stack, level, entity, i) -> entity == null ? (ITaintable.isTainted(stack) ? 1.0F : 0.0F) : stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F));
-            ItemProperties.register(EnigmaticItems.THE_INFINITUM.get(), ELDRITCH_LOCATION, eldritchFunc);
-            ItemProperties.register(EnigmaticItems.ELDRITCH_AMULET.get(), ELDRITCH_LOCATION, eldritchFunc);
-            ItemProperties.register(EnigmaticItems.DESOLATION_RING.get(), ELDRITCH_LOCATION, eldritchFunc);
+            ItemProperties.register(EnigmaticItems.ABYSSAL_HEART.get(), eldritchLocation, (stack, level, entity, i) -> entity == null ? (ITaintable.isTainted(stack) ? 1.0F : 0.0F) : stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F));
+            ItemProperties.register(EnigmaticItems.THE_INFINITUM.get(), eldritchLocation, eldritchFunc);
+            ItemProperties.register(EnigmaticItems.ELDRITCH_AMULET.get(), eldritchLocation, eldritchFunc);
+            ItemProperties.register(EnigmaticItems.DESOLATION_RING.get(), eldritchLocation, eldritchFunc);
+            ItemProperties.register(EnigmaticItems.CHAOS_ELYTRA.get(), eldritchLocation, eldritchFunc);
             ItemProperties.register(EnigmaticItems.MINER_RING.get(), ResourceLocation.withDefaultNamespace("on"), (stack, level, entity, i) -> MinerRing.getPoint(stack) > 0 ? 1.0F : 0.0F);
             ItemProperties.register(EnigmaticItems.INFERNAL_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
             ItemProperties.register(EnigmaticItems.ENIGMATIC_AMULET.get(), EnigmaticLegacy.location("amulet_color"), (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.AMULET_COLOR, 0.0F));
+            EnigmaticItems.SOUL_COMPASS.get().registerVariants();
         } catch (Exception exception) {
             EnigmaticLegacy.LOGGER.warn("Could not load item models.");
         }

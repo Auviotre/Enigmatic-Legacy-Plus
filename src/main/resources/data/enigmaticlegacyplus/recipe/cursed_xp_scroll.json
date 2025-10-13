@@ -1,0 +1,30 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "B": {
+            "item": "enigmaticlegacyplus:evil_essence"
+        },
+        "E": {
+            "item": "minecraft:emerald_block"
+        },
+        "G": {
+            "item": "minecraft:experience_bottle"
+        },
+        "T": {
+            "item": "enigmaticlegacyplus:darkest_scroll"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:twisted_heart"
+        }
+    },
+    "pattern": [
+        "GXG",
+        "BTB",
+        "GEG"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:cursed_xp_scroll"
+    }
+}

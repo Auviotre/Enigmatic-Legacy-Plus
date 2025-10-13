@@ -1,6 +1,7 @@
 {
-  "values": [
-    "minecraft:elytra",
-    "enigmaticlegacyplus:majestic_elytra"
-  ]
+    "values": [
+        "minecraft:elytra",
+        "enigmaticlegacyplus:majestic_elytra",
+        "enigmaticlegacyplus:chaos_elytra"
+    ]
 }

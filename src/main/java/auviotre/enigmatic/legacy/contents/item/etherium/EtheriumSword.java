@@ -9,31 +9,29 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.common.SimpleTier;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class EtheriumSword extends SwordItem {
-    public static final Tier TIER = new SimpleTier(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 2794, 8.0F, 5F, 32, () -> Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
-
     public EtheriumSword() {
-        super(TIER, new Item.Properties().fireResistant().attributes(createAttributes(TIER, 6.0F, -2.6F)
+        super(EtheriumProperties.TIER, new Item.Properties().fireResistant().attributes(createAttributes(EtheriumProperties.TIER, 6.0F, -2.6F)
                 .withModifierAdded(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(EnigmaticLegacy.location("etherium_sword"), 1, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
         ).component(EnigmaticComponents.ETHERIUM_TOOL, 5));
     }
@@ -44,7 +42,6 @@ public class EtheriumSword extends SwordItem {
         if (Minecraft.getInstance().player != null)
             power += EtheriumArmor.getShieldThreshold(Minecraft.getInstance().player) / 2;
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumSword", ChatFormatting.GOLD, power + "%");
-        TooltipHandler.line(list);
     }
 
     @Mod(value = EnigmaticLegacy.MODID)

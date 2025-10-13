@@ -1,30 +1,30 @@
 {
-  "type": "enigmaticlegacyplus:cursed_shaped",
-  "category": "misc",
-  "key": {
-    "N": {
-      "item": "minecraft:netherite_ingot"
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "N": {
+            "item": "minecraft:netherite_ingot"
+        },
+        "R": {
+            "item": "minecraft:redstone"
+        },
+        "T": {
+            "item": "enigmaticlegacyplus:twisted_heart"
+        },
+        "V": {
+            "item": "enigmaticlegacyplus:evil_essence"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:the_acknowledgment"
+        }
     },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "T": {
-      "item": "enigmaticlegacyplus:twisted_heart"
-    },
-    "V": {
-      "item": "enigmaticlegacyplus:evil_essence"
-    },
-    "X": {
-      "item": "enigmaticlegacyplus:the_acknowledgment"
+    "pattern": [
+        "VRV",
+        "NXN",
+        "VTV"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:the_twist"
     }
-  },
-  "pattern": [
-    "VRV",
-    "NXN",
-    "VTV"
-  ],
-  "result": {
-    "count": 1,
-    "id": "enigmaticlegacyplus:the_twist"
-  }
 }

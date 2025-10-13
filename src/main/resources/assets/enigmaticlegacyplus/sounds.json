@@ -17,6 +17,15 @@
       }
     ]
   },
+  "misc.sword_hit_reject": {
+    "subtitle": "subtitle.enigmaticlegacy.misc.sword_hit_reject",
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:misc/sword_hit_reject",
+        "stream": false
+      }
+    ]
+  },
   "misc.accelerate": {
     "subtitle": "subtitle.enigmaticlegacy.misc.accelerate",
     "sounds": [
@@ -58,6 +67,21 @@
       {
         "name": "item.armor.equip_iron",
         "type": "event"
+      }
+    ]
+  },
+  "block.cosmic_cake.restore": {
+    "subtitle": "subtitle.enigmaticlegacy.cosmic_cake.restore",
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:misc/uneat1",
+        "stream": false
+      }, {
+        "name": "enigmaticlegacyplus:misc/uneat2",
+        "stream": false
+      }, {
+        "name": "enigmaticlegacyplus:misc/uneat3",
+        "stream": false
       }
     ]
   }

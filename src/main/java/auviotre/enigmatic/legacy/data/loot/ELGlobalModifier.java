@@ -33,6 +33,7 @@ public class ELGlobalModifier extends GlobalLootModifierProvider {
                 IGLOO_CHEST, WOODLAND_MANSION,
                 SHIPWRECK_SUPPLY, PILLAGER_OUTPOST
         );
+        this.addChest(Chests.NETHER_SIMPLE, NETHER_BRIDGE, BASTION_BRIDGE, BASTION_TREASURE);
         this.addChest(Chests.END_SIMPLE, END_CITY_TREASURE);
         this.addChest(Chests.DARKEST_SCROLL, BASTION_TREASURE);
         this.addChest(Chests.GOLEM_HEART, ABANDONED_MINESHAFT, SIMPLE_DUNGEON);

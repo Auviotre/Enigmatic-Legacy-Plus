@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -29,6 +30,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -37,11 +40,20 @@ import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 
-import static auviotre.enigmatic.legacy.ELConfig.CONFIG;
-
 public class AngelBlessing extends SpellstoneItem {
+    public static ModConfigSpec.IntValue deflectChance;
+    public static ModConfigSpec.DoubleValue vulnerabilityModifier;
+
     public AngelBlessing() {
-        super(defaultSingleProperties().rarity(Rarity.RARE));
+        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFFB2DAFF);
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.angel_blessing").push("spellstone.angelBlessing");
+        deflectChance = builder.defineInRange("deflectChance", 40, 0, 100);
+        vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
+        builder.pop(2);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -55,13 +67,18 @@ public class AngelBlessing extends SpellstoneItem {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstonePassive");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.angelBlessing1");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.angelBlessing2", ChatFormatting.GOLD, CONFIG.SPELLSTONES.deflectChance.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.angelBlessing2", ChatFormatting.GOLD, deflectChance.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.angelBlessing3");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.angelBlessing4");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.angelBlessing5");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.angelBlessing6");
         } else TooltipHandler.line(list, "tooltip.enigmaticlegacy.holdShift");
         this.addKeyText(list);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void addTuneTooltip(List<Component> list) {
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.angelBlessing1");
     }
 
     public int getCooldown() {
@@ -151,7 +168,7 @@ public class AngelBlessing extends SpellstoneItem {
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.ANGEL_BLESSING)) {
                 DamageSource source = event.getSource();
                 if (source.is(EnigmaticTags.DamageTypes.ANGEL_BLESSING_VULNERABLE_TO)) {
-                    event.setNewDamage((float) (event.getNewDamage() * CONFIG.SPELLSTONES.ABVulnerabilityModifier.getAsDouble()));
+                    event.setNewDamage((float) (event.getNewDamage() * vulnerabilityModifier.getAsDouble()));
                 }
             }
         }

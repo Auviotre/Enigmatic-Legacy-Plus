@@ -1,8 +1,8 @@
 # Enigmatic Legacy Plus
 
-**Original Author** [Aizistral](https://aizistral.com/)
+**Original Author:** **[Aizistral](https://aizistral.com/)**
 
-**Current Version:** 0.3.0
+**Current Version:** 0.4.0
 
 **Minecraft Version:** 1.21.1
 
@@ -14,4 +14,4 @@ This mod is designed to bring new magical-themed content to the game, mainly of 
 
 Whatever fate your advent will bring upon this forgotten land.
 
-This is an unofficial 1.21 ver porting. Click to [Enigmatic Legacy](https://github.com/Aizistral-Studios/Enigmatic-Legacy)
+This is an unofficial 1.21 ver porting. Click to **[Enigmatic Legacy](https://github.com/Aizistral-Studios/Enigmatic-Legacy)**
