@@ -19,6 +19,8 @@ public class RegistryDataGenerator extends DatapackBuiltinEntriesProvider {
             .add(Registries.PLACED_FEATURE, EnigmaticPlacedFeatures::bootstrap)
             .add(Registries.ENCHANTMENT, EnigmaticEnchantments::bootstrap)
             .add(Registries.DAMAGE_TYPE, EnigmaticDamageTypes::bootstrap)
+            .add(Registries.STRUCTURE_SET, EnigmaticStructures::bootstrapSet)
+            .add(Registries.STRUCTURE, EnigmaticStructures::bootstrapStructure)
             // NeoForge
             .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, EnigmaticBiomeModifiers::bootstrap);
 

@@ -73,5 +73,12 @@ public class ELDamageTypeTags extends DamageTypeTagsProvider {
                         DamageTypes.FALLING_BLOCK,
                         DamageTypes.SWEET_BERRY_BUSH
                 );
+        this.tag(EnigmaticTags.DamageTypes.ETHERIUM_CORE_IMMUNE_TO).addTag(DamageTypeTags.IS_EXPLOSION).add(
+                DamageTypes.CACTUS,
+                DamageTypes.CRAMMING,
+                DamageTypes.IN_WALL,
+                DamageTypes.FALLING_BLOCK,
+                DamageTypes.SWEET_BERRY_BUSH
+        );
     }
 }

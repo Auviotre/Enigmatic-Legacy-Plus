@@ -39,10 +39,11 @@ public class TwistedMirror extends BaseCursedItem {
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (!EnigmaticHandler.isTheCursedOne(player) || player.getCooldowns().isOnCooldown(this))
-            return InteractionResultHolder.pass(player.getItemInHand(hand));
+        ItemStack stack = player.getItemInHand(hand);
+        if (!EnigmaticHandler.canUse(player, stack) || player.getCooldowns().isOnCooldown(this))
+            return InteractionResultHolder.pass(stack);
         player.startUsingItem(hand);
-        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
+        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
     }
 
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {

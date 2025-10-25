@@ -1,0 +1,33 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "B": {
+            "item": "minecraft:wither_rose"
+        },
+        "E": {
+            "item": "minecraft:ender_eye"
+        },
+        "M": {
+            "item": "minecraft:phantom_membrane"
+        },
+        "T": {
+            "item": "enigmaticlegacyplus:darkest_scroll"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:twisted_heart"
+        },
+        "Y": {
+            "item": "minecraft:feather"
+        }
+    },
+    "pattern": [
+        "MXM",
+        "BTY",
+        "MEM"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:night_scroll"
+    }
+}

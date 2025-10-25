@@ -92,7 +92,6 @@ public class CursedXpScroll extends XpScroll {
 
         TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScrollMode", modeComponent.withStyle(ChatFormatting.GOLD));
-        TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScrollStoredXP");
         Long stored = stack.getOrDefault(EnigmaticComponents.XP_SCROLL_STORED, 0L);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScrollUnits", ChatFormatting.GOLD, stored, getExpLevel(stored));
@@ -103,6 +102,8 @@ public class CursedXpScroll extends XpScroll {
         } catch (NullPointerException ignored) {
         }
         this.addAttributes(list, stack);
+        TooltipHandler.line(list);
+        TooltipHandler.cursedOnly(list, stack);
     }
 
     @OnlyIn(Dist.CLIENT)

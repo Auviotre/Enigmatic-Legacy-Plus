@@ -44,7 +44,7 @@ import java.util.function.Predicate;
 public class EtheriumHammer extends DiggerItem {
     public EtheriumHammer() {
         super(EtheriumProperties.TIER, EnigmaticTags.Blocks.ALL_MINEABLE, new Item.Properties().fireResistant().attributes(createAttributes(EtheriumProperties.TIER, 9.0F, -3.0F)
-        ).component(EnigmaticComponents.ETHERIUM_TOOL, 4));
+        ).component(EnigmaticComponents.ETHERIUM_SHIELD, 4));
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -38,7 +38,7 @@ import java.util.function.Predicate;
 public class EtheriumScythe extends HoeItem {
     public EtheriumScythe() {
         super(EtheriumProperties.TIER, new Item.Properties().fireResistant().attributes(createAttributes(EtheriumProperties.TIER, 3.0F, -2.0F)
-        ).component(EnigmaticComponents.ETHERIUM_TOOL, 4));
+        ).component(EnigmaticComponents.ETHERIUM_SHIELD, 4));
     }
 
     public static Consumer<UseOnContext> changeIntoState(BlockState state, BlockPos pos) {

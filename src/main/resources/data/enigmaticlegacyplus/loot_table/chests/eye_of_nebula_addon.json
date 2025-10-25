@@ -8,25 +8,25 @@
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "baseChance": 0.053,
+                            "baseChance": 0.043,
                             "bonusChance": 0.027,
                             "condition": "enigmaticlegacyplus:spellstone"
                         }
                     ],
                     "name": "enigmaticlegacyplus:eye_of_nebula",
-                    "weight": 90
+                    "weight": 93
                 },
                 {
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "baseChance": 0.01325,
+                            "baseChance": 0.01075,
                             "bonusChance": 0.0135,
                             "condition": "enigmaticlegacyplus:spellstone"
                         }
                     ],
                     "name": "enigmaticlegacyplus:spellcore",
-                    "weight": 10
+                    "weight": 7
                 }
             ],
             "rolls": 1.0
@@ -38,7 +38,7 @@
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "chance": 0.08,
+                            "chance": 0.035,
                             "condition": "minecraft:random_chance"
                         }
                     ],
@@ -47,8 +47,8 @@
                             "add": false,
                             "count": {
                                 "type": "minecraft:uniform",
-                                "max": 3.0,
-                                "min": 1.0
+                                "max": 2.0,
+                                "min": 0.0
                             },
                             "function": "minecraft:set_count"
                         }

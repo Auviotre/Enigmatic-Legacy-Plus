@@ -61,11 +61,11 @@
   "effect.enigmaticlegacyplus.molten_heart": "Molten Heart",
 
   "entity.enigmaticlegacyplus.cobweb_ball": "Cobweb Ball",
+  "entity.enigmaticlegacyplus.dragon_breath_arrow": "Dragon Breath Arrow",
 
   "block.enigmaticlegacyplus.astral_dust_sack": "Sack of Astral Dust",
   "block.enigmaticlegacyplus.cosmic_cake": "The Eternal Cake",
   "block.enigmaticlegacyplus.dimensional_anchor": "Dimensional Anchor",
-  "block.enigmaticlegacyplus.divine_fruit_pie_block": "Divine Fruit Pie",
   "block.enigmaticlegacyplus.etherium_block": "Etherium Block",
   "block.enigmaticlegacyplus.etherium_ore": "Etherium Ore",
   "block.enigmaticlegacyplus.spellstone_table": "Spellstone Table",
@@ -76,23 +76,23 @@
   "item.enigmaticlegacyplus.ascension_amulet": "Amulet of Ascension",
   "item.enigmaticlegacyplus.astral_dust": "Astral Dust",
   "item.enigmaticlegacyplus.astral_fruit": "Celestial Fruit",
-  "item.enigmaticlegacyplus.astral_fruit_slice": "Slice of Celestial Fruit",
   "item.enigmaticlegacyplus.avarice_scroll": "Pact of Infinite Avarice",
   "item.enigmaticlegacyplus.berserk_emblem": "Emblem of Bloodstained Valor",
   "item.enigmaticlegacyplus.blank_scroll": "Blank Scroll",
   "item.enigmaticlegacyplus.blazing_core": "Blazing Core",
   "item.enigmaticlegacyplus.chaos_elytra": "The Arrogance of Chaos",
-  "item.enigmaticlegacyplus.cosmic_cake_slice": "Slice of The Eternal Cake",
   "item.enigmaticlegacyplus.cosmic_heart": "Heart of the Cosmos",
+  "item.enigmaticlegacyplus.cosmic_scroll": "The Architect's Favor",
   "item.enigmaticlegacyplus.curse_transposer": "Tome of Devoured Malignancy",
   "item.enigmaticlegacyplus.cursed_ring": "Ring of the Seven Curses",
   "item.enigmaticlegacyplus.cursed_scroll": "Scroll of a Thousand Curses",
   "item.enigmaticlegacyplus.cursed_stone": "Unholy Stone",
   "item.enigmaticlegacyplus.cursed_xp_scroll": "Scroll of Ignorance Curse",
   "item.enigmaticlegacyplus.darkest_scroll": "Darkest Scroll",
+  "item.enigmaticlegacyplus.desolation_ring": "The Burden of Desolation",
   "item.enigmaticlegacyplus.dislocation_ring": "Dislocation Ring",
   "item.enigmaticlegacyplus.divine_fruit_pie": "Plate of Divine Fruit Pie",
-  "item.enigmaticlegacyplus.desolation_ring": "The Burden of Desolation",
+  "item.enigmaticlegacyplus.dragon_breath_bow": "Dragon Breath Bow",
   "item.enigmaticlegacyplus.earth_heart": "Heart of the Earth",
   "item.enigmaticlegacyplus.earth_heart_fragment": "Fragment of the Earth",
   "item.enigmaticlegacyplus.eldritch_amulet": "The Testament of Contempt",
@@ -105,11 +105,11 @@
   "item.enigmaticlegacyplus.enigmatic_amulet": "Enigmatic Amulet",
   "item.enigmaticlegacyplus.etherium_boots": "Etherium Boots",
   "item.enigmaticlegacyplus.etherium_chestplate": "Etherium Cuirass",
+  "item.enigmaticlegacyplus.etherium_core": "Etherium Core",
   "item.enigmaticlegacyplus.etherium_hammer": "Etherium Sledgehammer",
   "item.enigmaticlegacyplus.etherium_helmet": "Etherium Helmet",
   "item.enigmaticlegacyplus.etherium_ingot": "Etherium Ingot",
   "item.enigmaticlegacyplus.etherium_leggings": "Etherium Greaves",
-  "item.enigmaticlegacyplus.etherium_machete": "Etherium Machete",
   "item.enigmaticlegacyplus.etherium_nugget": "Etherium Nugget",
   "item.enigmaticlegacyplus.etherium_scythe": "Etherium Scythe",
   "item.enigmaticlegacyplus.etherium_sword": "Etherium Broadsword",
@@ -127,6 +127,7 @@
   "item.enigmaticlegacyplus.heaven_scroll": "Gift of the Heaven",
   "item.enigmaticlegacyplus.hunter_guidebook": "Guide to Feral Hunt",
   "item.enigmaticlegacyplus.ichor_bottle": "Nectar of Ichor",
+  "item.enigmaticlegacyplus.ichor_droplet": "Ichor Droplet",
   "item.enigmaticlegacyplus.infernal_cinder": "Infernal Cinder",
   "item.enigmaticlegacyplus.infernal_shield": "Bulwark of Blazing Pride",
   "item.enigmaticlegacyplus.infinimeal": "Essence of Raging Life",
@@ -141,6 +142,7 @@
   "item.enigmaticlegacyplus.miner_ring": "Miner's Ring",
   "item.enigmaticlegacyplus.mining_charm": "Charm of Treasure Hunter",
   "item.enigmaticlegacyplus.monster_charm": "Emblem of Monster Slayer",
+  "item.enigmaticlegacyplus.night_scroll": "Pact of Dark Night",
   "item.enigmaticlegacyplus.ocean_stone": "Will of the Ocean",
   "item.enigmaticlegacyplus.ode_to_living": "Ode to Living Beings",
   "item.enigmaticlegacyplus.quartz_ring": "Magic Quartz Ring",
@@ -165,6 +167,7 @@
   "item.enigmaticlegacyplus.unholy_grail": "Unholy Grail",
   "item.enigmaticlegacyplus.unwitnessed_amulet": "Unwitnessed Amulet",
   "item.enigmaticlegacyplus.void_pearl": "Pearl of the Void",
+  "item.enigmaticlegacyplus.void_stone": "Keystone of The Oblivion",
   "item.enigmaticlegacyplus.wormhole_potion": "Potion of Wormhole",
   "item.enigmaticlegacyplus.xp_scroll": "Scroll of Ageless Wisdom",
 
@@ -308,16 +311,26 @@
   "tooltip.enigmaticlegacy.extradimensionalEyeDimension": "§d Dimension: §6%s",
 
   "tooltip.enigmaticlegacy.forgerGem1" : "§5Half the experience required for forging",
-  "tooltip.enigmaticlegacy.forgerGem2" : "§5and making your anvil more durable.",
+  "tooltip.enigmaticlegacy.forgerGem2" : "§5and make your anvil more durable.",
+  "tooltip.enigmaticlegacy.forgerGem3" : "§5Also can make the result more durable.",
 
   "tooltip.enigmaticlegacy.infinimeal1": "§5Functions as infinite §6Bone Meal§5.",
   "tooltip.enigmaticlegacy.infinimeal2": "§5Effective on §6Cactus§5, §6Chorus Plants§5,",
   "tooltip.enigmaticlegacy.infinimeal3": "§6Nether Wart§5, §6Sugar Cane§5 and §6Vines§5.",
 
+  "tooltip.enigmaticlegacy.voidStone1": "§5While in inventory, §6Right-Clicking§5 it while dragging",
+  "tooltip.enigmaticlegacy.voidStone2": "§5another stack, or while dragging the keystone",
+  "tooltip.enigmaticlegacy.voidStone3": "§5over another stack will destroy that stack.",
+
   "tooltip.enigmaticlegacy.executionAxeBeheadingChance": "§6+%1$s §dBeheading Chance",
   "tooltip.enigmaticlegacy.executionAxe1": "§5Has a chance to behead slain monsters.",
   "tooltip.enigmaticlegacy.executionAxe2": "§5Each level of Looting applied adds§6 +%1$s§5",
   "tooltip.enigmaticlegacy.executionAxe3": "§5to the overall beheading chance.",
+
+  "tooltip.enigmaticlegacy.dragonBreathBowAmmo": "§5Using §d%s§5 as ammunition.",
+  "tooltip.enigmaticlegacy.dragonBreathBowEffects": "§5Current Effects:",
+  "tooltip.enigmaticlegacy.dragonBreathBowNoEffects1": "§5Right-click with a§d Splash Potion §5on",
+  "tooltip.enigmaticlegacy.dragonBreathBowNoEffects2": "§5this bow to absorb the potion effect.",
 
   "tooltip.enigmaticlegacy.etheriumAttribute": "+%1$s Etherium Shield Threshold",
   "tooltip.enigmaticlegacy.etheriumAttributeAlt": " %1$s Etherium Shield Threshold",
@@ -439,6 +452,13 @@
   "tooltip.enigmaticlegacy.theCube11": "§5  with §61 health§5 remaining. If you have §61 health§5 or less, attempts to",
   "tooltip.enigmaticlegacy.theCube12": "§5  trigger active ability to prevent lethal damage. Restores your",
   "tooltip.enigmaticlegacy.theCube13": "§5  health to §630%§5 and applies powerful buffs if successful.",
+
+  "tooltip.enigmaticlegacy.etheriumCore1": "§5- §6%1$s§5 Armor, §6%2$s§5 Toughness",
+  "tooltip.enigmaticlegacy.etheriumCore2": "§5- §6%1$s§5 Knockback Resistance",
+  "tooltip.enigmaticlegacy.etheriumCore3": "§5- §6%1$s§5 Etherium Shield Threshold",
+  "tooltip.enigmaticlegacy.etheriumCore4": "§5- Convert §6%1$s§5 of the damage received into",
+  "tooltip.enigmaticlegacy.etheriumCore5": "§5  an increase for the next attack.",
+  "tooltip.enigmaticlegacy.etheriumCore6": "§5- Immunity to pressure, pricking and explosion damage.",
 
   "tooltip.enigmaticlegacy.unholyGrail": "§5You'd better not be drinking from it...",
 
@@ -575,6 +595,12 @@
   "tooltip.enigmaticlegacy.enderSlayer12": "§5§6Ender Pearls§5, §6Potions of Recall§5 and §6Twisted",
   "tooltip.enigmaticlegacy.enderSlayer13": "§5§6Mirror§5 for attacked players.",
 
+  "tooltip.enigmaticlegacy.nightScroll1": "§6Phantoms §5 will not spawn in your proximity.",
+  "tooltip.enigmaticlegacy.nightScroll2": "§5Provide bonuses based on the brightness.",
+  "tooltip.enigmaticlegacy.nightScroll3": "§6+%1$s §dAttack Damage",
+  "tooltip.enigmaticlegacy.nightScroll4": "§6+%1$s §dDamage Resistance",
+  "tooltip.enigmaticlegacy.nightScroll5": "§6+%1$s §dLifesteal",
+
   "tooltip.enigmaticlegacy.cursedScroll1": "§6+%1$s §dAttack Damage",
   "tooltip.enigmaticlegacy.cursedScroll2": "§6+%1$s §dMining Speed",
   "tooltip.enigmaticlegacy.cursedScroll3": "§6+%1$s §dHealth Regeneration",
@@ -669,6 +695,8 @@
   "gui.enigmaticlegacy.permanent_death_screen_title": "The End",
   "gui.enigmaticlegacy.lore_inscriber": "Write Name & Lore",
   "gui.enigmaticlegacy.blazing_core_bar_title": "Heat",
+  "gui.enigmaticlegacy.jei.spellstone_crafting": "Spellstone Crafting",
+  "gui.enigmaticlegacy.jei.spellstone_crafting.all_different": "No identical materials are allowed.",
   "gui.enigmaticlegacy.jei.tainting": "Tainting",
 
   "gameMode.cursed": "§cCursed Mode",
@@ -713,6 +741,8 @@
   "enigmaticlegacyplus.configuration.bonusCritMultiplier": "Bonus Crit Multiplier",
   "enigmaticlegacyplus.configuration.naturalRegenerationSpeed": "Natural Regeneration Speed",
   "enigmaticlegacyplus.configuration.naturalRegenerationSpeed.tooltip": "The time required for each 0.5HP treatment from the natural regeneration of the Revival Leaf. Measured in ticks.",
+  "enigmaticlegacyplus.configuration.damageConversion": "Damage Conversion Ratio",
+  "enigmaticlegacyplus.configuration.damageConversionLimit": "Damage Conversion Limit",
 
   "enigmaticlegacyplus.configuration.sevenCurses": "Ring of Seven Curses Configs",
   "enigmaticlegacyplus.configuration.painMultiplier": "§5First Curse§d - Pain Multiplier",
@@ -782,6 +812,9 @@
   "enigmaticlegacyplus.configuration.magneticRange": "Attracting Range",
   "enigmaticlegacyplus.configuration.beheadingBase": "Default Chance to Beheading",
   "enigmaticlegacyplus.configuration.beheadingBonus": "Bonus Chance to Beheading",
+  "enigmaticlegacyplus.configuration.breakChanceModifier": "Anvil Break Chance Modifier",
+  "enigmaticlegacyplus.configuration.extraDurabilityModifier": "Extra Tool Durability Modifier",
+  "enigmaticlegacyplus.configuration.extraMaxDurability": "Extra Tool Durability Limit",
 
   "enigmaticlegacyplus.configuration.section.enigmaticlegacyplus.client.toml": "Client Configs",
   "enigmaticlegacyplus.configuration.section.enigmaticlegacyplus.client.toml.title": "Enigmatic Legacy Client Configs",
@@ -793,5 +826,15 @@
   "enigmaticlegacyplus.configuration.OffsetXCreative": "X-axis Offset in Creative Inventory",
   "enigmaticlegacyplus.configuration.OffsetYCreative": "Y-axis Offset in Creative Inventory",
 
-  "book.enigmaticlegacy.landing_text": "In front of you lies the well of great knowledge, a place where some of this world's greatest mysteries belong, scrupulously researched and carefully cataloged.<br2/>As your journey continues and the world reveals itself to you, you may revisit and behold knowledge you gathered within these pages."
+  "book.enigmaticlegacy.landing_text": "In front of you lies the well of great knowledge, a place where some of this world's greatest mysteries belong, scrupulously researched and carefully cataloged.<br2/>As your journey continues and the world reveals itself to you, you may revisit and behold knowledge you gathered within these pages.",
+
+  "book.enigmaticlegacy.category.world.name": "The World",
+  "book.enigmaticlegacy.category.world.desc": "Some choose to mindlessly scavenge whatever they come across for treasures, leaving behind anything else. That isn't an entirely unjustified path, but does it make one any better than those monsters blindly seeking blood in the night?... Sometimes, if you look just a bit closer, ruins and traces of the former ages can tell you a lot about long history before your advent.",
+
+  "book.enigmaticlegacy.entry.soul_loss.name": "Loss of Soul",
+  "book.enigmaticlegacy.entry.soul_loss.heading.1": "The Crystal",
+  "book.enigmaticlegacy.entry.soul_loss.page.1": "Every death comes with its own tolls, but there is one far more significant than all others you had to face before.<br2/>It does appear that every time you die in this world, a part of your very soul is separated from you, remaining in the place of your demise. It doesn't stay ethereal for too long, instead quickly manifesting itself into physical",
+  "book.enigmaticlegacy.entry.soul_loss.page.2": "reality, in form known as the Soul Crystal. Luckily for you, being a part of this reality actually makes it less vulnerable than otherwise.<br2/>Soul Crystals would float in the air, invulnerable and not reacting to any force acting upon them, as though being only a part of it, soul of",
+  "book.enigmaticlegacy.entry.soul_loss.page.3": "the demigod can only be destroyed by something of a higher nature. Not even other demigods can hope to claim or destroy your crystals.<br2/>With every fragment of your soul lost, you vitality fades, you become weaker and easier to kill. But should you approach your Soul Crystal, and it will lean towards you, and lost fragment of your soul will be instantly freed from its crystal prison, fusing together with your being again.",
+  "book.enigmaticlegacy.entry.soul_loss.page.4": "Hopefully, even under the worst circumstances, you won't lose all your life force. As fabric of your soul thins out, it becomes more and more resistant to being torn apart one more time.<br2/>It is safe to assume that at some point you will not be able to lose any more of your soul fragments, no matter how many times you die - though you would be left in an incredibly vulnerable state to any physical threat by then."
 }

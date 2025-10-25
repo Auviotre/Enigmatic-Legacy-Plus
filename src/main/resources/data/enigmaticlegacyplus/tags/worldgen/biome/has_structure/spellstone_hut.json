@@ -1,0 +1,13 @@
+{
+    "values": [
+        "#minecraft:is_forest",
+        "#minecraft:is_mountain",
+        "#minecraft:is_jungle",
+        "#minecraft:is_ocean",
+        "minecraft:mushroom_fields",
+        "minecraft:plains",
+        "minecraft:snowy_plains",
+        "minecraft:jungle",
+        "minecraft:savanna"
+    ]
+}

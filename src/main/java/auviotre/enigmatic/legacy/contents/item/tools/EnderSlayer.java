@@ -88,7 +88,7 @@ public class EnderSlayer extends SwordItem {
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
             if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && event.getSource().is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-                if (attacker.getMainHandItem().is(EnigmaticItems.ENDER_SLAYER) && EnigmaticHandler.isTheCursedOne(attacker)) {
+                if (attacker.getMainHandItem().is(EnigmaticItems.ENDER_SLAYER) && EnigmaticHandler.canUse(attacker, attacker.getMainHandItem())) {
                     if (event.getEntity() instanceof ServerPlayer player) {
                         ItemCooldowns cooldowns = player.getCooldowns();
                         cooldowns.addCooldown(Items.ENDER_PEARL, 400);

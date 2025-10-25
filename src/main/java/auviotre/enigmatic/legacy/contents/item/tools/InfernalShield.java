@@ -54,7 +54,7 @@ public class InfernalShield extends BaseCursedItem {
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (EnigmaticHandler.isTheCursedOne(player)) {
+        if (EnigmaticHandler.canUse(player, stack)) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(stack);
         }

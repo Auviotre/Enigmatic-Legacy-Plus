@@ -19,14 +19,14 @@ public class SpellstoneTableRender implements BlockEntityRenderer<SpellstoneTabl
     }
 
     public void render(SpellstoneTableEntity entity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+        if (!entity.render) return;
         poseStack.pushPose();
         float timer = entity.time + partialTick;
         poseStack.translate(0.5F, 1.08F + Mth.sin(timer * 0.1F) * 0.025F, 0.5F);
         poseStack.mulPose(Axis.ZP.rotation(0.25F + Mth.lerp(partialTick, entity.oRot, entity.rot)));
         poseStack.mulPose(Axis.XP.rotation( 0.1F + Mth.lerp(partialTick, -entity.oRot, -entity.rot)));
         poseStack.mulPose(Axis.YP.rotation(Mth.lerp(partialTick, entity.oRot, entity.rot)));
-//        this.model.setupAnim(timer, ));
-        VertexConsumer vertexconsumer = buffer.getBuffer(RenderType.entityTranslucentCull(EnigmaticLegacy.location("textures/models/misc/the_true_cube.png")));
+        VertexConsumer vertexconsumer = buffer.getBuffer(RenderType.entityTranslucentCull(EnigmaticLegacy.location("textures/models/misc/spellstone_table_cube.png")));
         this.model.render(poseStack, vertexconsumer, packedLight, packedOverlay, -1);
         poseStack.popPose();
     }

@@ -146,7 +146,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
         if (slot.hasItem()) {
             ItemStack selected = slot.getItem();
             stack = selected.copy();
-            if (id == 10) {
+            if (id == 9) {
 
             } else if (id >= 10 && id < 46) {
                 if (!this.moveItemStackTo(selected, 0, 9, false))

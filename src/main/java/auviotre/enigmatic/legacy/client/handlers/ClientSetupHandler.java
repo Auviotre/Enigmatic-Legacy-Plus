@@ -3,6 +3,7 @@ package auviotre.enigmatic.legacy.client.handlers;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.client.renderer.DimensionalAnchorRender;
+import auviotre.enigmatic.legacy.client.renderer.DragonBreathArrowRender;
 import auviotre.enigmatic.legacy.client.renderer.PermanentItemRenderer;
 import auviotre.enigmatic.legacy.client.renderer.SpellstoneTableRender;
 import auviotre.enigmatic.legacy.client.renderer.layer.EnigmaticElytraLayer;
@@ -66,6 +67,7 @@ public class ClientSetupHandler {
     private static void registerEntityRenderers(EntityRenderersEvent.@NotNull RegisterRenderers event) {
         event.registerEntityRenderer(EnigmaticEntities.PERMANENT_ITEM_ENTITY.get(), PermanentItemRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.COBWEB_BALL.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(EnigmaticEntities.DRAGON_BREATH_ARROW.get(), DragonBreathArrowRender::new);
         event.registerBlockEntityRenderer(EnigmaticBlockEntities.DIMENSIONAL_ANCHOR_ENTITY.get(), DimensionalAnchorRender::new);
         event.registerBlockEntityRenderer(EnigmaticBlockEntities.SPELLSTONE_TABLE_ENTITY.get(), SpellstoneTableRender::new);
     }

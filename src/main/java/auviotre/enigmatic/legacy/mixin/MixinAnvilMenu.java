@@ -1,9 +1,14 @@
 package auviotre.enigmatic.legacy.mixin;
 
+import auviotre.enigmatic.legacy.contents.item.charms.ForgerGem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,6 +33,30 @@ public abstract class MixinAnvilMenu extends ItemCombinerMenu {
             int xp = 0;
             for (int i = 1; i < this.cost.get(); i++) xp += getXp(i);
             this.cost.set(Math.max(1, getExpLevel(xp / 2)));
+        }
+    }
+
+    @Inject(method = "createResult", at = @At("TAIL"))
+    public void createResultLast(CallbackInfo ci) {
+        if (EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_GEM) && EnigmaticHandler.isTheOne(player)) {
+            ItemStack result = this.resultSlots.getItem(0);
+            if (!result.isEmpty() && result.has(DataComponents.MAX_DAMAGE)) {
+                Integer i = result.get(DataComponents.MAX_DAMAGE);
+                if (i != null) {
+                    int modified = Mth.floor(i * (ForgerGem.extraDurabilityModifier.get() * 0.01 + 1));
+                    if (!result.has(EnigmaticComponents.TOOL_DURABILITY_INFO)) {
+                        result.set(EnigmaticComponents.TOOL_DURABILITY_INFO, ForgerGem.ToolInfo.of(i, modified - i));
+                    }
+                    ForgerGem.ToolInfo info = result.get(EnigmaticComponents.TOOL_DURABILITY_INFO);
+                    if (info == null) return;
+                    int max = Mth.floor(info.originDurability() * (1 + 0.01 * ForgerGem.extraMaxDurability.get()));
+                    if (i >= max) return;
+                    modified = Math.min(modified, max);
+                    result.set(DataComponents.MAX_DAMAGE, modified);
+                    result.set(EnigmaticComponents.TOOL_DURABILITY_INFO, ForgerGem.ToolInfo.of(info.originDurability(), modified - info.originDurability()));
+                    this.resultSlots.setItem(0, result);
+                }
+            }
         }
     }
 

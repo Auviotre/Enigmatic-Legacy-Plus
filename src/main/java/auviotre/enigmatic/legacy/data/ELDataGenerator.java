@@ -40,6 +40,7 @@ public class ELDataGenerator {
         generator.addProvider(includeServer, new ELItemTags(output, lookupProvider, blockTags.contentsGetter(), helper));
         generator.addProvider(includeServer, new ELEnchantmentTags(output, lookupProvider, helper));
         generator.addProvider(includeServer, new ELDamageTypeTags(output, lookupProvider, helper));
+        generator.addProvider(includeServer, new ELBiomeTags(output, lookupProvider, helper));
         generator.addProvider(includeServer, new ELEffectTags(output, lookupProvider, helper));
         generator.addProvider(includeServer, new ELRecipeProvider(output, lookupProvider));
         generator.addProvider(includeServer, new ELAdvancementProvider(output, lookupProvider, helper));

@@ -1,14 +1,7 @@
 {
     "values": [
-        "enigmaticlegacyplus:golem_heart",
-        "enigmaticlegacyplus:blazing_core",
-        "enigmaticlegacyplus:ocean_stone",
-        "enigmaticlegacyplus:angel_blessing",
-        "enigmaticlegacyplus:eye_of_nebula",
-        "enigmaticlegacyplus:void_pearl",
-        "enigmaticlegacyplus:forgotten_ice",
-        "enigmaticlegacyplus:revival_leaf",
-        "enigmaticlegacyplus:lost_engine",
-        "enigmaticlegacyplus:the_cube"
+        "#curios:materials_of_the_cube",
+        "enigmaticlegacyplus:the_cube",
+        "enigmaticlegacyplus:etherium_core"
     ]
 }

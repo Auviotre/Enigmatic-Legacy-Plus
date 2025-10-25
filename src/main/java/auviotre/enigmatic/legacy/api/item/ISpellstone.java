@@ -40,7 +40,8 @@ public interface ISpellstone {
         int cooldown = getCooldown();
         if (cooldown > 0 && !cooldowns.isOnCooldown(stack.getItem())) {
             cooldown = player.hasInfiniteMaterials() ? 15 : cooldown;
-            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.SPELLTUNER)) cooldown = (int) (cooldown * 0.9F);
+            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.COSMIC_SCROLL)) cooldown = (int) (cooldown * 0.2F);
+            else if (EnigmaticHandler.hasCurio(player, EnigmaticItems.SPELLTUNER)) cooldown = (int) (cooldown * 0.9F);
             int finalCooldown = cooldown;
             BuiltInRegistries.ITEM.forEach(item -> {
                 if (item.getDefaultInstance().is(EnigmaticTags.Items.SPELLSTONES)) {

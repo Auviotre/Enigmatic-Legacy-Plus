@@ -108,7 +108,6 @@ public class XpScroll extends BaseCurioItem {
 
         TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScrollMode", modeComponent.withStyle(ChatFormatting.GOLD));
-        TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScrollStoredXP");
         Long stored = stack.getOrDefault(EnigmaticComponents.XP_SCROLL_STORED, 0L);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScrollUnits", ChatFormatting.GOLD, stored, getExpLevel(stored));

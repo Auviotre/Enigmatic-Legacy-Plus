@@ -1,28 +1,36 @@
 package auviotre.enigmatic.legacy.compat.jei;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.client.screen.SpellstoneTableScreen;
 import auviotre.enigmatic.legacy.compat.CompatHandler;
 import auviotre.enigmatic.legacy.compat.farmersdelight.FDCompat;
+import auviotre.enigmatic.legacy.compat.jei.category.SpellstoneCraftingCategory;
 import auviotre.enigmatic.legacy.compat.jei.category.TaintingCategory;
 import auviotre.enigmatic.legacy.compat.jei.extension.CursedRecipeExtension;
 import auviotre.enigmatic.legacy.compat.jei.subtype.TaintableSubtypeInterpreter;
 import auviotre.enigmatic.legacy.contents.crafting.CursedShapedRecipe;
+import auviotre.enigmatic.legacy.contents.crafting.SpellstoneTableRecipe;
+import auviotre.enigmatic.legacy.contents.gui.SpellstoneTableMenu;
 import auviotre.enigmatic.legacy.contents.item.tools.TotemOfMalice;
+import auviotre.enigmatic.legacy.registries.EnigmaticBlocks;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticMenus;
+import auviotre.enigmatic.legacy.registries.EnigmaticRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.vanilla.IJeiAnvilRecipe;
 import mezz.jei.api.recipe.vanilla.IVanillaRecipeFactory;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.ISubtypeRegistration;
-import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
+import mezz.jei.api.registration.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,10 +39,14 @@ import java.util.List;
 
 @JeiPlugin
 public class JEIHandler implements IModPlugin {
-    public static final RecipeType<TaintingCategory.Recipe> TAINTING = RecipeType.create(EnigmaticLegacy.MODID, "tainting", TaintingCategory.Recipe.class);
+    private static final ResourceLocation ID = EnigmaticLegacy.location("jei_plugin");
+    public static Level getLevel() {
+        if (Minecraft.getInstance().level != null) return Minecraft.getInstance().level;
+        else throw new NullPointerException("minecraft level must not be null.");
+    }
 
     public ResourceLocation getPluginUid() {
-        return EnigmaticLegacy.location("jei_plugin");
+        return ID;
     }
 
     public void registerItemSubtypes(@NotNull ISubtypeRegistration registration) {
@@ -44,17 +56,35 @@ public class JEIHandler implements IModPlugin {
 //        registration.registerSubtypeInterpreter(EnigmaticItems.ENIGMATIC_AMULET.get(), AmuletSubtypeInterpreter.INSTANCE);
     }
 
+    public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(EnigmaticBlocks.SPELLSTONE_TABLE.toStack(), EnigmaticRecipeTypes.SPELLSTONE_CRAFTING);
+    }
+
+    public void registerGuiHandlers(@NotNull IGuiHandlerRegistration registration) {
+        registration.addRecipeClickArea(SpellstoneTableScreen.class, 85, 53, 6, 6, EnigmaticRecipeTypes.SPELLSTONE_CRAFTING);
+    }
+
+    public void registerRecipeTransferHandlers(@NotNull IRecipeTransferRegistration registration) {
+        registration.addRecipeTransferHandler(SpellstoneTableMenu.class, EnigmaticMenus.SPELLSTONE_TABLE_MENU.get(), EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, 0, 9, 10, 36);
+    }
+
     public void registerVanillaCategoryExtensions(@NotNull IVanillaCategoryExtensionRegistration registration) {
         registration.getCraftingCategory().addExtension(CursedShapedRecipe.class, new CursedRecipeExtension());
     }
 
     public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new TaintingCategory(registration.getJeiHelpers().getGuiHelper()));
+        IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
+        registration.addRecipeCategories(new TaintingCategory(guiHelper));
+        registration.addRecipeCategories(new SpellstoneCraftingCategory(guiHelper));
     }
 
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
+        RecipeManager manager = getLevel().getRecipeManager();
+        List<RecipeHolder<SpellstoneTableRecipe>> holders = manager.getAllRecipesFor(EnigmaticRecipes.SPELLSTONE_CRAFTING.get());
+        registration.addRecipes(EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, holders);
+
         Ingredient cursed_ring = Ingredient.of(EnigmaticItems.CURSED_RING);
-        registration.addRecipes(TAINTING, List.of(
+        registration.addRecipes(EnigmaticRecipeTypes.TAINTING, List.of(
                 TaintingCategory.create(EnigmaticItems.EARTH_HEART.toStack(), cursed_ring),
                 TaintingCategory.create(EnigmaticItems.TWISTED_HEART.toStack(), cursed_ring),
                 TaintingCategory.create(EnigmaticItems.ABYSSAL_HEART.toStack(), cursed_ring)

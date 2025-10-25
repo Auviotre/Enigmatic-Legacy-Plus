@@ -1,0 +1,7 @@
+{
+    "type": "enigmaticlegacyplus:spellstone_hut",
+    "biomes": "#enigmaticlegacyplus:has_structure/spellstone_hut",
+    "spawn_overrides": {},
+    "step": "underground_structures",
+    "terrain_adaptation": "bury"
+}

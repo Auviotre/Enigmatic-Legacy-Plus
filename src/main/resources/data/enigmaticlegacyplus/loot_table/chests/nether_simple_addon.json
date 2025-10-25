@@ -75,6 +75,17 @@
                     "weight": 15
                 },
                 {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.25,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:void_stone",
+                    "weight": 4
+                },
+                {
                     "type": "minecraft:empty",
                     "weight": 60
                 }

@@ -86,6 +86,7 @@ public class ChaosElytra extends BaseElytraItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.majesticElytra1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.majesticElytra2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.majesticElytra3");
+            TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.chaosElytra1", ChatFormatting.GOLD, specialDamageResistance.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.chaosElytra2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.chaosElytra3");

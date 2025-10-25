@@ -33,7 +33,7 @@ public class EtheriumSword extends SwordItem {
     public EtheriumSword() {
         super(EtheriumProperties.TIER, new Item.Properties().fireResistant().attributes(createAttributes(EtheriumProperties.TIER, 6.0F, -2.6F)
                 .withModifierAdded(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(EnigmaticLegacy.location("etherium_sword"), 1, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
-        ).component(EnigmaticComponents.ETHERIUM_TOOL, 5));
+        ).component(EnigmaticComponents.ETHERIUM_SHIELD, 5));
     }
 
     @OnlyIn(Dist.CLIENT)

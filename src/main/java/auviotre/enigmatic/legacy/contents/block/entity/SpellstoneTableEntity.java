@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class SpellstoneTableEntity extends BlockEntity {
+    public boolean render;
     public int time;
     public float rot;
     public float oRot;
@@ -17,12 +18,13 @@ public class SpellstoneTableEntity extends BlockEntity {
     }
 
     public static void animationTick(Level level, BlockPos pos, BlockState state, SpellstoneTableEntity table) {
+        table.render = level.getBlockState(pos.above()).isAir();
         table.oRot = table.rot;
         Vec3 vec3 = pos.getBottomCenter();
         Player player = level.getNearestPlayer(vec3.x, vec3.y, vec3.z, 2.5, false);
-        table.rot = player == null ? table.rot + 0.03F : table.rot + 0.06F;
+        table.rot = player == null ? table.rot + 0.025F : table.rot + 0.02F + (float) (Math.min(0.08F / Math.sqrt(player.distanceToSqr(vec3)), 0.1F));
         ++table.time;
-        float delta = (float) (Math.PI * 2);
+        float delta = (float) (2.0F * Math.PI);
         while(table.rot >= Math.PI) {
             table.oRot -= delta;
             table.rot -= delta;

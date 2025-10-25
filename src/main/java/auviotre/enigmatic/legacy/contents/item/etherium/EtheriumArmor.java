@@ -2,17 +2,21 @@ package auviotre.enigmatic.legacy.contents.item.etherium;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.phys.Vec3;
@@ -28,6 +32,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,7 +41,7 @@ public class EtheriumArmor extends ArmorItem {
     public static ModConfigSpec.BooleanValue etheriumShieldRenderLayer;
 
     public EtheriumArmor(Type type) {
-        super(EtheriumProperties.MATERIAL, type, BaseItem.defaultProperties().fireResistant().durability(type.getDurability(132)).component(EnigmaticComponents.ETHERIUM_TOOL, 10));
+        super(EtheriumProperties.MATERIAL, type, BaseItem.defaultProperties().fireResistant().durability(type.getDurability(132)).component(EnigmaticComponents.ETHERIUM_SHIELD, 10));
     }
 
     @SubscribeConfig(receiveClient = true)
@@ -49,20 +54,23 @@ public class EtheriumArmor extends ArmorItem {
     public static int getShieldThreshold(@NotNull LivingEntity entity) {
         AtomicInteger etherPoint = new AtomicInteger();
         for (ItemStack slot : entity.getArmorSlots()) {
-            int i = slot.getOrDefault(EnigmaticComponents.ETHERIUM_TOOL, 0);
+            int i = slot.getOrDefault(EnigmaticComponents.ETHERIUM_SHIELD, 0);
             if (i > 0) etherPoint.addAndGet(i);
         }
         for (ItemStack slot : entity.getHandSlots()) {
-            int i = slot.getOrDefault(EnigmaticComponents.ETHERIUM_TOOL, 0);
+            if (slot.getItem() instanceof Equipable) continue;
+            if (slot.getItem() instanceof ICurioItem) continue;
+            int i = slot.getOrDefault(EnigmaticComponents.ETHERIUM_SHIELD, 0);
             if (i > 0) etherPoint.addAndGet(i);
         }
         CuriosApi.getCuriosInventory(entity).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
             for (int i = 0; i < curios.getSlots(); i++) {
-                int v = curios.getStackInSlot(i).getOrDefault(EnigmaticComponents.ETHERIUM_TOOL, 0);
+                int v = curios.getStackInSlot(i).getOrDefault(EnigmaticComponents.ETHERIUM_SHIELD, 0);
                 if (v > 0) etherPoint.addAndGet(v);
             }
         });
+        if (ISpellstone.get(entity).is(EnigmaticItems.ETHERIUM_CORE)) etherPoint.set(Mth.floor(etherPoint.get() * 1.4F));
         return Math.min(etherPoint.get(), 99);
     }
 

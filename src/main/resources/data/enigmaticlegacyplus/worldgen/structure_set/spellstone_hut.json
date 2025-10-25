@@ -1,0 +1,14 @@
+{
+    "placement": {
+        "type": "minecraft:random_spread",
+        "salt": 68431572,
+        "separation": 11,
+        "spacing": 32
+    },
+    "structures": [
+        {
+            "structure": "enigmaticlegacyplus:spellstone_hut",
+            "weight": 1
+        }
+    ]
+}

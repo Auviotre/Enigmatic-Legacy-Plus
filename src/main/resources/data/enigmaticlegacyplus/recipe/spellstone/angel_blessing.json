@@ -1,0 +1,31 @@
+{
+    "type": "enigmaticlegacyplus:spellstone_table",
+    "debris_count": 8,
+    "ingredients": [
+        {
+            "item": "minecraft:dragon_breath"
+        },
+        {
+            "item": "minecraft:phantom_membrane"
+        },
+        {
+            "item": "minecraft:glowstone"
+        },
+        {
+            "item": "enigmaticlegacyplus:quartz_ring"
+        },
+        {
+            "item": "minecraft:glowstone"
+        },
+        {
+            "item": "minecraft:phantom_membrane"
+        },
+        {
+            "item": "minecraft:dragon_breath"
+        }
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:angel_blessing"
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "type": "enigmaticlegacyplus:spellstone_table",
+    "all_different": true,
+    "debris_count": 24,
+    "ingredients": [
+        {
+            "tag": "curios:materials_of_the_cube"
+        },
+        {
+            "tag": "curios:materials_of_the_cube"
+        },
+        {
+            "tag": "curios:materials_of_the_cube"
+        },
+        {
+            "item": "enigmaticlegacyplus:cosmic_heart"
+        },
+        {
+            "tag": "curios:materials_of_the_cube"
+        },
+        {
+            "tag": "curios:materials_of_the_cube"
+        },
+        {
+            "tag": "curios:materials_of_the_cube"
+        }
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:the_cube"
+    }
+}

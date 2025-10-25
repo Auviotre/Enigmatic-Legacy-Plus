@@ -41,7 +41,7 @@ import java.util.List;
 public class EtheriumMachete extends KnifeItem {
 
     public EtheriumMachete() {
-        super(EtheriumProperties.TIER, new Item.Properties().fireResistant().attributes(createAttributes(EtheriumProperties.TIER, 0.5F, -2.2F)).component(EnigmaticComponents.ETHERIUM_TOOL, 5));
+        super(EtheriumProperties.TIER, new Item.Properties().fireResistant().attributes(createAttributes(EtheriumProperties.TIER, 0.5F, -2.2F)).component(EnigmaticComponents.ETHERIUM_SHIELD, 5));
     }
 
     @OnlyIn(Dist.CLIENT)

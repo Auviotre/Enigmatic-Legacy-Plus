@@ -61,11 +61,11 @@
   "effect.enigmaticlegacyplus.molten_heart": "熔火之心",
 
   "entity.enigmaticlegacyplus.cobweb_ball": "蛛网球",
+  "entity.enigmaticlegacyplus.dragon_breath_arrow": "龙息箭",
 
   "block.enigmaticlegacyplus.astral_dust_sack": "袋装星尘",
   "block.enigmaticlegacyplus.cosmic_cake": "永恒蛋糕",
   "block.enigmaticlegacyplus.dimensional_anchor": "维度锚",
-  "block.enigmaticlegacyplus.divine_fruit_pie_block": "神谕灵果派",
   "block.enigmaticlegacyplus.etherium_block": "以太块",
   "block.enigmaticlegacyplus.etherium_ore": "以太矿",
   "block.enigmaticlegacyplus.spellstone_table": "术石台",
@@ -76,14 +76,13 @@
   "item.enigmaticlegacyplus.ascension_amulet": "飞升护符",
   "item.enigmaticlegacyplus.astral_dust": "星尘",
   "item.enigmaticlegacyplus.astral_fruit": "天体果",
-  "item.enigmaticlegacyplus.astral_fruit_slice": "天体果切片",
   "item.enigmaticlegacyplus.avarice_scroll": "无尽贪婪契约",
   "item.enigmaticlegacyplus.berserk_emblem": "血战沙场之证",
   "item.enigmaticlegacyplus.blank_scroll": "空卷轴",
   "item.enigmaticlegacyplus.blazing_core": "烈焰之核",
   "item.enigmaticlegacyplus.chaos_elytra": "混沌之傲",
-  "item.enigmaticlegacyplus.cosmic_cake_slice": "永恒蛋糕切片",
   "item.enigmaticlegacyplus.cosmic_heart": "寰宇之心",
+  "item.enigmaticlegacyplus.cosmic_scroll": "建筑师的青睐",
   "item.enigmaticlegacyplus.curse_transposer": "噬咒之书",
   "item.enigmaticlegacyplus.cursed_ring": "七咒之戒",
   "item.enigmaticlegacyplus.cursed_scroll": "千咒卷轴",
@@ -93,6 +92,7 @@
   "item.enigmaticlegacyplus.desolation_ring": "荒芜之负",
   "item.enigmaticlegacyplus.dislocation_ring": "转位之戒",
   "item.enigmaticlegacyplus.divine_fruit_pie": "盘装神谕灵果派",
+  "item.enigmaticlegacyplus.dragon_breath_bow": "龙息弓",
   "item.enigmaticlegacyplus.earth_heart": "大地之心",
   "item.enigmaticlegacyplus.earth_heart_fragment": "大地之心碎片",
   "item.enigmaticlegacyplus.eldritch_amulet": "轻蔑之约",
@@ -105,11 +105,11 @@
   "item.enigmaticlegacyplus.enigmatic_amulet": "神秘护身符",
   "item.enigmaticlegacyplus.etherium_boots": "以太靴子",
   "item.enigmaticlegacyplus.etherium_chestplate": "以太胸甲",
+  "item.enigmaticlegacyplus.etherium_core": "以太核心",
   "item.enigmaticlegacyplus.etherium_hammer": "以太重锤",
   "item.enigmaticlegacyplus.etherium_helmet": "以太头盔",
   "item.enigmaticlegacyplus.etherium_ingot": "以太锭",
   "item.enigmaticlegacyplus.etherium_leggings": "以太护腿",
-  "item.enigmaticlegacyplus.etherium_machete": "以太砍刀",
   "item.enigmaticlegacyplus.etherium_nugget": "以太粒",
   "item.enigmaticlegacyplus.etherium_scythe": "以太镰刀",
   "item.enigmaticlegacyplus.etherium_sword": "以太阔剑",
@@ -127,6 +127,7 @@
   "item.enigmaticlegacyplus.heaven_scroll": "天堂之礼",
   "item.enigmaticlegacyplus.hunter_guidebook": "野猎指南",
   "item.enigmaticlegacyplus.ichor_bottle": "灵液蜜酿",
+  "item.enigmaticlegacyplus.ichor_droplet": "灵液滴",
   "item.enigmaticlegacyplus.infernal_cinder": "狱火余烬",
   "item.enigmaticlegacyplus.infernal_shield": "烈焰之傲壁垒",
   "item.enigmaticlegacyplus.infinimeal": "狂野生长精华",
@@ -141,6 +142,7 @@
   "item.enigmaticlegacyplus.miner_ring": "采掘者之戒",
   "item.enigmaticlegacyplus.mining_charm": "猎宝者护符",
   "item.enigmaticlegacyplus.monster_charm": "怪物猎人勋章",
+  "item.enigmaticlegacyplus.night_scroll": "暗夜契约卷轴",
   "item.enigmaticlegacyplus.ocean_stone": "海洋意志",
   "item.enigmaticlegacyplus.ode_to_living": "生灵颂词",
   "item.enigmaticlegacyplus.quartz_ring": "魔法石英戒指",
@@ -165,6 +167,7 @@
   "item.enigmaticlegacyplus.unholy_grail": "不洁圣杯",
   "item.enigmaticlegacyplus.unwitnessed_amulet": "无主护身符",
   "item.enigmaticlegacyplus.void_pearl": "虚空珍珠",
+  "item.enigmaticlegacyplus.void_stone": "湮灭基石（WIP）",
   "item.enigmaticlegacyplus.wormhole_potion": "虫洞药水",
   "item.enigmaticlegacyplus.xp_scroll": "永恒智慧卷轴",
 
@@ -309,15 +312,25 @@
 
   "tooltip.enigmaticlegacy.forgerGem1" : "§5减半锻造所需经验",
   "tooltip.enigmaticlegacy.forgerGem2" : "§5并使你的铁砧更耐用",
+  "tooltip.enigmaticlegacy.forgerGem3" : "§5同时使锻造结果更耐用",
 
   "tooltip.enigmaticlegacy.infinimeal1": "§5作用类似于无限§6骨粉",
   "tooltip.enigmaticlegacy.infinimeal2": "§5可以作用于§6仙人掌§5、",
   "tooltip.enigmaticlegacy.infinimeal3": "§6藤蔓§5、§6下界疣§5和§6甘蔗",
 
+  "tooltip.enigmaticlegacy.voidStone1": "§5在物品栏中手持其他物品",
+  "tooltip.enigmaticlegacy.voidStone2": "§6右键§5基石或§6右键§5于其他",
+  "tooltip.enigmaticlegacy.voidStone3": "§5物品时会将其销毁",
+
   "tooltip.enigmaticlegacy.executionAxeBeheadingChance": "§6+%1$s§d 斩首概率",
   "tooltip.enigmaticlegacy.executionAxe1": "§5有机会斩下怪物的头颅",
   "tooltip.enigmaticlegacy.executionAxe2": "§5每级抢夺增加§6 %1$s §5的斩首概率",
   "tooltip.enigmaticlegacy.executionAxe3": "§5",
+
+  "tooltip.enigmaticlegacy.dragonBreathBowAmmo": "§5以§d%s§5为弹药",
+  "tooltip.enigmaticlegacy.dragonBreathBowEffects": "§5当前效果：",
+  "tooltip.enigmaticlegacy.dragonBreathBowNoEffects1": "§5将§d喷溅型药水§5右键于",
+  "tooltip.enigmaticlegacy.dragonBreathBowNoEffects2": "§5此弓以吸收药水效果",
 
   "tooltip.enigmaticlegacy.etheriumAttribute": "+%1$s 以太护盾阈值",
   "tooltip.enigmaticlegacy.etheriumAttributeAlt": " %1$s 以太护盾阈值",
@@ -327,9 +340,9 @@
   "tooltip.enigmaticlegacy.etheriumSword": "§5手持时有 §6%1$s §d几率§5不受到伤害",
   "tooltip.enigmaticlegacy.etheriumDisable": "§5按住 §6Shift§5 以禁用此效果",
 
-  "tooltip.enigmaticlegacy.majesticElytra1": "§5滑翔时按住跳跃键以持续向前加速",
-  "tooltip.enigmaticlegacy.majesticElytra2": "§5加速时耐久消耗更快",
-  "tooltip.enigmaticlegacy.majesticElytra3": "§5 ",
+  "tooltip.enigmaticlegacy.majesticElytra1": "§5滑翔时按住跳跃键以",
+  "tooltip.enigmaticlegacy.majesticElytra2": "§5持续向前加速",
+  "tooltip.enigmaticlegacy.majesticElytra3": "§5加速时耐久消耗更快",
 
   "tooltip.enigmaticlegacy.ichorBottle1": "§5藐视神明的前提是了解神明……",
   "tooltip.enigmaticlegacy.ichorBottle2": "§5饮用以永久§6 +1 §d饰品栏位",
@@ -439,6 +452,13 @@
   "tooltip.enigmaticlegacy.theCube11": "§5  中以§61点§5生命值存活下来。而当你的生命值等于或少",
   "tooltip.enigmaticlegacy.theCube12": "§5  于§61点§5时，将会尝试启动主动技能以躲避致命伤害。",
   "tooltip.enigmaticlegacy.theCube13": "§5  如果成功将会恢复§630%§5的生命值并获得强力增益。",
+
+  "tooltip.enigmaticlegacy.etheriumCore1": "§5- §6%1$s§5 护甲值, §6%2$s§5 盔甲韧性",
+  "tooltip.enigmaticlegacy.etheriumCore2": "§5- §6%1$s§5 击退抗性",
+  "tooltip.enigmaticlegacy.etheriumCore3": "§5- §6%1$s§5 以太护盾阈值",
+  "tooltip.enigmaticlegacy.etheriumCore4": "§5- 将受到伤害的 §6%1$s§5 转化",
+  "tooltip.enigmaticlegacy.etheriumCore5": "§5  为下一次攻击的增幅",
+  "tooltip.enigmaticlegacy.etheriumCore6": "§5- 免疫挤压，荆棘与爆炸伤害",
 
   "tooltip.enigmaticlegacy.unholyGrail": "§5最好别用它来喝水...",
 
@@ -575,6 +595,12 @@
   "tooltip.enigmaticlegacy.enderSlayer12": "§5并使其暂时无法使用§6末影珍珠",
   "tooltip.enigmaticlegacy.enderSlayer13": "§6召回药水§5和§6扭曲魔镜§5",
 
+  "tooltip.enigmaticlegacy.nightScroll1": "§6幻翼§5不会在身边生成",
+  "tooltip.enigmaticlegacy.nightScroll2": "§5根据身处亮度提供加成",
+  "tooltip.enigmaticlegacy.nightScroll3": "§6+%1$s §d攻击伤害",
+  "tooltip.enigmaticlegacy.nightScroll4": "§6+%1$s §d伤害减免",
+  "tooltip.enigmaticlegacy.nightScroll5": "§6+%1$s §d生命窃取",
+
   "tooltip.enigmaticlegacy.cursedScroll1": "§6+%1$s §d攻击伤害",
   "tooltip.enigmaticlegacy.cursedScroll2": "§6+%1$s §d挖掘速度",
   "tooltip.enigmaticlegacy.cursedScroll3": "§6+%1$s §d生命回复",
@@ -669,6 +695,8 @@
   "gui.enigmaticlegacy.permanent_death_screen_title": "结局",
   "gui.enigmaticlegacy.lore_inscriber": "写下名字和物品描述",
   "gui.enigmaticlegacy.blazing_core_bar_title": "Heat",
+  "gui.enigmaticlegacy.jei.spellstone_crafting": "术石合成",
+  "gui.enigmaticlegacy.jei.spellstone_crafting.all_different": "不可出现相同材料",
   "gui.enigmaticlegacy.jei.tainting": "污染",
 
   "gameMode.cursed": "§c诅咒模式",
@@ -713,6 +741,8 @@
   "enigmaticlegacyplus.configuration.bonusCritMultiplier": "额外暴击倍率",
   "enigmaticlegacyplus.configuration.naturalRegenerationSpeed": "自然恢复速率",
   "enigmaticlegacyplus.configuration.naturalRegenerationSpeed.tooltip": "复苏之叶自然回复0.5生命值所需要的时间（以游戏刻衡量）",
+  "enigmaticlegacyplus.configuration.damageConversion": "伤害转换比率",
+  "enigmaticlegacyplus.configuration.damageConversionLimit": "伤害转换上限",
 
   "enigmaticlegacyplus.configuration.sevenCurses": "七咒之戒配置",
   "enigmaticlegacyplus.configuration.painMultiplier": "§5第一诅咒§d - 受伤系数",
@@ -782,6 +812,9 @@
   "enigmaticlegacyplus.configuration.magneticRange": "吸取范围",
   "enigmaticlegacyplus.configuration.beheadingBase": "基础斩首概率",
   "enigmaticlegacyplus.configuration.beheadingBonus": "额外斩首概率",
+  "enigmaticlegacyplus.configuration.breakChanceModifier": "铁砧损坏概率系数",
+  "enigmaticlegacyplus.configuration.extraDurabilityModifier": "额外工具耐久系数",
+  "enigmaticlegacyplus.configuration.extraMaxDurability": "额外工具耐久上限",
 
   "enigmaticlegacyplus.configuration.section.enigmaticlegacyplus.client.toml": "客户端配置",
   "enigmaticlegacyplus.configuration.section.enigmaticlegacyplus.client.toml.title": "神秘遗物客户端配置",
@@ -793,5 +826,15 @@
   "enigmaticlegacyplus.configuration.OffsetXCreative": "磁力按钮X轴偏移",
   "enigmaticlegacyplus.configuration.OffsetYCreative": "磁力按钮Y轴偏移",
 
-  "book.enigmaticlegacy.landing_text": "在你手中，在你面前，这本书好似一口深井，伟大之知皆聚于此。一些世间最为深邃的奥秘，连带着对这些谜团的严谨研究以及详细分类，皆蕴藏于其中。<br2/>于尘世旅行不息，书中内容亦会逐渐自见。路中见知虽载于书页之中，却仍需你常读常新。"
+  "book.enigmaticlegacy.landing_text": "在你手中，在你面前，这本书好似一口深井，伟大之知皆聚于此。一些世间最为深邃的奥秘，连带着对这些谜团的严谨研究以及详细分类，皆蕴藏于其中。<br2/>于尘世旅行不息，书中内容亦会逐渐自见。路中见知虽载于书页之中，却仍需你常读常新。",
+
+  "book.enigmaticlegacy.category.world.name": "世界",
+  "book.enigmaticlegacy.category.world.desc": "有些人选择盲目地搜寻他们遇到的任何事物，只为了寻找宝藏，而将其他一切抛诸脑后。这并非全无道理，只是这样的行为与只会在夜中盲目寻求血液的怪物有何区别？…有时，如果你观察再细致一些就能发现，那遗迹以及逝去岁月留下的踪迹正在向你静静诉说着许多事情：那是一段悠久的历史，诞生于你冒险之前的故事。",
+
+  "book.enigmaticlegacy.entry.soul_loss.name": "灵魂损失",
+  "book.enigmaticlegacy.entry.soul_loss.heading.1": "水晶",
+  "book.enigmaticlegacy.entry.soul_loss.page.1": "每次死亡都有其代价，但除此之外，还有一个更重要的问题，这个问题比丢失物品和等级要严重得多。<br2/>每次你在世界中死亡，你的一部分灵魂就会离你而去，徘徊于你的死亡地点。它并不会长时间保持虚无状态，相反，它会迅速地在物理现实中显示出自身——这就是灵魂水晶。",
+  "book.enigmaticlegacy.entry.soul_loss.page.2": "好在，成为如此这般的现实形态，使得它较之原先更为坚韧了。<br2/>灵魂水晶会飘浮于半空中，无法被破坏且不与任何施加于其上的力发生反应，似乎只有那些比半神位阶更高的自然方可破坏灵魂水晶。那些希望自己可以占有或破坏你的灵魂水晶的其他半神，只是在做白日梦罢了。",
+  "book.enigmaticlegacy.entry.soul_loss.page.3": "你每失去一小块灵魂，你的生命力便会随之减弱。虚弱侵袭，死亡也就更易到来。但是，若你走到你的灵魂水晶旁边，它会朝向你飞来，被囚禁于晶体内的遗失灵魂之碎片，也会立即从中脱离，复归于你，并与你身上的灵魂水乳交融，回复如初。",
+  "book.enigmaticlegacy.entry.soul_loss.page.4": "好在，即便是在最糟糕的情况下。你也不会完全丧失掉你的生命力。灵魂越稀薄，就越是难以被撕裂。<br2/>不夸张地说，你是没有办法丢失掉所有灵魂碎片的，死再多次也是如此——但是，死亡次数过多会使你变得极端脆弱，任何的损伤都是致命的威胁。"
 }

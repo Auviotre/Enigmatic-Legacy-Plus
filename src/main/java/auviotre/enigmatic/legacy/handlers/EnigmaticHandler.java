@@ -84,6 +84,12 @@ import java.util.*;
 public interface EnigmaticHandler {
     List<Holder<MobEffect>> DEBUFF_LIST = new ArrayList<>();
 
+    static boolean canUse(LivingEntity entity, ItemStack stack) {
+        if (isBlessedItem(stack) && isTheOne(entity)) return true;
+        if (isCursedItem(stack) && !isTheCursedOne(entity)) return false;
+        return !isEldritchItem(stack) || isTheWorthyOne(entity);
+    }
+
     static boolean isTheCursedOne(LivingEntity entity) {
         return hasCurio(entity, EnigmaticItems.CURSED_RING) || entity instanceof Player player && getPersistedData(player).getBoolean("SevenCursesBearing");
     }
@@ -92,6 +98,10 @@ public interface EnigmaticHandler {
         if (stack.is(EnigmaticItems.CURSED_RING)) return false;
         if (isEldritchItem(stack)) return true;
         return !stack.isEmpty() && stack.has(EnigmaticComponents.CURSED) && stack.getOrDefault(EnigmaticComponents.CURSED, false);
+    }
+
+    static boolean isBlessedItem(@NotNull ItemStack stack) {
+        return !stack.isEmpty() && stack.has(EnigmaticComponents.BLESSED) && stack.getOrDefault(EnigmaticComponents.BLESSED, false);
     }
 
     static boolean isTheBlessedOne(LivingEntity entity) {

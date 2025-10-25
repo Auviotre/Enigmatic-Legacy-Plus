@@ -88,7 +88,7 @@ public class DesolationRing extends BaseCurioItem {
         public static final Map<LivingEntity, AABB> BOXES = new WeakHashMap<>();
 
         @SubscribeEvent
-        private static void onPlayerTick(EntityTickEvent.@NotNull Pre event) {
+        private static void onTick(EntityTickEvent.@NotNull Pre event) {
             if (event.getEntity() instanceof LivingEntity entity) {
                 if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.DESOLATION_RING))
                     BOXES.put(entity, entity.getBoundingBox().inflate(effectiveRange.get()));

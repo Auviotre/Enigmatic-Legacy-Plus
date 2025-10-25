@@ -95,5 +95,8 @@ public class ELAdvancementProvider extends AdvancementProvider {
                     null, AdvancementType.TASK, true, true, false
             ).requirements(AdvancementRequirements.Strategy.OR).addCriterion("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(EnigmaticItems.TWISTED_MIRROR).build())).save(consumer, prefix("twisted_mirror"));
         }
+
+        private void book(Consumer<AdvancementHolder> consumer) {
+        }
     }
 }

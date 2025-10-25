@@ -45,6 +45,7 @@ public record ELChestLoot(HolderLookup.Provider registries) implements LootTable
                         .add(LootItem.lootTableItem(Items.WITHER_ROSE).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 4.0F))).setWeight(25))
                         .add(LootItem.lootTableItem(Items.GHAST_TEAR).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))).setWeight(10))
                         .add(LootItem.lootTableItem(EnigmaticItems.INFERNAL_CINDER).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))).when(LootItemRandomChanceCondition.randomChance(0.25F)).setWeight(15))
+                        .add(LootItem.lootTableItem(EnigmaticItems.VOID_STONE).when(LootItemRandomChanceCondition.randomChance(0.25F)).setWeight(4))
                         .add(EmptyLootItem.emptyItem().setWeight(60))
                 )
         );
@@ -70,19 +71,38 @@ public record ELChestLoot(HolderLookup.Provider registries) implements LootTable
         output.accept(Chests.BLAZING_CORE, spellstonePool(EnigmaticItems.BLAZING_CORE, 0.046F, 0.018F));
         output.accept(Chests.OCEAN_STONE, spellstonePool(EnigmaticItems.OCEAN_STONE, 0.087F, 0.021F));
         output.accept(Chests.ANGEL_BLESSING, spellstonePool(EnigmaticItems.ANGEL_BLESSING, 0.105F, 0.025F));
-        output.accept(Chests.EYE_OF_NEBULA, spellstonePool(EnigmaticItems.EYE_OF_NEBULA, 0.053F, 0.027F));
+        output.accept(Chests.EYE_OF_NEBULA, spellstonePool(EnigmaticItems.EYE_OF_NEBULA, 0.043F, 0.027F));
         output.accept(Chests.VOID_PEARL, spellstonePool(EnigmaticItems.VOID_PEARL, 0.018F, 0.01F));
         output.accept(Chests.FORGOTTEN_ICE, spellstonePool(EnigmaticItems.FORGOTTEN_ICE, 0.048F, 0.024F));
         output.accept(Chests.REVIVAL_LEAF, spellstonePool(EnigmaticItems.REVIVAL_LEAF, 0.048F, 0.024F));
         output.accept(Chests.LOST_ENGINE, spellstonePool(EnigmaticItems.LOST_ENGINE, 0.05F, 0.014F));
+
+        output.accept(Chests.SPELLSTONE_HUT_TREASURE, LootTable.lootTable()
+                .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(Items.BOOK).apply(SetItemCountFunction.setCount(UniformGenerator.between(6.0F, 24.0F))))
+                ).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).setBonusRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(Items.REDSTONE).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 10.0F))))
+                        .add(LootItem.lootTableItem(Items.LAPIS_LAZULI).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 10.0F))))
+                        .add(LootItem.lootTableItem(Items.GLOWSTONE_DUST).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 10.0F))))
+                        .add(LootItem.lootTableItem(Items.PRISMARINE_CRYSTALS).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 10.0F))))
+                ).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(EnigmaticItems.SPELLSTONE_DEBRIS).setWeight(40).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F))))
+                        .add(LootItem.lootTableItem(EnigmaticItems.EARTH_HEART).setWeight(20).when(LootItemRandomChanceCondition.randomChance(0.25F)))
+                        .add(LootItem.lootTableItem(EnigmaticItems.EARTH_HEART_FRAGMENT).setWeight(40).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F))))
+                ).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(EnigmaticItems.SPELLSTONE_DEBRIS).setWeight(80).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F))).when(LootItemRandomChanceCondition.randomChance(0.75F)))
+                        .add(LootItem.lootTableItem(EnigmaticItems.SPELLCORE).setWeight(20).when(LootItemRandomChanceCondition.randomChance(0.5F)))
+                )
+        );
     }
 
     private LootTable.Builder spellstonePool(ItemLike spellstone, float baseChance, float bonusChance) {
-        return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                .add(LootItem.lootTableItem(spellstone).setWeight(90).when(SpellstoneLootCondition.chance(baseChance, bonusChance)))
-                .add(LootItem.lootTableItem(EnigmaticItems.SPELLCORE).setWeight(10).when(SpellstoneLootCondition.chance(baseChance / 4, bonusChance / 2)))
-        ).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                .add(LootItem.lootTableItem(EnigmaticItems.SPELLSTONE_DEBRIS).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F))).when(LootItemRandomChanceCondition.randomChance(baseChance + bonusChance)))
-        );
+        return LootTable.lootTable()
+                .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(spellstone).setWeight(93).when(SpellstoneLootCondition.chance(baseChance, bonusChance)))
+                        .add(LootItem.lootTableItem(EnigmaticItems.SPELLCORE).setWeight(7).when(SpellstoneLootCondition.chance(baseChance / 4, bonusChance / 2)))
+                ).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(EnigmaticItems.SPELLSTONE_DEBRIS).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))).when(LootItemRandomChanceCondition.randomChance((baseChance + bonusChance) / 2)))
+                );
     }
 }

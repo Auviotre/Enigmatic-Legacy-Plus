@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "enigmaticlegacyplus:item/etherium_frame",
+    "layer1": "enigmaticlegacyplus:item/etherium_core"
+  }
+}

@@ -36,20 +36,33 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
     final ItemStack result;
     final int debrisCount;
     final NonNullList<Ingredient> ingredients;
+    final boolean allDifferent;
 
-    public SpellstoneTableRecipe(ItemStack result, int count, NonNullList<Ingredient> ingredients) {
+    public SpellstoneTableRecipe(ItemStack result, int count, NonNullList<Ingredient> ingredients, boolean flag) {
         this.result = result;
         this.debrisCount = count;
         this.ingredients = ingredients;
+        this.allDifferent = flag;
     }
 
     public boolean matches(@NotNull Input input, Level level) {
         if (!input.core().is(EnigmaticItems.SPELLCORE)) return false;
         if (input.debris().getCount() < this.debrisCount) return false;
         int size = input.ingredients().size();
-        ArrayList<ItemStack> items = new ArrayList<>(size);
+        List<ItemStack> items = new ArrayList<>(size);
         for (ItemStack ingredient : input.ingredients())
             if (!ingredient.isEmpty()) items.add(ingredient);
+        if (allDifferent) {
+            Map<Item, Integer> map = new HashMap<>();
+            for (ItemStack stack : items) {
+                if (map.containsKey(stack.getItem())) {
+                    map.put(stack.getItem(), map.get(stack.getItem()) + 1);
+                } else map.put(stack.getItem(), 1);
+            }
+            for (Integer value : map.values()) {
+                if (value > 1) return false;
+            }
+        }
         return RecipeMatcher.findMatches(items, this.ingredients) != null;
     }
 
@@ -73,6 +86,14 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
 
     public boolean canCraftInDimensions(int i, int i1) {
         return true;
+    }
+
+    public int getCount() {
+        return this.debrisCount;
+    }
+
+    public boolean isAllDifferent() {
+        return this.allDifferent;
     }
 
     public NonNullList<Ingredient> getIngredients() {
@@ -119,7 +140,8 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
                     else if (aingredient.length > 7)
                         return DataResult.error(() -> "Too many ingredients for shapeless recipe. The maximum is: %s".formatted(7));
                     else return DataResult.success(NonNullList.of(Ingredient.EMPTY, aingredient));
-                }, DataResult::success).forGetter(recipe -> recipe.ingredients)
+                }, DataResult::success).forGetter(recipe -> recipe.ingredients),
+                Codec.BOOL.optionalFieldOf("all_different", false).forGetter(recipe -> recipe.allDifferent)
         ).apply(instance, SpellstoneTableRecipe::new));
 
         private static SpellstoneTableRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
@@ -128,7 +150,8 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
             NonNullList<Ingredient> list = NonNullList.withSize(size, Ingredient.EMPTY);
             list.replaceAll((ingredient) -> Ingredient.CONTENTS_STREAM_CODEC.decode(buffer));
             ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
-            return new SpellstoneTableRecipe(result, count, list);
+            boolean allDifferent = buffer.readBoolean();
+            return new SpellstoneTableRecipe(result, count, list, allDifferent);
         }
 
         private static void toNetwork(RegistryFriendlyByteBuf buffer, SpellstoneTableRecipe recipe) {
@@ -137,6 +160,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
             for (Ingredient ingredient : recipe.ingredients)
                 Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, ingredient);
             ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
+            buffer.writeBoolean(recipe.allDifferent);
         }
 
         public MapCodec<SpellstoneTableRecipe> codec() {
@@ -153,6 +177,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         private final int debrisCount;
         private final ItemStack result;
         private final NonNullList<Ingredient> ingredients;
+        private boolean allDifferent = false;
         private Builder(ItemLike resultItem, int debrisCount) {
             this.result = resultItem.asItem().getDefaultInstance();
             this.debrisCount = debrisCount;
@@ -162,6 +187,10 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
 
         public static Builder spell(ItemLike result, int debrisCount) {
             return new Builder(result, debrisCount);
+        }
+        public Builder allDifferent() {
+            this.allDifferent = true;
+            return this;
         }
 
         public Builder requires(TagKey<Item> tag) {
@@ -207,7 +236,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
             Advancement.Builder builder = recipeOutput.advancement().addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(AdvancementRequirements.Strategy.OR);
             Objects.requireNonNull(builder);
             this.criteria.forEach(builder::addCriterion);
-            SpellstoneTableRecipe recipe = new SpellstoneTableRecipe(this.result, this.debrisCount, this.ingredients);
+            SpellstoneTableRecipe recipe = new SpellstoneTableRecipe(this.result, this.debrisCount, this.ingredients, this.allDifferent);
             recipeOutput.accept(id, recipe, builder.build(id.withPrefix("recipes/spellstone_table/")));
         }
     }

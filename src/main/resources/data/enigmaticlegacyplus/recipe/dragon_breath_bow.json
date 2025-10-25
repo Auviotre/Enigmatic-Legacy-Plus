@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+        "D": {
+            "item": "minecraft:dragon_breath"
+        },
+        "E": {
+            "item": "enigmaticlegacyplus:ender_rod"
+        },
+        "N": {
+            "item": "minecraft:netherite_ingot"
+        },
+        "X": {
+            "item": "minecraft:dragon_head"
+        }
+    },
+    "pattern": [
+        "DED",
+        "NXD",
+        "DED"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:dragon_breath_bow"
+    }
+}

@@ -47,7 +47,7 @@ public class EnchanterPearl extends CursedCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-        if (EnigmaticHandler.isTheCursedOne(context.entity()))
+        if (EnigmaticHandler.canUse(context.entity(), stack))
             CuriosApi.addSlotModifier(attributes, "charm", getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
         return attributes;
     }

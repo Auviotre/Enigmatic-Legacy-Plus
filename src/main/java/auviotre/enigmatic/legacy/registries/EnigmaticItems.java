@@ -60,6 +60,7 @@ public class EnigmaticItems {
     public static final DeferredItem<LostEngine> LOST_ENGINE = registerWithTab("lost_engine", LostEngine::new);
     // Re-roller
     public static final DeferredItem<TheCube> THE_CUBE = registerWithTab("the_cube", TheCube::new);
+    public static final DeferredItem<EtheriumCore> ETHERIUM_CORE = registerWithTab("etherium_core", EtheriumCore::new);
     public static final DeferredItem<IronRing> IRON_RING = registerWithTab("iron_ring", IronRing::new);
     public static final DeferredItem<GoldenRing> GOLDEN_RING = registerWithTab("golden_ring", GoldenRing::new);
     public static final DeferredItem<MinerRing> MINER_RING = registerWithTab("miner_ring", MinerRing::new);
@@ -87,7 +88,9 @@ public class EnigmaticItems {
     public static final DeferredItem<ExecutionAxe> EXECUTION_AXE = registerWithTab("execution_axe", ExecutionAxe::new);
     public static final DeferredItem<ForgerGem> FORGER_GEM = registerWithTab("forger_gem", ForgerGem::new);
     public static final DeferredItem<UnholyGrail> UNHOLY_GRAIL = registerWithTab("unholy_grail", UnholyGrail::new);
+    public static final DeferredItem<VoidStone> VOID_STONE = registerWithTab("void_stone", VoidStone::new);
     public static final DeferredItem<Item> INFERNAL_CINDER = registerWithTab("infernal_cinder", () -> new Item(BaseItem.defaultProperties()));
+    public static final DeferredItem<Item> ICHOR_DROPLET = registerWithTab("ichor_droplet", () -> new Item(BaseItem.defaultProperties()));
     public static final DeferredItem<ForbiddenFruit> FORBIDDEN_FRUIT = registerWithTab("forbidden_fruit", ForbiddenFruit::new);
     public static final DeferredItem<RedemptionPotion> REDEMPTION_POTION = registerWithTab("redemption_potion", RedemptionPotion::new);
     public static final DeferredItem<Item> LORE_INSCRIBER = registerWithTab("lore_inscriber", LoreInscriber::new);
@@ -107,11 +110,12 @@ public class EnigmaticItems {
     public static final DeferredItem<EtheriumArmor> ETHERIUM_LEGGINGS = registerWithTab("etherium_leggings", () -> new EtheriumArmor(ArmorItem.Type.LEGGINGS));
     public static final DeferredItem<EtheriumArmor> ETHERIUM_BOOTS = registerWithTab("etherium_boots", () -> new EtheriumArmor(ArmorItem.Type.BOOTS));
     public static final DeferredItem<MajesticElytra> MAJESTIC_ELYTRA = registerWithTab("majestic_elytra", MajesticElytra::new);
+    public static final DeferredItem<DragonBreathBow> DRAGON_BREATH_BOW = registerWithTab("dragon_breath_bow", DragonBreathBow::new);
     public static final DeferredItem<IchorBottle> ICHOR_BOTTLE = registerWithTab("ichor_bottle", IchorBottle::new);
     public static final DeferredItem<CursedRing> CURSED_RING = registerWithTab("cursed_ring", CursedRing::new);
     public static final DeferredItem<TwistedHeart> TWISTED_HEART = registerWithTab("twisted_heart", TwistedHeart::new);
     public static final DeferredItem<AstralFruit> ASTRAL_FRUIT = registerWithTab("astral_fruit", () -> new AstralFruit(false));
-    public static final DeferredItem<AstralFruit> ENCHANTED_ASTRAL_FRUIT = ITEMS.register("enchanted_astral_fruit", () -> new AstralFruit(true));
+    public static final DeferredItem<AstralFruit> ENCHANTED_ASTRAL_FRUIT = registerWithTab("enchanted_astral_fruit", () -> new AstralFruit(true));
     public static final DeferredItem<TwistedMirror> TWISTED_MIRROR = registerWithTab("twisted_mirror", TwistedMirror::new);
     public static final DeferredItem<InfernalShield> INFERNAL_SHIELD = registerWithTab("infernal_shield", InfernalShield::new);
     public static final DeferredItem<BerserkEmblem> BERSERK_EMBLEM = registerWithTab("berserk_emblem", BerserkEmblem::new);
@@ -125,6 +129,7 @@ public class EnigmaticItems {
     public static final DeferredItem<EnchanterPearl> ENCHANTER_PEARL = registerWithTab("enchanter_pearl", EnchanterPearl::new);
     public static final DeferredItem<EnderSlayer> ENDER_SLAYER = registerWithTab("ender_slayer", EnderSlayer::new);
     public static final DeferredItem<Item> DARKEST_SCROLL = registerWithTab("darkest_scroll", () -> new Item(BaseItem.defaultProperties(16).rarity(Rarity.UNCOMMON)));
+    public static final DeferredItem<NightScroll> NIGHT_SCROLL = registerWithTab("night_scroll", NightScroll::new);
     public static final DeferredItem<CursedScroll> CURSED_SCROLL = registerWithTab("cursed_scroll", CursedScroll::new);
     public static final DeferredItem<AvariceScroll> AVARICE_SCROLL = registerWithTab("avarice_scroll", AvariceScroll::new);
     public static final DeferredItem<CursedXpScroll> CURSED_XP_SCROLL = registerWithTab("cursed_xp_scroll", CursedXpScroll::new);
@@ -135,6 +140,7 @@ public class EnigmaticItems {
     public static final DeferredItem<ChaosElytra> CHAOS_ELYTRA = registerWithTab("chaos_elytra", ChaosElytra::new);
     public static final DeferredItem<SoulCrystal> SOUL_CRYSTAL = registerWithTab("soul_crystal", SoulCrystal::new);
     public static final DeferredItem<StorageCrystal> STORAGE_CRYSTAL = ITEMS.register("storage_crystal", StorageCrystal::new);
+    public static final DeferredItem<CosmicScroll> COSMIC_SCROLL = ITEMS.register("cosmic_scroll", CosmicScroll::new);
     public static final DeferredItem<TheJudgement> THE_JUDGEMENT = ITEMS.register("the_judgement", TheJudgement::new);
     public static final DeferredItem<LootGenerator> LOOT_GENERATOR = ITEMS.register("loot_generator", LootGenerator::new);
 

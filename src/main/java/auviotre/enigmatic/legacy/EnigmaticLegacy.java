@@ -6,6 +6,7 @@ import auviotre.enigmatic.legacy.contents.item.amulets.EnigmaticAmulet;
 import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.item.rings.DesolationRing;
+import auviotre.enigmatic.legacy.contents.item.scrolls.NightScroll;
 import auviotre.enigmatic.legacy.contents.item.spellstones.TheCube;
 import auviotre.enigmatic.legacy.contents.item.tools.ChaosElytra;
 import auviotre.enigmatic.legacy.contents.item.tools.SoulCompass;
@@ -69,6 +70,8 @@ public class EnigmaticLegacy {
         EnigmaticBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         EnigmaticLootModifiers.LOOT_MODIFIERS.register(modEventBus);
         EnigmaticLootConditions.LOOT_CONDITIONS.register(modEventBus);
+        EnigmaticStructureTypes.STRUCTURE_TYPES.register(modEventBus);
+        EnigmaticStructureTypes.STRUCTURE_PIECE_TYPES.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::onCommonSetup);
@@ -128,6 +131,7 @@ public class EnigmaticLegacy {
         if (event.getTabKey() == CreativeModeTabs.OP_BLOCKS) {
             event.accept(EnigmaticItems.THE_JUDGEMENT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.accept(EnigmaticItems.LOOT_GENERATOR.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.accept(EnigmaticItems.COSMIC_SCROLL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         } else if (event.getTab() == EnigmaticTabs.MAIN_TAB.get()) {
             event.insertAfter(EnigmaticItems.UNWITNESSED_AMULET.toStack(), setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.RED), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.RED), EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.AQUA), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
@@ -146,10 +150,11 @@ public class EnigmaticLegacy {
     }
 
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
+    public void onServerStarting(@NotNull ServerStartingEvent event) {
         SoulCrystal.ATTRIBUTE_DISPATCHER.clear();
         SoulArchive.initialize(event.getServer());
         CursedRing.POSSESSIONS.clear();
+        NightScroll.Events.BOXES.clear();
         DesolationRing.Events.BOXES.clear();
         SoulCompass.Events.LAST_SOUL_COMPASS_UPDATE.clear();
         TheCube.clearLocationCache();

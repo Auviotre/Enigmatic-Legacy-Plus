@@ -1,14 +1,13 @@
 package auviotre.enigmatic.legacy.data;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.compat.CompatHandler;
-import auviotre.enigmatic.legacy.compat.farmersdelight.FDCompat;
 import auviotre.enigmatic.legacy.contents.crafting.CursedShapedRecipe;
 import auviotre.enigmatic.legacy.contents.crafting.ShapelessNoRemainRecipe;
 import auviotre.enigmatic.legacy.contents.crafting.SpellstoneTableRecipe;
 import auviotre.enigmatic.legacy.data.helpers.RecipeProviderWithHelper;
 import auviotre.enigmatic.legacy.registries.EnigmaticBlocks;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -32,6 +31,12 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .define('X', EnigmaticItems.SPELLCORE)
                 .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
                 .save(output);
+//        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, EnigmaticBlocks.SPELLSTONE_TABLE)
+//                .pattern("SAA").pattern("AXA").pattern("AAS")
+//                .define('S', EnigmaticItems.SPELLSTONE_DEBRIS).define('A', Items.AMETHYST_SHARD)
+//                .define('X', EnigmaticItems.SPELLCORE)
+//                .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
+//                .save(output);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, EnigmaticItems.THE_ACKNOWLEDGMENT)
                 .requires(Items.BOOK).requires(Items.LANTERN)
@@ -296,6 +301,12 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .unlockedBy("has_item", has(EnigmaticItems.ETHERIUM_INGOT))
                 .save(output);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, EnigmaticItems.DRAGON_BREATH_BOW)
+                .pattern("DED").pattern("NXD").pattern("DED")
+                .define('D', Items.DRAGON_BREATH).define('E', EnigmaticItems.ENDER_ROD)
+                .define('X', Items.DRAGON_HEAD).define('N', Items.NETHERITE_INGOT)
+                .unlockedBy("has_item", has(EnigmaticItems.ENDER_ROD))
+                .save(output);
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, EnigmaticItems.MAJESTIC_ELYTRA)
                 .pattern("BAB").pattern("EXE").pattern("DVD")
                 .define('A', EnigmaticItems.ANGEL_BLESSING).define('D', EnigmaticItems.ASTRAL_DUST)
@@ -321,7 +332,7 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
         CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.CURSED_STONE)
                 .pattern("LTL").pattern("ESE").pattern("PXP")
                 .define('T', EnigmaticItems.TWISTED_HEART).define('L', Items.LAVA_BUCKET)
-                .define('S', Blocks.STONE).define('P', Items.PRISMARINE_CRYSTALS)
+                .define('S', Blocks.STONE).define('P', EnigmaticItems.INFERNAL_CINDER)
                 .define('E', EnigmaticItems.EVIL_ESSENCE).define('X', Items.NETHER_STAR)
                 .unlockedBy("has_item", has(EnigmaticItems.EVIL_ESSENCE))
                 .save(output);
@@ -368,6 +379,13 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .pattern("BNB").pattern("WXW").pattern("BTB")
                 .define('B', Items.BLACK_DYE).define('W', Items.WITHER_ROSE).define('N', Items.NETHERITE_SCRAP)
                 .define('X', EnigmaticItems.BLANK_SCROLL).define('T', EnigmaticItems.DARKEST_SCROLL)
+                .unlockedBy("has_item", has(EnigmaticItems.DARKEST_SCROLL))
+                .save(output);
+        CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.NIGHT_SCROLL)
+                .pattern("MXM").pattern("BTY").pattern("MEM")
+                .define('M', Items.PHANTOM_MEMBRANE).define('B', Items.WITHER_ROSE)
+                .define('T', EnigmaticItems.DARKEST_SCROLL).define('Y', Items.FEATHER)
+                .define('E', Items.ENDER_EYE).define('X', EnigmaticItems.TWISTED_HEART)
                 .unlockedBy("has_item", has(EnigmaticItems.DARKEST_SCROLL))
                 .save(output);
         CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.CURSED_SCROLL)
@@ -448,16 +466,85 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .unlockedBy("has_item", has(EnigmaticItems.ABYSSAL_HEART))
                 .save(output);
 
-        SpellstoneTableRecipe.Builder.spell(EnigmaticItems.GOLEM_HEART, 4)
-                .requires(Blocks.REDSTONE_BLOCK).requires(Items.IRON_INGOT)
+        SpellstoneTableRecipe.Builder.spell(EnigmaticItems.GOLEM_HEART, 6)
+                .requires(Blocks.OBSIDIAN)
+                .requires(Items.IRON_INGOT)
+                .requires(Blocks.REDSTONE_BLOCK)
+                .requires(EnigmaticItems.IRON_RING)
+                .requires(Blocks.REDSTONE_BLOCK)
+                .requires(Items.IRON_INGOT)
+                .requires(Blocks.OBSIDIAN)
                 .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
                 .save(output);
-
-        SpellstoneTableRecipe.Builder.spell(EnigmaticItems.BLAZING_CORE, 4)
-                .requires(Blocks.MAGMA_BLOCK).requires(Items.BLAZE_POWDER)
+        SpellstoneTableRecipe.Builder.spell(EnigmaticItems.BLAZING_CORE, 6)
+                .requires(Blocks.MAGMA_BLOCK)
+                .requires(Items.BLAZE_POWDER)
+                .requires(Blocks.BASALT)
+                .requires(Items.MAGMA_CREAM)
+                .requires(Blocks.BASALT)
+                .requires(Items.BLAZE_POWDER)
+                .requires(Blocks.MAGMA_BLOCK)
                 .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
                 .save(output);
-
-        if (CompatHandler.isLoaded("farmersdelight")) FDCompat.buildRecipes(output);
+        SpellstoneTableRecipe.Builder.spell(EnigmaticItems.OCEAN_STONE, 6)
+                .requires(Blocks.DARK_PRISMARINE)
+                .requires(Items.PRISMARINE_CRYSTALS)
+                .requires(Blocks.LAPIS_BLOCK)
+                .requires(Items.HEART_OF_THE_SEA)
+                .requires(Blocks.LAPIS_BLOCK)
+                .requires(Items.PRISMARINE_CRYSTALS)
+                .requires(Blocks.DARK_PRISMARINE)
+                .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
+                .save(output);
+        SpellstoneTableRecipe.Builder.spell(EnigmaticItems.ANGEL_BLESSING, 8)
+                .requires(Items.DRAGON_BREATH)
+                .requires(Items.PHANTOM_MEMBRANE)
+                .requires(Blocks.GLOWSTONE)
+                .requires(EnigmaticItems.QUARTZ_RING)
+                .requires(Blocks.GLOWSTONE)
+                .requires(Items.PHANTOM_MEMBRANE)
+                .requires(Items.DRAGON_BREATH)
+                .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
+                .save(output);
+        SpellstoneTableRecipe.Builder.spell(EnigmaticItems.EYE_OF_NEBULA, 7)
+                .requires(EnigmaticItems.ENDER_ROD)
+                .requires(Items.CHORUS_FRUIT)
+                .requires(Blocks.END_STONE_BRICKS)
+                .requires(Items.ENDER_EYE)
+                .requires(Blocks.END_STONE_BRICKS)
+                .requires(Items.CHORUS_FRUIT)
+                .requires(EnigmaticItems.ENDER_ROD)
+                .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
+                .save(output);
+        SpellstoneTableRecipe.Builder.spell(EnigmaticItems.VOID_PEARL, 10)
+                .requires(Blocks.GOLD_BLOCK)
+                .requires(EnigmaticItems.ETHERIUM_NUGGET)
+                .requires(Items.ENDER_PEARL)
+                .requires(EnigmaticItems.VOID_STONE)
+                .requires(Items.ENDER_PEARL)
+                .requires(EnigmaticItems.ETHERIUM_NUGGET)
+                .requires(Blocks.GOLD_BLOCK)
+                .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
+                .save(output);
+        SpellstoneTableRecipe.Builder.spell(EnigmaticItems.THE_CUBE, 24).allDifferent()
+                .requires(EnigmaticTags.Items.THE_CUBE_MATERIAL)
+                .requires(EnigmaticTags.Items.THE_CUBE_MATERIAL)
+                .requires(EnigmaticTags.Items.THE_CUBE_MATERIAL)
+                .requires(EnigmaticItems.COSMIC_HEART)
+                .requires(EnigmaticTags.Items.THE_CUBE_MATERIAL)
+                .requires(EnigmaticTags.Items.THE_CUBE_MATERIAL)
+                .requires(EnigmaticTags.Items.THE_CUBE_MATERIAL)
+                .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
+                .save(output);
+        SpellstoneTableRecipe.Builder.spell(EnigmaticItems.ETHERIUM_CORE, 9)
+                .requires(EnigmaticItems.ENDER_ROD)
+                .requires(EnigmaticBlocks.ETHERIUM_BLOCK)
+                .requires(EnigmaticItems.ENDER_ROD)
+                .requires(EnigmaticItems.EARTH_HEART)
+                .requires(EnigmaticItems.ENDER_ROD)
+                .requires(EnigmaticBlocks.ETHERIUM_BLOCK)
+                .requires(EnigmaticItems.ENDER_ROD)
+                .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
+                .save(output);
     }
 }

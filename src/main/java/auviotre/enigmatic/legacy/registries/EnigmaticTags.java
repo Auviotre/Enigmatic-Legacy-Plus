@@ -9,6 +9,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import top.theillusivec4.curios.api.CuriosApi;
 
@@ -16,6 +17,7 @@ public interface EnigmaticTags {
     interface Items {
         TagKey<Item> SCROLLS = register(CuriosApi.MODID, "scroll");
         TagKey<Item> SPELLSTONES = register(CuriosApi.MODID, "spellstone");
+        TagKey<Item> THE_CUBE_MATERIAL = register(CuriosApi.MODID, "materials_of_the_cube");
         TagKey<Item> AMULETS = register(CuriosApi.MODID, "amulets");
         TagKey<Item> ARMOR_CHECK_EXCLUSION = register("armor_check_exclusions");
         TagKey<Item> BYPASS_FOURTH_CURSE = register("bypass_fourth_curse");
@@ -74,9 +76,18 @@ public interface EnigmaticTags {
         TagKey<DamageType> LOST_ENGINE_IMMUNE_TO = registerSpellstone("lost_engine/immune_to");
         TagKey<DamageType> FORGOTTEN_ICE_RESISTANT_TO = registerSpellstone("forgotten_ice/resistant_to");
         TagKey<DamageType> THE_CUBE_IMMUNE_TO = registerSpellstone("the_cube/immune_to");
+        TagKey<DamageType> ETHERIUM_CORE_IMMUNE_TO = registerSpellstone("etherium_core/immune_to");
 
         private static TagKey<DamageType> registerSpellstone(String name) {
             return TagKey.create(Registries.DAMAGE_TYPE, EnigmaticLegacy.location("spellstone/" + name));
+        }
+    }
+
+    interface Biomes {
+        TagKey<Biome> HAS_SPELLSTONE_HUT = register("has_structure/spellstone_hut");
+
+        private static TagKey<Biome> register(String name) {
+            return TagKey.create(Registries.BIOME, EnigmaticLegacy.location(name));
         }
     }
 }

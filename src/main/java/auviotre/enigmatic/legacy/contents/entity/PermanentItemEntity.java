@@ -269,7 +269,7 @@ public class PermanentItemEntity extends Entity {
 
     public Component getName() {
         Component itextcomponent = this.getCustomName();
-        return itextcomponent != null ? itextcomponent : Component.translatable(this.getItem().getDescriptionId());
+        return itextcomponent != null ? itextcomponent : this.getItem().getItem().getDescription();
     }
 
     public boolean isAttackable() {

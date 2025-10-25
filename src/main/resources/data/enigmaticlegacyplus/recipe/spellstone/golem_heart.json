@@ -1,12 +1,27 @@
 {
     "type": "enigmaticlegacyplus:spellstone_table",
-    "debris_count": 4,
+    "debris_count": 6,
     "ingredients": [
+        {
+            "item": "minecraft:obsidian"
+        },
+        {
+            "item": "minecraft:iron_ingot"
+        },
+        {
+            "item": "minecraft:redstone_block"
+        },
+        {
+            "item": "enigmaticlegacyplus:iron_ring"
+        },
         {
             "item": "minecraft:redstone_block"
         },
         {
             "item": "minecraft:iron_ingot"
+        },
+        {
+            "item": "minecraft:obsidian"
         }
     ],
     "result": {

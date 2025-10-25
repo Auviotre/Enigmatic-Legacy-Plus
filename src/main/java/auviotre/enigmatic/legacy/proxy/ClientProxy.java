@@ -29,6 +29,8 @@ public class ClientProxy extends CommonProxy {
             ItemProperties.register(EnigmaticItems.DESOLATION_RING.get(), eldritchLocation, eldritchFunc);
             ItemProperties.register(EnigmaticItems.CHAOS_ELYTRA.get(), eldritchLocation, eldritchFunc);
             ItemProperties.register(EnigmaticItems.MINER_RING.get(), ResourceLocation.withDefaultNamespace("on"), (stack, level, entity, i) -> MinerRing.getPoint(stack) > 0 ? 1.0F : 0.0F);
+            ItemProperties.register(EnigmaticItems.DRAGON_BREATH_BOW.get(), ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem().equals(stack) ? 1.0F : 0.0F);
+            ItemProperties.register(EnigmaticItems.DRAGON_BREATH_BOW.get(), ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, i) -> (entity == null || entity.getUseItem() != stack) ? 0.0F : (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F);
             ItemProperties.register(EnigmaticItems.INFERNAL_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
             ItemProperties.register(EnigmaticItems.ENIGMATIC_AMULET.get(), EnigmaticLegacy.location("amulet_color"), (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.AMULET_COLOR, 0.0F));
             EnigmaticItems.SOUL_COMPASS.get().registerVariants();
@@ -49,8 +51,7 @@ public class ClientProxy extends CommonProxy {
             }
         }
 
-        PermanentDeathScreen screen = new PermanentDeathScreen(new SelectWorldScreen(new TitleScreen()), Component.translatable("gui.enigmaticlegacy.permanent_death_screen_title"),
-                Component.translatable("message.enigmaticlegacy.permanent_death_screen"));
+        PermanentDeathScreen screen = new PermanentDeathScreen(new SelectWorldScreen(new TitleScreen()), Component.translatable("gui.enigmaticlegacy.permanent_death_screen_title"), Component.translatable("message.enigmaticlegacy.permanent_death_screen"));
         PermanentDeathScreen.active = screen;
         Minecraft.getInstance().setScreen(screen);
     }

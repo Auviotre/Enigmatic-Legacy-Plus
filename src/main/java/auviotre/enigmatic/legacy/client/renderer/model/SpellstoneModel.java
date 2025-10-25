@@ -26,7 +26,7 @@ public class SpellstoneModel extends Model {
 		PartDefinition partdefinition = meshdefinition.getRoot();
 		partdefinition.addOrReplaceChild("main", CubeListBuilder.create()
 				.texOffs(0, 0).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(-1.0F))
-				.texOffs(32, 32).addBox(4.0F, 4.0F, 4.0F, -8.0F, -8.0F, -8.0F, new CubeDeformation(0.5F))
+				.texOffs(32, 32).addBox(4.0F, 4.0F, 4.0F, -8.0F, -8.0F, -8.0F, new CubeDeformation(0.54F))
 				, PartPose.ZERO);
 
 		return LayerDefinition.create(meshdefinition, 32, 32);

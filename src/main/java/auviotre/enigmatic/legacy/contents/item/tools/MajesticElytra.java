@@ -27,7 +27,7 @@ import java.util.List;
 public class MajesticElytra extends BaseElytraItem {
 
     public MajesticElytra() {
-        super(defaultSingleProperties().fireResistant().rarity(Rarity.RARE).durability(3476).component(EnigmaticComponents.ETHERIUM_TOOL, 4));
+        super(defaultSingleProperties().fireResistant().rarity(Rarity.RARE).durability(3476).component(EnigmaticComponents.ETHERIUM_SHIELD, 4));
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
 

@@ -33,7 +33,7 @@ public class CurseTransposer extends EnchantmentTransposer {
     }
 
     protected boolean canDisenchant(Player player, ItemStack transposer, @NotNull ItemStack target) {
-        if (transposer.is(this) && !EnigmaticHandler.isTheCursedOne(player)) return false;
+        if (transposer.is(this) && !EnigmaticHandler.canUse(player, transposer)) return false;
         return super.canDisenchant(player, transposer, target);
     }
 

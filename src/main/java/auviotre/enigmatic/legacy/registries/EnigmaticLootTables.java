@@ -26,8 +26,14 @@ public interface EnigmaticLootTables {
         ResourceKey<LootTable> REVIVAL_LEAF = key("revival_leaf");
         ResourceKey<LootTable> LOST_ENGINE = key("lost_engine");
 
+        ResourceKey<LootTable> SPELLSTONE_HUT_TREASURE = create("spellstone_hut/treasure");
+        ResourceKey<LootTable> SPELLSTONE_HUT_SUPPLY = create("spellstone_hut/supply");
+
         private static ResourceKey<LootTable> key(String name) {
             return EnigmaticLootTables.key("chests/", name);
+        }
+        private static ResourceKey<LootTable> create(String name) {
+            return ResourceKey.create(Registries.LOOT_TABLE, EnigmaticLegacy.location("chests/" + name));
         }
     }
 

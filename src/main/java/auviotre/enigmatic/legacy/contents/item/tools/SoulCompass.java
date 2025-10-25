@@ -89,7 +89,7 @@ public class SoulCompass extends BaseCursedItem {
                     if (isLocalPlayer) bodyRotation = living.getYRot();
                     else return this.randomAngle(gameTime, seed);
                     ItemStack item = EnigmaticHandler.getItem(living, EnigmaticItems.SOUL_COMPASS);
-                    if (!EnigmaticHandler.isTheCursedOne(living) || !ItemStack.isSameItemSameComponents(item, stack) || level.getBiome(living.blockPosition()).is(Biomes.SOUL_SAND_VALLEY))
+                    if (!EnigmaticHandler.canUse(living, stack) || !ItemStack.isSameItemSameComponents(item, stack) || level.getBiome(living.blockPosition()).is(Biomes.SOUL_SAND_VALLEY))
                         return this.randomAngle(gameTime, seed);
 
                     bodyRotation = Mth.positiveModulo(bodyRotation / 360.0D, 1.0D);

@@ -2,7 +2,7 @@ package auviotre.enigmatic.legacy.compat.jei.category;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.ITaintable;
-import auviotre.enigmatic.legacy.compat.jei.JEIHandler;
+import auviotre.enigmatic.legacy.compat.jei.EnigmaticRecipeTypes;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -35,7 +35,7 @@ public class TaintingCategory implements IRecipeCategory<TaintingCategory.Recipe
     }
 
     public RecipeType<Recipe> getRecipeType() {
-        return JEIHandler.TAINTING;
+        return EnigmaticRecipeTypes.TAINTING;
     }
 
     public Component getTitle() {
@@ -55,7 +55,7 @@ public class TaintingCategory implements IRecipeCategory<TaintingCategory.Recipe
     }
 
     public void draw(Recipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.blitSprite(SPRITE, 0, 0, 108, 42);
+        guiGraphics.blitSprite(SPRITE, 0, 0, getWidth(), getHeight());
     }
 
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull TaintingCategory.Recipe recipe, IFocusGroup focuses) {

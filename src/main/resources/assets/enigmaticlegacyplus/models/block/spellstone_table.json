@@ -1,9 +1,9 @@
 {   "parent": "block/block",
     "textures": {
-        "particle": "block/enchanting_table_bottom",
-        "bottom": "block/enchanting_table_bottom",
-        "top": "block/enchanting_table_top",
-        "side": "block/enchanting_table_side"
+        "particle": "enigmaticlegacyplus:block/spellstone_table_bottom",
+        "bottom": "enigmaticlegacyplus:block/spellstone_table_bottom",
+        "top": "enigmaticlegacyplus:block/spellstone_table_top",
+        "side": "enigmaticlegacyplus:block/spellstone_table_side"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],
