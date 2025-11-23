@@ -76,6 +76,10 @@ public class TheCube extends SpellstoneItem {
         return EnigmaticHandler.isTheCursedOne(entity) ? 150.0F : 100.0F;
     }
 
+    public static void clearLocationCache() {
+        LOCATION_CACHE.clear();
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -247,7 +251,8 @@ public class TheCube extends SpellstoneItem {
             level.getChunkAt(pos);
 
             for (int i = 0; i < 4; i++) {
-                if (i > 0) pos = new BlockPos((pos.getX() >> 4) * 16 + random.nextInt(16), pos.getY(), (pos.getZ() >> 4) * 16 + random.nextInt(16));
+                if (i > 0)
+                    pos = new BlockPos((pos.getX() >> 4) * 16 + random.nextInt(16), pos.getY(), (pos.getZ() >> 4) * 16 + random.nextInt(16));
 
                 Optional<Vec3> location = this.findValidPosition(level, pos.getX(), pos.getY(), pos.getZ());
                 if (location.isPresent()) return Optional.of(new GlobalPos(key, BlockPos.containing(location.get())));
@@ -272,10 +277,6 @@ public class TheCube extends SpellstoneItem {
         }
 
         return Optional.empty();
-    }
-
-    public static void clearLocationCache() {
-        LOCATION_CACHE.clear();
     }
 
     @Mod(value = EnigmaticLegacy.MODID)

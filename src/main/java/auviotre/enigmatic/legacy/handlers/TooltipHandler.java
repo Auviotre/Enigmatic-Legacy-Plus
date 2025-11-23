@@ -1,21 +1,25 @@
 package auviotre.enigmatic.legacy.handlers;
 
-import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
+import auviotre.enigmatic.legacy.contents.item.materials.AbyssalHeart;
+import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public interface TooltipHandler {
-    char[] UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-    char[] LOWERCASE_LETTERS = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+    char[] UPPERCASE_LETTERS = "ABCDEFGHJKLMNOPQRSTUVWXYZ".toCharArray();
+    char[] LOWERCASE_LETTERS = "abcdeghjmnopqrsuvwxyz".toCharArray();
     char[] NUMBERS = "0123456789".toCharArray();
-    char[] SPECIAL_SYMBOLS = "-+=(){}[]':;./,<>*&^%$#@!?~".toCharArray();
+    char[] NORMAL_LETTERS = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdeghjmnopqrsuvwxyz+/\\-=$%^_".toCharArray();
 
     static void line(List<Component> list) {
         list.add(Component.empty());
@@ -38,9 +42,14 @@ public interface TooltipHandler {
     }
 
     static void cursedOnly(List<Component> list, ItemStack stack) {
-        ChatFormatting color = EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
-        list.add(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly1").withStyle(color));
-        list.add(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly2").withStyle(color));
+        if (EnigmaticHandler.isBlessedItem(stack) && RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player)) {
+            list.add(Component.translatable("tooltip.enigmaticlegacy.blessOneAvailable1").withStyle(ChatFormatting.GOLD));
+            list.add(Component.translatable("tooltip.enigmaticlegacy.blessOneAvailable2").withStyle(ChatFormatting.GOLD));
+        } else {
+            ChatFormatting color = EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
+            list.add(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly1").withStyle(color));
+            list.add(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly2").withStyle(color));
+        }
         if (stack.isEnchanted()) list.add(Component.empty());
     }
 
@@ -48,7 +57,7 @@ public interface TooltipHandler {
         if (Screen.hasShiftDown()) {
             Player player = Minecraft.getInstance().player;
             ChatFormatting color = player != null && EnigmaticHandler.isTheWorthyOne(player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
-            Component percent = Component.literal(String.format("%.01f%%", 100 * CursedRing.abyssThreshold.get())).withStyle(ChatFormatting.GOLD);
+            Component percent = Component.literal(String.format("%.01f%%", 100 * AbyssalHeart.abyssThreshold.get())).withStyle(ChatFormatting.GOLD);
             list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly1"));
             list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly2", percent));
             list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly3", percent));
@@ -59,7 +68,8 @@ public interface TooltipHandler {
     }
 
 
-    public static String obscureString(String string, RandomSource random) {
+    @Contract("_, _ -> new")
+    static @NotNull String obscureString(String string, RandomSource random) {
         char[] oldArray = string.toCharArray();
         char[] newArray = new char[oldArray.length];
         boolean code = false;
@@ -76,13 +86,15 @@ public interface TooltipHandler {
                 continue;
             } else if (ch == ' ')
                 continue;
+            else if (ch == '-')
+                continue;
 
             char[] replacements;
 
             if (contains(UPPERCASE_LETTERS, ch)) replacements = UPPERCASE_LETTERS;
             else if (contains(LOWERCASE_LETTERS, ch)) replacements = LOWERCASE_LETTERS;
             else if (contains(NUMBERS, ch)) replacements = NUMBERS;
-            else replacements = SPECIAL_SYMBOLS;
+            else replacements = NORMAL_LETTERS;
 
             ch = replacements[random.nextInt(replacements.length)];
             newArray[i] = ch;
@@ -91,9 +103,14 @@ public interface TooltipHandler {
         return new String(newArray);
     }
 
-    static void obscureTooltip(List<Component> tooltip, RandomSource random) {
-        tooltip.replaceAll(component -> Component.literal(obscureString(component.getString(), random))
-                .withStyle(component.getStyle()));
+    static void obscure(List<Component> list, String location, RandomSource random) {
+        MutableComponent component = Component.translatable(location);
+        list.add(Component.literal(obscureString(component.getString(), random)).withStyle(component.getStyle()));
+    }
+
+    static void obscure(List<Component> list, String location, RandomSource random, ChatFormatting format, Object... value) {
+        MutableComponent component = Component.translatable(location, value).withStyle(format);
+        list.add(Component.literal(obscureString(component.getString(), random)).withStyle(component.getStyle()));
     }
 
     private static boolean contains(char[] array, char ch) {

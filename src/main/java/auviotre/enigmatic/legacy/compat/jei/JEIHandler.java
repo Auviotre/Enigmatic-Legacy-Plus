@@ -2,8 +2,6 @@ package auviotre.enigmatic.legacy.compat.jei;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.client.screen.SpellstoneTableScreen;
-import auviotre.enigmatic.legacy.compat.CompatHandler;
-import auviotre.enigmatic.legacy.compat.farmersdelight.FDCompat;
 import auviotre.enigmatic.legacy.compat.jei.category.SpellstoneCraftingCategory;
 import auviotre.enigmatic.legacy.compat.jei.category.TaintingCategory;
 import auviotre.enigmatic.legacy.compat.jei.extension.CursedRecipeExtension;
@@ -21,6 +19,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.vanilla.IJeiAnvilRecipe;
+import mezz.jei.api.recipe.vanilla.IJeiBrewingRecipe;
 import mezz.jei.api.recipe.vanilla.IVanillaRecipeFactory;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
@@ -40,6 +39,7 @@ import java.util.List;
 @JeiPlugin
 public class JEIHandler implements IModPlugin {
     private static final ResourceLocation ID = EnigmaticLegacy.location("jei_plugin");
+
     public static Level getLevel() {
         if (Minecraft.getInstance().level != null) return Minecraft.getInstance().level;
         else throw new NullPointerException("minecraft level must not be null.");
@@ -52,6 +52,7 @@ public class JEIHandler implements IModPlugin {
     public void registerItemSubtypes(@NotNull ISubtypeRegistration registration) {
         registration.registerSubtypeInterpreter(EnigmaticItems.EARTH_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
         registration.registerSubtypeInterpreter(EnigmaticItems.TWISTED_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
+        registration.registerSubtypeInterpreter(EnigmaticItems.PURE_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
         registration.registerSubtypeInterpreter(EnigmaticItems.ABYSSAL_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
 //        registration.registerSubtypeInterpreter(EnigmaticItems.ENIGMATIC_AMULET.get(), AmuletSubtypeInterpreter.INSTANCE);
     }
@@ -79,18 +80,20 @@ public class JEIHandler implements IModPlugin {
     }
 
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
+        IVanillaRecipeFactory factory = registration.getVanillaRecipeFactory();
         RecipeManager manager = getLevel().getRecipeManager();
         List<RecipeHolder<SpellstoneTableRecipe>> holders = manager.getAllRecipesFor(EnigmaticRecipes.SPELLSTONE_CRAFTING.get());
         registration.addRecipes(EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, holders);
 
         Ingredient cursed_ring = Ingredient.of(EnigmaticItems.CURSED_RING);
+        Ingredient two_ring = Ingredient.of(EnigmaticItems.CURSED_RING, EnigmaticItems.REDEMPTION_RING);
         registration.addRecipes(EnigmaticRecipeTypes.TAINTING, List.of(
-                TaintingCategory.create(EnigmaticItems.EARTH_HEART.toStack(), cursed_ring),
+                TaintingCategory.create(EnigmaticItems.EARTH_HEART.toStack(), two_ring),
                 TaintingCategory.create(EnigmaticItems.TWISTED_HEART.toStack(), cursed_ring),
+                TaintingCategory.create(EnigmaticItems.PURE_HEART.toStack(), two_ring),
                 TaintingCategory.create(EnigmaticItems.ABYSSAL_HEART.toStack(), cursed_ring)
         ));
         List<IJeiAnvilRecipe> recipes = new ArrayList<>();
-        IVanillaRecipeFactory factory = registration.getVanillaRecipeFactory();
         addRepairData(recipes, factory, EnigmaticItems.EXECUTION_AXE.toStack(), Ingredient.of(Items.NETHERITE_INGOT));
         addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_SWORD.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
         addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_HAMMER.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
@@ -99,13 +102,26 @@ public class JEIHandler implements IModPlugin {
         addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_CHESTPLATE.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
         addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_LEGGINGS.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
         addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_BOOTS.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
-        if (CompatHandler.isLoaded("farmersdelight"))
-            addRepairData(recipes, factory, FDCompat.Items.ETHERIUM_MACHETE.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
         addRepairData(recipes, factory, EnigmaticItems.MAJESTIC_ELYTRA.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
         addRepairData(recipes, factory, EnigmaticItems.INFERNAL_SHIELD.toStack(), Ingredient.of(Blocks.OBSIDIAN.asItem()));
         addRepairData(recipes, factory, EnigmaticItems.ENDER_SLAYER.toStack(), Ingredient.of(Blocks.OBSIDIAN.asItem()));
-        addCustomDate(recipes, factory);
+        addCustomData(recipes, factory);
         registration.addRecipes(RecipeTypes.ANVIL, recipes);
+
+        List<IJeiBrewingRecipe> brewingRecipes = new ArrayList<>();
+        brewingRecipes.add(factory.createBrewingRecipe(
+                List.of(Items.FERMENTED_SPIDER_EYE.getDefaultInstance()),
+                EnigmaticItems.RECALL_POTION.toStack(),
+                EnigmaticItems.WORMHOLE_POTION.toStack(),
+                EnigmaticLegacy.location("recall_potion.to.wormhole_potion")
+        ));
+        brewingRecipes.add(factory.createBrewingRecipe(
+                List.of(EnigmaticItems.ICHOR_DROPLET.toStack()),
+                Items.OMINOUS_BOTTLE.getDefaultInstance(),
+                EnigmaticItems.ICHOR_CURSE_BOTTLE.toStack(),
+                EnigmaticLegacy.location("ominous_bottle.to.ichor_curse_bottle")
+        ));
+        registration.addRecipes(RecipeTypes.BREWING, brewingRecipes);
     }
 
     private void addRepairData(List<IJeiAnvilRecipe> list, IVanillaRecipeFactory factory, ItemStack stack, Ingredient repairIngredient) {
@@ -136,7 +152,7 @@ public class JEIHandler implements IModPlugin {
         }
     }
 
-    private void addCustomDate(List<IJeiAnvilRecipe> list, IVanillaRecipeFactory factory) {
+    private void addCustomData(List<IJeiAnvilRecipe> list, IVanillaRecipeFactory factory) {
         ItemStack stack = EnigmaticItems.TOTEM_OF_MALICE.toStack();
         TotemOfMalice.setDurability(stack, TotemOfMalice.getMaxDurability(stack));
         list.add(factory.createAnvilRecipe(

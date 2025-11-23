@@ -95,7 +95,7 @@ public class CosmicCake extends CakeBlock {
 
     public static class Item extends BlockItem {
         public Item(Block block) {
-            super(block, new Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            super(block, new Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
         }
     }
 

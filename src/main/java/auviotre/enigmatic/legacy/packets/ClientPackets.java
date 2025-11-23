@@ -1,16 +1,23 @@
 package auviotre.enigmatic.legacy.packets;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.client.screen.toast.SlotUnlockedToast;
 import auviotre.enigmatic.legacy.packets.client.*;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.toasts.ToastComponent;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class ClientPackets {
     public static void handle(final EnderRingGrabItemPacket packet) {
@@ -72,6 +79,22 @@ public class ClientPackets {
         EnigmaticItems.SOUL_COMPASS.get().setNearestCrystal(packet.noValid() ? null : packet.pos());
     }
 
+    public static void handle(final IchorSpriteBeamPacket packet) {
+        Vec3 self = packet.self;
+        Vec3 tarPos = packet.tarPos;
+        double dist = self.distanceTo(tarPos);
+        Vec3 delta = tarPos.subtract(self).normalize();
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level != null) {
+            for (double i = 0.2; i < dist; i += 0.4) {
+                level.addParticle((ParticleOptions) EnigmaticParticles.ICHOR.get(),
+                        self.x + delta.x * i, self.y + delta.y * i, self.z + delta.z * i,
+                        delta.x * 0.1, delta.y * 0.1, delta.z * 0.1
+                );
+            }
+        }
+    }
+
     public static void handle(final TheCubeRevivePacket packet) {
         Minecraft instance = Minecraft.getInstance();
         Player player = instance.player;
@@ -82,6 +105,18 @@ public class ClientPackets {
         if (instance.level != null) {
             instance.level.playLocalSound(packet.x, packet.y, packet.z, SoundEvents.TOTEM_USE, SoundSource.HOSTILE, 1.0F, 1.0F, false);
         }
+    }
+
+    public static void handle(final SlotUnlockToastPacket packet) {
+        ToastComponent toasts = Minecraft.getInstance().getToasts();
+        ItemStack stack = switch (packet.identifier()) {
+            case "ring" -> EnigmaticItems.IRON_RING.toStack();
+            case "scroll" -> EnigmaticItems.BLANK_SCROLL.toStack();
+            case "spellstone" -> EnigmaticItems.SPELLCORE.toStack();
+            case "charm" -> EnigmaticItems.ENIGMATIC_AMULET.toStack();
+            default -> ItemStack.EMPTY;
+        };
+        toasts.addToast(new SlotUnlockedToast(stack, packet.identifier()));
     }
 
     public static void handle(final ChaosDescendingPacket packet) {

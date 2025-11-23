@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.registries;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.block.entity.DimensionalAnchorEntity;
+import auviotre.enigmatic.legacy.contents.block.entity.EtherealLanternEntity;
 import auviotre.enigmatic.legacy.contents.block.entity.SpellstoneTableEntity;
 import net.minecraft.Util;
 import net.minecraft.core.registries.Registries;
@@ -20,5 +21,6 @@ public class EnigmaticBlockEntities {
     }
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DimensionalAnchorEntity>> DIMENSIONAL_ANCHOR_ENTITY = register("dimensional_anchor_entity", DimensionalAnchorEntity::new, EnigmaticBlocks.DIMENSIONAL_ANCHOR);
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EtherealLanternEntity>> ETHEREAL_LANTERN_ENTITY = register("ethereal_lantern_entity", EtherealLanternEntity::new, EnigmaticBlocks.ETHEREAL_LANTERN);
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SpellstoneTableEntity>> SPELLSTONE_TABLE_ENTITY = register("spellstone_table_entity", SpellstoneTableEntity::new, EnigmaticBlocks.SPELLSTONE_TABLE);
 }

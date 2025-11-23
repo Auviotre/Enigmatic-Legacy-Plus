@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class BlazingMight extends MobEffect {
     public BlazingMight() {
         super(MobEffectCategory.BENEFICIAL, 0xFF5000);
-        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, EnigmaticLegacy.location("blazing_might"), 3.0D, AttributeModifier.Operation.ADD_VALUE);
+        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, EnigmaticLegacy.location("effect.blazing_might"), 3.0D, AttributeModifier.Operation.ADD_VALUE);
         NeoForge.EVENT_BUS.register(this);
     }
 

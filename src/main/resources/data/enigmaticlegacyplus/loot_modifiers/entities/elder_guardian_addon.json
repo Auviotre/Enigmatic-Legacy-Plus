@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/elder_guardian"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/elder_guardian_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/elder_guardian_addon"
 }

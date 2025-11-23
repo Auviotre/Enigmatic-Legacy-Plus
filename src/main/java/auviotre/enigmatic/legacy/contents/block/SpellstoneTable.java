@@ -32,6 +32,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class SpellstoneTable extends BaseEntityBlock {
     public static final MapCodec<SpellstoneTable> CODEC = simpleCodec(SpellstoneTable::new);
     protected static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0);
+
     public SpellstoneTable() {
         super(Properties.ofFullCopy(Blocks.ENCHANTING_TABLE));
     }
@@ -47,6 +48,7 @@ public class SpellstoneTable extends BaseEntityBlock {
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
+
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
@@ -70,6 +72,7 @@ public class SpellstoneTable extends BaseEntityBlock {
             level.addParticle(ParticleTypes.WITCH, pos.getX() + random.nextFloat(), pos.getY() + 0.8 + random.nextFloat() * 0.1, pos.getZ() + random.nextFloat(), 0, 0, 0);
         }
     }
+
     protected boolean useShapeForLightOcclusion(BlockState state) {
         return true;
     }
@@ -81,7 +84,7 @@ public class SpellstoneTable extends BaseEntityBlock {
     protected MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
         BlockEntity blockentity = level.getBlockEntity(pos);
         if (!(blockentity instanceof SpellstoneTableEntity)) return null;
-        return new SimpleMenuProvider((id, inventory, player) -> new SpellstoneTableMenu(id, inventory, ContainerLevelAccess.create(level, pos)), Component.empty());
+        return new SimpleMenuProvider((id, inventory, player) -> new SpellstoneTableMenu(id, inventory, ContainerLevelAccess.create(level, pos)), Component.translatable("gui.enigmaticlegacy.spellstone_crafting"));
     }
 
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {

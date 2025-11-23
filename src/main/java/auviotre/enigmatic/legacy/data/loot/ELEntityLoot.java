@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.data.loot;
 
+import auviotre.enigmatic.legacy.registries.EnigmaticEntities;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticLootTables;
 import net.minecraft.core.HolderLookup;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -23,11 +25,41 @@ public class ELEntityLoot extends EntityLootSubProvider {
     }
 
     public void generate() {
+        this.add(EnigmaticEntities.PIGLIN_WANDERER.get(),
+                LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(Items.GOLD_INGOT)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 3.0F)))
+                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))
+                ).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(EnigmaticItems.ICHOR_DROPLET)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
+                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))
+                        .add(LootItem.lootTableItem(EnigmaticItems.ICHOR_SPEAR)
+                                .when(LootItemRandomChanceCondition.randomChance(0.1F))
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F)))
+                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(1.0F, 2.0F))))
+                )
+        );
+        this.add(EnigmaticEntities.ICHOR_SPRITE.get(),
+                LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(EnigmaticItems.SACRED_CRYSTAL)
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.1F, 0.04F))
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))))
+                ).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(EnigmaticItems.ICHOR_DROPLET)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
+                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))
+                )
+        );
+
         this.add(EntityType.BLAZE, EnigmaticLootTables.Entities.BLAZE,
                 LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(Items.BLAZE_POWDER)
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 5.0F)))
                                 .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))
+                        .add(LootItem.lootTableItem(EnigmaticItems.INFERNAL_CINDER)
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.3F, 0.05F))
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F))))
                 )
         );
         this.add(EntityType.CREEPER, EnigmaticLootTables.Entities.CREEPER,
@@ -82,6 +114,9 @@ public class ELEntityLoot extends EntityLootSubProvider {
                 LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(Items.PHANTOM_MEMBRANE)
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F)))
+                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))
+                        .add(LootItem.lootTableItem(EnigmaticItems.ICHOR_DROPLET)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
                                 .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))
                 )
         );
@@ -173,13 +208,6 @@ public class ELEntityLoot extends EntityLootSubProvider {
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F))))
                         .add(LootItem.lootTableItem(Items.GHAST_TEAR)
                                 .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.3F, 0.05F)))
-                )
-        );
-        this.add(EntityType.WITHER, EnigmaticLootTables.Entities.WITHER,
-                LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                        .add(LootItem.lootTableItem(EnigmaticItems.EVIL_ESSENCE)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F)))
-                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))
                 )
         );
         this.add(EntityType.WITHER_SKELETON, EnigmaticLootTables.Entities.WITHER_SKELETON,

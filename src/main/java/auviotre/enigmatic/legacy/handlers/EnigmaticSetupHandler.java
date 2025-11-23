@@ -51,12 +51,13 @@ public class EnigmaticSetupHandler {
         ItemStack awkward = Items.POTION.getDefaultInstance();
         awkward.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.AWKWARD));
         builder.addRecipe(Ingredient.of(awkward), Ingredient.of(Items.ENDER_EYE), EnigmaticItems.RECALL_POTION.toStack());
-        builder.addRecipe(Ingredient.of(EnigmaticItems.RECALL_POTION, EnigmaticItems.RECALL_POTION), Ingredient.of(Items.FERMENTED_SPIDER_EYE), EnigmaticItems.WORMHOLE_POTION.toStack());
+        builder.addRecipe(Ingredient.of(EnigmaticItems.RECALL_POTION), Ingredient.of(Items.FERMENTED_SPIDER_EYE), EnigmaticItems.WORMHOLE_POTION.toStack());
         builder.addStartMix(Items.QUARTZ, EnigmaticPotions.HASTE);
         builder.addMix(Potions.FIRE_RESISTANCE, Items.BLAZE_ROD, EnigmaticPotions.MOLTEN_HEART);
         builder.addMix(Potions.LONG_FIRE_RESISTANCE, Items.BLAZE_ROD, EnigmaticPotions.LONG_MOLTEN_HEART);
         builder.addMix(EnigmaticPotions.HASTE, Items.REDSTONE, EnigmaticPotions.LONG_HASTE);
         builder.addMix(EnigmaticPotions.HASTE, Items.GLOWSTONE_DUST, EnigmaticPotions.STRONG_HASTE);
         builder.addMix(Potions.AWKWARD, EnigmaticItems.EARTH_HEART_FRAGMENT.get(), Potions.LUCK);
+        builder.addRecipe(Ingredient.of(Items.OMINOUS_BOTTLE), Ingredient.of(EnigmaticItems.ICHOR_DROPLET), EnigmaticItems.ICHOR_CURSE_BOTTLE.toStack());
     }
 }

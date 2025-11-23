@@ -35,7 +35,6 @@ public class MendingMixture extends BaseItem {
         return true;
     }
 
-
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {

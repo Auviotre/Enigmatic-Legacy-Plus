@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/evoker"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/evoker_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/evoker_addon"
 }

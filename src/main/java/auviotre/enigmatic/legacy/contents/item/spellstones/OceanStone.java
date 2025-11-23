@@ -57,6 +57,7 @@ public class OceanStone extends SpellstoneItem {
     public static ModConfigSpec.DoubleValue xpCostModifier;
     public static ModConfigSpec.BooleanValue preventOxygenBarRender;
     public static ModConfigSpec.DoubleValue OSVulnerabilityModifier;
+    public static ModConfigSpec.IntValue cooldown;
 
     public OceanStone() {
         super(defaultSingleProperties().rarity(Rarity.RARE), 0xFF35ACF7);
@@ -69,6 +70,7 @@ public class OceanStone extends SpellstoneItem {
         xpCostModifier = builder.defineInRange("xpCostModifier", 1.0, 0, 10.0);
         preventOxygenBarRender = builder.define("preventOxygenBarRender", false);
         OSVulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
+        cooldown = builder.defineInRange("cooldown", 600, 200, 1000);
         builder.pop(2);
     }
 
@@ -100,7 +102,7 @@ public class OceanStone extends SpellstoneItem {
     }
 
     public int getCooldown() {
-        return 600;
+        return cooldown.get();
     }
 
     public void triggerActiveAbility(ServerLevel level, @NotNull ServerPlayer player, ItemStack stack) {

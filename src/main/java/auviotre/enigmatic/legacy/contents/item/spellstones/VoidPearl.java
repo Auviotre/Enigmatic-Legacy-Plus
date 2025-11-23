@@ -21,6 +21,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -111,7 +112,7 @@ public class VoidPearl extends SpellstoneItem {
             for (LivingEntity victim : entities) {
                 if (victim.level().getMaxLocalRawBrightness(victim.blockPosition(), 0) < 3 || victim instanceof FlyingMob) {
                     if (!(entity instanceof Player player) || !(victim instanceof Player vPlayer) || player.canHarmPlayer(vPlayer)) {
-                        if (victim.hurt(EnigmaticDamageTypes.source(victim.level(), EnigmaticDamageTypes.DARKNESS, entity), darknessDamage.getAsInt())) {
+                        if (victim.hurt(EnigmaticDamageTypes.source(victim.level(), EnigmaticDamageTypes.DARKNESS, entity), (float) (darknessDamage.getAsInt() + entity.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.5F))) {
                             entity.level().playSound(null, victim.blockPosition(), SoundEvents.PHANTOM_BITE, SoundSource.PLAYERS, 1.0F, 0.3F + entity.getRandom().nextFloat() * 0.4F);
 
                             victim.addEffect(new MobEffectInstance(MobEffects.WITHER, 80, 1, false, true), entity);

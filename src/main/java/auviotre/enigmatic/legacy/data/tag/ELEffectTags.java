@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.data.tag;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -19,7 +20,7 @@ public class ELEffectTags extends TagsProvider<MobEffect> {
     }
 
     protected void addTags(HolderLookup.Provider provider) {
-        this.tag(EnigmaticTags.Effects.ALWAYS_APPLY).add(MobEffects.NIGHT_VISION.getKey());
+        this.tag(EnigmaticTags.Effects.ALWAYS_APPLY).add(MobEffects.NIGHT_VISION.getKey(), EnigmaticEffects.ABYSS_CORRUPTION.getKey());
         this.tag(EnigmaticTags.Effects.SHOULD_NOT_RANDOM_OUT).add(MobEffects.INFESTED.getKey(), MobEffects.WEAVING.getKey());
     }
 }

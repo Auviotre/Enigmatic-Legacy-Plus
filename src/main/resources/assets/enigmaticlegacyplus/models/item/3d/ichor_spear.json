@@ -1,0 +1,6 @@
+{
+  "parent": "enigmaticlegacyplus:item/3d/spear",
+  "textures": {
+    "layer0": "enigmaticlegacyplus:item/3d/ichor_spear"
+  }
+}

@@ -2,6 +2,8 @@ package auviotre.enigmatic.legacy.client.renderer.layer;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumArmor;
+import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumProperties;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidModel;
@@ -36,7 +38,7 @@ public class EtheriumShieldLayer extends RenderLayer<AbstractClientPlayer, Playe
     }
 
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer player, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (EtheriumArmor.etheriumShieldRenderLayer.get() && EtheriumArmor.hasShield(player)) {
+        if (EtheriumArmor.etheriumShieldRenderLayer.get() && (EtheriumProperties.hasShield(player) || player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getEtherealShield() > 0)) {
             float f = (float) player.tickCount + partialTick;
 
             PlayerModel<AbstractClientPlayer> playerModel = this.model();

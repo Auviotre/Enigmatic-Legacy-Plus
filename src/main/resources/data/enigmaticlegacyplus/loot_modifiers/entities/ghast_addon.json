@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/ghast"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/ghast_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/ghast_addon"
 }

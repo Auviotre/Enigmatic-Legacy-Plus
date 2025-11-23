@@ -1,0 +1,29 @@
+{
+    "name": "book.enigmaticlegacy.entry.etherium.name",
+    "icon": "enigmaticlegacyplus:etherium_ingot",
+    "category": "enigmaticlegacyplus:materials",
+	"advancement": "enigmaticlegacyplus:book/materials/etherium",
+    "secret": false,
+    "priority": false,
+    "read_by_default": false,
+    "sortnum": 50,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.enigmaticlegacy.entry.etherium.page.1"
+        },
+		{
+            "type": "blasting",
+			"recipe": "enigmaticlegacyplus:etherium_ingot_from_blasting",
+            "text": "book.enigmaticlegacy.entry.etherium.page.2"
+        },
+		{
+            "type": "text",
+            "text": "book.enigmaticlegacy.entry.etherium.page.3"
+        },
+		{
+            "type": "empty",
+            "draw_filler": false
+        }
+    ]
+}

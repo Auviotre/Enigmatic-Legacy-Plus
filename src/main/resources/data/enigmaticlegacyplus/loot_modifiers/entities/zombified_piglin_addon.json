@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/zombified_piglin"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/zombified_piglin_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/zombified_piglin_addon"
 }

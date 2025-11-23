@@ -18,6 +18,8 @@ import auviotre.enigmatic.legacy.proxy.ClientProxy;
 import auviotre.enigmatic.legacy.proxy.CommonProxy;
 import auviotre.enigmatic.legacy.registries.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
@@ -35,6 +37,7 @@ import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -53,7 +56,6 @@ public class EnigmaticLegacy {
 
     public EnigmaticLegacy(IEventBus modEventBus, @NotNull ModContainer container) {
         PROXY = FMLLoader.getDist().isClient() ? new ClientProxy() : new CommonProxy();
-        PROXY.init();
         EnigmaticItems.ITEMS.register(modEventBus);
         EnigmaticMenus.MENUS.register(modEventBus);
         EnigmaticBlocks.BLOCKS.register(modEventBus);
@@ -61,6 +63,8 @@ public class EnigmaticLegacy {
         EnigmaticEffects.EFFECTS.register(modEventBus);
         EnigmaticPotions.POTIONS.register(modEventBus);
         EnigmaticRecipes.RECIPE_TYPES.register(modEventBus);
+        EnigmaticMemories.MEMORY_TYPE.register(modEventBus);
+        EnigmaticAttributes.ATTRIBUTES.register(modEventBus);
         EnigmaticEntities.ENTITY_TYPES.register(modEventBus);
         EnigmaticComponents.COMPONENTS.register(modEventBus);
         EnigmaticTabs.CREATIVE_MODE_TABS.register(modEventBus);
@@ -77,10 +81,11 @@ public class EnigmaticLegacy {
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::interMod);
         modEventBus.addListener(this::onPacketSetup);
+        modEventBus.addListener(this::attributeSetup);
         modEventBus.addListener(this::onLoadComplete);
         modEventBus.addListener(this::addCreative);
 
-        container.registerConfig(ModConfig.Type.COMMON, ELConfig.SPEC);
+        container.registerConfig(ModConfig.Type.SERVER, ELConfig.SPEC);
         if (FMLEnvironment.dist.isClient()) {
             modEventBus.addListener(this::onClientSetup);
             container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
@@ -99,6 +104,7 @@ public class EnigmaticLegacy {
     }
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
+        PROXY.init();
     }
 
     public void onLoadComplete(FMLLoadCompleteEvent event) {
@@ -121,10 +127,12 @@ public class EnigmaticLegacy {
         registrar.playToClient(ForceProjectileRotationsPacket.TYPE, ForceProjectileRotationsPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(PlayerMotionPacket.TYPE, PlayerMotionPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(PermanentDeathPacket.TYPE, PermanentDeathPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(IchorSpriteBeamPacket.TYPE, IchorSpriteBeamPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(TotemOfMalicePacket.TYPE, TotemOfMalicePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(SoulCompassUpdatePacket.TYPE, SoulCompassUpdatePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(ChaosDescendingPacket.TYPE, ChaosDescendingPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(TheCubeRevivePacket.TYPE, TheCubeRevivePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(SlotUnlockToastPacket.TYPE, SlotUnlockToastPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -144,8 +152,15 @@ public class EnigmaticLegacy {
             event.insertAfter(EnigmaticItems.ASTRAL_DUST.toStack(), EnigmaticBlocks.ASTRAL_DUST_SACK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticItems.COSMIC_HEART.toStack(), EnigmaticBlocks.COSMIC_CAKE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertBefore(EnigmaticItems.RAW_ETHERIUM.toStack(), EnigmaticBlocks.ETHERIUM_ORE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(EnigmaticItems.ETHEREAL_FORGING_CHARM.toStack(), EnigmaticBlocks.ETHEREAL_LANTERN.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticItems.ETHERIUM_NUGGET.toStack(), EnigmaticBlocks.ETHERIUM_BLOCK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticBlocks.ETHERIUM_BLOCK.toStack(), EnigmaticBlocks.DIMENSIONAL_ANCHOR.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+        }
+    }
+
+    private void attributeSetup(final EntityAttributeModificationEvent event) {
+        for (EntityType<? extends LivingEntity> type : event.getTypes()) {
+            event.add(type, EnigmaticAttributes.ETHERIUM_SHIELD);
         }
     }
 

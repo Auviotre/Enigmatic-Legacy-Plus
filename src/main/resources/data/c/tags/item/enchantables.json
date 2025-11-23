@@ -1,5 +1,6 @@
 {
     "values": [
-        "#enigmaticlegacyplus:eternal_binding_enchantable"
+        "#enigmaticlegacyplus:enchantable/eternal_binding",
+        "#enigmaticlegacyplus:enchantable/etheric_resonance"
     ]
 }

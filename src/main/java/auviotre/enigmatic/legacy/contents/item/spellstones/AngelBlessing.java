@@ -43,6 +43,7 @@ import java.util.List;
 public class AngelBlessing extends SpellstoneItem {
     public static ModConfigSpec.IntValue deflectChance;
     public static ModConfigSpec.DoubleValue vulnerabilityModifier;
+    public static ModConfigSpec.IntValue cooldown;
 
     public AngelBlessing() {
         super(defaultSingleProperties().rarity(Rarity.RARE), 0xFFB2DAFF);
@@ -53,6 +54,7 @@ public class AngelBlessing extends SpellstoneItem {
         builder.translation("item.enigmaticlegacyplus.angel_blessing").push("spellstone.angelBlessing");
         deflectChance = builder.defineInRange("deflectChance", 40, 0, 100);
         vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
+        cooldown = builder.defineInRange("cooldown", 30, 10, 100);
         builder.pop(2);
     }
 
@@ -82,7 +84,7 @@ public class AngelBlessing extends SpellstoneItem {
     }
 
     public int getCooldown() {
-        return 30;
+        return cooldown.get();
     }
 
     public void triggerActiveAbility(ServerLevel level, ServerPlayer player, ItemStack stack) {

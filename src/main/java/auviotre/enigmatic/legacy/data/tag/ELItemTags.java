@@ -29,12 +29,14 @@ public class ELItemTags extends ItemTagsProvider {
                 ODE_TO_LIVING.get(),
                 ENCHANTMENT_TRANSPOSER.get(),
                 CURSE_TRANSPOSER.get(),
+                BLESS_AMPLIFIER.get(),
                 THE_ACKNOWLEDGMENT.get(),
                 THE_TWIST.get(),
+                THE_BLESS.get(),
                 THE_INFINITUM.get()
         );
-        this.tag(ItemTags.LECTERN_BOOKS).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_INFINITUM.get());
-        this.tag(ItemTags.VANISHING_ENCHANTABLE).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_INFINITUM.get(), INFERNAL_SHIELD.get());
+        this.tag(ItemTags.LECTERN_BOOKS).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get());
+        this.tag(ItemTags.VANISHING_ENCHANTABLE).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get(), INFERNAL_SHIELD.get());
         this.tag(ItemTags.DURABILITY_ENCHANTABLE).add(INFERNAL_SHIELD.get(), ETHERIUM_HAMMER.get(), MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
         this.tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
         this.tag(ItemTags.SWORDS).add(EXECUTION_AXE.get(), ENDER_SLAYER.get(), ETHERIUM_SWORD.get());
@@ -45,7 +47,6 @@ public class ELItemTags extends ItemTagsProvider {
         this.tag(ItemTags.MINING_LOOT_ENCHANTABLE).add(ETHERIUM_HAMMER.get());
         this.tag(ItemTags.SHARP_WEAPON_ENCHANTABLE).add(ETHERIUM_SCYTHE.get(), THE_INFINITUM.get());
         this.tag(ItemTags.WEAPON_ENCHANTABLE).add(ETHERIUM_HAMMER.get());
-        this.tag(ItemTags.CROSSBOW_ENCHANTABLE).add(ETHERIUM_HAMMER.get());
         this.tag(ItemTags.HEAD_ARMOR).add(ETHERIUM_HELMET.get());
         this.tag(ItemTags.CHEST_ARMOR).add(ETHERIUM_CHESTPLATE.get());
         this.tag(ItemTags.LEG_ARMOR).add(ETHERIUM_LEGGINGS.get());
@@ -63,6 +64,7 @@ public class ELItemTags extends ItemTagsProvider {
         this.tag(EnigmaticTags.Items.ARMOR_CHECK_EXCLUSION).add(Items.ELYTRA, MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
         this.tag(EnigmaticTags.Items.BYPASS_FOURTH_CURSE).add(
                 THE_TWIST.get(),
+                THE_BLESS.get(),
                 THE_INFINITUM.get()
         );
         this.tag(EnigmaticTags.Items.SPELLSTONES).addTag(EnigmaticTags.Items.THE_CUBE_MATERIAL).add(
@@ -94,6 +96,18 @@ public class ELItemTags extends ItemTagsProvider {
         );
 
         this.tag(Tags.Items.ENCHANTABLES).addTag(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE);
+        this.tag(Tags.Items.ENCHANTABLES).addTag(EnigmaticTags.Items.ETHERIC_RESONANCE_ENCHANTABLE);
+        this.tag(EnigmaticTags.Items.ETHERIC_RESONANCE_ENCHANTABLE).add(
+                ETHERIUM_HELMET.get(),
+                ETHERIUM_CHESTPLATE.get(),
+                ETHERIUM_LEGGINGS.get(),
+                ETHERIUM_BOOTS.get(),
+                MAJESTIC_ELYTRA.get(),
+                ETHERIUM_SWORD.get(),
+                ETHERIUM_HAMMER.get(),
+                ETHERIUM_SCYTHE.get(),
+                ETHEREAL_FORGING_CHARM.get()
+        );
         this.tag(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE).add(TOTEM_OF_MALICE.get())
                 .addTag(EnigmaticTags.Items.SCROLLS)
                 .addTag(CuriosTags.RING)
@@ -110,12 +124,14 @@ public class ELItemTags extends ItemTagsProvider {
 
         this.tag(CuriosTags.RING).add(
                 IRON_RING.get(), GOLDEN_RING.get(), MINER_RING.get(), MAGNET_RING.get(), DISLOCATION_RING.get(),
-                QUARTZ_RING.get(), ENDER_RING.get(), CURSED_RING.get(), DESOLATION_RING.get()
+                QUARTZ_RING.get(), ENDER_RING.get(), EARTH_PROMISE.get(), CURSED_RING.get(), REDEMPTION_RING.get(), DESOLATION_RING.get()
         );
         this.tag(CuriosTags.CHARM).addTag(EnigmaticTags.Items.AMULETS).add(
                 MINING_CHARM.get(),
                 MONSTER_CHARM.get(),
                 FORGER_GEM.get(),
+                HELL_BLADE_CHARM.get(),
+                ETHEREAL_FORGING_CHARM.get(),
                 BERSERK_EMBLEM.get(),
                 ENCHANTER_PEARL.get(),
                 SPELLTUNER.get()

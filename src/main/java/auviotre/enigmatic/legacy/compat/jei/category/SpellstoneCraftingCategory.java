@@ -27,7 +27,6 @@ import java.util.List;
 public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<SpellstoneTableRecipe>> {
     private static final ResourceLocation SPRITE = EnigmaticLegacy.location("jei/spellstone_table_gui");
     private static final ResourceLocation ICON = EnigmaticLegacy.location("jei/spellstone_table_icon");
-    private final IDrawable icon;
     private static final List<Pair<Integer, Integer>> OFFSETS = List.of(
             new Pair<>(38, 52),
             new Pair<>(31, 32),
@@ -37,6 +36,7 @@ public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<
             new Pair<>(85, 32),
             new Pair<>(78, 52)
     );
+    private final IDrawable icon;
 
     public SpellstoneCraftingCategory(IGuiHelper guiHelper) {
         this.icon = guiHelper.createDrawableItemLike(EnigmaticItems.SPELLCORE);
@@ -76,6 +76,7 @@ public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull RecipeHolder<SpellstoneTableRecipe> holder, IFocusGroup focuses) {
         SpellstoneTableRecipe recipe = holder.value();
         builder.addInputSlot(5, 32).addItemStack(EnigmaticItems.SPELLSTONE_DEBRIS.toStack(recipe.getCount()));
+        builder.addInputSlot(111, 32);
         builder.addInputSlot(58, 32).addItemStack(EnigmaticItems.SPELLCORE.toStack());
         NonNullList<Ingredient> ingredients = recipe.getIngredients();
         for (int i = 0; i < ingredients.size(); i++) {

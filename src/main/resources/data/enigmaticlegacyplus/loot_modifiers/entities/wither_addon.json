@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/wither"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/wither_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/wither_addon"
 }

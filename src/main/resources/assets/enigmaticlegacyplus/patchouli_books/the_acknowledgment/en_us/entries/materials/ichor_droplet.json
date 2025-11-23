@@ -1,0 +1,23 @@
+{
+    "name": "book.enigmaticlegacy.entry.ichor_droplet.name",
+    "icon": "enigmaticlegacyplus:ichor_droplet",
+    "category": "enigmaticlegacyplus:materials",
+	"advancement": "enigmaticlegacyplus:book/materials/ichor_droplet",
+    "secret": false,
+    "priority": false,
+    "read_by_default": false,
+    "sortnum": 40,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.enigmaticlegacy.entry.ichor_droplet.page.1"
+        },
+		{
+            "type": "spotlight",
+			"item": "enigmaticlegacyplus:ichor_droplet",
+			"link_recipe": true,
+            "title": "book.enigmaticlegacy.entry.ichor_droplet.heading.1",
+            "text": "book.enigmaticlegacy.entry.ichor_droplet.page.2"
+        }
+    ]
+}

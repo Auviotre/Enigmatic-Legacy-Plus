@@ -76,6 +76,7 @@ public class ForgottenIce extends SpellstoneItem {
     public static ModConfigSpec.DoubleValue damageFeedback;
     public static ModConfigSpec.IntValue resistanceModifier;
     public static ModConfigSpec.DoubleValue vulnerabilityModifier;
+    public static ModConfigSpec.IntValue cooldown;
 
     public ForgottenIce() {
         super(defaultSingleProperties().rarity(Rarity.RARE), 0xFF80E5FF);
@@ -90,6 +91,7 @@ public class ForgottenIce extends SpellstoneItem {
         resistanceModifier = builder.defineInRange("resistanceModifier", 30, 0, 100);
         damageFeedback = builder.defineInRange("damageFeedback", 4.0, 0.0, 64.0);
         vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.5, 1.0, 20.0);
+        cooldown = builder.defineInRange("cooldown", 240, 100, 400);
         builder.pop(2);
     }
 
@@ -144,7 +146,7 @@ public class ForgottenIce extends SpellstoneItem {
     }
 
     public int getCooldown() {
-        return 240;
+        return cooldown.get();
     }
 
     public void triggerActiveAbility(ServerLevel level, ServerPlayer player, ItemStack stack) {

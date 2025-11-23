@@ -2,8 +2,9 @@
     "values": [
         "enigmaticlegacyplus:the_acknowledgment",
         "enigmaticlegacyplus:the_twist",
+        "enigmaticlegacyplus:the_bless",
         "enigmaticlegacyplus:the_infinitum",
         "enigmaticlegacyplus:infernal_shield",
-        "#enigmaticlegacyplus:eternal_binding_enchantable"
+        "#enigmaticlegacyplus:enchantable/eternal_binding"
     ]
 }

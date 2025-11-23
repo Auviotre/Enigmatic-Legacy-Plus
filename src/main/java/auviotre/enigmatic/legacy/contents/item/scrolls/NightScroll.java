@@ -50,9 +50,11 @@ public class NightScroll extends CursedCurioItem {
     public static ModConfigSpec.IntValue damageBoost;
     public static ModConfigSpec.IntValue damageResistance;
     public static ModConfigSpec.IntValue lifeSteal;
+
     public NightScroll() {
         super(defaultSingleProperties().rarity(Rarity.RARE));
     }
+
     @SubscribeConfig
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.translation("item.enigmaticlegacyplus.night_scroll").push("cursedItems.nightScroll");
@@ -70,8 +72,9 @@ public class NightScroll extends CursedCurioItem {
         int sky = entity.level().getBrightness(LightLayer.SKY, blockPos);
         int block = entity.level().getBrightness(LightLayer.BLOCK, blockPos);
         if (sky >= block) return 2.0F - sky * 0.1F;
-        return 2.0F - (sky * 0.04F + block * 0.06F);
+        return 2.0F - (sky * 0.025F + block * 0.075F);
     }
+
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -80,7 +83,7 @@ public class NightScroll extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.nightScroll2");
         } else TooltipHandler.holdShift(list);
         TooltipHandler.line(list);
-        list.add(Component.translatable("curios.modifiers.scroll").withStyle(ChatFormatting.GOLD));
+        TooltipHandler.line(list, "curios.modifiers.scroll", ChatFormatting.GOLD);
         float darkModifier = getDarkModifier(Minecraft.getInstance().player);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.nightScroll3", ChatFormatting.GOLD, String.format("%.01f%%", darkModifier * damageBoost.get()));
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.nightScroll4", ChatFormatting.GOLD, String.format("%.01f%%", darkModifier * damageResistance.get()));

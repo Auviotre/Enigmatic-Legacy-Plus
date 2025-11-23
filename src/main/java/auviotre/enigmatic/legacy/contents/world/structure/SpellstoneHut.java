@@ -33,11 +33,13 @@ import java.util.Optional;
 public class SpellstoneHut extends Structure {
     private static final ResourceLocation LOCATION = EnigmaticLegacy.location("spellstone_hut");
     private static final MapCodec<SpellstoneHut> CODEC = simpleCodec(SpellstoneHut::new);
-    public static MapCodec<SpellstoneHut> codec() {
-        return CODEC;
-    }
+
     public SpellstoneHut(StructureSettings settings) {
         super(settings);
+    }
+
+    public static MapCodec<SpellstoneHut> codec() {
+        return CODEC;
     }
 
     protected Optional<GenerationStub> findGenerationPoint(@NotNull GenerationContext context) {
@@ -68,13 +70,13 @@ public class SpellstoneHut extends Structure {
             super(EnigmaticStructureTypes.SPELLSTONE_HUT_PIECE.get(), tag, context.structureTemplateManager(), (location) -> makeSettings(Rotation.valueOf(tag.getString("Rot"))));
         }
 
+        private static StructurePlaceSettings makeSettings(Rotation rotation) {
+            return new StructurePlaceSettings().setRotation(rotation).setMirror(Mirror.NONE).addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK).setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
+        }
+
         protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {
             super.addAdditionalSaveData(context, tag);
             tag.putString("Rot", this.placeSettings.getRotation().name());
-        }
-
-        private static StructurePlaceSettings makeSettings(Rotation rotation) {
-            return new StructurePlaceSettings().setRotation(rotation).setMirror(Mirror.NONE).addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK).setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
         }
 
         protected void handleDataMarker(String metadata, BlockPos pos, ServerLevelAccessor level, RandomSource random, BoundingBox box) {

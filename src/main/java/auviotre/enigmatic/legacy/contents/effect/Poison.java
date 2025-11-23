@@ -12,6 +12,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +32,6 @@ public class Poison extends MobEffect {
         return true;
     }
 
-    @Override
     public String getDescriptionId() {
         return "effect.minecraft.poison";
     }
@@ -44,6 +45,14 @@ public class Poison extends MobEffect {
     public void onLivingHeal(@NotNull LivingHealEvent event) {
         if (event.getEntity().hasEffect(EnigmaticEffects.POISON)) {
             event.setAmount(event.getAmount() * 0.25F);
+        }
+    }
+
+    @SubscribeEvent
+    public void onDeath(@NotNull LivingDeathEvent event) {
+        if (event.getSource().is(Tags.DamageTypes.IS_POISON)) {
+            event.getEntity().setHealth(1.0F);
+            event.setCanceled(true);
         }
     }
 }

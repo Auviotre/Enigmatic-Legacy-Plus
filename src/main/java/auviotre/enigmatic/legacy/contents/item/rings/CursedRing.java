@@ -14,6 +14,7 @@ import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.packets.client.EnigmaticDataSyncPacket;
 import auviotre.enigmatic.legacy.packets.client.PermanentDeathPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import com.google.common.collect.ArrayListMultimap;
@@ -24,8 +25,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -38,7 +41,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -56,6 +58,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
@@ -70,14 +73,17 @@ import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.event.DropRulesEvent;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CursedRing extends CursedCurioItem {
     public static final Multimap<Player, ItemLike> POSSESSIONS = ArrayListMultimap.create();
@@ -95,8 +101,8 @@ public class CursedRing extends CursedCurioItem {
     public static ModConfigSpec.BooleanValue autoEquip;
     public static ModConfigSpec.BooleanValue ultraHardcore;
     public static ModConfigSpec.IntValue maxSoulCrystalLoss;
-    public static ModConfigSpec.DoubleValue abyssThreshold;
     public static ModConfigSpec.BooleanValue forTheWorthyMode;
+    public static ModConfigSpec.ConfigValue<List<? extends String>> neutralWhiteList;
 
     public CursedRing() {
         super(defaultSingleProperties().rarity(Rarity.EPIC));
@@ -119,8 +125,8 @@ public class CursedRing extends CursedCurioItem {
         autoEquip = builder.define("autoEquip", false);
         ultraHardcore = builder.define("ultraHardcore", false);
         maxSoulCrystalLoss = builder.defineInRange("maxSoulCrystalLoss", 9, 0, 10);
-        abyssThreshold = builder.defineInRange("abyssThreshold", 0.995, 0.0, 1.0);
-        forTheWorthyMode = builder.define("forTheWorthy", false);
+        forTheWorthyMode = builder.define("forTheWorthy", true);
+        neutralWhiteList = builder.defineList("neutralWhiteList", List.of("minecraft:bee"), () -> "minecraft:player", Objects::nonNull);
         builder.pop();
     }
 
@@ -128,26 +134,26 @@ public class CursedRing extends CursedCurioItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (Screen.hasShiftDown()) {
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing3");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurses");
             int multiplier = painMultiplier.getAsInt();
-            if (multiplier == 200) TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing4");
+            if (multiplier == 200) TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse1");
             else
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing4_alt", ChatFormatting.GOLD, multiplier + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing5");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing6", ChatFormatting.GOLD, armorDebuff.get() + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing7", ChatFormatting.GOLD, monsterDamageDebuff.get() + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing8");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing9");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing10");
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse1_alt", ChatFormatting.GOLD, multiplier + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse2");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse3", ChatFormatting.GOLD, armorDebuff.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse4", ChatFormatting.GOLD, monsterDamageDebuff.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse5");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse6");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse7");
             TooltipHandler.line(list);
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing11");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing12", ChatFormatting.GOLD, lootingBonus.get());
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing13", ChatFormatting.GOLD, fortuneBonus.get());
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing14", ChatFormatting.GOLD, experienceBonus.get() + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing15", ChatFormatting.GOLD, enchantingBonus.get());
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing16");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing17");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRing18");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBlesses");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless1", ChatFormatting.GOLD, lootingBonus.get());
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless2", ChatFormatting.GOLD, fortuneBonus.get());
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless3", ChatFormatting.GOLD, experienceBonus.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless4", ChatFormatting.GOLD, enchantingBonus.get());
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless5");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless6");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless7");
         } else {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingLore1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingLore2");
@@ -158,7 +164,7 @@ public class CursedRing extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingLore7");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eternallyBound1");
-            if (Minecraft.getInstance().player != null && EnigmaticHandler.canUnequipBoundRelics(Minecraft.getInstance().player)) {
+            if (EnigmaticHandler.canUnequipBoundRelics(Minecraft.getInstance().player)) {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.eternallyBound2_creative");
             } else TooltipHandler.line(list, "tooltip.enigmaticlegacy.eternallyBound2");
 
@@ -184,22 +190,25 @@ public class CursedRing extends CursedCurioItem {
         List<LivingEntity> genericMobs = player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(5));
         for (LivingEntity mob : genericMobs) {
             double visibility = player.getVisibilityPercent(mob);
-            double noCheckDistance = Math.max(neutralAngerRange.getAsDouble() / 6.0, 2);
+            double noCheckDistance = Math.max(neutralAngerRange.getAsDouble() / 3.2, 4.8);
             double angerDistance = Math.max(neutralAngerRange.getAsDouble() * visibility, noCheckDistance);
-            if (!player.hasLineOfSight(mob) && player.distanceTo(mob) > 4) continue;
+            if (!player.hasLineOfSight(mob) && player.distanceTo(mob) > 4.8) continue;
             if (mob.distanceToSqr(player.getX(), player.getY(), player.getZ()) <= angerDistance * angerDistance) {
-                if (mob instanceof Piglin piglin) {
+                if (mob instanceof Piglin piglin && !EnigmaticHandler.hasCurio(player, EnigmaticItems.AVARICE_SCROLL)) {
                     if (piglin.getTarget() == null || !piglin.getTarget().isAlive())
                         if (player.hasLineOfSight(mob) || player.distanceTo(mob) <= noCheckDistance)
                             PiglinAi.wasHurtBy(piglin, player);
                 } else if (mob instanceof NeutralMob neutral) {
                     if (!mob.getType().is(EnigmaticTags.EntityTypes.NEUTRAL_ANGER_BLACKLIST)) {
                         if (neutral == player) continue;
+                        if (neutral instanceof TraceableEntity ownable && ownable.getOwner() != null && player.is(ownable.getOwner()))
+                            continue;
                         if (neutral instanceof OwnableEntity ownable && ownable.getOwner() != null && player.is(ownable.getOwner()))
                             continue;
                         if (neutral instanceof TamableAnimal tamable && tamable.isTame()) continue;
                         if (neutral instanceof IronGolem golem && golem.isPlayerCreated()) continue;
-                        if (neutral instanceof Bee) continue;
+                        ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType());
+                        if (neutralWhiteList.get().contains(key.toString())) return;
                         if ((neutral.getTarget() == null || !neutral.getTarget().isAlive()) && (player.hasLineOfSight(mob) || player.distanceTo(mob) <= noCheckDistance)) {
                             neutral.setTarget(player);
                         }
@@ -284,7 +293,24 @@ public class CursedRing extends CursedCurioItem {
                 if (EnigmaticHandler.hasCurio(player, EnigmaticItems.ENIGMATIC_AMULET) || EnigmaticHandler.hasCurio(player, EnigmaticItems.ASCENSION_AMULET))
                     POSSESSIONS.put(player, EnigmaticItems.ENIGMATIC_AMULET);
 
+                boolean flag = false;
                 for (InteractionHand hand : InteractionHand.values()) {
+                    ItemStack stack = player.getItemInHand(hand);
+                    if (stack.is(EnigmaticItems.BLESS_STONE)) {
+                        POSSESSIONS.put(player, EnigmaticItems.BLESS_STONE);
+                        stack.shrink(1);
+                        flag = true;
+                        LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(player.level());
+                        if (lightningbolt != null) {
+                            lightningbolt.moveTo(Vec3.atBottomCenterOf(player.blockPosition()));
+                            lightningbolt.setCause(player instanceof ServerPlayer ? player : null);
+                            player.level().addFreshEntity(lightningbolt);
+                        }
+                        break;
+                    }
+                }
+
+                if (!flag) for (InteractionHand hand : InteractionHand.values()) {
                     ItemStack stack = player.getItemInHand(hand);
                     if (stack.is(EnigmaticItems.CURSED_STONE)) {
                         POSSESSIONS.put(player, EnigmaticItems.CURSED_STONE);
@@ -345,6 +371,8 @@ public class CursedRing extends CursedCurioItem {
         @SubscribeEvent
         private static void onUseItem(@NotNull LivingEntityUseItemEvent.Start event) {
             if (EnigmaticHandler.isCursedItem(event.getItem())) {
+                if (EnigmaticHandler.isBlessedItem(event.getItem()) && RedemptionRing.Helper.canUseRelic(event.getEntity()))
+                    return;
                 if (!EnigmaticHandler.isTheCursedOne(event.getEntity())) {
                     event.setCanceled(true);
                     return;
@@ -386,12 +414,15 @@ public class CursedRing extends CursedCurioItem {
         @SubscribeEvent
         private static void onAttack(@NotNull AttackEntityEvent event) {
             Player player = event.getEntity();
-            if (!(EnigmaticHandler.isTheCursedOne(player))) {
-                if (EnigmaticHandler.isCursedItem(player.getMainHandItem())) {
+            boolean redemption = RedemptionRing.Helper.canUseRelic(player);
+            if (!EnigmaticHandler.isTheCursedOne(player)) {
+                boolean blessed = EnigmaticHandler.isBlessedItem(player.getMainHandItem());
+                if (EnigmaticHandler.isCursedItem(player.getMainHandItem()) && !blessed || blessed && !redemption) {
                     event.setCanceled(true);
                     return;
                 }
-                if (EnigmaticHandler.isCursedItem(player.getOffhandItem())) {
+                blessed = EnigmaticHandler.isBlessedItem(player.getOffhandItem());
+                if (EnigmaticHandler.isCursedItem(player.getOffhandItem()) && !blessed || blessed && !redemption) {
                     event.setCanceled(true);
                 }
             }
@@ -403,8 +434,10 @@ public class CursedRing extends CursedCurioItem {
             DamageSource source = event.getSource();
             if (source.getDirectEntity() instanceof LivingEntity entity && (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK))) {
                 if (EnigmaticHandler.isCursedItem(entity.getMainHandItem()) && !EnigmaticHandler.isTheCursedOne(entity)) {
-                    event.setCanceled(true);
-                    return;
+                    if (!(EnigmaticHandler.isBlessedItem(entity.getMainHandItem()) && RedemptionRing.Helper.canUseRelic(entity))) {
+                        event.setCanceled(true);
+                        return;
+                    }
                 }
                 if (EnigmaticHandler.isEldritchItem(entity.getMainHandItem()) && !EnigmaticHandler.isTheWorthyOne(entity)) {
                     event.setCanceled(true);
@@ -413,6 +446,8 @@ public class CursedRing extends CursedCurioItem {
 
             if (EnigmaticHandler.isTheCursedOne(event.getEntity())) {
                 float multiplier = 0.01F * painMultiplier.getAsInt();
+                if (EnigmaticHandler.hasCurio(event.getEntity(), EnigmaticItems.EARTH_PROMISE))
+                    multiplier = (multiplier - 1) * (1 - EarthPromise.firstCurseModifier.get() * 0.01F) + 1.0F;
                 event.setAmount(event.getAmount() * multiplier);
             }
 
@@ -551,6 +586,27 @@ public class CursedRing extends CursedCurioItem {
                             return;
                         }
                     }
+                }
+
+                if (POSSESSIONS.containsEntry(player, EnigmaticItems.BLESS_STONE)) {
+                    event.addOverride(stack -> stack != null && stack.is(EnigmaticItems.CURSED_RING), ICurio.DropRule.DESTROY);
+                    player.level().playSound(null, player.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 1.0F, 0.5F);
+                    CuriosApi.getCuriosInventory(player).ifPresent((handler) -> {
+                        IItemHandlerModifiable curios = handler.getEquippedCurios();
+                        for (int i = 0; i < handler.getSlots(); ++i) {
+                            ItemStack stackInSlot = curios.getStackInSlot(i);
+                            if (stackInSlot.is(EnigmaticItems.CURSED_RING)) {
+                                ItemStack stack = EnigmaticItems.REDEMPTION_RING.toStack();
+                                stack.set(EnigmaticComponents.REDEMPTION_LEVEL, RedemptionRing.Helper.getPossibleLevel(player));
+                                curios.setStackInSlot(i, stack);
+                            } else if (EnigmaticHandler.isCursedItem(stackInSlot) && !EnigmaticHandler.isBlessedItem(stackInSlot)) {
+                                PermanentItemEntity itemEntity = new PermanentItemEntity(player.level(), player.getRandomX(4), player.getRandomY(), player.getRandomZ(4), stackInSlot);
+                                itemEntity.setGlowingTag(true);
+                                player.level().addFreshEntity(itemEntity);
+                                curios.setStackInSlot(i, ItemStack.EMPTY);
+                            }
+                        }
+                    });
                 }
             }
         }

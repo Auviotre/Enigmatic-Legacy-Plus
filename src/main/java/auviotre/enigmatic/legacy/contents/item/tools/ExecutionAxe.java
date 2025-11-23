@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.tools;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.contents.entity.PiglinWanderer;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
@@ -50,6 +51,7 @@ public class ExecutionAxe extends SwordItem {
             Creeper.class, Items.CREEPER_HEAD,
             Piglin.class, Items.PIGLIN_HEAD,
             PiglinBrute.class, Items.PIGLIN_HEAD,
+            PiglinWanderer.class, Items.PIGLIN_HEAD,
             WitherSkeleton.class, Items.WITHER_SKELETON_SKULL,
             EnderDragon.class, Items.DRAGON_HEAD
     );
@@ -72,7 +74,7 @@ public class ExecutionAxe extends SwordItem {
         int loot = 0;
         Holder.Reference<Enchantment> holder = EnigmaticHandler.get(level, Registries.ENCHANTMENT, Enchantments.LOOTING);
         loot += EnchantmentHelper.getEnchantmentLevel(holder, entity);
-        loot += CuriosApi.getCuriosInventory(Minecraft.getInstance().player).map(handler -> handler.getLootingLevel(null)).orElse(0);
+        loot += CuriosApi.getCuriosInventory(entity).map(handler -> handler.getLootingLevel(null)).orElse(0);
         return loot;
     }
 

@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/guardian"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/guardian_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/guardian_addon"
 }

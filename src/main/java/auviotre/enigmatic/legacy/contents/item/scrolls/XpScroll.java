@@ -42,7 +42,7 @@ public class XpScroll extends BaseCurioItem {
         super(properties.component(EnigmaticComponents.XP_SCROLL_STORED, 0L));
     }
 
-    @SubscribeConfig(receiveClient = true)
+    @SubscribeConfig
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.translation("item.enigmaticlegacyplus.xp_scroll").push("else.xpScroll");
         magneticRange = builder.defineInRange("magneticRange", 16.0, 1.0, 256.0);

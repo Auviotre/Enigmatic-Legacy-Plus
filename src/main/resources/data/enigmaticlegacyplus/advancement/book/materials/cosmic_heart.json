@@ -1,0 +1,17 @@
+{
+  "parent": "enigmaticlegacyplus:book/root",
+  "rewards": {},
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "enigmaticlegacyplus:cosmic_heart"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe"
+    ]
+  ]
+}

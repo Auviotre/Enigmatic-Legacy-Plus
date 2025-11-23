@@ -4,6 +4,7 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.event.LivingCurseBoostEvent;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
+import auviotre.enigmatic.legacy.contents.item.materials.AbyssalHeart;
 import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.item.tools.InfernalShield;
@@ -101,15 +102,16 @@ public interface EnigmaticHandler {
     }
 
     static boolean isBlessedItem(@NotNull ItemStack stack) {
+        if (stack.is(EnigmaticItems.REDEMPTION_RING)) return false;
         return !stack.isEmpty() && stack.has(EnigmaticComponents.BLESSED) && stack.getOrDefault(EnigmaticComponents.BLESSED, false);
     }
 
     static boolean isTheBlessedOne(LivingEntity entity) {
-        return false;
+        return hasCurio(entity, EnigmaticItems.REDEMPTION_RING) || entity instanceof Player player && getPersistedData(player).getBoolean("RedemptionBearing");
     }
 
     static boolean isTheWorthyOne(LivingEntity entity) {
-        return isTheCursedOne(entity) && getSufferingFraction(entity) >= CursedRing.abyssThreshold.get();
+        return isTheCursedOne(entity) && getSufferingFraction(entity) >= AbyssalHeart.abyssThreshold.get();
     }
 
     static boolean isEldritchItem(@NotNull ItemStack stack) {
@@ -207,8 +209,8 @@ public interface EnigmaticHandler {
         return false;
     }
 
-    static boolean canUnequipBoundRelics(@NotNull Player player) {
-        return player.isCreative();
+    static boolean canUnequipBoundRelics(Player player) {
+        return player != null && player.isCreative();
     }
 
     static boolean isAffectedBySoulLoss(@NotNull Player player, boolean hadRing) {
@@ -299,9 +301,9 @@ public interface EnigmaticHandler {
         return info;
     }
 
-    static double getSufferingFraction(@Nullable LivingEntity livingEntity) {
-        if (livingEntity == null) return 0;
-        EnigmaticData data = livingEntity.getData(EnigmaticAttachments.ENIGMATIC_DATA);
+    static double getSufferingFraction(@Nullable LivingEntity entity) {
+        if (entity == null) return 0;
+        EnigmaticData data = entity.getData(EnigmaticAttachments.ENIGMATIC_DATA);
         long timeWithRing = data.getTimeWithCurses();
         long timeWithoutRing = data.getTimeWithoutCurses();
 

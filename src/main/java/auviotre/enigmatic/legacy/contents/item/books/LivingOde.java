@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -20,6 +21,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
@@ -27,8 +30,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class LivingOde extends BaseItem {
+    public static ModConfigSpec.DoubleValue effectiveRange;
+    public static ModConfigSpec.IntValue redirectResistance;
+
     public LivingOde() {
         super(defaultSingleProperties().rarity(Rarity.RARE));
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.ode_to_living").push("else.odeToLiving");
+        effectiveRange = builder.defineInRange("effectiveRange", 24.0, 4.0, 96.0);
+        redirectResistance = builder.defineInRange("specialDamageResistance", 50, 0, 100);
+        builder.pop(2);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -36,9 +50,9 @@ public class LivingOde extends BaseItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.inInventory", ChatFormatting.GOLD);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.animalGuidebook1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.animalGuidebook2");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.hunterGuidebook1", ChatFormatting.GOLD, 24);
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.hunterGuidebook1", ChatFormatting.GOLD, String.format("%.0f", effectiveRange.get()));
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.hunterGuidebook2");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.odeToLiving1", ChatFormatting.GOLD, "50%");
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.odeToLiving1", ChatFormatting.GOLD, redirectResistance.get() + "%");
         if (EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player)) {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.secondCurse"));

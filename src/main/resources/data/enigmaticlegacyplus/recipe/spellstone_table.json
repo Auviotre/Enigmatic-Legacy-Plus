@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "minecraft:ender_pearl"
+        },
+        "I": {
+            "item": "enigmaticlegacyplus:ichor_droplet"
+        },
+        "S": {
+            "item": "minecraft:crying_obsidian"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:spellcore"
+        }
+    },
+    "pattern": [
+        " X ",
+        "AIA",
+        "SSS"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:spellstone_table"
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "name": "book.enigmaticlegacy.entry.pure_heart.name",
+    "icon": "enigmaticlegacyplus:pure_heart",
+    "category": "enigmaticlegacyplus:materials",
+	"advancement": "enigmaticlegacyplus:book/materials/pure_heart",
+    "secret": false,
+    "priority": false,
+    "read_by_default": false,
+    "sortnum": 120,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.enigmaticlegacy.entry.pure_heart.page.1"
+        },
+		{
+            "type": "crafting",
+			"recipe": "enigmaticlegacyplus:pure_heart",
+            "title": " ",
+            "text": "book.enigmaticlegacy.entry.pure_heart.page.2"
+        }
+    ]
+}

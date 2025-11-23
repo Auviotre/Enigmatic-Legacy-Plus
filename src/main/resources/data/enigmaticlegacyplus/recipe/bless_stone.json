@@ -1,0 +1,33 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:sacred_crystal"
+        },
+        "B": {
+            "item": "minecraft:glowstone_dust"
+        },
+        "C": {
+            "item": "enigmaticlegacyplus:cosmic_heart"
+        },
+        "I": {
+            "item": "enigmaticlegacyplus:ichor_droplet"
+        },
+        "P": {
+            "item": "enigmaticlegacyplus:pure_heart"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:cursed_stone"
+        }
+    },
+    "pattern": [
+        "ICI",
+        "AXA",
+        "BPB"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:bless_stone"
+    }
+}

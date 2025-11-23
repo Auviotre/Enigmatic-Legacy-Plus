@@ -70,6 +70,7 @@ public class RevivalLeaf extends SpellstoneItem {
     );
     public static ModConfigSpec.DoubleValue vulnerabilityModifier;
     public static ModConfigSpec.IntValue naturalRegenerationSpeed;
+    public static ModConfigSpec.IntValue cooldown;
 
     public RevivalLeaf() {
         super(defaultSingleProperties().rarity(Rarity.RARE), 0xFF91D93F);
@@ -80,6 +81,7 @@ public class RevivalLeaf extends SpellstoneItem {
         builder.translation("item.enigmaticlegacyplus.revival_leaf").push("spellstone.revivalLeaf");
         naturalRegenerationSpeed = builder.defineInRange("naturalRegenerationSpeed", 5, 1, 40);
         vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
+        cooldown = builder.defineInRange("cooldown", 120, 60, 240);
         builder.pop(2);
     }
 
@@ -163,7 +165,7 @@ public class RevivalLeaf extends SpellstoneItem {
     }
 
     public int getCooldown() {
-        return 120;
+        return cooldown.get();
     }
 
     public void triggerActiveAbility(ServerLevel level, ServerPlayer player, ItemStack stack) {

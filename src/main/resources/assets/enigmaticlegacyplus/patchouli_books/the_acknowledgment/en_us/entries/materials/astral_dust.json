@@ -1,0 +1,23 @@
+{
+    "name": "book.enigmaticlegacy.entry.astral_dust.name",
+    "icon": "enigmaticlegacyplus:astral_dust",
+    "category": "enigmaticlegacyplus:materials",
+	"advancement": "enigmaticlegacyplus:book/materials/astral_dust",
+    "secret": false,
+    "priority": false,
+    "read_by_default": false,
+    "sortnum": 60,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.enigmaticlegacy.entry.astral_dust.page.1"
+        },
+		{
+            "type": "spotlight",
+			"item": "enigmaticlegacyplus:astral_dust",
+			"link_recipe": true,
+            "title": "book.enigmaticlegacy.entry.astral_dust.heading.1",
+            "text": "book.enigmaticlegacy.entry.astral_dust.page.2"
+        }
+    ]
+}

@@ -1,6 +1,6 @@
 package auviotre.enigmatic.legacy.contents.entity.goal;
 
-import auviotre.enigmatic.legacy.contents.entity.CobwebBall;
+import auviotre.enigmatic.legacy.contents.entity.projectile.CobwebBall;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;

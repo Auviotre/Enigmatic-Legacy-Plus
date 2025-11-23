@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/shulker"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/shulker_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/shulker_addon"
 }

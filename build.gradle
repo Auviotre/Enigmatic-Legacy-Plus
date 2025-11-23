@@ -120,11 +120,13 @@ dependencies {
     implementation "curse.maven:iceberg-520110:6423863"
     // compat
     implementation "curse.maven:thirst-was-taken-679270:7017923"
-    implementation "curse.maven:farmers-delight-398521:6917256"
 
     implementation "curse.maven:placebo-283644:6926281"
     implementation "curse.maven:apothic-attributes-898963:6751650"
     implementation "curse.maven:apothic-enchanting-1063926:6926290"
+
+    implementation "curse.maven:sodium-394468:6382651"
+    implementation "curse.maven:irisshaders-455508:6661598"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

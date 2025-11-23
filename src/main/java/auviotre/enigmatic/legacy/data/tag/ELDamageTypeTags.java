@@ -28,6 +28,8 @@ public class ELDamageTypeTags extends DamageTypeTagsProvider {
         this.tag(DamageTypeTags.BYPASSES_INVULNERABILITY).add(ABYSS);
         this.tag(DamageTypeTags.BYPASSES_COOLDOWN).add(EVIL_CURSE);
         this.tag(DamageTypeTags.WITHER_IMMUNE_TO).add(DARKNESS);
+        this.tag(DamageTypeTags.NO_IMPACT).add(ABYSS);
+        this.tag(DamageTypeTags.NO_KNOCKBACK).add(ABYSS);
 
         this.tag(EnigmaticTags.DamageTypes.GOLEM_HEART_IMMUNE_TO).add(
                 DamageTypes.CACTUS,

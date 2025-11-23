@@ -1,0 +1,23 @@
+{
+    "name": "book.enigmaticlegacy.entry.sacred_crystal.name",
+    "icon": "enigmaticlegacyplus:sacred_crystal",
+    "category": "enigmaticlegacyplus:materials",
+	"advancement": "enigmaticlegacyplus:book/materials/sacred_crystal",
+    "secret": false,
+    "priority": false,
+    "read_by_default": false,
+    "sortnum": 130,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.enigmaticlegacy.entry.sacred_crystal.page.1"
+        },
+		{
+            "type": "spotlight",
+            "item": "enigmaticlegacyplus:sacred_crystal",
+            "link_recipe": true,
+            "title": "book.enigmaticlegacy.entry.sacred_crystal.heading.1",
+            "text": "book.enigmaticlegacy.entry.sacred_crystal.page.2"
+        }
+    ]
+}

@@ -1,0 +1,34 @@
+{
+    "name": "book.enigmaticlegacy.entry.earth_heart.name",
+    "icon": "enigmaticlegacyplus:earth_heart",
+    "category": "enigmaticlegacyplus:materials",
+	"advancement": "enigmaticlegacyplus:book/materials/earth_heart",
+    "secret": false,
+    "priority": false,
+    "read_by_default": false,
+    "sortnum": 20,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.enigmaticlegacy.entry.earth_heart.page.1"
+        },
+		{
+            "type": "spotlight",
+			"item": "enigmaticlegacyplus:earth_heart",
+			"link_recipe": true,
+            "title": "book.enigmaticlegacy.entry.earth_heart.heading.1",
+            "text": "book.enigmaticlegacy.entry.earth_heart.page.2"
+        },
+		{
+            "type": "spotlight",
+            "item": "enigmaticlegacyplus:earth_heart_fragment",
+            "link_recipe": true,
+            "title": "book.enigmaticlegacy.entry.earth_heart.heading.2",
+            "text": "book.enigmaticlegacy.entry.earth_heart.page.3"
+        },
+		{
+            "type": "empty",
+            "draw_filler": false
+        }
+    ]
+}

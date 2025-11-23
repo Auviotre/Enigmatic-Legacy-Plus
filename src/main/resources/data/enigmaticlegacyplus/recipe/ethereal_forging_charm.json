@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "E": {
+            "item": "enigmaticlegacyplus:etherium_ingot"
+        },
+        "F": {
+            "item": "enigmaticlegacyplus:forger_gem"
+        },
+        "H": {
+            "item": "enigmaticlegacyplus:etherium_hammer"
+        },
+        "R": {
+            "item": "enigmaticlegacyplus:ender_rod"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:earth_heart"
+        }
+    },
+    "pattern": [
+        " F ",
+        "RXR",
+        "EHE"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:ethereal_forging_charm"
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "B": {
+            "item": "enigmaticlegacyplus:hunter_guidebook"
+        },
+        "C": {
+            "item": "enigmaticlegacyplus:infernal_cinder"
+        },
+        "D": {
+            "item": "minecraft:dragon_breath"
+        },
+        "G": {
+            "item": "minecraft:ghast_tear"
+        },
+        "S": {
+            "item": "minecraft:netherite_ingot"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:twisted_heart"
+        }
+    },
+    "pattern": [
+        "CSC",
+        "GBG",
+        "DXD"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:sanguinary_handbook"
+    }
+}

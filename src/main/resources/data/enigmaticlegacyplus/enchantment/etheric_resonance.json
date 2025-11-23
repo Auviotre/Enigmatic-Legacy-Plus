@@ -1,0 +1,34 @@
+{
+    "anvil_cost": 12,
+    "description": {
+        "translate": "enchantment.enigmaticlegacyplus.etheric_resonance"
+    },
+    "effects": {
+        "minecraft:attributes": [
+            {
+                "amount": {
+                    "type": "minecraft:linear",
+                    "base": 0.01,
+                    "per_level_above_first": 0.01
+                },
+                "attribute": "enigmaticlegacyplus:etherium_shield",
+                "id": "enigmaticlegacyplus:enchantment.etheric_resonance",
+                "operation": "add_value"
+            }
+        ]
+    },
+    "max_cost": {
+        "base": 40,
+        "per_level_above_first": 0
+    },
+    "max_level": 1,
+    "min_cost": {
+        "base": 20,
+        "per_level_above_first": 0
+    },
+    "slots": [
+        "any"
+    ],
+    "supported_items": "#enigmaticlegacyplus:enchantable/etheric_resonance",
+    "weight": 1
+}

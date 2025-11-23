@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/vex"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/vex_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/vex_addon"
 }

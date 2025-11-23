@@ -28,12 +28,5 @@ public class CompatHandler {
             EnigmaticLegacy.LOGGER.info("Thirst Compat.");
             NeoForge.EVENT_BUS.register(new ThirstCompatHandler());
         }
-//        if (isLoaded("farmersdelight")) {
-//            EnigmaticLegacy.LOGGER.info("Farmer's Delight Compat.");
-//            FDCompat.Tabs.TABS.register(modEventBus);
-//            FDCompat.Items.ITEMS.register(modEventBus);
-//            FDCompat.Blocks.BLOCKS.register(modEventBus);
-//            NeoForge.EVENT_BUS.register(new FDCompat.Handler());
-//        }
     }
 }

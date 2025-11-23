@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.registries;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumProperties;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.loot.conditions.IsMonsterCondition;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -21,12 +22,14 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.*;
 import net.minecraft.world.item.enchantment.effects.AddValue;
 import net.minecraft.world.item.enchantment.effects.ApplyMobEffect;
+import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
 import net.minecraft.world.item.enchantment.effects.SetValue;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.DamageSourceCondition;
@@ -39,6 +42,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.event.CurioCanUnequipEvent;
 import top.theillusivec4.curios.api.event.DropRulesEvent;
@@ -52,6 +56,8 @@ public class EnigmaticEnchantments {
     public static final ResourceKey<Enchantment> ETERNAL_BINDING_CURSE = key("eternal_binding_curse");
     public static final ResourceKey<Enchantment> NEMESIS_CURSE = key("nemesis_curse");
     public static final ResourceKey<Enchantment> SORROW_CURSE = key("sorrow_curse");
+    public static final ResourceKey<Enchantment> ETHERIC_RESONANCE = key("etheric_resonance");
+    public static final ResourceKey<Enchantment> REDEMPTION_CURSE = key("redemption_curse");
 
     public static void bootstrap(BootstrapContext<Enchantment> context) {
         HolderGetter<Enchantment> enchantmentGetter = context.lookup(Registries.ENCHANTMENT);
@@ -118,6 +124,21 @@ public class EnigmaticEnchantments {
                         .exclusiveWith(enchantmentGetter.getOrThrow(EnchantmentTags.DAMAGE_EXCLUSIVE))
                         .withEffect(EnchantmentEffectComponents.DAMAGE, new AddValue(LevelBasedValue.perLevel(1.25F)))
         );
+        register(context, ETHERIC_RESONANCE, Enchantment.enchantment(
+                                Enchantment.definition(
+                                        itemGetter.getOrThrow(EnigmaticTags.Items.ETHERIC_RESONANCE_ENCHANTABLE),
+                                        1, 1, Enchantment.constantCost(20), Enchantment.constantCost(40), 12, EquipmentSlotGroup.ANY
+                                )
+                        )
+                        .withEffect(
+                                EnchantmentEffectComponents.ATTRIBUTES,
+                                new EnchantmentAttributeEffect(
+                                        EnigmaticLegacy.location("enchantment.etheric_resonance"),
+                                        EnigmaticAttributes.ETHERIUM_SHIELD,
+                                        LevelBasedValue.perLevel(0.01F),
+                                        AttributeModifier.Operation.ADD_VALUE
+                                ))
+        );
         register(context, NEMESIS_CURSE, Enchantment.enchantment(
                         Enchantment.definition(
                                 itemGetter.getOrThrow(ItemTags.SHARP_WEAPON_ENCHANTABLE), itemGetter.getOrThrow(ItemTags.SWORD_ENCHANTABLE),
@@ -128,8 +149,7 @@ public class EnigmaticEnchantments {
         register(context, ETERNAL_BINDING_CURSE, Enchantment.enchantment(
                                 Enchantment.definition(
                                         itemGetter.getOrThrow(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE), itemGetter.getOrThrow(ItemTags.EQUIPPABLE_ENCHANTABLE),
-                                        1, 1, Enchantment.constantCost(25), Enchantment.constantCost(50), 8,
-                                        EquipmentSlotGroup.ANY
+                                        1, 1, Enchantment.constantCost(25), Enchantment.constantCost(50), 8, EquipmentSlotGroup.ANY
                                 )
                         )
                         .exclusiveWith(enchantmentGetter.getOrThrow(EnigmaticTags.Enchantments.BINDING_CURSE_EXCLUSIVE))
@@ -141,6 +161,14 @@ public class EnigmaticEnchantments {
                                 1, 1, Enchantment.constantCost(25), Enchantment.constantCost(50), 8, EquipmentSlotGroup.ARMOR
                         )
                 )
+        );
+        register(context, REDEMPTION_CURSE, Enchantment.enchantment(
+                        Enchantment.definition(
+                                itemGetter.getOrThrow(ItemTags.EQUIPPABLE_ENCHANTABLE), itemGetter.getOrThrow(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE),
+                                1, 1, Enchantment.constantCost(30), Enchantment.constantCost(60), 9, EquipmentSlotGroup.ANY
+                        )
+                )
+                .exclusiveWith(enchantmentGetter.getOrThrow(EnchantmentTags.CURSE))
         );
     }
 
@@ -163,11 +191,11 @@ public class EnigmaticEnchantments {
                 event.setUnequipResult(TriState.FALSE);
         }
 
-        @SubscribeEvent
+        @SubscribeEvent(priority = EventPriority.HIGH)
         private static void onDrop(@NotNull DropRulesEvent event) {
             event.addOverride(stack -> {
                         Holder<Enchantment> holder = event.getEntity().registryAccess().holderOrThrow(ETERNAL_BINDING_CURSE);
-                        return stack.is(EnigmaticItems.CURSED_RING) || stack.is(EnigmaticTags.Items.AMULETS)
+                        return stack.is(EnigmaticItems.CURSED_RING) || stack.is(EnigmaticItems.REDEMPTION_RING) || stack.is(EnigmaticTags.Items.AMULETS)
                                 || EnigmaticHandler.isEldritchItem(stack) || EnchantmentHelper.getTagEnchantmentLevel(holder, stack) > 0;
                     }, ICurio.DropRule.ALWAYS_KEEP
             );
@@ -189,6 +217,26 @@ public class EnigmaticEnchantments {
                     event.setCanceled(true);
                     entity.setHealth(1);
                 }
+            }
+        }
+
+        @SubscribeEvent
+        private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
+            int level;
+            if (event.getSource().getEntity() instanceof LivingEntity attacker) {
+                var ethereal = EnigmaticHandler.get(attacker.level(), Registries.ENCHANTMENT, ETHERIC_RESONANCE);
+                level = EnchantmentHelper.getEnchantmentLevel(ethereal, attacker);
+                if (level > 0) {
+                    float modifier = (float) (EtheriumProperties.getShieldThreshold(attacker) * 0.06F * level);
+                    event.setAmount(event.getAmount() * (1 + modifier));
+                }
+            }
+            LivingEntity victim = event.getEntity();
+            var redemption = EnigmaticHandler.get(victim.level(), Registries.ENCHANTMENT, REDEMPTION_CURSE);
+            level = EnchantmentHelper.getEnchantmentLevel(redemption, victim);
+            if (level > 0 && EnigmaticHandler.isTheOne(victim)) {
+                if (EnigmaticHandler.isTheBlessedOne(victim)) level = -level;
+                event.setAmount(event.getAmount() * Math.max(0, 1 + level * 0.04F));
             }
         }
 

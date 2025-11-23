@@ -53,7 +53,7 @@ public class CursedXpScroll extends XpScroll {
         super(defaultSingleProperties().rarity(Rarity.RARE).component(EnigmaticComponents.CURSED, true));
     }
 
-    @SubscribeConfig(receiveClient = true)
+    @SubscribeConfig
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.translation("item.enigmaticlegacyplus.cursed_xp_scroll").push("cursedItems.cursedXpScroll");
         magneticRange = builder.defineInRange("magneticRange", 24.0, 1.0, 256.0);

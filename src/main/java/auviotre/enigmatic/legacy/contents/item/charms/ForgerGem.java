@@ -43,6 +43,7 @@ public class ForgerGem extends BaseCurioItem {
     public static ModConfigSpec.IntValue breakChanceModifier;
     public static ModConfigSpec.IntValue extraDurabilityModifier;
     public static ModConfigSpec.IntValue extraMaxDurability;
+
     public ForgerGem() {
         super(defaultSingleProperties().rarity(Rarity.UNCOMMON).fireResistant());
     }

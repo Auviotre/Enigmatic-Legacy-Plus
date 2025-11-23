@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/spider"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/spider_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/spider_addon"
 }

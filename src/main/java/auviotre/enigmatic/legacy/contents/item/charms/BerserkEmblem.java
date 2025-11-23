@@ -11,6 +11,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -79,18 +80,19 @@ public class BerserkEmblem extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm5");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm6");
         } else TooltipHandler.holdShift(list);
-
-        if (Minecraft.getInstance().player != null)
-            if (EnigmaticHandler.getCurio(Minecraft.getInstance().player, this) == stack) {
-                float missingPool = getMissingHealthPool(Minecraft.getInstance().player);
-                int percentage = (int) (missingPool * 100F);
-                TooltipHandler.line(list);
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm7");
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm1", ChatFormatting.GOLD, String.format("%.1f%%", percentage * attackDamage.get()));
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm2", ChatFormatting.GOLD, String.format("%.1f%%", percentage * attackSpeed.get()));
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm3", ChatFormatting.GOLD, String.format("%.1f%%", percentage * movementSpeed.get()));
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm4", ChatFormatting.GOLD, String.format("%.1f%%", percentage * damageResistance.get()));
-            }
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (EnigmaticHandler.getCurio(player, this) == stack) {
+            float missingPool = getMissingHealthPool(player);
+            int percentage = (int) (missingPool * 100F);
+            TooltipHandler.line(list);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm7");
+            double damageBoost = percentage * attackDamage.get() * (EnigmaticHandler.hasCurio(player, EnigmaticItems.HELL_BLADE_CHARM) ? 1.25 : 1.0);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm1", ChatFormatting.GOLD, String.format("%.1f%%", damageBoost));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm2", ChatFormatting.GOLD, String.format("%.1f%%", percentage * attackSpeed.get()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm3", ChatFormatting.GOLD, String.format("%.1f%%", percentage * movementSpeed.get()));
+            double damageResist = percentage * damageResistance.get() * (EnigmaticHandler.hasCurio(player, EnigmaticItems.HELL_BLADE_CHARM) ? 0.6 : 1.0);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm4", ChatFormatting.GOLD, String.format("%.1f%%", damageResist));
+        }
         TooltipHandler.line(list);
         TooltipHandler.cursedOnly(list, stack);
     }
@@ -113,7 +115,9 @@ public class BerserkEmblem extends CursedCurioItem {
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
             Entity entity = event.getSource().getEntity();
             if (entity instanceof LivingEntity attacker && EnigmaticHandler.hasCurio(attacker, EnigmaticItems.BERSERK_EMBLEM)) {
-                event.setAmount(event.getAmount() * (1.0F + (getMissingHealthPool(attacker) * (float) attackDamage.getAsDouble())));
+                float boost = getMissingHealthPool(attacker) * (float) attackDamage.getAsDouble();
+                if (EnigmaticHandler.hasCurio(attacker, EnigmaticItems.HELL_BLADE_CHARM)) boost *= 1.25F;
+                event.setAmount(event.getAmount() * (1.0F + boost));
             }
         }
 
@@ -121,7 +125,9 @@ public class BerserkEmblem extends CursedCurioItem {
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
             LivingEntity victim = event.getEntity();
             if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.BERSERK_EMBLEM)) {
-                event.setNewDamage(event.getNewDamage() * (1.0F - (getMissingHealthPool(victim) * (float) damageResistance.getAsDouble())));
+                float resistance = getMissingHealthPool(victim) * (float) damageResistance.getAsDouble();
+                if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.HELL_BLADE_CHARM)) resistance *= 0.6F;
+                event.setNewDamage(event.getNewDamage() * (1.0F - resistance));
             }
         }
     }

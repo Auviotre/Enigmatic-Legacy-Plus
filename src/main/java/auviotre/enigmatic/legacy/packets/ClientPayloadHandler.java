@@ -46,11 +46,19 @@ public class ClientPayloadHandler {
         handle(ctx, () -> ClientPackets.handle(data));
     }
 
+    public void handle(final IchorSpriteBeamPacket data, final IPayloadContext ctx) {
+        handle(ctx, () -> ClientPackets.handle(data));
+    }
+
     public void handle(final ChaosDescendingPacket data, final IPayloadContext ctx) {
         handle(ctx, () -> ClientPackets.handle(data));
     }
 
     public void handle(final TheCubeRevivePacket data, final IPayloadContext ctx) {
+        handle(ctx, () -> ClientPackets.handle(data));
+    }
+
+    public void handle(final SlotUnlockToastPacket data, final IPayloadContext ctx) {
         handle(ctx, () -> ClientPackets.handle(data));
     }
 }

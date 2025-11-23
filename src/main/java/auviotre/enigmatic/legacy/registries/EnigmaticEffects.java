@@ -1,9 +1,7 @@
 package auviotre.enigmatic.legacy.registries;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.contents.effect.BlazingMight;
-import auviotre.enigmatic.legacy.contents.effect.MoltenHeart;
-import auviotre.enigmatic.legacy.contents.effect.Poison;
+import auviotre.enigmatic.legacy.contents.effect.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -14,4 +12,8 @@ public class EnigmaticEffects {
     public static final DeferredHolder<MobEffect, MoltenHeart> MOLTEN_HEART = EFFECTS.register("molten_heart", MoltenHeart::new);
     public static final DeferredHolder<MobEffect, BlazingMight> BLAZING_MIGHT = EFFECTS.register("blazing_might", BlazingMight::new);
     public static final DeferredHolder<MobEffect, Poison> POISON = EFFECTS.register("poison", Poison::new);
+    public static final DeferredHolder<MobEffect, IchorCurse> ICHOR_CURSE = EFFECTS.register("ichor_curse", IchorCurse::new);
+    public static final DeferredHolder<MobEffect, IchorCorrosion> ICHOR_CORROSION = EFFECTS.register("ichor_corrosion", IchorCorrosion::new);
+    public static final DeferredHolder<MobEffect, PureResistance> PURE_RESISTANCE = EFFECTS.register("pure_resistance", PureResistance::new);
+    public static final DeferredHolder<MobEffect, AbyssCorruption> ABYSS_CORRUPTION = EFFECTS.register("abyss_corruption", AbyssCorruption::new);
 }

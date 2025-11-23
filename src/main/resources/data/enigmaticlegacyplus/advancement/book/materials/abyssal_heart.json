@@ -1,0 +1,21 @@
+{
+  "parent": "enigmaticlegacyplus:book/root",
+  "rewards": {},
+  "criteria": {
+    "has_items": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["enigmaticlegacyplus:abyssal_heart"]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_items"
+    ]
+  ]
+}

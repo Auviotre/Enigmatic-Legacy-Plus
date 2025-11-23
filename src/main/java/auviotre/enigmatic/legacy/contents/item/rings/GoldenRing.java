@@ -24,6 +24,7 @@ public class GoldenRing extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
+        if (list.isEmpty()) return list;
         if (EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player))
             list.add(Component.translatable("tooltip.enigmaticlegacy.goldenRing").withStyle(ChatFormatting.RED, ChatFormatting.STRIKETHROUGH));
         else list.add(Component.translatable("tooltip.enigmaticlegacy.goldenRing").withStyle(ChatFormatting.BLUE));

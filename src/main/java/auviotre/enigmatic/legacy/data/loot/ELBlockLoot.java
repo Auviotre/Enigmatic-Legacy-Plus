@@ -25,6 +25,7 @@ public class ELBlockLoot extends BlockLootSubProvider {
         this.dropSelf(DIMENSIONAL_ANCHOR.get());
         this.dropSelf(SPELLSTONE_TABLE.get());
         this.dropSelf(ETHERIUM_BLOCK.get());
+        this.dropSelf(ETHEREAL_LANTERN.get());
         this.add(ETHERIUM_ORE.get(), block -> createOreDrop(block, EnigmaticItems.RAW_ETHERIUM.get()));
     }
 

@@ -1,16 +1,16 @@
 package auviotre.enigmatic.legacy.contents.item.etherium;
 
+import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
-import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
-import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticEnchantments;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -43,8 +43,7 @@ import java.util.function.Predicate;
 
 public class EtheriumHammer extends DiggerItem {
     public EtheriumHammer() {
-        super(EtheriumProperties.TIER, EnigmaticTags.Blocks.ALL_MINEABLE, new Item.Properties().fireResistant().attributes(createAttributes(EtheriumProperties.TIER, 9.0F, -3.0F)
-        ).component(EnigmaticComponents.ETHERIUM_SHIELD, 4));
+        super(EtheriumProperties.TIER, EnigmaticTags.Blocks.ALL_MINEABLE, new Item.Properties().fireResistant().attributes(EtheriumProperties.createAttributes(9.0F, -3.0F, 0.03F)));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -58,14 +57,28 @@ public class EtheriumHammer extends DiggerItem {
                 || ability == ItemAbilities.SHOVEL_DIG || ability == ItemAbilities.HOE_DIG || ability == ItemAbilities.SWORD_DIG;
     }
 
-    public void spawnFlameParticles(ServerLevel level, BlockPos pos) {
-        Vec3 center = pos.getCenter();
-        ItemParticleOption particle = new ItemParticleOption(ParticleTypes.ITEM, EnigmaticItems.ETHERIUM_INGOT.toStack());
-        level.sendParticles(particle, center.x, center.y, center.z, 6, 0.5, 0.5, 0.5, 0);
+    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        Level level = attacker.level();
+        var holder = EnigmaticHandler.get(level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
+        if (stack.getEnchantmentLevel(holder) > 0 && attacker instanceof Player player) {
+            List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(1.25, 0.25, 1.25),
+                    entity -> entity.isAlive() && player.canAttack(entity) && entity != target && entity != attacker && entity.distanceTo(target) < 1.25F);
+            for (LivingEntity entity : entities) {
+                if (player.getRandom().nextInt(4) == 0) {
+                    entity.hurtMarked = true;
+                    continue;
+                }
+                player.attack(entity);
+                stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND);
+            }
+            if (level instanceof ServerLevel server) {
+                server.sendParticles(ParticleTypes.END_ROD, target.getX(), target.getY(0.5), target.getZ(), 4, 0.2, 0.2, 0.2, 0.05);
+            }
+        }
+        super.postHurtEnemy(stack, target, attacker);
     }
 
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
-//        if (level instanceof ServerLevel server) this.spawnFlameParticles(server, pos);
         if (miningEntity.isCrouching()) return super.mineBlock(stack, level, state, pos, miningEntity);
         if (miningEntity instanceof Player player && isCorrectToolForDrops(stack, state) && !level.isClientSide()) {
             BlockHitResult hitResult = Item.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);

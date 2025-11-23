@@ -1,0 +1,30 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:sacred_crystal"
+        },
+        "G": {
+            "item": "minecraft:glowstone_dust"
+        },
+        "I": {
+            "item": "minecraft:gold_ingot"
+        },
+        "P": {
+            "item": "enigmaticlegacyplus:pure_heart"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:the_acknowledgment"
+        }
+    },
+    "pattern": [
+        "AGA",
+        "IXI",
+        "APA"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:the_bless"
+    }
+}

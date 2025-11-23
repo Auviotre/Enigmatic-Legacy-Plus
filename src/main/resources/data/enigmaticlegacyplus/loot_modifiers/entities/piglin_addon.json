@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/piglin"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/piglin_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/piglin_addon"
 }

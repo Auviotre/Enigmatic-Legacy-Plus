@@ -72,7 +72,29 @@
                         }
                     ],
                     "name": "enigmaticlegacyplus:infernal_cinder",
-                    "weight": 15
+                    "weight": 20
+                },
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.25,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "add": false,
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "max": 2.0,
+                                "min": 0.0
+                            },
+                            "function": "minecraft:set_count"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:ichor_droplet",
+                    "weight": 20
                 },
                 {
                     "type": "minecraft:item",

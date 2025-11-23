@@ -48,6 +48,7 @@ public class MonsterCharm extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
+        if (list.isEmpty()) return list;
         list.add(Component.translatable("attribute.modifier.plus.1", 25, Component.translatable("tooltip.enigmaticlegacy.monsterCharmAttribute")).withStyle(ChatFormatting.BLUE));
         list.add(Component.translatable("attribute.modifier.plus.0", 1, Component.translatable("attribute.name.looting_level")).withStyle(ChatFormatting.BLUE));
         return list;

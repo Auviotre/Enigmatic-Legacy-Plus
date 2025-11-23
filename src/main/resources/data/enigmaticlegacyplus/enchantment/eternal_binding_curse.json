@@ -20,6 +20,6 @@
     "slots": [
         "any"
     ],
-    "supported_items": "#enigmaticlegacyplus:eternal_binding_enchantable",
+    "supported_items": "#enigmaticlegacyplus:enchantable/eternal_binding",
     "weight": 1
 }

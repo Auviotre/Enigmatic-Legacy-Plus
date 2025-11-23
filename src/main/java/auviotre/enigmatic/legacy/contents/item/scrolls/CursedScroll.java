@@ -70,6 +70,7 @@ public class CursedScroll extends CursedCurioItem {
         ItemEnchantments enchantments = stack.getTagEnchantments();
         int level = 0;
         if (stack.is(EnigmaticItems.CURSED_RING)) level += 7;
+        if (stack.is(EnigmaticItems.HELL_BLADE_CHARM)) level += 2;
         for (Holder<Enchantment> enchantment : enchantments.keySet()) {
             if (enchantment.is(EnchantmentTags.CURSE)) level += enchantments.getLevel(enchantment);
         }

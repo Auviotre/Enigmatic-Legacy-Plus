@@ -1,10 +1,7 @@
 package auviotre.enigmatic.legacy.registries;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.contents.block.CosmicCake;
-import auviotre.enigmatic.legacy.contents.block.DimensionalAnchor;
-import auviotre.enigmatic.legacy.contents.block.EtheriumOre;
-import auviotre.enigmatic.legacy.contents.block.SpellstoneTable;
+import auviotre.enigmatic.legacy.contents.block.*;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -23,7 +20,8 @@ public class EnigmaticBlocks {
 
     public static final DeferredBlock<SpellstoneTable> SPELLSTONE_TABLE = registerBlock("spellstone_table", SpellstoneTable::new, Rarity.UNCOMMON);
     public static final DeferredBlock<EtheriumOre> ETHERIUM_ORE = registerFireResistanceBlock("etherium_ore", EtheriumOre::new);
-    public static final DeferredBlock<Block> ETHERIUM_BLOCK = registerFireResistanceBlock("etherium_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERITE_BLOCK).mapColor(MapColor.COLOR_LIGHT_BLUE).lightLevel(state -> 8)));
+    public static final DeferredBlock<Block> ETHERIUM_BLOCK = registerFireResistanceBlock("etherium_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERITE_BLOCK).mapColor(MapColor.COLOR_LIGHT_BLUE).lightLevel(state -> 10)));
+    public static final DeferredBlock<EtherealLantern> ETHEREAL_LANTERN = registerBlock("ethereal_lantern", EtherealLantern::new, EtherealLantern.Item::new);
     public static final DeferredBlock<Block> ASTRAL_DUST_SACK = registerBlock("astral_dust_sack", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).mapColor(MapColor.COLOR_PINK)), Rarity.COMMON);
     public static final DeferredBlock<DimensionalAnchor> DIMENSIONAL_ANCHOR = registerFireResistanceBlock("dimensional_anchor", DimensionalAnchor::new);
     public static final DeferredBlock<CosmicCake> COSMIC_CAKE = registerBlock("cosmic_cake", CosmicCake::new, CosmicCake.Item::new);

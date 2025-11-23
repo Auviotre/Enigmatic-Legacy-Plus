@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/blaze"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/blaze_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/blaze_addon"
 }

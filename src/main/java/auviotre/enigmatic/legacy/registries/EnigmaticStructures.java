@@ -17,6 +17,7 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 public class EnigmaticStructures {
     public static final ResourceKey<Structure> SPELLSTONE_HUT = key("spellstone_hut");
     public static final ResourceKey<StructureSet> SPELLSTONE_HUT_STE = setKey("spellstone_hut");
+
     public static void bootstrapStructure(BootstrapContext<Structure> context) {
         HolderGetter<Biome> biome = context.lookup(Registries.BIOME);
         context.register(SPELLSTONE_HUT, new SpellstoneHut(
@@ -38,6 +39,7 @@ public class EnigmaticStructures {
     private static ResourceKey<Structure> key(String name) {
         return ResourceKey.create(Registries.STRUCTURE, EnigmaticLegacy.location(name));
     }
+
     private static ResourceKey<StructureSet> setKey(String name) {
         return ResourceKey.create(Registries.STRUCTURE_SET, EnigmaticLegacy.location(name));
     }

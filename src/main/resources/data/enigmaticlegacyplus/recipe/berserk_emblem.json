@@ -3,7 +3,7 @@
     "category": "misc",
     "key": {
         "C": {
-            "item": "minecraft:crimson_fungus"
+            "item": "enigmaticlegacyplus:infernal_cinder"
         },
         "G": {
             "item": "minecraft:ghast_tear"
@@ -22,8 +22,8 @@
         }
     },
     "pattern": [
-        "CSC",
-        "PXP",
+        "PSP",
+        "CXC",
         "GTG"
     ],
     "result": {

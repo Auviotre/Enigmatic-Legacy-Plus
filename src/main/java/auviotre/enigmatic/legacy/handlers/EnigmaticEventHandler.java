@@ -13,24 +13,22 @@ import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.item.spellstones.AngelBlessing;
 import auviotre.enigmatic.legacy.packets.client.EnigmaticDataSyncPacket;
 import auviotre.enigmatic.legacy.packets.client.ForceProjectileRotationsPacket;
+import auviotre.enigmatic.legacy.packets.client.SlotUnlockToastPacket;
 import auviotre.enigmatic.legacy.registries.*;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -40,7 +38,7 @@ import net.minecraft.world.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.world.entity.ai.goal.RangedCrossbowAttackGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.*;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownTrident;
@@ -81,9 +79,7 @@ public class EnigmaticEventHandler {
                             if (tag.startsWith("AB_DEFLECTED")) {
                                 try {
                                     int time = Integer.parseInt(tag.split(":")[1]);
-                                    if (arrow.tickCount - time < 10)
-                                        // If we cancel the event here it gets stuck in the infinite loop
-                                        return;
+                                    if (arrow.tickCount - time < 10) return;
                                 } catch (Exception ex) {
                                     ex.fillInStackTrace();
                                 }
@@ -176,10 +172,9 @@ public class EnigmaticEventHandler {
     private static void onClone(PlayerEvent.@NotNull Clone event) {
         if (event.getEntity() instanceof ServerPlayer player && event.getOriginal() instanceof ServerPlayer original) {
             EnigmaticData data = original.getData(EnigmaticAttachments.ENIGMATIC_DATA);
-            data.setFireImmunityTimer(0);
+            data.setNebulaPower(false);
             data.setFireImmunityTimer(0);
             PacketDistributor.sendToPlayer(player, new EnigmaticDataSyncPacket(data.save()));
-
             if (event.isWasDeath()) EldritchAmulet.reclaimInventory(original, player);
         }
     }
@@ -202,14 +197,15 @@ public class EnigmaticEventHandler {
     @SubscribeEvent
     private static void onGrantAdvancement(@NotNull AdvancementEvent.AdvancementEarnEvent event) {
         String id = event.getAdvancement().id().toString();
-        Player player = event.getEntity();
-        if (id.equals(EnigmaticLegacy.MODID + ":main/discover_spellstone")) {
-            if (EnigmaticHandler.unlockSpecialSlot("spellstone", player)) {
-                player.displayClientMessage(Component.translatable("message.enigmaticlegacy.slot_unlocked", Component.translatable("curios.identifier.spellstone").withStyle(ChatFormatting.YELLOW)), true);
-            }
-        } else if (id.equals(EnigmaticLegacy.MODID + ":main/discover_scroll")) {
-            if (EnigmaticHandler.unlockSpecialSlot("scroll", player)) {
-                player.displayClientMessage(Component.translatable("message.enigmaticlegacy.slot_unlocked", Component.translatable("curios.identifier.scroll").withStyle(ChatFormatting.YELLOW)), true);
+        if (event.getEntity() instanceof ServerPlayer player) {
+            if (id.equals(EnigmaticLegacy.MODID + ":main/discover_spellstone")) {
+                if (EnigmaticHandler.unlockSpecialSlot("spellstone", player)) {
+                    PacketDistributor.sendToPlayer(player, new SlotUnlockToastPacket("spellstone"));
+                }
+            } else if (id.equals(EnigmaticLegacy.MODID + ":main/discover_scroll")) {
+                if (EnigmaticHandler.unlockSpecialSlot("scroll", player)) {
+                    PacketDistributor.sendToPlayer(player, new SlotUnlockToastPacket("scroll"));
+                }
             }
         }
     }
@@ -232,6 +228,7 @@ public class EnigmaticEventHandler {
         LivingEntity worthy = event.getTheWorthyOne();
         if (entity.level().isClientSide()) return;
         ResourceLocation location = ResourceLocation.fromNamespaceAndPath(EnigmaticLegacy.MODID, "curse_boost");
+        ResourceLocation location_multiplier = ResourceLocation.fromNamespaceAndPath(EnigmaticLegacy.MODID, "curse_boost_extra");
         if (entity instanceof Zombie zombie) {
             addModifier(zombie, Attributes.ARMOR, new AttributeModifier(location, 4.0, AttributeModifier.Operation.ADD_VALUE));
         }
@@ -241,6 +238,64 @@ public class EnigmaticEventHandler {
             } else if (entity.getRandom().nextInt(8) == 0) {
                 entity.setItemInHand(InteractionHand.MAIN_HAND, Items.WOODEN_AXE.getDefaultInstance());
             }
+        }
+        if (entity.getClass() == Drowned.class && entity.getRandom().nextInt(100) <= 5) {
+            if (entity.getMainHandItem().isEmpty()) entity.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.TRIDENT));
+        }
+        if (entity instanceof AbstractPiglin piglin) {
+            addModifier(piglin, Attributes.ATTACK_DAMAGE, new AttributeModifier(location, 1.0, AttributeModifier.Operation.ADD_VALUE));
+            addModifier(piglin, Attributes.ATTACK_KNOCKBACK, new AttributeModifier(location, 0.6, AttributeModifier.Operation.ADD_VALUE));
+            addModifier(piglin, Attributes.ARMOR, new AttributeModifier(location, 2.0, AttributeModifier.Operation.ADD_VALUE));
+            addModifier(piglin, Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, 4.0, AttributeModifier.Operation.ADD_VALUE));
+            addModifier(piglin, Attributes.ARMOR, new AttributeModifier(location_multiplier, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+            addModifier(piglin, Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location_multiplier, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        }
+        if (entity instanceof Creeper creeper && entity.getRandom().nextInt(100) <= 5) {
+            if (!creeper.isPowered()) {
+                LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(creeper.level());
+                if (lightningbolt != null) {
+                    lightningbolt.moveTo(Vec3.atBottomCenterOf(creeper.blockPosition()));
+                    lightningbolt.setSilent(creeper.getRandom().nextBoolean());
+                    lightningbolt.setDamage(0.0F);
+                    creeper.level().addFreshEntity(lightningbolt);
+                }
+            }
+        }
+        if (entity instanceof Evoker evoker) {
+            evoker.setItemInHand(InteractionHand.MAIN_HAND, Items.TOTEM_OF_UNDYING.getDefaultInstance());
+            addModifier(evoker, Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, 8.0, AttributeModifier.Operation.ADD_VALUE));
+        }
+        if (entity instanceof Vindicator vindicator) {
+            vindicator.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60));
+        }
+        if (entity instanceof Ravager ravager) {
+            addModifier(ravager, Attributes.ARMOR, new AttributeModifier(location_multiplier, 10.0, AttributeModifier.Operation.ADD_VALUE));
+            addModifier(ravager, Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, 10.0, AttributeModifier.Operation.ADD_VALUE));
+        }
+        if (entity instanceof Vex vex && vex.getClass() == Vex.class) {
+            vex.setItemSlot(EquipmentSlot.OFFHAND, vex.getItemBySlot(EquipmentSlot.MAINHAND));
+            vex.setDropChance(EquipmentSlot.OFFHAND, 0.0F);
+            vex.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+            vex.setDropChance(EquipmentSlot.CHEST, -1.0F);
+            vex.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 120, 1));
+            vex.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 40));
+        }
+        if (entity instanceof Slime slime) {
+            int size = slime.getSize();
+            if (size > 2) slime.setSize(Mth.ceil(size * 1.2), true);
+            addModifier(slime, Attributes.ATTACK_KNOCKBACK, new AttributeModifier(location, 1.0, AttributeModifier.Operation.ADD_VALUE));
+        }
+        if (entity instanceof MagmaCube magma) {
+            addModifier(magma, Attributes.ARMOR, new AttributeModifier(location, 3.0, AttributeModifier.Operation.ADD_VALUE));
+            addModifier(magma, Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, 4.0, AttributeModifier.Operation.ADD_VALUE));
+        }
+        if (entity instanceof Blaze blaze) {
+            addModifier(blaze, Attributes.ATTACK_DAMAGE, new AttributeModifier(location, 2.0, AttributeModifier.Operation.ADD_VALUE));
+            addModifier(blaze, Attributes.ATTACK_KNOCKBACK, new AttributeModifier(location, 1.0, AttributeModifier.Operation.ADD_VALUE));
+        }
+        if (entity instanceof Phantom phantom) {
+            phantom.setPhantomSize(phantom.getPhantomSize() + 2);
+            addModifier(phantom, Attributes.ATTACK_DAMAGE, new AttributeModifier(location, 2.0, AttributeModifier.Operation.ADD_VALUE));
         }
     }
 

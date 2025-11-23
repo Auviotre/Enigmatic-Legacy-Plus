@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/ravager"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/ravager_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/ravager_addon"
 }

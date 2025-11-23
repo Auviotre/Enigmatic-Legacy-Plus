@@ -95,8 +95,11 @@ public class ChaosElytra extends BaseElytraItem {
         TooltipHandler.worthyOnly(list, stack);
     }
 
+    public int getEnchantmentValue(ItemStack stack) {
+        return 21;
+    }
 
-    protected boolean flyingBoost(Player player) {
+    protected boolean flyingBoost(@NotNull Player player) {
         if (player.isFallFlying()) {
             Vec3 lookAngle = player.getLookAngle().scale(flyingSpeedModifier.get());
             Vec3 movement = player.getDeltaMovement().scale(0.54F);

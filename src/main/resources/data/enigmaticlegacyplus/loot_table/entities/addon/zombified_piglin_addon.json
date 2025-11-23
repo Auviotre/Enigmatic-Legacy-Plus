@@ -1,0 +1,66 @@
+{
+    "type": "minecraft:entity",
+    "pools": [
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance_with_enchanted_bonus",
+                            "enchanted_chance": {
+                                "type": "minecraft:linear",
+                                "base": 0.45000002,
+                                "per_level_above_first": 0.05
+                            },
+                            "enchantment": "minecraft:looting",
+                            "unenchanted_chance": 0.4
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "add": false,
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "max": 3.0,
+                                "min": 1.0
+                            },
+                            "function": "minecraft:set_count"
+                        }
+                    ],
+                    "name": "minecraft:gold_ingot"
+                },
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance_with_enchanted_bonus",
+                            "enchanted_chance": {
+                                "type": "minecraft:linear",
+                                "base": 0.35000002,
+                                "per_level_above_first": 0.05
+                            },
+                            "enchantment": "minecraft:looting",
+                            "unenchanted_chance": 0.3
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "add": false,
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "max": 7.0,
+                                "min": 1.0
+                            },
+                            "function": "minecraft:set_count"
+                        }
+                    ],
+                    "name": "minecraft:glowstone_dust"
+                }
+            ],
+            "rolls": 1.0
+        }
+    ],
+    "random_sequence": "enigmaticlegacyplus:entities/addon/zombified_piglin_addon"
+}

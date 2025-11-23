@@ -11,6 +11,11 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class ThirstCompatHandler {
+    public static void setHellBladeRecover(Player player) {
+        PlayerThirst data = player.getData(ModAttachment.PLAYER_THIRST);
+        data.setQuenched(data.getThirst());
+    }
+
     @SubscribeEvent
     public void onRegisterThirst(@NotNull RegisterThirstValueEvent event) {
         event.addFood(EnigmaticItems.ASTRAL_FRUIT.get(), 3, 8);
@@ -32,7 +37,7 @@ public class ThirstCompatHandler {
         lockThirstData(event.getEntity());
     }
 
-    private void lockThirstData(Player player) {
+    private void lockThirstData(@NotNull Player player) {
         PlayerThirst data = player.getData(ModAttachment.PLAYER_THIRST);
         if (ForbiddenFruit.isForbiddenCursed(player)) {
             data.setThirst(20);

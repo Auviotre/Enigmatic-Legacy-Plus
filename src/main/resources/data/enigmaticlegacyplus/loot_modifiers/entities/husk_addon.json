@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/husk"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/zombie_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/zombie_addon"
 }

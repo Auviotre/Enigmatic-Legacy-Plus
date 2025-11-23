@@ -22,15 +22,13 @@ import org.apache.commons.lang3.StringUtils;
 public class LoreInscriberMenu extends AbstractContainerMenu {
     public final Player player;
     protected final ResultContainer result = new ResultContainer();
-    protected final Container loreSlot = new SimpleContainer(1) {
+    protected final ContainerLevelAccess access;
+    private String unParsedInputField;    protected final Container loreSlot = new SimpleContainer(1) {
         public void setChanged() {
             super.setChanged();
             LoreInscriberMenu.this.slotsChanged(this);
         }
     };
-    protected final ContainerLevelAccess access;
-    private String unParsedInputField;
-
     public LoreInscriberMenu(int syncID, Inventory inventory) {
         this(syncID, inventory, ContainerLevelAccess.create(inventory.player.level(), inventory.player.blockPosition()));
     }
@@ -48,9 +46,11 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof LoreInscriber.Fragment;
             }
+
             public int getMaxStackSize() {
                 return 1;
             }
+
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_lore_fragment_slot"));
             }
@@ -59,9 +59,11 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
             public boolean mayPlace(ItemStack stack) {
                 return false;
             }
+
             public boolean mayPickup(Player playerIn) {
                 return this.hasItem();
             }
+
             public void onTake(Player thePlayer, ItemStack stack) {
                 this.setChanged();
                 LoreInscriberMenu.this.loreSlot.setItem(0, ItemStack.EMPTY);
@@ -191,4 +193,8 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
             return this.name;
         }
     }
+
+
+
+
 }

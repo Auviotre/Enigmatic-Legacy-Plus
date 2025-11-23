@@ -1,0 +1,16 @@
+{
+  "parent": "minecraft:item/generated",
+  "loader": "neoforge:item_layers",
+  "neoforge_data": {
+    "layers": {
+      "0": {
+        "block_light": 14,
+        "sky_light": 9
+
+      }
+    }
+  },
+  "textures": {
+    "layer0": "enigmaticlegacyplus:item/ethereal_forging_charm"
+  }
+}

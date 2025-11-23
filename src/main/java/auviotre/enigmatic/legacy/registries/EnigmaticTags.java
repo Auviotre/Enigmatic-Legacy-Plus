@@ -21,7 +21,8 @@ public interface EnigmaticTags {
         TagKey<Item> AMULETS = register(CuriosApi.MODID, "amulets");
         TagKey<Item> ARMOR_CHECK_EXCLUSION = register("armor_check_exclusions");
         TagKey<Item> BYPASS_FOURTH_CURSE = register("bypass_fourth_curse");
-        TagKey<Item> ETERNAL_BINDING_ENCHANTABLE = register("eternal_binding_enchantable");
+        TagKey<Item> ETERNAL_BINDING_ENCHANTABLE = register("enchantable/eternal_binding");
+        TagKey<Item> ETHERIC_RESONANCE_ENCHANTABLE = register("enchantable/etheric_resonance");
 
         private static TagKey<Item> register(String name) {
             return register(EnigmaticLegacy.MODID, name);

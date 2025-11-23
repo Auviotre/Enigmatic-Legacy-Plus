@@ -1,0 +1,25 @@
+{
+  "parent": "enigmaticlegacyplus:book/root",
+  "rewards": {},
+  "criteria": {
+    "has_items": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "enigmaticlegacyplus:etherium_ore",
+              "enigmaticlegacyplus:raw_etherium",
+              "enigmaticlegacyplus:etherium_ingot"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_items"
+    ]
+  ]
+}

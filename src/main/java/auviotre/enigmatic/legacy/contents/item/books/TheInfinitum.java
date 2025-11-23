@@ -57,7 +57,7 @@ public class TheInfinitum extends TheAcknowledgment {
 
     @SubscribeConfig
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
-        builder.translation("item.enigmaticlegacyplus.the_infinitum").push("abyssItems.TheInfinitum");
+        builder.translation("item.enigmaticlegacyplus.the_infinitum").push("abyssItems.theInfinitum");
         specialDamageBoost = builder.defineInRange("specialDamageBoost", 200, 0, 1000);
         knockbackModifier = builder.defineInRange("knockbackModifier", 200, 0, 1000);
         lifeSteal = builder.defineInRange("lifeSteal", 10, 0, 100);

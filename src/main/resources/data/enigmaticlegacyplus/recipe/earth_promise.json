@@ -1,0 +1,33 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:mining_charm"
+        },
+        "E": {
+            "item": "minecraft:enchanted_golden_apple"
+        },
+        "G": {
+            "item": "minecraft:golden_apple"
+        },
+        "P": {
+            "item": "enigmaticlegacyplus:pure_heart"
+        },
+        "Q": {
+            "item": "enigmaticlegacyplus:sacred_crystal"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:golden_ring"
+        }
+    },
+    "pattern": [
+        "PGP",
+        "QXQ",
+        "EAE"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:earth_promise"
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "name": "book.enigmaticlegacy.entry.evil_essence.name",
+    "icon": "enigmaticlegacyplus:evil_essence",
+    "category": "enigmaticlegacyplus:materials",
+	"advancement": "enigmaticlegacyplus:book/materials/evil_essence",
+    "secret": false,
+    "priority": false,
+    "read_by_default": false,
+    "sortnum": 110,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.enigmaticlegacy.entry.evil_essence.page.1"
+        },
+		{
+            "type": "spotlight",
+			"item": "enigmaticlegacyplus:evil_essence",
+			"link_recipe": true,
+            "title": "book.enigmaticlegacy.entry.evil_essence.heading.1",
+            "text": "book.enigmaticlegacy.entry.evil_essence.page.2"
+        },
+		{
+			"type": "text",
+			"text": "book.enigmaticlegacy.entry.evil_essence.page.3"
+		}
+    ]
+}

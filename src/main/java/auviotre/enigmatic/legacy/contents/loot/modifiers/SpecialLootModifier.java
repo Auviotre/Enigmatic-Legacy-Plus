@@ -55,12 +55,26 @@ public class SpecialLootModifier extends LootModifier {
                 data.putBoolean("LootedIchorBottle", true);
             }
 
-            if (BuiltInLootTables.END_CITY_TREASURE.location().equals(context.getQueriedLootTableId())) {
+            if (BuiltInLootTables.END_CITY_TREASURE.location().equals(context.getQueriedLootTableId()) && EnigmaticHandler.isTheCursedOne(player)) {
                 if (level.dimension().equals(Level.END) && !data.contains("LootedFirstEndCityChest")) {
                     data.putBoolean("LootedFirstEndCityChest", true);
-                    if (EnigmaticHandler.isTheCursedOne(player)) {
-                        list.add(EnigmaticItems.ENCHANTED_ASTRAL_FRUIT.toStack());
+                    list.set(0, EnigmaticItems.ENCHANTED_ASTRAL_FRUIT.toStack());
+                }
+                if (player.getRandom().nextFloat() < 0.1F && list.stream().anyMatch(stack -> stack.is(EnigmaticItems.ASTRAL_DUST))) {
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).is(EnigmaticItems.ASTRAL_DUST)) {
+                            list.set(i, EnigmaticItems.ASTRAL_FRUIT.toStack());
+                            break;
+                        }
                     }
+                }
+            }
+
+            if (entity.level().dimension().equals(Level.NETHER) && !data.getBoolean("LootedHellBladeCharm")) {
+                if (data.getFloat("HellPoint") > 100.0F) {
+                    list.set(0, EnigmaticItems.HELL_BLADE_CHARM.toStack());
+                    data.putBoolean("LootedHellBladeCharm", true);
+                    data.remove("HellPoint");
                 }
             }
 

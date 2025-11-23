@@ -1,0 +1,24 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "enigmaticlegacyplus:item/3d/ichor_spear_using"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "enigmaticlegacyplus:item/gui/ichor_spear"
+    },
+    "fixed": {
+      "parent": "enigmaticlegacyplus:item/gui/ichor_spear"
+    },
+    "ground": {
+      "parent": "enigmaticlegacyplus:item/gui/ichor_spear"
+    },
+    "firstperson_righthand": {
+      "parent": "enigmaticlegacyplus:item/gui/ichor_spear_using"
+    },
+    "firstperson_lefthand": {
+      "parent": "enigmaticlegacyplus:item/gui/ichor_spear_using"
+    }
+  }
+}

@@ -20,9 +20,9 @@ public class ELEnchantmentTags extends EnchantmentTagsProvider {
     }
 
     protected void addTags(HolderLookup.Provider provider) {
-        this.tag(EnchantmentTags.CURSE).add(NEMESIS_CURSE, SORROW_CURSE, ETERNAL_BINDING_CURSE);
-        this.tag(EnchantmentTags.TREASURE).add(NEMESIS_CURSE, SORROW_CURSE, ETERNAL_BINDING_CURSE);
-        this.tag(EnchantmentTags.NON_TREASURE).add(SLAYER, WRATH, CEASELESS, SHARPSHOOTER);
+        this.tag(EnchantmentTags.CURSE).add(NEMESIS_CURSE, SORROW_CURSE, ETERNAL_BINDING_CURSE, REDEMPTION_CURSE);
+        this.tag(EnchantmentTags.TREASURE).add(NEMESIS_CURSE, SORROW_CURSE, ETERNAL_BINDING_CURSE, REDEMPTION_CURSE);
+        this.tag(EnchantmentTags.NON_TREASURE).add(SLAYER, WRATH, CEASELESS, SHARPSHOOTER, ETHERIC_RESONANCE);
         this.tag(EnchantmentTags.DAMAGE_EXCLUSIVE).add(SLAYER, WRATH);
         this.tag(EnchantmentTags.RIPTIDE_EXCLUSIVE).add(WRATH);
         this.tag(EnchantmentTags.BOW_EXCLUSIVE).add(CEASELESS);

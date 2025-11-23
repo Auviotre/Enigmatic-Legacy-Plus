@@ -2,10 +2,7 @@ package auviotre.enigmatic.legacy.contents.gui;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.crafting.SpellstoneTableRecipe;
-import auviotre.enigmatic.legacy.registries.EnigmaticBlocks;
-import auviotre.enigmatic.legacy.registries.EnigmaticItems;
-import auviotre.enigmatic.legacy.registries.EnigmaticMenus;
-import auviotre.enigmatic.legacy.registries.EnigmaticRecipes;
+import auviotre.enigmatic.legacy.registries.*;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
@@ -32,6 +29,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
         }
     };
     protected final Container debrisSlot = new InputContainer(1);
+    protected final Container spellstoneSlot = new InputContainer(1);
     protected final Container ingredientSlot = new InputContainer(7);
     protected final ResultContainer result = new ResultContainer();
     private final ContainerLevelAccess access;
@@ -59,10 +57,20 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_spellstone_debris_slot"));
             }
         });
+        this.addSlot(new Slot(this.spellstoneSlot, 0, 133, 35) {
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(EnigmaticTags.Items.SPELLSTONES);
+            }
+
+            public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+                return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_spellstone_slot"));
+            }
+        });
         this.addSlot(new Slot(this.coreSlot, 0, 80, 35) {
             public boolean mayPlace(ItemStack stack) {
                 return stack.is(EnigmaticItems.SPELLCORE);
             }
+
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_spellcore_slot"));
             }
@@ -78,15 +86,18 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
             public boolean mayPlace(ItemStack stack) {
                 return false;
             }
+
             public boolean mayPickup(Player playerIn) {
                 return this.hasItem();
             }
+
             public void onTake(Player thePlayer, ItemStack stack) {
                 this.setChanged();
                 SpellstoneTableRecipe.Input input = SpellstoneTableMenu.this.getInput();
                 NonNullList<ItemStack> remains = player.level().getRecipeManager().getRemainingItemsFor(EnigmaticRecipes.SPELLSTONE_CRAFTING.get(), input, player.level());
                 debrisSlot.setItem(0, remains.getFirst());
                 coreSlot.clearContent();
+                spellstoneSlot.clearContent();
                 for (int i = 2; i < remains.size(); i++) {
                     ItemStack item = ingredientSlot.getItem(i - 2);
                     ItemStack remain = remains.get(i);
@@ -106,6 +117,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
                     }
                 }
             }
+
             public boolean isFake() {
                 return true;
             }
@@ -126,6 +138,11 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
             MinecraftServer server = level.getServer();
             ItemStack output = ItemStack.EMPTY;
             if (server != null) {
+                if (this.debrisSlot.isEmpty() && this.coreSlot.isEmpty() && this.ingredientSlot.isEmpty() && !this.spellstoneSlot.isEmpty()) {
+                    output = EnigmaticItems.SPELLSTONE_DEBRIS.toStack(4);
+                    this.result.setItem(0, output);
+                    return;
+                }
                 SpellstoneTableRecipe.Input input = this.getInput();
                 Optional<RecipeHolder<SpellstoneTableRecipe>> optional = server.getRecipeManager().getRecipeFor(EnigmaticRecipes.SPELLSTONE_CRAFTING.get(), input, level, (RecipeHolder<SpellstoneTableRecipe>) null);
                 if (optional.isPresent()) {
@@ -146,12 +163,14 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
         if (slot.hasItem()) {
             ItemStack selected = slot.getItem();
             stack = selected.copy();
-            if (id == 9) {
-
-            } else if (id >= 10 && id < 46) {
-                if (!this.moveItemStackTo(selected, 0, 9, false))
+            if (id == 10) {
+                this.access.execute((level, pos) -> selected.getItem().onCraftedBy(selected, level, player));
+                if (!this.moveItemStackTo(selected, 11, 47, true)) return ItemStack.EMPTY;
+                slot.onQuickCraft(selected, stack);
+            } else if (id > 10 && id < 47) {
+                if (!this.moveItemStackTo(selected, 0, 10, false))
                     return ItemStack.EMPTY;
-            } else if (!this.moveItemStackTo(selected, 10, 46, false))
+            } else if (!this.moveItemStackTo(selected, 11, 47, false))
                 return ItemStack.EMPTY;
 
             if (selected.isEmpty()) slot.set(ItemStack.EMPTY);
@@ -160,7 +179,6 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
             if (selected.getCount() == stack.getCount()) return ItemStack.EMPTY;
             slot.onTake(player, selected);
         }
-
         return stack;
     }
 
@@ -168,7 +186,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
         List<ItemStack> list = new ArrayList<>();
         for (int i = 0; i < this.ingredientSlot.getContainerSize(); i++)
             list.add(this.ingredientSlot.getItem(i));
-        return new SpellstoneTableRecipe.Input(this.coreSlot.getItem(0), this.debrisSlot.getItem(0), list);
+        return new SpellstoneTableRecipe.Input(this.coreSlot.getItem(0), this.debrisSlot.getItem(0), list, this.spellstoneSlot.isEmpty());
     }
 
     public boolean hasOutput() {
@@ -192,16 +210,6 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
         return stillValid(this.access, player, EnigmaticBlocks.SPELLSTONE_TABLE.get());
     }
 
-    public class InputContainer extends SimpleContainer {
-        public InputContainer(int size) {
-            super(size);
-        }
-        public void setChanged() {
-            super.setChanged();
-            SpellstoneTableMenu.this.slotsChanged(this);
-        }
-    }
-
     public static class Provider implements MenuProvider {
         private final Component name;
 
@@ -215,6 +223,17 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
 
         public Component getDisplayName() {
             return this.name;
+        }
+    }
+
+    public class InputContainer extends SimpleContainer {
+        public InputContainer(int size) {
+            super(size);
+        }
+
+        public void setChanged() {
+            super.setChanged();
+            SpellstoneTableMenu.this.slotsChanged(this);
         }
     }
 }

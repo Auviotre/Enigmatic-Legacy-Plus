@@ -47,6 +47,7 @@ public class EyeOfNebula extends SpellstoneItem {
     public static ModConfigSpec.IntValue dodgeProbability;
     public static ModConfigSpec.IntValue attackEmpower;
     public static ModConfigSpec.DoubleValue vulnerabilityModifier;
+    public static ModConfigSpec.IntValue cooldown;
 
     public EyeOfNebula() {
         super(defaultSingleProperties().rarity(Rarity.RARE), 0xFF0BDDB8);
@@ -60,6 +61,7 @@ public class EyeOfNebula extends SpellstoneItem {
         dodgeProbability = builder.defineInRange("dodgeProbability", 15, 0, 100);
         attackEmpower = builder.defineInRange("attackEmpower", 150, 0, 1000);
         vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
+        cooldown = builder.defineInRange("cooldown", 60, 20, 200);
         builder.pop(2);
     }
 
@@ -112,7 +114,7 @@ public class EyeOfNebula extends SpellstoneItem {
     }
 
     public int getCooldown() {
-        return 60;
+        return cooldown.get();
     }
 
     public void triggerActiveAbility(ServerLevel level, @NotNull ServerPlayer player, ItemStack stack) {

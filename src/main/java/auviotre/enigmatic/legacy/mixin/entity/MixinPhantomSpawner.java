@@ -33,7 +33,7 @@ public class MixinPhantomSpawner {
             var random = level.random;
             --this.ticksUntilSpawn;
             if (this.ticksUntilSpawn <= 0) {
-                this.ticksUntilSpawn += (60 + random.nextInt(60)) * 20;
+                this.ticksUntilSpawn += (60 + random.nextInt(60)) * 10;
                 if (level.getSkyDarken() < 5 && level.dimensionType().hasSkyLight()) return;
                 int i = 0;
                 for (ServerPlayer player : level.players()) {
@@ -51,14 +51,14 @@ public class MixinPhantomSpawner {
                                         BlockState blockstate = level.getBlockState(blockPos);
                                         FluidState fluidstate = level.getFluidState(blockPos);
                                         if (NaturalSpawner.isValidEmptySpawnBlock(level, blockPos, blockstate, fluidstate, EntityType.PHANTOM)) {
-                                            SpawnGroupData ilivingentitydata = null;
+                                            SpawnGroupData spawnGroupData = null;
                                             int l = 1 + random.nextInt(difficulty.getDifficulty().getId() + 1);
                                             for (int i1 = 0; i1 < l; ++i1) {
                                                 Phantom phantom = EntityType.PHANTOM.create(level);
                                                 if (phantom != null) {
                                                     phantom.moveTo(blockPos, 0.0F, 0.0F);
                                                     EnigmaticHandler.setCurseBoosted(phantom, true, player);
-                                                    ilivingentitydata = phantom.finalizeSpawn(level, difficulty, MobSpawnType.NATURAL, ilivingentitydata);
+                                                    spawnGroupData = phantom.finalizeSpawn(level, difficulty, MobSpawnType.NATURAL, spawnGroupData);
                                                     level.addFreshEntityWithPassengers(phantom);
                                                 }
                                             }

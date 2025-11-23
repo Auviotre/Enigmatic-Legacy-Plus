@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/skeleton"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/skeleton_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/skeleton_addon"
 }

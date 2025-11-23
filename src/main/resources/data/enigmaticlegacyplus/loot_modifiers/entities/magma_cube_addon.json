@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/magma_cube"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/magma_cube_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/magma_cube_addon"
 }

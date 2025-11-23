@@ -31,12 +31,12 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .define('X', EnigmaticItems.SPELLCORE)
                 .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
                 .save(output);
-//        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, EnigmaticBlocks.SPELLSTONE_TABLE)
-//                .pattern("SAA").pattern("AXA").pattern("AAS")
-//                .define('S', EnigmaticItems.SPELLSTONE_DEBRIS).define('A', Items.AMETHYST_SHARD)
-//                .define('X', EnigmaticItems.SPELLCORE)
-//                .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
-//                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, EnigmaticBlocks.SPELLSTONE_TABLE)
+                .pattern(" X ").pattern("AIA").pattern("SSS")
+                .define('I', EnigmaticItems.ICHOR_DROPLET).define('A', Items.ENDER_PEARL)
+                .define('X', EnigmaticItems.SPELLCORE).define('S', Blocks.CRYING_OBSIDIAN)
+                .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
+                .save(output);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, EnigmaticItems.THE_ACKNOWLEDGMENT)
                 .requires(Items.BOOK).requires(Items.LANTERN)
@@ -236,6 +236,12 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .define('P', Items.BLAZE_POWDER).define('R', Items.BLAZE_ROD).define('V', Items.WITHER_SKELETON_SKULL)
                 .unlockedBy("has_item", has(Items.WITHER_SKELETON_SKULL))
                 .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, EnigmaticItems.ICHOR_SPEAR, 2)
+                .pattern(" IG").pattern(" BI").pattern("B  ")
+                .define('I', EnigmaticItems.ICHOR_DROPLET).define('G', Items.GOLD_INGOT)
+                .define('B', Items.BLAZE_ROD)
+                .unlockedBy("has_item", has(EnigmaticItems.ICHOR_DROPLET))
+                .save(output);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EnigmaticItems.ENDER_ROD)
                 .pattern("  B").pattern("AXA").pattern("B  ")
@@ -300,6 +306,20 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .define('X', EnigmaticItems.ETHERIUM_INGOT)
                 .unlockedBy("has_item", has(EnigmaticItems.ETHERIUM_INGOT))
                 .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EnigmaticItems.ETHEREAL_FORGING_CHARM)
+                .pattern(" F ").pattern("RXR").pattern("EHE")
+                .define('F', EnigmaticItems.FORGER_GEM)
+                .define('R', EnigmaticItems.ENDER_ROD).define('X', EnigmaticItems.EARTH_HEART)
+                .define('E', EnigmaticItems.ETHERIUM_INGOT).define('H', EnigmaticItems.ETHERIUM_HAMMER)
+                .unlockedBy("has_item", has(EnigmaticItems.ETHERIUM_HAMMER))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, EnigmaticBlocks.ETHEREAL_LANTERN)
+                .pattern("NAN").pattern("IXI").pattern("EIE")
+                .define('A', EnigmaticItems.ASTRAL_DUST)
+                .define('N', EnigmaticItems.ETHERIUM_NUGGET).define('X', Blocks.SEA_LANTERN)
+                .define('I', EnigmaticItems.ETHERIUM_INGOT).define('E', EnigmaticItems.ENDER_ROD)
+                .unlockedBy("has_item", has(EnigmaticItems.ETHERIUM_NUGGET))
+                .save(output);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, EnigmaticItems.DRAGON_BREATH_BOW)
                 .pattern("DED").pattern("NXD").pattern("DED")
@@ -356,10 +376,17 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .unlockedBy("has_item", has(EnigmaticItems.TWISTED_HEART))
                 .save(output);
         CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.BERSERK_EMBLEM)
-                .pattern("CSC").pattern("PXP").pattern("GTG")
-                .define('C', Items.CRIMSON_FUNGUS).define('S', Items.GOLDEN_SWORD)
+                .pattern("PSP").pattern("CXC").pattern("GTG")
+                .define('C', EnigmaticItems.INFERNAL_CINDER).define('S', Items.GOLDEN_SWORD)
                 .define('G', Items.GHAST_TEAR).define('P', Items.BLAZE_POWDER)
                 .define('T', Items.NETHERITE_INGOT).define('X', EnigmaticItems.TWISTED_HEART)
+                .unlockedBy("has_item", has(EnigmaticItems.TWISTED_HEART))
+                .save(output);
+        CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.SANGUINARY_HANDBOOK)
+                .pattern("CSC").pattern("GBG").pattern("DXD")
+                .define('C', EnigmaticItems.INFERNAL_CINDER).define('S', Items.NETHERITE_INGOT)
+                .define('G', Items.GHAST_TEAR).define('D', Items.DRAGON_BREATH)
+                .define('B', EnigmaticItems.HUNTER_GUIDEBOOK).define('X', EnigmaticItems.TWISTED_HEART)
                 .unlockedBy("has_item", has(EnigmaticItems.TWISTED_HEART))
                 .save(output);
         CursedShapedRecipe.Builder.shaped(RecipeCategory.TOOLS, EnigmaticItems.SOUL_COMPASS)
@@ -369,6 +396,42 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .define('T', EnigmaticItems.TWISTED_HEART).define('X', Items.COMPASS)
                 .unlockedBy("has_item", has(EnigmaticItems.TWISTED_HEART))
                 .save(output);
+
+        CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.PURE_HEART)
+                .pattern(" T ").pattern("BXB").pattern("RER")
+                .define('T', Items.GHAST_TEAR).define('B', EnigmaticItems.ICHOR_DROPLET).define('R', Items.GLOWSTONE_DUST)
+                .define('E', Items.ENDER_EYE).define('X', EnigmaticItems.EARTH_HEART)
+                .unlockedBy("has_item", has(EnigmaticItems.ICHOR_DROPLET))
+                .save(output);
+        CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.THE_BLESS)
+                .pattern("AGA").pattern("IXI").pattern("APA")
+                .define('A', EnigmaticItems.SACRED_CRYSTAL).define('I', Items.GOLD_INGOT)
+                .define('P', EnigmaticItems.PURE_HEART).define('G', Items.GLOWSTONE_DUST)
+                .define('X', EnigmaticItems.THE_ACKNOWLEDGMENT)
+                .unlockedBy("has_item", has(EnigmaticItems.SACRED_CRYSTAL))
+                .save(output);
+        CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.BLESS_AMPLIFIER)
+                .pattern("GIG").pattern("QXQ").pattern("GAG")
+                .define('A', EnigmaticItems.SACRED_CRYSTAL).define('I', EnigmaticItems.ICHOR_DROPLET)
+                .define('Q', Items.QUARTZ).define('G', Items.GLOWSTONE_DUST)
+                .define('X', EnigmaticItems.ENCHANTMENT_TRANSPOSER)
+                .unlockedBy("has_item", has(EnigmaticItems.SACRED_CRYSTAL))
+                .save(output);
+        CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.EARTH_PROMISE)
+                .pattern("PGP").pattern("QXQ").pattern("EAE")
+                .define('A', EnigmaticItems.MINING_CHARM).define('E', Items.ENCHANTED_GOLDEN_APPLE)
+                .define('G', Items.GOLDEN_APPLE).define('P', EnigmaticItems.PURE_HEART)
+                .define('X', EnigmaticItems.GOLDEN_RING).define('Q', EnigmaticItems.SACRED_CRYSTAL)
+                .unlockedBy("has_item", has(EnigmaticItems.SACRED_CRYSTAL))
+                .save(output);
+        CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.BLESS_STONE)
+                .pattern("ICI").pattern("AXA").pattern("BPB")
+                .define('A', EnigmaticItems.SACRED_CRYSTAL).define('C', EnigmaticItems.COSMIC_HEART)
+                .define('P', EnigmaticItems.PURE_HEART).define('I', EnigmaticItems.ICHOR_DROPLET)
+                .define('X', EnigmaticItems.CURSED_STONE).define('B', Items.GLOWSTONE_DUST)
+                .unlockedBy("has_item", has(EnigmaticItems.CURSED_STONE))
+                .save(output);
+
         CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.TOTEM_OF_MALICE)
                 .pattern(" N ").pattern("EXE").pattern(" N ")
                 .define('N', Items.NETHERITE_INGOT).define('X', Items.TOTEM_OF_UNDYING)
@@ -389,8 +452,9 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .unlockedBy("has_item", has(EnigmaticItems.DARKEST_SCROLL))
                 .save(output);
         CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.CURSED_SCROLL)
-                .pattern("MXM").pattern("BTY").pattern("RER")
-                .define('M', Items.PHANTOM_MEMBRANE).define('B', Items.INK_SAC).define('Y', Items.FEATHER)
+                .pattern("CXC").pattern("BTY").pattern("RER")
+                .define('C', EnigmaticItems.INFERNAL_CINDER)
+                .define('B', Items.INK_SAC).define('Y', Items.FEATHER)
                 .define('T', EnigmaticItems.DARKEST_SCROLL).define('R', Items.REDSTONE)
                 .define('E', Items.ENCHANTED_BOOK).define('X', EnigmaticItems.TWISTED_HEART)
                 .unlockedBy("has_item", has(EnigmaticItems.DARKEST_SCROLL))

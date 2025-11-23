@@ -5,11 +5,11 @@
         "B": {
             "item": "minecraft:ink_sac"
         },
+        "C": {
+            "item": "enigmaticlegacyplus:infernal_cinder"
+        },
         "E": {
             "item": "minecraft:enchanted_book"
-        },
-        "M": {
-            "item": "minecraft:phantom_membrane"
         },
         "R": {
             "item": "minecraft:redstone"
@@ -25,7 +25,7 @@
         }
     },
     "pattern": [
-        "MXM",
+        "CXC",
         "BTY",
         "RER"
     ],

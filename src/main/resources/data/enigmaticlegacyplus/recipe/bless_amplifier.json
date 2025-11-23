@@ -1,0 +1,30 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:sacred_crystal"
+        },
+        "G": {
+            "item": "minecraft:glowstone_dust"
+        },
+        "I": {
+            "item": "enigmaticlegacyplus:ichor_droplet"
+        },
+        "Q": {
+            "item": "minecraft:quartz"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:enchantment_transposer"
+        }
+    },
+    "pattern": [
+        "GIG",
+        "QXQ",
+        "GAG"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:bless_amplifier"
+    }
+}

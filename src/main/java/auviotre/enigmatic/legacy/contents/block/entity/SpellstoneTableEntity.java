@@ -13,6 +13,7 @@ public class SpellstoneTableEntity extends BlockEntity {
     public int time;
     public float rot;
     public float oRot;
+
     public SpellstoneTableEntity(BlockPos pos, BlockState blockState) {
         super(EnigmaticBlockEntities.SPELLSTONE_TABLE_ENTITY.get(), pos, blockState);
     }
@@ -25,11 +26,11 @@ public class SpellstoneTableEntity extends BlockEntity {
         table.rot = player == null ? table.rot + 0.025F : table.rot + 0.02F + (float) (Math.min(0.08F / Math.sqrt(player.distanceToSqr(vec3)), 0.1F));
         ++table.time;
         float delta = (float) (2.0F * Math.PI);
-        while(table.rot >= Math.PI) {
+        while (table.rot >= Math.PI) {
             table.oRot -= delta;
             table.rot -= delta;
         }
-        while(table.rot < -Math.PI) {
+        while (table.rot < -Math.PI) {
             table.oRot += delta;
             table.rot += delta;
         }

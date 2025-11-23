@@ -1,6 +1,6 @@
 package auviotre.enigmatic.legacy.mixin.entity;
 
-import auviotre.enigmatic.legacy.api.entity.IAbyssalHeartBearer;
+import auviotre.enigmatic.legacy.api.entity.AbyssalHeartBearer;
 import auviotre.enigmatic.legacy.contents.entity.PermanentItemEntity;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EnderDragon.class)
-public abstract class MixinEnderDragon extends Mob implements Enemy, IAbyssalHeartBearer {
+public abstract class MixinEnderDragon extends Mob implements Enemy, AbyssalHeartBearer {
     @Shadow
     public int dragonDeathTime;
     private Player abyssalHeartOwner;

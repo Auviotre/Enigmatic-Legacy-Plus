@@ -8,6 +8,8 @@ import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -27,6 +29,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.client.IItemDecorator;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -56,7 +59,7 @@ public class TotemOfMalice extends BaseCursedItem {
         if (!entity.level().isClientSide() && !entity.hasInfiniteMaterials()) {
             entity.invulnerableTime = 60;
             setDurability(stack, getDurability(stack) - 1);
-            if (getDurability(stack) == 0 && entity.getRandom().nextInt(100) < 50) {
+            if (getDurability(stack) == 0 && entity.getRandom().nextBoolean()) {
                 stack.set(EnigmaticComponents.MALICE_MAX_DURABILITY, getMaxDurability(stack) - 1);
                 if (getMaxDurability(stack) < 1) stack.shrink(1);
             }
@@ -108,17 +111,21 @@ public class TotemOfMalice extends BaseCursedItem {
         return getDurability(stack) > 0;
     }
 
-    public boolean isBarVisible(ItemStack stack) {
-        return true;
-    }
-
-    public int getBarWidth(ItemStack stack) {
-        return Math.round((float) getDurability(stack) * 13.0F / getMaxDurability(stack));
-    }
-
-    public int getBarColor(ItemStack stack) {
-        float f = Math.max(0.0F, (float) getDurability(stack) / getMaxDurability(stack));
-        return Mth.hsvToRgb(f / 18 * 13, 1.0F, 0.25F + f * 0.5F);
+    @OnlyIn(Dist.CLIENT)
+    public static class Decorator implements IItemDecorator {
+        public boolean render(GuiGraphics graphics, Font font, @NotNull ItemStack stack, int x, int y) {
+            int durability = getDurability(stack);
+            if (stack.getCount() == 1 && durability > 0) {
+                graphics.pose().pushPose();
+                String s = String.valueOf(durability);
+                float f = Math.clamp((float) getDurability(stack) / getMaxDurability(stack), 0.0F, 0.8F);
+                graphics.pose().translate(0.0F, 0.0F, 200.0F);
+                graphics.drawString(font, s, x + 19 - 2 - font.width(s), y + 6 + 3, Mth.hsvToRgb(5.0F / 6, 1.0F, 0.6F + f * 0.5F), true);
+                graphics.pose().popPose();
+                return true;
+            }
+            return false;
+        }
     }
 
     @Mod(value = EnigmaticLegacy.MODID)

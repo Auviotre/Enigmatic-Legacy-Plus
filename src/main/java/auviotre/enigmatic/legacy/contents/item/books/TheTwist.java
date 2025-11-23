@@ -50,7 +50,7 @@ public class TheTwist extends TheAcknowledgment {
 
     @SubscribeConfig
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
-        builder.translation("item.enigmaticlegacyplus.the_twist").push("cursedItems.TheTwist");
+        builder.translation("item.enigmaticlegacyplus.the_twist").push("cursedItems.theTwist");
         specialDamageBoost = builder.defineInRange("specialDamageBoost", 300, 0, 1000);
         knockbackModifier = builder.defineInRange("knockbackModifier", 300, 0, 1000);
         builder.pop(2);

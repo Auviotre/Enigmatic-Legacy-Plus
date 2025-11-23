@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:astral_dust"
+        },
+        "E": {
+            "item": "enigmaticlegacyplus:ender_rod"
+        },
+        "I": {
+            "item": "enigmaticlegacyplus:etherium_ingot"
+        },
+        "N": {
+            "item": "enigmaticlegacyplus:etherium_nugget"
+        },
+        "X": {
+            "item": "minecraft:sea_lantern"
+        }
+    },
+    "pattern": [
+        "NAN",
+        "IXI",
+        "EIE"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:ethereal_lantern"
+    }
+}

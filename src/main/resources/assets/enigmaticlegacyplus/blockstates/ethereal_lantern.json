@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=true": {
+      "model": "enigmaticlegacyplus:block/ethereal_lantern_hanging"
+    },
+    "hanging=false": {
+      "model": "enigmaticlegacyplus:block/ethereal_lantern"
+    }
+  }
+}

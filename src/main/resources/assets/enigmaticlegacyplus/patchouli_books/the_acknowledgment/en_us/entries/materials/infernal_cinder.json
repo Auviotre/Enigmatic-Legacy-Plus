@@ -1,0 +1,23 @@
+{
+    "name": "book.enigmaticlegacy.entry.infernal_cinder.name",
+    "icon": "enigmaticlegacyplus:infernal_cinder",
+    "category": "enigmaticlegacyplus:materials",
+	"advancement": "enigmaticlegacyplus:book/materials/infernal_cinder",
+    "secret": false,
+    "priority": false,
+    "read_by_default": false,
+    "sortnum": 30,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.enigmaticlegacy.entry.infernal_cinder.page.1"
+        },
+		{
+            "type": "spotlight",
+			"item": "enigmaticlegacyplus:infernal_cinder",
+			"link_recipe": true,
+            "title": "book.enigmaticlegacy.entry.infernal_cinder.heading.1",
+            "text": "book.enigmaticlegacy.entry.infernal_cinder.page.2"
+        }
+    ]
+}

@@ -72,6 +72,9 @@ public class EnchantmentTransposer extends BaseItem {
                     leftover.removeIf(transposer::canTranspose);
                     EnchantmentHelper.setEnchantments(book, transposed.toImmutable());
                     EnchantmentHelper.setEnchantments(target, leftover.toImmutable());
+                    int cost = target.getOrDefault(DataComponents.REPAIR_COST, 0);
+                    book.set(DataComponents.REPAIR_COST, cost / 2);
+                    target.set(DataComponents.REPAIR_COST, cost + 1);
                     if (player.level().isClientSide)
                         player.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 0.8F, 1.2F + player.getRandom().nextFloat() * 0.4F);
                     event.getCarriedSlotAccess().set(book);

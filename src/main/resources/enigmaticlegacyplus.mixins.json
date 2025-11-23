@@ -15,11 +15,17 @@
     "MixinServerPlayer",
     "compat.MixinApothMenu",
     "entity.MixinEnderDragon",
+    "entity.MixinGuardian",
     "entity.MixinHoglinAi",
+    "entity.MixinHusk",
     "entity.MixinPhantomSpawner",
     "entity.MixinPiglinAi",
+    "entity.MixinRavager",
     "entity.MixinSwellGoal",
-    "entity.MixinVillager"
+    "entity.MixinVillager",
+    "entity.MixinWitch",
+    "entity.MixinWitherBoss",
+    "entity.MixinZombie"
   ],
   "injectors": {
     "defaultRequire": 1

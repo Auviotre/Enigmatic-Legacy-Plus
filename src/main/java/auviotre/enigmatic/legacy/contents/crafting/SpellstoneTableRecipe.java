@@ -46,7 +46,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
     }
 
     public boolean matches(@NotNull Input input, Level level) {
-        if (!input.core().is(EnigmaticItems.SPELLCORE)) return false;
+        if (!input.core().is(EnigmaticItems.SPELLCORE) && !input.noSpellstone) return false;
         if (input.debris().getCount() < this.debrisCount) return false;
         int size = input.ingredients().size();
         List<ItemStack> items = new ArrayList<>(size);
@@ -70,7 +70,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         NonNullList<ItemStack> nonnulllist = NonNullList.withSize(input.size(), ItemStack.EMPTY);
         input.debris().shrink(this.debrisCount);
         nonnulllist.set(0, input.debris().copy());
-        for(int i = 2; i < nonnulllist.size(); ++i) {
+        for (int i = 2; i < nonnulllist.size(); ++i) {
             ItemStack item = input.getItem(i);
             if (item.hasCraftingRemainingItem()) {
                 nonnulllist.set(i, item.getCraftingRemainingItem());
@@ -116,7 +116,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         return EnigmaticRecipes.SPELLSTONE_CRAFTING.get();
     }
 
-    public record Input(ItemStack core, ItemStack debris, List<ItemStack> ingredients) implements RecipeInput {
+    public record Input(ItemStack core, ItemStack debris, List<ItemStack> ingredients, boolean noSpellstone) implements RecipeInput {
         public ItemStack getItem(int id) {
             if (id == 0) return core;
             else if (id == 1) return debris;
@@ -178,6 +178,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         private final ItemStack result;
         private final NonNullList<Ingredient> ingredients;
         private boolean allDifferent = false;
+
         private Builder(ItemLike resultItem, int debrisCount) {
             this.result = resultItem.asItem().getDefaultInstance();
             this.debrisCount = debrisCount;
@@ -188,6 +189,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         public static Builder spell(ItemLike result, int debrisCount) {
             return new Builder(result, debrisCount);
         }
+
         public Builder allDifferent() {
             this.allDifferent = true;
             return this;
@@ -202,7 +204,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         }
 
         public Builder requires(ItemLike item, int quantity) {
-            for(int i = 0; i < quantity; ++i) this.requires(Ingredient.of(item));
+            for (int i = 0; i < quantity; ++i) this.requires(Ingredient.of(item));
             return this;
         }
 
@@ -211,7 +213,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         }
 
         public Builder requires(Ingredient ingredient, int quantity) {
-            for(int i = 0; i < quantity; ++i)  this.ingredients.add(ingredient);
+            for (int i = 0; i < quantity; ++i) this.ingredients.add(ingredient);
             return this;
         }
 
@@ -232,6 +234,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
             ResourceLocation location = BuiltInRegistries.ITEM.getKey(this.getResult());
             this.save(recipeOutput, ResourceLocation.fromNamespaceAndPath(location.getNamespace(), "spellstone/" + location.getPath()));
         }
+
         public void save(@NotNull RecipeOutput recipeOutput, ResourceLocation id) {
             Advancement.Builder builder = recipeOutput.advancement().addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(AdvancementRequirements.Strategy.OR);
             Objects.requireNonNull(builder);

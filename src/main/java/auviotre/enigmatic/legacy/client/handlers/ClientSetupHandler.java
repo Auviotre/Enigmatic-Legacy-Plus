@@ -2,23 +2,25 @@ package auviotre.enigmatic.legacy.client.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.client.KeyHandler;
-import auviotre.enigmatic.legacy.client.renderer.DimensionalAnchorRender;
-import auviotre.enigmatic.legacy.client.renderer.DragonBreathArrowRender;
-import auviotre.enigmatic.legacy.client.renderer.PermanentItemRenderer;
-import auviotre.enigmatic.legacy.client.renderer.SpellstoneTableRender;
+import auviotre.enigmatic.legacy.client.particles.IchorParticle;
+import auviotre.enigmatic.legacy.client.renderer.*;
 import auviotre.enigmatic.legacy.client.renderer.layer.EnigmaticElytraLayer;
 import auviotre.enigmatic.legacy.client.renderer.layer.EtheriumShieldLayer;
+import auviotre.enigmatic.legacy.client.renderer.model.IchorSpriteModel;
 import auviotre.enigmatic.legacy.client.renderer.model.SpellstoneModel;
 import auviotre.enigmatic.legacy.client.screen.LoreInscriberScreen;
 import auviotre.enigmatic.legacy.client.screen.SpellstoneTableScreen;
 import auviotre.enigmatic.legacy.client.screen.button.EnderChestInventoryButton;
 import auviotre.enigmatic.legacy.client.screen.button.MagnetRingInventoryButton;
+import auviotre.enigmatic.legacy.contents.item.charms.HellBladeCharm;
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
+import auviotre.enigmatic.legacy.contents.item.tools.TotemOfMalice;
 import auviotre.enigmatic.legacy.registries.*;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.particle.SpellParticle;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -48,6 +50,13 @@ public class ClientSetupHandler {
     }
 
     @SubscribeEvent
+    private static void registerItemDecorator(@NotNull RegisterItemDecorationsEvent event) {
+        event.register(EnigmaticItems.HELL_BLADE_CHARM, new HellBladeCharm.Decorator());
+        event.register(EnigmaticItems.TOTEM_OF_MALICE, new TotemOfMalice.Decorator());
+    }
+
+
+    @SubscribeEvent
     private static void registerItemColor(RegisterColorHandlersEvent.@NotNull Item event) {
         event.register((stack, index) -> index > 0 ? -1 : Spelltuner.getColor(stack), EnigmaticItems.SPELLTUNER);
     }
@@ -61,6 +70,8 @@ public class ClientSetupHandler {
     @SubscribeEvent
     private static void registerParticleProvider(@NotNull RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(EnigmaticParticles.SPELL.get(), SpellParticle.MobEffectProvider::new);
+        event.registerSpriteSet(EnigmaticParticles.ICHOR.get(), IchorParticle.Provider::new);
+        event.registerSpriteSet(EnigmaticParticles.ICHOR_CURSE.get(), SpellParticle.Provider::new);
     }
 
     @SubscribeEvent
@@ -68,6 +79,9 @@ public class ClientSetupHandler {
         event.registerEntityRenderer(EnigmaticEntities.PERMANENT_ITEM_ENTITY.get(), PermanentItemRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.COBWEB_BALL.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.DRAGON_BREATH_ARROW.get(), DragonBreathArrowRender::new);
+        event.registerEntityRenderer(EnigmaticEntities.THROWN_ICHOR_SPEAR.get(), ThrownIchorSpearRenderer::new);
+        event.registerEntityRenderer(EnigmaticEntities.ICHOR_SPRITE.get(), IchorSpriteRenderer::new);
+        event.registerEntityRenderer(EnigmaticEntities.PIGLIN_WANDERER.get(), context -> new PiglinWandererRender(context, ModelLayers.PIGLIN_BRUTE, ModelLayers.PIGLIN_BRUTE_INNER_ARMOR, ModelLayers.PIGLIN_BRUTE_OUTER_ARMOR));
         event.registerBlockEntityRenderer(EnigmaticBlockEntities.DIMENSIONAL_ANCHOR_ENTITY.get(), DimensionalAnchorRender::new);
         event.registerBlockEntityRenderer(EnigmaticBlockEntities.SPELLSTONE_TABLE_ENTITY.get(), SpellstoneTableRender::new);
     }
@@ -75,6 +89,7 @@ public class ClientSetupHandler {
     @SubscribeEvent
     private static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(SpellstoneModel.LAYER, SpellstoneModel::createLayer);
+        event.registerLayerDefinition(IchorSpriteModel.LAYER, IchorSpriteModel::createBodyLayer);
     }
 
     @SubscribeEvent

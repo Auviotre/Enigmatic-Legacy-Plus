@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 public class SpellstoneTableScreen extends AbstractContainerScreen<SpellstoneTableMenu> {
     private static final ResourceLocation TEXTURE = EnigmaticLegacy.location("textures/gui/spellstone_table.png");
@@ -16,13 +17,19 @@ public class SpellstoneTableScreen extends AbstractContainerScreen<SpellstoneTab
         super(menu, inventory, title);
     }
 
+    protected void init() {
+        super.init();
+        this.titleLabelX += 15;
+        this.titleLabelY -= 1;
+    }
+
     public void render(GuiGraphics graphics, int x, int y, float partialTick) {
         super.render(graphics, x, y, partialTick);
         RenderSystem.disableBlend();
         this.renderTooltip(graphics, x, y);
     }
 
-    protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
+    protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int x, int y) {
         RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int i = (this.width - this.imageWidth) / 2;

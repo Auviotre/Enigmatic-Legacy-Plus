@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "enigmaticlegacyplus:item/divine_fruit_pie_block"
-  }
-}

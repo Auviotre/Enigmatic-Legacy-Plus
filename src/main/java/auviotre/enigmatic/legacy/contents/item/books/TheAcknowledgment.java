@@ -29,10 +29,6 @@ public class TheAcknowledgment extends BaseItem {
         super(properties.attributes(createAttributes(attackDamage, attackSpeed)));
     }
 
-    protected TheAcknowledgment(@NotNull Properties properties) {
-        super(properties);
-    }
-
     public TheAcknowledgment() {
         this(defaultSingleProperties().rarity(Rarity.EPIC), 3.5F, -2.1F);
     }

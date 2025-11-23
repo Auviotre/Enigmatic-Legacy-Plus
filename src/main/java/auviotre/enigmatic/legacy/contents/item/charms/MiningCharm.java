@@ -13,6 +13,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
@@ -22,6 +24,7 @@ public class MiningCharm extends BaseCurioItem {
         super(defaultSingleProperties().rarity(Rarity.UNCOMMON));
     }
 
+    @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
         list.add(Component.translatable("attribute.modifier.plus.0", 1, Component.translatable("attribute.name.fortune_level")).withStyle(ChatFormatting.BLUE));

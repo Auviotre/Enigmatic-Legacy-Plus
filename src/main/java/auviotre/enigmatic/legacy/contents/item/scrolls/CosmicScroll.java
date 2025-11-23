@@ -4,11 +4,11 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -39,7 +39,7 @@ import java.util.List;
 
 public class CosmicScroll extends BaseCurioItem {
     public CosmicScroll() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.ETHERIUM_SHIELD, 25));
+        super(defaultSingleProperties().rarity(Rarity.EPIC));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -54,15 +54,11 @@ public class CosmicScroll extends BaseCurioItem {
         return false;
     }
 
-    public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
-        tooltips.add(Component.translatable("tooltip.enigmaticlegacy.etheriumAttribute", "25%").withStyle(ChatFormatting.BLUE));
-        return tooltips;
-    }
-
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         CuriosApi.addSlotModifier(attributes, "scroll", getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
         attributes.put(Attributes.LUCK, new AttributeModifier(getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE));
+        attributes.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(getLocation(this), 0.2, AttributeModifier.Operation.ADD_VALUE));
         return attributes;
     }
 

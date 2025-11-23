@@ -4,11 +4,16 @@ import auviotre.enigmatic.legacy.contents.item.charms.ForgerGem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +21,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
 
 @Mixin(AnvilMenu.class)
 public abstract class MixinAnvilMenu extends ItemCombinerMenu {
@@ -54,6 +61,32 @@ public abstract class MixinAnvilMenu extends ItemCombinerMenu {
                     modified = Math.min(modified, max);
                     result.set(DataComponents.MAX_DAMAGE, modified);
                     result.set(EnigmaticComponents.TOOL_DURABILITY_INFO, ForgerGem.ToolInfo.of(info.originDurability(), modified - info.originDurability()));
+                    this.resultSlots.setItem(0, result);
+                }
+            }
+        }
+
+        if (EnigmaticHandler.hasCurio(player, EnigmaticItems.ETHEREAL_FORGING_CHARM)) {
+            ItemStack result = this.resultSlots.getItem(0);
+            if (!result.isEmpty() && !result.getOrDefault(EnigmaticComponents.ETHEREAL_FORGED, false)) {
+                if (result.has(DataComponents.ATTRIBUTE_MODIFIERS)) {
+                    ItemAttributeModifiers attributes = result.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
+                    ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+                    List<ItemAttributeModifiers.Entry> modifiers = attributes.modifiers();
+                    for (ItemAttributeModifiers.Entry entry : modifiers) {
+                        Holder<Attribute> attribute = entry.attribute();
+                        AttributeModifier modifier = entry.modifier();
+                        AttributeModifier.Operation operation = modifier.operation();
+                        if (attribute == Attributes.ATTACK_DAMAGE) {
+                            double amount = modifier.amount();
+                            if (operation.id() == 0 && amount > 0) amount += 1;
+                            if (operation.id() != 0 && amount > 0) amount += 0.05;
+                            modifier = new AttributeModifier(modifier.id(), amount, operation);
+                        }
+                        builder.add(attribute, modifier, entry.slot());
+                    }
+                    result.set(DataComponents.ATTRIBUTE_MODIFIERS, builder.build());
+                    result.set(EnigmaticComponents.ETHEREAL_FORGED, true);
                     this.resultSlots.setItem(0, result);
                 }
             }

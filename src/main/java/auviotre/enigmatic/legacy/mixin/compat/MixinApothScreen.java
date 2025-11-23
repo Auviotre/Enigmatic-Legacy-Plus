@@ -19,6 +19,7 @@ public abstract class MixinApothScreen extends EnchantmentScreen {
     @Shadow
     @Final
     protected ApothEnchantmentMenu menu;
+
     public MixinApothScreen(EnchantmentMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
     }

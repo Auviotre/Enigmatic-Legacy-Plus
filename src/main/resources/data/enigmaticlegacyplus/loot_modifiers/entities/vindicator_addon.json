@@ -6,5 +6,5 @@
             "loot_table_id": "minecraft:entities/vindicator"
         }
     ],
-    "loot_table": "enigmaticlegacyplus:entities/illager_addon"
+    "loot_table": "enigmaticlegacyplus:entities/addon/illager_addon"
 }

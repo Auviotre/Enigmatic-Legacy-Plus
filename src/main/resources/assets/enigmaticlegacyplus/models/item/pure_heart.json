@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "enigmaticlegacyplus:item/pure_heart"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "enigmaticlegacyplus:tainted": 1.0
+      },
+      "model": "enigmaticlegacyplus:item/pure_heart_on"
+    }
+  ]
+}

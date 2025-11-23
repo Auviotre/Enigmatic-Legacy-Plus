@@ -6,6 +6,7 @@ import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.food.ForbiddenFruit;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseElytraItem;
+import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
 import auviotre.enigmatic.legacy.contents.item.spellstones.OceanStone;
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -18,6 +19,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.illusivesoulworks.caelus.api.RenderCapeEvent;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -62,10 +64,10 @@ public class ClientEventHandler {
         if (!stack.isEmpty()) {
             LocalPlayer player = Minecraft.getInstance().player;
             if (EnigmaticHandler.isCursedItem(stack)) {
-                if (false && player != null && EnigmaticHandler.isTheBlessedOne(player)) {
-                    event.setBackground(0xF0201A10);
-                    event.setBorderStart(0x90800C00);
-                    event.setBorderEnd(0x80FFA632);
+                if (EnigmaticHandler.isBlessedItem(stack)) {
+                    event.setBackground(0xF01a0a07);
+                    event.setBorderStart(0xF0FFA400);
+                    event.setBorderEnd(0x80D07540);
                 } else if (EnigmaticHandler.isEldritchItem(stack)) {
                     event.setBackground(0xF0201020);
                     event.setBorderStart(0xF08F609A);
@@ -80,6 +82,10 @@ public class ClientEventHandler {
                 event.setBackground(0xF0201010);
                 event.setBorderStart(0xF0A01000);
                 event.setBorderEnd(0x70901000);
+            } else if (stack.is(EnigmaticItems.REDEMPTION_RING)) {
+                event.setBackground(0xF01a0a07);
+                event.setBorderStart(0xF0FFA400);
+                event.setBorderEnd(0x80D07540);
             }
         }
     }
@@ -87,14 +93,17 @@ public class ClientEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     private static void onTooltip(@NotNull ItemTooltipEvent event) {
         Player player = event.getEntity();
-        if (player != null && !player.hasInfiniteMaterials()) {
+        if (player == null) return;
+        if (!player.hasInfiniteMaterials()) {
             if (EnigmaticHandler.isCursedItem(event.getItemStack())) {
+                if (EnigmaticHandler.isBlessedItem(event.getItemStack()) && RedemptionRing.Helper.canUseRelic(player))
+                    return;
                 if (!EnigmaticHandler.isTheCursedOne(player)) {
                     event.getToolTip().replaceAll(component -> {
                         if (component.getContents() instanceof TranslatableContents locations) {
-                            if (locations.getKey().startsWith("tooltip.enigmaticlegacy.cursedOnesOnly"))
+                            if (locations.getKey().equals("tooltip.enigmaticlegacy.cursedOnesOnly"))
                                 return component;
-                            if (locations.getKey().startsWith("tooltip.enigmaticlegacy.worthyOnesOnly"))
+                            if (locations.getKey().equals("tooltip.enigmaticlegacy.worthyOnesOnly"))
                                 return component;
                         }
 
@@ -102,6 +111,16 @@ public class ClientEventHandler {
                     });
                 }
             }
+        }
+
+        if (EnigmaticHandler.isTheBlessedOne(player)) {
+            event.getToolTip().replaceAll(component -> {
+                if (component.getContents() instanceof TranslatableContents locations) {
+                    if (locations.getKey().equals("enchantment.enigmaticlegacyplus.redemption_curse"))
+                        return Component.translatable("enchantment.enigmaticlegacyplus.redemption_blessing").withStyle(ChatFormatting.GOLD);
+                }
+                return component;
+            });
         }
     }
 

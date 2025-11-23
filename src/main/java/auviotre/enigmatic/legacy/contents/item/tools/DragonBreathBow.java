@@ -1,10 +1,8 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
-import auviotre.enigmatic.legacy.contents.entity.DragonBreathArrow;
+import auviotre.enigmatic.legacy.contents.entity.projectile.DragonBreathArrow;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
-import net.minecraft.ChatFormatting;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -22,8 +20,6 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -37,16 +33,20 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class DragonBreathBow extends ProjectileWeaponItem {
-    public static final Predicate<ItemStack> DRAGON_BREATH = (stack) -> stack.is(Items.DRAGON_BREATH);
     public DragonBreathBow() {
         super(BaseItem.defaultSingleProperties().rarity(Rarity.RARE).durability(1574));
     }
 
+    public static float getPowerForTime(int tick) {
+        float f = (float) tick / 32.0F;
+        f = (f * f + f * 2.0F) / 3.0F;
+        return Math.min(f, 1.0F);
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+//      TooltipHandler.line(list, "tooltip.enigmaticlegacy.dragonBreathBowAmmo", ChatFormatting.LIGHT_PURPLE, Items.DRAGON_BREATH.getDescription());
         PotionContents potioncontents = stack.get(DataComponents.POTION_CONTENTS);
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.dragonBreathBowAmmo", ChatFormatting.LIGHT_PURPLE, Items.DRAGON_BREATH.getDescription());
-        TooltipHandler.line(list);
         if (potioncontents != null) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.dragonBreathBowEffects");
             potioncontents.addPotionTooltip(list::add, 1.0F, context.tickRate());
@@ -54,24 +54,18 @@ public class DragonBreathBow extends ProjectileWeaponItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.dragonBreathBowNoEffects1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.dragonBreathBowNoEffects2");
         }
+        if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, InteractionHand hand) {
         ItemStack bow = player.getItemInHand(hand);
-        boolean flag = !player.getProjectile(bow).isEmpty();
-        InteractionResultHolder<ItemStack> ret = EventHooks.onArrowNock(bow, level, player, hand, flag);
+        InteractionResultHolder<ItemStack> ret = EventHooks.onArrowNock(bow, level, player, hand, true);
         if (ret != null) {
             return ret;
-        } else if (!player.hasInfiniteMaterials() && !flag) {
-            return InteractionResultHolder.fail(bow);
         } else {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(bow);
         }
-    }
-
-    public boolean supportsEnchantment(@NotNull ItemStack stack, @NotNull Holder<Enchantment> enchantment) {
-        return stack.is(enchantment.value().definition().supportedItems()) || enchantment.is(Enchantments.MULTISHOT);
     }
 
     public int getEnchantmentValue(ItemStack stack) {
@@ -80,29 +74,20 @@ public class DragonBreathBow extends ProjectileWeaponItem {
 
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof Player player) {
-            ItemStack projectile = player.getProjectile(stack);
-            if (!projectile.isEmpty()) {
-                int tick = this.getUseDuration(stack, entityLiving) - timeLeft;
-                tick = EventHooks.onArrowLoose(stack, level, player, tick, !projectile.isEmpty());
-                if (tick < 0) return;
-                float f = getPowerForTime(tick);
-                if (f > 0.1F) {
-                    List<ItemStack> list = draw(stack, projectile, player);
-                    if (level instanceof ServerLevel server && !list.isEmpty()) {
-                        this.shoot(server, player, player.getUsedItemHand(), stack, list, f * 3.0F, 1.0F, f == 1.0F, null);
-                    }
-                    player.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-                    player.awardStat(Stats.ITEM_USED.get(this));
+            ItemStack projectile = Items.DRAGON_BREATH.getDefaultInstance();
+            int tick = this.getUseDuration(stack, entityLiving) - timeLeft;
+            tick = EventHooks.onArrowLoose(stack, level, player, tick, true);
+            if (tick < 0) return;
+            float f = getPowerForTime(tick);
+            if (f > 0.1F) {
+                List<ItemStack> list = List.of(projectile);
+                if (level instanceof ServerLevel server) {
+                    this.shoot(server, player, player.getUsedItemHand(), stack, list, f * 3.0F, 1.0F, f == 1.0F, null);
                 }
+                player.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                player.awardStat(Stats.ITEM_USED.get(this));
             }
         }
-
-    }
-
-    public static float getPowerForTime(int tick) {
-        float f = (float) tick / 32.0F;
-        f = (f * f + f * 2.0F) / 3.0F;
-        return Math.min(f, 1.0F);
     }
 
     public AbstractArrow customArrow(@NotNull AbstractArrow arrow, ItemStack projectile, ItemStack bow) {
@@ -121,7 +106,7 @@ public class DragonBreathBow extends ProjectileWeaponItem {
     }
 
     public Predicate<ItemStack> getAllSupportedProjectiles() {
-        return DRAGON_BREATH;
+        return ItemStack::isEmpty;
     }
 
     public int getDefaultProjectileRange() {
@@ -142,13 +127,10 @@ public class DragonBreathBow extends ProjectileWeaponItem {
                     access.set(Items.GLASS_BOTTLE.getDefaultInstance());
                     List<MobEffectInstance> effects = contents.potion().get().value().getEffects();
                     List<MobEffectInstance> newEffects = new ArrayList<>();
-                    for (MobEffectInstance effect : effects) {
+                    for (MobEffectInstance effect : effects)
                         newEffects.add(new MobEffectInstance(effect.getEffect(), effect.getDuration() / 10, effect.getAmplifier()));
-                    }
                     int index = 0;
-                    while (newEffects.size() < 4 && remains.size() > index) {
-                        newEffects.add(remains.get(index++));
-                    }
+                    while (newEffects.size() < 4 && remains.size() > index) newEffects.add(remains.get(index++));
                     stack.set(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.empty(), newEffects));
                     return true;
                 }
