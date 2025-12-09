@@ -83,7 +83,13 @@ public class ELEntityLoot extends EntityLootSubProvider {
                                 .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))
                         .add(LootItem.lootTableItem(Items.PRISMARINE_SHARD)
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(7.0F, 25.0F)))
-                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 2.0F)))))
+                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 2.0F))))
+                ).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(EnigmaticItems.GUARDIAN_HEART)
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.5F, 0.05F)))
+                        .add(LootItem.lootTableItem(Items.HEART_OF_THE_SEA)
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.5F, 0.08F)))
+                )
         );
         this.add(EntityType.ENDERMAN, EnigmaticLootTables.Entities.ENDERMAN,
                 LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))

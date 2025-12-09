@@ -19,6 +19,6 @@ import java.util.function.Consumer;
 public abstract class MixinItemStack implements DataComponentHolder {
     @Inject(method = "hurtAndBreak(ILnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V", at = @At("HEAD"), cancellable = true)
     public void breakMix(int amount, ServerLevel level, @Nullable LivingEntity user, Consumer<Item> consumer, CallbackInfo info) {
-        if (EnigmaticHandler.hasCurio(user, EnigmaticItems.ETHERIUM_CORE)) info.cancel();
+        if (EnigmaticHandler.hasCurio(user, EnigmaticItems.ETHEREAL_FORGING_CHARM)) info.cancel();
     }
 }

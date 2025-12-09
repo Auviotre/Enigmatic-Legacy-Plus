@@ -166,6 +166,7 @@ public class TheCube extends SpellstoneItem {
 
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(this.getCurrentModifiers(context.entity()));
+        super.onUnequip(context, newStack, stack);
     }
 
     public int getCooldown() {

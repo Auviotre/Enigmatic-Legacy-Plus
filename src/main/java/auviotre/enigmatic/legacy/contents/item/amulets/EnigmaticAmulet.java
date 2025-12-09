@@ -111,8 +111,8 @@ public class EnigmaticAmulet extends BaseCurioItem {
     }
 
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
-        LivingEntity entity = context.entity();
-        entity.getAttributes().removeAttributeModifiers(getAllModifiers(entity));
+        context.entity().getAttributes().removeAttributeModifiers(getAllModifiers(context.entity()));
+        super.onUnequip(context, newStack, stack);
     }
 
     public void curioTick(SlotContext context, ItemStack stack) {

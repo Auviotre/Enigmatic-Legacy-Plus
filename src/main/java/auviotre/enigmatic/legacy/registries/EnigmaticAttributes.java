@@ -1,7 +1,7 @@
 package auviotre.enigmatic.legacy.registries;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.contents.attributes.EtheriumShieldAttribute;
+import auviotre.enigmatic.legacy.contents.attribute.EtheriumShieldAttribute;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.neoforge.registries.DeferredHolder;

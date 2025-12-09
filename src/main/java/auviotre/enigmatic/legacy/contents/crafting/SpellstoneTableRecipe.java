@@ -116,7 +116,8 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         return EnigmaticRecipes.SPELLSTONE_CRAFTING.get();
     }
 
-    public record Input(ItemStack core, ItemStack debris, List<ItemStack> ingredients, boolean noSpellstone) implements RecipeInput {
+    public record Input(ItemStack core, ItemStack debris, List<ItemStack> ingredients,
+                        boolean noSpellstone) implements RecipeInput {
         public ItemStack getItem(int id) {
             if (id == 0) return core;
             else if (id == 1) return debris;

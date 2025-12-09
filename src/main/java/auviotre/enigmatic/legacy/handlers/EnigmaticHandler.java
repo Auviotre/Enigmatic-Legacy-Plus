@@ -4,11 +4,16 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.event.LivingCurseBoostEvent;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
+import auviotre.enigmatic.legacy.contents.effect.BlazingMight;
+import auviotre.enigmatic.legacy.contents.item.legacy.AntiqueBag;
 import auviotre.enigmatic.legacy.contents.item.materials.AbyssalHeart;
 import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.item.tools.InfernalShield;
-import auviotre.enigmatic.legacy.registries.*;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -30,11 +35,12 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -156,8 +162,20 @@ public interface EnigmaticHandler {
         return ItemStack.EMPTY;
     }
 
-    static boolean hasItem(@Nullable LivingEntity entity, ItemLike item) {
-        return !getItem(entity, item).isEmpty();
+    static boolean hasItem(@Nullable LivingEntity entity, ItemLike itemLike) {
+        if (entity == null) return false;
+        Item item = itemLike.asItem();
+        if (isCursedItem(item.getDefaultInstance()) && !isTheCursedOne(entity)) return false;
+        else if (isEldritchItem(item.getDefaultInstance()) && !isTheWorthyOne(entity)) return false;
+        Item antiqueBag = EnigmaticItems.ANTIQUE_BAG.asItem();
+        if (item != antiqueBag && AntiqueBag.isBook(item.getDefaultInstance())) {
+            boolean enderCheck = entity instanceof Player player && player.getEnderChestInventory().countItem(antiqueBag) > 0;
+            if (!getItem(entity, antiqueBag).isEmpty() || enderCheck) {
+                if (AntiqueBag.hasBook(item.getDefaultInstance(), entity))
+                    return true;
+            }
+        }
+        return !getItem(entity, itemLike).isEmpty();
     }
 
     static ItemStack getItem(@Nullable LivingEntity entity, ItemLike itemLike) {
@@ -189,12 +207,12 @@ public interface EnigmaticHandler {
         });
     }
 
-    static boolean isAttacker(Mob entity, LivingEntity target) {
+    static boolean isNotAttacker(Mob entity, LivingEntity target) {
         if (entity.getTarget() == target) {
-            return true;
+            return false;
         } else for (WrappedGoal goal : entity.targetSelector.getAvailableGoals()) {
             if (goal.getGoal() instanceof TargetGoal targetGoal && targetGoal.targetMob == target) {
-                return true;
+                return false;
             }
         }
 
@@ -202,11 +220,11 @@ public interface EnigmaticHandler {
         try {
             var memory = brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET) ? brain.getMemory(MemoryModuleType.ATTACK_TARGET) : Optional.empty();
             if (memory.isPresent() && memory.get() == target) {
-                return true;
+                return false;
             }
         } catch (NullPointerException ignored) {
         }
-        return false;
+        return true;
     }
 
     static boolean canUnequipBoundRelics(Player player) {
@@ -402,11 +420,9 @@ public interface EnigmaticHandler {
         for (int distance = 1; distance < maxDist; ++distance) {
             target = target.add(from.getLookAngle().scale(distance)).add(0.0, 0.5, 0.0);
             List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(target.x - range, target.y - range, target.z - range, target.x + range, target.y + range, target.z + range));
-            list.removeIf(entity -> entity == from || !from.canAttack(entity));
+            list.removeIf(entity -> !entity.isAlive() || entity == from || !from.canAttack(entity));
             entities.addAll(list);
-            if (stopWhenFound && !entities.isEmpty()) {
-                break;
-            }
+            if (stopWhenFound && !entities.isEmpty()) break;
         }
         return entities;
     }
@@ -437,19 +453,19 @@ public interface EnigmaticHandler {
         return true;
     }
 
-    static boolean canPickStack(Player player, ItemStack stack) {
+    static boolean canNotPickStack(Player player, ItemStack stack) {
         if (player.getInventory().getFreeSlot() >= 0)
-            return true;
+            return false;
         else {
             List<ItemStack> allInventories = new ArrayList<>();
             allInventories.addAll(player.getInventory().items);
             allInventories.addAll(player.getInventory().offhand);
             for (ItemStack invStack : allInventories) {
                 if (canMergeStacks(invStack, stack, player.getInventory().getMaxStackSize()))
-                    return true;
+                    return false;
             }
         }
-        return false;
+        return true;
     }
 
     static boolean canMergeStacks(ItemStack stack1, ItemStack stack2, int invStackLimit) {
@@ -520,22 +536,15 @@ public interface EnigmaticHandler {
                     Vec3 viewVec = blocker.calculateViewVector(0.0F, blocker.getYHeadRot());
                     Vec3 sourceToSelf = sourcePos.vectorTo(blocker.position());
                     if (sourceToSelf.dot(viewVec) < 0.0D) {
-                        int strength = -1;
-
-                        if (player.hasEffect(EnigmaticEffects.BLAZING_MIGHT)) {
-                            MobEffectInstance effectInstance = player.getEffect(EnigmaticEffects.BLAZING_MIGHT);
-                            strength = effectInstance == null ? -1 : effectInstance.getAmplifier();
-                            player.removeEffect(EnigmaticEffects.BLAZING_MIGHT);
-                            strength = Math.min(strength, 2);
-                        }
-                        player.addEffect(new MobEffectInstance(EnigmaticEffects.BLAZING_MIGHT, 1200, strength + 1, true, true));
-
+                        BlazingMight.addAmplifier(player, useItem.getUseDuration(player) - player.getUseItemRemainingTicks() < 20 ? 2 : 1, 1200);
                         if (source.getDirectEntity() instanceof LivingEntity living && living.isAlive()) {
                             if (!living.fireImmune() && !(living instanceof Guardian)) {
                                 StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
                                 if (Arrays.stream(stacktrace).filter(element -> EnigmaticHandler.class.getName().equals(element.getClassName())).count() < 2) {
                                     living.invulnerableTime = 0;
-                                    living.hurt(living.damageSources().source(DamageTypes.ON_FIRE, player), 4F);
+                                    AttributeInstance attribute = player.getAttribute(Attributes.ATTACK_DAMAGE);
+                                    float damage = attribute == null ? 2.0F : 2.0F + (float) attribute.getValue() * 0.4F;
+                                    living.hurt(living.damageSources().source(DamageTypes.ON_FIRE, player), damage);
                                     living.igniteForSeconds(4);
                                 }
                             }
@@ -566,7 +575,7 @@ public interface EnigmaticHandler {
                     method.invoke(null, builder, type);
                 }
             } catch (Exception exception) {
-                exception.printStackTrace();
+                exception.printStackTrace(System.err);
             }
         }
     }

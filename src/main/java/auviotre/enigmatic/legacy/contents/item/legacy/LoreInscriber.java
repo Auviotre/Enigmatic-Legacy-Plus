@@ -1,4 +1,4 @@
-package auviotre.enigmatic.legacy.contents.item.tools;
+package auviotre.enigmatic.legacy.contents.item.legacy;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.gui.LoreInscriberMenu;

@@ -18,8 +18,11 @@ import java.util.function.Function;
 public class EnigmaticParticles {
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(Registries.PARTICLE_TYPE, EnigmaticLegacy.MODID);
     public static final DeferredHolder<ParticleType<?>, ParticleType<ColorParticleOption>> SPELL = register(ColorParticleOption::codec, ColorParticleOption::streamCodec);
-    public static final DeferredHolder<ParticleType<?>, ParticleType<SimpleParticleType>> ICHOR = PARTICLE_TYPES.register("ichor", () -> new SimpleParticleType(false));
-    public static final DeferredHolder<ParticleType<?>, ParticleType<SimpleParticleType>> ICHOR_CURSE = PARTICLE_TYPES.register("ichor_curse", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ICHOR = PARTICLE_TYPES.register("ichor", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> BLUE_STAR_DUST = PARTICLE_TYPES.register("blue_star_dust", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> RED_STAR_DUST = PARTICLE_TYPES.register("red_star_dust", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PURPLE_STAR_DUST = PARTICLE_TYPES.register("purple_star_dust", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ICHOR_CURSE = PARTICLE_TYPES.register("ichor_curse", () -> new SimpleParticleType(false));
 
     private static <T extends ParticleOptions> @NotNull DeferredHolder<ParticleType<?>, ParticleType<T>> register(final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
         return PARTICLE_TYPES.register("spell", () -> new ParticleType<T>(false) {

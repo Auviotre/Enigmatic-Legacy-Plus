@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.registries;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.contents.item.amulets.EldritchAmulet;
 import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumProperties;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.loot.conditions.IsMonsterCondition;
@@ -163,12 +164,12 @@ public class EnigmaticEnchantments {
                 )
         );
         register(context, REDEMPTION_CURSE, Enchantment.enchantment(
-                        Enchantment.definition(
-                                itemGetter.getOrThrow(ItemTags.EQUIPPABLE_ENCHANTABLE), itemGetter.getOrThrow(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE),
-                                1, 1, Enchantment.constantCost(30), Enchantment.constantCost(60), 9, EquipmentSlotGroup.ANY
+                                Enchantment.definition(
+                                        itemGetter.getOrThrow(ItemTags.EQUIPPABLE_ENCHANTABLE), itemGetter.getOrThrow(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE),
+                                        1, 1, Enchantment.constantCost(30), Enchantment.constantCost(60), 9, EquipmentSlotGroup.ANY
+                                )
                         )
-                )
-                .exclusiveWith(enchantmentGetter.getOrThrow(EnchantmentTags.CURSE))
+                        .exclusiveWith(enchantmentGetter.getOrThrow(EnchantmentTags.CURSE))
         );
     }
 
@@ -200,7 +201,7 @@ public class EnigmaticEnchantments {
                     }, ICurio.DropRule.ALWAYS_KEEP
             );
             if (event.getEntity() instanceof Player player) {
-                if (CursedRing.POSSESSIONS.containsEntry(player, EnigmaticItems.ELDRITCH_AMULET)) {
+                if (CursedRing.POSSESSIONS.containsEntry(player, EnigmaticItems.ELDRITCH_AMULET) && EldritchAmulet.keepInventory.get()) {
                     event.addOverride(stack -> {
                         Holder<Enchantment> holder = event.getEntity().registryAccess().holderOrThrow(Enchantments.VANISHING_CURSE);
                         return EnchantmentHelper.getTagEnchantmentLevel(holder, stack) <= 0;

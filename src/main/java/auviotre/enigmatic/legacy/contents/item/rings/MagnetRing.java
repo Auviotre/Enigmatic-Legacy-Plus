@@ -70,7 +70,7 @@ public class MagnetRing extends BaseCurioItem {
         for (ItemEntity item : items)
             if (this.canPullItem(item)) {
                 if (pulled > 200) break;
-                if (!EnigmaticHandler.canPickStack(player, item.getItem())) continue;
+                if (EnigmaticHandler.canNotPickStack(player, item.getItem())) continue;
                 item.setNoPickUpDelay();
                 Vec3 delta = item.position().subtract(x, y, z);
                 if (delta.length() > 1.0) delta = delta.normalize();

@@ -138,6 +138,7 @@ public class HellBladeCharm extends BaseCurioItem {
 
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(this.createAttributeMap(context.entity()));
+        super.onUnequip(context, newStack, stack);
     }
 
     public boolean canUnequip(SlotContext context, ItemStack stack) {
@@ -146,7 +147,7 @@ public class HellBladeCharm extends BaseCurioItem {
 
     @OnlyIn(Dist.CLIENT)
     public static class Decorator implements IItemDecorator {
-        final ResourceLocation SPRITE = EnigmaticLegacy.location("decorator/hell_blade_charm_slot");
+        static final ResourceLocation SPRITE = EnigmaticLegacy.location("decorator/hell_blade_charm_slot");
 
         public boolean render(GuiGraphics graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             ItemStack curio = EnigmaticHandler.getCurio(Minecraft.getInstance().player, EnigmaticItems.HELL_BLADE_CHARM);

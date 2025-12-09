@@ -5,7 +5,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticEntities;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -46,7 +45,7 @@ public class ThrownIchorSpear extends AbstractSpear {
             double dz = vec3.z;
             double length = vec3.length() * 1.25D;
             for (int i = 0; i < length; ++i) {
-                this.level().addParticle((ParticleOptions) EnigmaticParticles.ICHOR.get(), this.getRandomX(0.0F) + dx * (double) i / length, this.getRandomY() + dy * (double) i / length, this.getRandomZ(0.0F) + dz * (double) i / length, -dx * 0.1, -dy * 0.1, -dz * 0.1);
+                this.level().addParticle(EnigmaticParticles.ICHOR.get(), this.getRandomX(0.0F) + dx * (double) i / length, this.getRandomY() + dy * (double) i / length, this.getRandomZ(0.0F) + dz * (double) i / length, -dx * 0.1, -dy * 0.1, -dz * 0.1);
             }
         }
     }

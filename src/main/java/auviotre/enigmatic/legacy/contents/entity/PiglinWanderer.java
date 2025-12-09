@@ -207,7 +207,7 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
             if (target == null) return;
             ItemStack backup = ItemStack.EMPTY;
             if (!piglin.getPersistentData().getCompound("BackupItem").isEmpty())
-                backup = ItemStack.parse(piglin.registryAccess(), piglin.getPersistentData().getCompound("BackupItem")).orElse(ItemStack.EMPTY);
+                backup = ItemStack.parseOptional(piglin.registryAccess(), piglin.getPersistentData().getCompound("BackupItem"));
             if (target.closerThan(piglin, 5) && piglin.isHolding(is -> is.getItem() instanceof IchorSpear)) {
                 InteractionHand hand = piglin.getMainHandItem().getItem() instanceof IchorSpear ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
                 ItemStack copy = piglin.getItemInHand(hand).copy();

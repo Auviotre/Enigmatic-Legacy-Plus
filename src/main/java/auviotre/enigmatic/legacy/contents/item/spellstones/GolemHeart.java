@@ -113,6 +113,7 @@ public class GolemHeart extends SpellstoneItem {
         LivingEntity entity = context.entity();
         entity.getAttributes().removeAttributeModifiers(this.getArmorDefaultModifiers());
         entity.getAttributes().removeAttributeModifiers(this.getFullArmorModifiers());
+        super.onUnequip(context, newStack, stack);
     }
 
     private Multimap<Holder<Attribute>, AttributeModifier> getArmorDefaultModifiers() {

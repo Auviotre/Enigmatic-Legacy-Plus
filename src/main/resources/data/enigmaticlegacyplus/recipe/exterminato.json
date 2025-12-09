@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:infernal_cinder"
+        },
+        "B": {
+            "item": "minecraft:blaze_powder"
+        },
+        "X": {
+            "item": "minecraft:baked_potato"
+        }
+    },
+    "pattern": [
+        "BXB",
+        "XAX",
+        "BXB"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:exterminato"
+    }
+}

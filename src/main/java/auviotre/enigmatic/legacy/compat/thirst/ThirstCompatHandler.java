@@ -18,11 +18,13 @@ public class ThirstCompatHandler {
 
     @SubscribeEvent
     public void onRegisterThirst(@NotNull RegisterThirstValueEvent event) {
+        event.addFood(EnigmaticItems.ICHOROOT.get(), 2, 3);
         event.addFood(EnigmaticItems.ASTRAL_FRUIT.get(), 3, 8);
         event.addFood(EnigmaticItems.ENCHANTED_ASTRAL_FRUIT.get(), 3, 8);
         event.addDrink(EnigmaticItems.RECALL_POTION.get(), 6, 8);
         event.addDrink(EnigmaticItems.WORMHOLE_POTION.get(), 6, 8);
         event.addDrink(EnigmaticItems.ICHOR_BOTTLE.get(), 6, 10);
+        event.addDrink(EnigmaticItems.ENCHANTED_ICHOR_BOTTLE.get(), 6, 10);
         event.addDrink(EnigmaticItems.REDEMPTION_POTION.get(), 6, 10);
         event.addDrink(EnigmaticItems.UNHOLY_GRAIL.get(), 1, 2);
     }

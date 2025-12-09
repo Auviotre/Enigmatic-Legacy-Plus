@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.misc;
 
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IPermanentCrystal;
 import auviotre.enigmatic.legacy.contents.entity.PermanentItemEntity;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
@@ -17,14 +18,25 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class StorageCrystal extends BaseItem implements IPermanentCrystal {
+    public static ModConfigSpec.BooleanValue enable;
+
     public StorageCrystal() {
         super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC));
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.storage_crystal").push("else.storageCrystal");
+        enable = builder.define("enable", true);
+        builder.pop(2);
     }
 
     public static ItemStack storeDropsOnCrystal(Collection<ItemEntity> drops, Player player, ItemStack soulCrystal) {

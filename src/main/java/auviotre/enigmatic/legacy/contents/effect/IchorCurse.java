@@ -34,13 +34,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class IchorCurse extends MobEffect {
     private static final ResourceLocation EFFECT_ID = EnigmaticLegacy.location("ichor_curse_boost");
+
     public IchorCurse() {
         super(MobEffectCategory.NEUTRAL, 0xFFBF4B);
         NeoForge.EVENT_BUS.register(this);
     }
 
     public ParticleOptions createParticleOptions(MobEffectInstance effect) {
-        return (ParticleOptions) EnigmaticParticles.ICHOR_CURSE.get();
+        return EnigmaticParticles.ICHOR_CURSE.get();
     }
 
     @SubscribeEvent
@@ -50,7 +51,7 @@ public class IchorCurse extends MobEffect {
             if (data.isInfected() && monster.tickCount % 2 == 0) {
                 double hOffset = monster.getBbWidth() / 3;
                 double yOffset = monster.getBbHeight() / 4;
-                ParticleOptions particle = (ParticleOptions) EnigmaticParticles.ICHOR_CURSE.get();
+                ParticleOptions particle = EnigmaticParticles.ICHOR_CURSE.get();
                 server.sendParticles(particle, monster.getX(), monster.getY(0.5), monster.getZ(), 1, hOffset, yOffset, hOffset, 0);
             }
         }
@@ -89,7 +90,7 @@ public class IchorCurse extends MobEffect {
                 IchorPermeation data = monster.getData(EnigmaticAttachments.ICHOR_PERMEATION);
                 if (!data.isInfected() && monster.hasLineOfSight(attacker)) {
                     data.setInfected(true);
-                    for (int i = 0; i < monster.getRandom().nextInt(1, 2); i++) {
+                    for (int i = 0; i < monster.getRandom().nextInt(1, 3); i++) {
                         IchorSprite sprite = EnigmaticEntities.ICHOR_SPRITE.get().create(level);
                         if (sprite != null) {
                             sprite.setPos(monster.getEyePosition());

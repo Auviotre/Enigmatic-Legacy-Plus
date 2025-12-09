@@ -78,7 +78,7 @@ public class LivingOde extends BaseItem {
             Entity entity = event.getSource().getEntity();
             if (entity instanceof LivingEntity attacker && EnigmaticHandler.hasItem(attacker, EnigmaticItems.ODE_TO_LIVING)) {
                 if (event.getEntity() instanceof Animal animal) {
-                    event.setCanceled(!EnigmaticHandler.isAttacker(animal, attacker));
+                    event.setCanceled(EnigmaticHandler.isNotAttacker(animal, attacker));
                 }
             }
         }

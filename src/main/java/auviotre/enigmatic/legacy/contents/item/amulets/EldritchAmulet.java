@@ -51,6 +51,7 @@ import java.util.Map;
 public class EldritchAmulet extends BaseCurioItem {
     public static ModConfigSpec.IntValue attackDamage;
     public static ModConfigSpec.IntValue lifeSteal;
+    public static ModConfigSpec.BooleanValue keepInventory;
 
     public EldritchAmulet() {
         super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true));
@@ -61,6 +62,7 @@ public class EldritchAmulet extends BaseCurioItem {
         builder.translation("item.enigmaticlegacyplus.eldritch_amulet").push("abyssItems.eldritchAmulet");
         attackDamage = builder.defineInRange("attackDamage", 20, 0, 100);
         lifeSteal = builder.defineInRange("lifeSteal", 15, 0, 100);
+        keepInventory = builder.define("keepInventory", true);
         builder.pop(2);
     }
 
@@ -165,8 +167,8 @@ public class EldritchAmulet extends BaseCurioItem {
     }
 
     public void onUnequip(@NotNull SlotContext context, ItemStack newStack, ItemStack stack) {
-        LivingEntity entity = context.entity();
-        entity.getAttributes().removeAttributeModifiers(getModifiers());
+        context.entity().getAttributes().removeAttributeModifiers(getModifiers());
+        super.onUnequip(context, newStack, stack);
     }
 
     public Multimap<Holder<Attribute>, AttributeModifier> getModifiers() {

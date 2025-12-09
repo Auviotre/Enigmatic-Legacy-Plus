@@ -37,7 +37,6 @@ public class SpellstoneTableScreen extends AbstractContainerScreen<SpellstoneTab
         graphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
         if (this.menu.hasOutput()) {
             graphics.blit(TEXTURE, i + 85, j + 53, 176, 0, 6, 6);
-
         }
     }
 }

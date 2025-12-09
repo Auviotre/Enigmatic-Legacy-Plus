@@ -145,7 +145,7 @@ public class EnigmaticEventHandler {
             if (target != null) {
                 ItemStack backup = ItemStack.EMPTY;
                 if (!skeleton.getPersistentData().getCompound("BackupItem").isEmpty())
-                    backup = ItemStack.parse(skeleton.registryAccess(), skeleton.getPersistentData().getCompound("BackupItem")).orElse(ItemStack.EMPTY);
+                    backup = ItemStack.parseOptional(skeleton.registryAccess(), skeleton.getPersistentData().getCompound("BackupItem"));
                 ItemStack mainHandItem = skeleton.getMainHandItem();
                 if (skeleton.distanceToSqr(target.position().add(target.getDeltaMovement().scale(1.6))) <= 25) {
                     if (mainHandItem.getItem() instanceof BowItem) {
@@ -240,7 +240,8 @@ public class EnigmaticEventHandler {
             }
         }
         if (entity.getClass() == Drowned.class && entity.getRandom().nextInt(100) <= 5) {
-            if (entity.getMainHandItem().isEmpty()) entity.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.TRIDENT));
+            if (entity.getMainHandItem().isEmpty())
+                entity.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.TRIDENT));
         }
         if (entity instanceof AbstractPiglin piglin) {
             addModifier(piglin, Attributes.ATTACK_DAMAGE, new AttributeModifier(location, 1.0, AttributeModifier.Operation.ADD_VALUE));

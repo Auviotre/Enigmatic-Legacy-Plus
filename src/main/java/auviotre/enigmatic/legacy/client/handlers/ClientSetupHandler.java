@@ -3,16 +3,19 @@ package auviotre.enigmatic.legacy.client.handlers;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.client.particles.IchorParticle;
+import auviotre.enigmatic.legacy.client.particles.StarDustParticle;
 import auviotre.enigmatic.legacy.client.renderer.*;
 import auviotre.enigmatic.legacy.client.renderer.layer.EnigmaticElytraLayer;
 import auviotre.enigmatic.legacy.client.renderer.layer.EtheriumShieldLayer;
 import auviotre.enigmatic.legacy.client.renderer.model.IchorSpriteModel;
 import auviotre.enigmatic.legacy.client.renderer.model.SpellstoneModel;
+import auviotre.enigmatic.legacy.client.screen.AntiqueBagScreen;
 import auviotre.enigmatic.legacy.client.screen.LoreInscriberScreen;
 import auviotre.enigmatic.legacy.client.screen.SpellstoneTableScreen;
 import auviotre.enigmatic.legacy.client.screen.button.EnderChestInventoryButton;
 import auviotre.enigmatic.legacy.client.screen.button.MagnetRingInventoryButton;
 import auviotre.enigmatic.legacy.contents.item.charms.HellBladeCharm;
+import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
 import auviotre.enigmatic.legacy.contents.item.tools.TotemOfMalice;
 import auviotre.enigmatic.legacy.registries.*;
@@ -53,6 +56,11 @@ public class ClientSetupHandler {
     private static void registerItemDecorator(@NotNull RegisterItemDecorationsEvent event) {
         event.register(EnigmaticItems.HELL_BLADE_CHARM, new HellBladeCharm.Decorator());
         event.register(EnigmaticItems.TOTEM_OF_MALICE, new TotemOfMalice.Decorator());
+        event.register(EnigmaticItems.THE_CUBE, new BaseItem.WIPDecorator());
+        event.register(EnigmaticItems.CREATION_HEART, new BaseItem.WIPDecorator());
+        event.register(EnigmaticItems.VOID_STONE, new BaseItem.WIPDecorator());
+        event.register(EnigmaticItems.INFERNAL_SPEAR, new BaseItem.WIPDecorator());
+        event.register(EnigmaticItems.COSMIC_SCROLL, new BaseItem.WIPDecorator());
     }
 
 
@@ -63,6 +71,7 @@ public class ClientSetupHandler {
 
     @SubscribeEvent
     private static void registerScreens(@NotNull RegisterMenuScreensEvent event) {
+        event.register(EnigmaticMenus.ANTIQUE_BAG_MENU.get(), AntiqueBagScreen::new);
         event.register(EnigmaticMenus.LORE_INSCRIBER_MENU.get(), LoreInscriberScreen::new);
         event.register(EnigmaticMenus.SPELLSTONE_TABLE_MENU.get(), SpellstoneTableScreen::new);
     }
@@ -72,6 +81,9 @@ public class ClientSetupHandler {
         event.registerSpriteSet(EnigmaticParticles.SPELL.get(), SpellParticle.MobEffectProvider::new);
         event.registerSpriteSet(EnigmaticParticles.ICHOR.get(), IchorParticle.Provider::new);
         event.registerSpriteSet(EnigmaticParticles.ICHOR_CURSE.get(), SpellParticle.Provider::new);
+        event.registerSpriteSet(EnigmaticParticles.BLUE_STAR_DUST.get(), StarDustParticle.Provider::new);
+        event.registerSpriteSet(EnigmaticParticles.RED_STAR_DUST.get(), StarDustParticle.Provider::new);
+        event.registerSpriteSet(EnigmaticParticles.PURPLE_STAR_DUST.get(), StarDustParticle.Provider::new);
     }
 
     @SubscribeEvent

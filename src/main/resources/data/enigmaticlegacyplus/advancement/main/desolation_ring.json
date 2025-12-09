@@ -1,0 +1,36 @@
+{
+    "parent": "enigmaticlegacyplus:main/abyssal_heart",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:desolation_ring"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.desolation_ring.desc"
+        },
+        "icon": {
+            "components": {
+                "enigmaticlegacyplus:eldritch_timer": 1.0
+            },
+            "count": 1,
+            "id": "enigmaticlegacyplus:desolation_ring"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.desolation_ring.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

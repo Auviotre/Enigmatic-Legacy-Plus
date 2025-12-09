@@ -35,7 +35,7 @@ public class AstralFruit extends BaseItem {
     private final boolean enchanted;
 
     public AstralFruit(boolean enchanted) {
-        super(defaultProperties().rarity(enchanted ? Rarity.EPIC : Rarity.RARE).fireResistant().component(EnigmaticComponents.CURSED, true)
+        super(defaultProperties().rarity(enchanted ? Rarity.EPIC : Rarity.RARE).fireResistant().component(EnigmaticComponents.CURSED, enchanted)
                 .food(enchanted ? ENCHANTED_PROPERTIES : DEFAULT_PROPERTIES));
         this.enchanted = enchanted;
     }
@@ -45,8 +45,8 @@ public class AstralFruit extends BaseItem {
         if (this.enchanted) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.astralFruit");
             TooltipHandler.line(list);
+            TooltipHandler.cursedOnly(list, stack);
         }
-        TooltipHandler.cursedOnly(list, stack);
     }
 
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {

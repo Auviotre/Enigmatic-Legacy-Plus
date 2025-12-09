@@ -49,24 +49,19 @@ public class SpecialLootModifier extends LootModifier {
         Vec3 origin = context.getParamOrNull(LootContextParams.ORIGIN);
         if (entity instanceof ServerPlayer player) {
             CompoundTag data = EnigmaticHandler.getPersistedData(player);
-            if (data.contains("LootedIchorBottle")) {
-                list.removeIf(stack -> stack.is(EnigmaticItems.ICHOR_BOTTLE));
-            } else if (list.stream().anyMatch(stack -> stack.is(EnigmaticItems.ICHOR_BOTTLE))) {
-                data.putBoolean("LootedIchorBottle", true);
+            if (!data.contains("LootedIchorBottle")) {
+                if (list.stream().anyMatch(stack -> stack.is(EnigmaticItems.ICHOR_BOTTLE))) {
+                    data.putBoolean("LootedIchorBottle", true);
+                    list.removeIf(stack -> stack.is(EnigmaticItems.ICHOR_BOTTLE));
+                    list.set(0, EnigmaticItems.ENCHANTED_ICHOR_BOTTLE.toStack());
+                }
             }
 
             if (BuiltInLootTables.END_CITY_TREASURE.location().equals(context.getQueriedLootTableId()) && EnigmaticHandler.isTheCursedOne(player)) {
-                if (level.dimension().equals(Level.END) && !data.contains("LootedFirstEndCityChest")) {
+                if (level.dimension().equals(Level.END) && !data.contains("LootedFirstEndCityChest") && list.stream().anyMatch(stack -> stack.is(EnigmaticItems.ASTRAL_FRUIT))) {
                     data.putBoolean("LootedFirstEndCityChest", true);
+                    list.removeIf(stack -> stack.is(EnigmaticItems.ASTRAL_FRUIT));
                     list.set(0, EnigmaticItems.ENCHANTED_ASTRAL_FRUIT.toStack());
-                }
-                if (player.getRandom().nextFloat() < 0.1F && list.stream().anyMatch(stack -> stack.is(EnigmaticItems.ASTRAL_DUST))) {
-                    for (int i = 0; i < list.size(); i++) {
-                        if (list.get(i).is(EnigmaticItems.ASTRAL_DUST)) {
-                            list.set(i, EnigmaticItems.ASTRAL_FRUIT.toStack());
-                            break;
-                        }
-                    }
                 }
             }
 

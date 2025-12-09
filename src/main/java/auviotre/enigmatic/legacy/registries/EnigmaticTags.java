@@ -17,8 +17,8 @@ public interface EnigmaticTags {
     interface Items {
         TagKey<Item> SCROLLS = register(CuriosApi.MODID, "scroll");
         TagKey<Item> SPELLSTONES = register(CuriosApi.MODID, "spellstone");
-        TagKey<Item> THE_CUBE_MATERIAL = register(CuriosApi.MODID, "materials_of_the_cube");
         TagKey<Item> AMULETS = register(CuriosApi.MODID, "amulets");
+        TagKey<Item> THE_CUBE_MATERIAL = register("materials_of_the_cube");
         TagKey<Item> ARMOR_CHECK_EXCLUSION = register("armor_check_exclusions");
         TagKey<Item> BYPASS_FOURTH_CURSE = register("bypass_fourth_curse");
         TagKey<Item> ETERNAL_BINDING_ENCHANTABLE = register("enchantable/eternal_binding");
@@ -60,9 +60,9 @@ public interface EnigmaticTags {
     }
 
     interface EntityTypes {
-        TagKey<EntityType<?>> NEUTRAL_ANGER_BLACKLIST = register("neutral_anger_blacklist");
         TagKey<EntityType<?>> EXTRA_GOLEM = register("extra_golem");
         TagKey<EntityType<?>> END_DWELLERS = register("end_dwellers");
+        TagKey<EntityType<?>> GUARDIAN_HEART_EXCLUDED = register("guardian_heart_excluded");
 
         private static TagKey<EntityType<?>> register(String name) {
             return TagKey.create(Registries.ENTITY_TYPE, EnigmaticLegacy.location(name));

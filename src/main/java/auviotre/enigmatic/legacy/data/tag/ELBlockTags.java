@@ -32,6 +32,9 @@ public class ELBlockTags extends BlockTagsProvider {
                 EnigmaticBlocks.ETHERIUM_BLOCK.get(),
                 EnigmaticBlocks.ETHEREAL_LANTERN.get()
         );
+        this.tag(BlockTags.DRAGON_IMMUNE).add(
+                EnigmaticBlocks.DIMENSIONAL_ANCHOR.get()
+        );
         this.tag(BlockTags.MINEABLE_WITH_HOE).add(
                 EnigmaticBlocks.ASTRAL_DUST_SACK.get()
         );

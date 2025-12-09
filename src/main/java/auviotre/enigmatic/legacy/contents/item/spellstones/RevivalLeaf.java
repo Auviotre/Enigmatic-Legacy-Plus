@@ -145,23 +145,28 @@ public class RevivalLeaf extends SpellstoneItem {
             }
         }
 
-        if (entity instanceof Player player && hasPlantBy(player)) {
-            player.getAttributes().addTransientAttributeModifiers(this.getModifiers());
-            if (player.getAbilities().flying) {
-                if (player.tickCount % 12 == 0) {
-                    BlockPos lazyPos = BlockPos.of(EnigmaticHandler.getPersistedData(player).getLong("RevivalFlightLazyPos"));
-                    player.level().addParticle(ParticleTypes.HAPPY_VILLAGER, player.getRandomX(0.5), player.getY(), player.getRandomZ(0.5), 0, 0, 0);
-                    int[] offset = {0, 1};
-                    for (int x : offset)
-                        for (int y : offset)
-                            for (int z : offset) {
-                                player.level().addParticle(ParticleTypes.HAPPY_VILLAGER, lazyPos.getX() + x, lazyPos.getY() + y, lazyPos.getZ() + z, 0, 0, 0);
-                            }
+        if (entity.tickCount % 12 == 0) {
+            if (entity instanceof Player player && hasPlantBy(player)) {
+                player.getAttributes().addTransientAttributeModifiers(this.getModifiers());
+                if (player.getAbilities().flying) {
+                    if (player.getRandom().nextBoolean()) {
+                        BlockPos lazyPos = BlockPos.of(EnigmaticHandler.getPersistedData(player).getLong("RevivalFlightLazyPos"));
+                        player.level().addParticle(ParticleTypes.HAPPY_VILLAGER, player.getRandomX(0.5), player.getY(), player.getRandomZ(0.5), 0, 0, 0);
+                        int[] offset = {0, 1};
+                        for (int x : offset)
+                            for (int y : offset)
+                                for (int z : offset) {
+                                    player.level().addParticle(ParticleTypes.HAPPY_VILLAGER, lazyPos.getX() + x, lazyPos.getY() + y, lazyPos.getZ() + z, 0, 0, 0);
+                                }
+                    }
                 }
-            }
-        } else {
-            entity.getAttributes().removeAttributeModifiers(this.getModifiers());
+            } else entity.getAttributes().removeAttributeModifiers(this.getModifiers());
         }
+    }
+
+    public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
+        context.entity().getAttributes().removeAttributeModifiers(this.getModifiers());
+        super.onUnequip(context, newStack, stack);
     }
 
     public int getCooldown() {
@@ -205,7 +210,6 @@ public class RevivalLeaf extends SpellstoneItem {
         CompoundTag data = EnigmaticHandler.getPersistedData(player);
         double reach = player.getAttributes().getValue(Attributes.BLOCK_INTERACTION_RANGE);
         int range = (int) Math.pow(reach + 1, 2) + 1;
-        Iterable<BlockPos> posSet = BlockPos.betweenClosed(blockPos.offset(-range, -range, -range), blockPos.offset(range, range, range));
         if (player.getPersistentData().contains("RevivalFlightLazyPos")) {
             BlockPos lazyPos = BlockPos.of(data.getLong("RevivalFlightLazyPos"));
             BlockState blockState = player.level().getBlockState(lazyPos);
@@ -213,6 +217,7 @@ public class RevivalLeaf extends SpellstoneItem {
                 if (lazyPos.distToCenterSqr(player.position()) < range) return true;
             }
         }
+        Iterable<BlockPos> posSet = BlockPos.betweenClosed(blockPos.offset(-range, -range, -range), blockPos.offset(range, range, range));
         for (BlockPos pos : posSet) {
             BlockState blockState = player.level().getBlockState(pos);
             if (PLANT_SET.stream().anyMatch(blockState::is)) {

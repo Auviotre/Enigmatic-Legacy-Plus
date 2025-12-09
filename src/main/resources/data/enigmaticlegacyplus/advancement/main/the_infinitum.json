@@ -1,0 +1,37 @@
+{
+    "parent": "enigmaticlegacyplus:main/abyssal_heart",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:the_infinitum"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.the_infinitum.desc"
+        },
+        "frame": "goal",
+        "icon": {
+            "components": {
+                "enigmaticlegacyplus:eldritch_timer": 1.0
+            },
+            "count": 1,
+            "id": "enigmaticlegacyplus:the_infinitum"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.the_infinitum.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

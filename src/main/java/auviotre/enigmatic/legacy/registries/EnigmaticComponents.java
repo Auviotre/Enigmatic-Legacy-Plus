@@ -83,7 +83,8 @@ public class EnigmaticComponents {
         @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void canEquip(@NotNull CurioCanEquipEvent event) {
             if (EnigmaticHandler.isCursedItem(event.getStack())) {
-                if (EnigmaticHandler.isBlessedItem(event.getStack()) && RedemptionRing.Helper.canUseRelic(event.getEntity())) return;
+                if (EnigmaticHandler.isBlessedItem(event.getStack()) && RedemptionRing.Helper.canUseRelic(event.getEntity()))
+                    return;
                 if (!EnigmaticHandler.isTheCursedOne(event.getEntity())) event.setEquipResult(TriState.FALSE);
             } else if (EnigmaticHandler.isEldritchItem(event.getStack()) && !EnigmaticHandler.isTheWorthyOne(event.getEntity()))
                 event.setEquipResult(TriState.FALSE);

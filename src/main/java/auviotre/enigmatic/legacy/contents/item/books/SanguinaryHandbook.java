@@ -11,7 +11,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -61,13 +60,11 @@ public class SanguinaryHandbook extends BaseCursedItem {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.inInventory", ChatFormatting.GOLD);
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.sanguinaryHandbookBuff", ChatFormatting.GOLD, String.format("+%.0f%%", damageMultiplier.get() * 100));
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.sanguinaryHandbook1");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.sanguinaryHandbook2");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.sanguinaryHandbook3");
-        } else TooltipHandler.holdShift(list);
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.inInventory", ChatFormatting.GOLD);
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.sanguinaryHandbookBuff", ChatFormatting.GOLD, String.format("+%.0f%%", damageMultiplier.get() * 100));
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.sanguinaryHandbook1");
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.sanguinaryHandbook2");
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.sanguinaryHandbook3");
         TooltipHandler.line(list);
         TooltipHandler.cursedOnly(list, stack);
     }

@@ -1,0 +1,38 @@
+{
+    "parent": "enigmaticlegacyplus:main/the_twist",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:abyssal_heart"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.abyssal_heart.desc"
+        },
+        "frame": "goal",
+        "icon": {
+            "components": {
+                "enigmaticlegacyplus:eldritch_timer": 1.0,
+                "enigmaticlegacyplus:taintable": true
+            },
+            "count": 1,
+            "id": "enigmaticlegacyplus:abyssal_heart"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.abyssal_heart.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

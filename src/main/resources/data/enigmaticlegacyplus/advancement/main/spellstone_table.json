@@ -1,0 +1,33 @@
+{
+    "parent": "enigmaticlegacyplus:main/discover_spellstone",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:spellstone_table"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.spellstone_table.desc"
+        },
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:spellstone_table"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.spellstone_table.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

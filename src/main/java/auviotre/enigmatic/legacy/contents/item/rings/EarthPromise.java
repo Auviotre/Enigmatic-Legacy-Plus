@@ -14,7 +14,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -97,7 +96,8 @@ public class EarthPromise extends CursedCurioItem {
     @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
-        if (!list.isEmpty()) list.add(Component.translatable("attribute.modifier.plus.0", EnigmaticHandler.hasCurio(Minecraft.getInstance().player, EnigmaticItems.MINING_CHARM) ? 3 : 2, Component.translatable("attribute.name.fortune_level")).withStyle(ChatFormatting.BLUE));
+        if (!list.isEmpty())
+            list.add(Component.translatable("attribute.modifier.plus.0", EnigmaticHandler.hasCurio(Minecraft.getInstance().player, EnigmaticItems.MINING_CHARM) ? 3 : 2, Component.translatable("attribute.name.fortune_level")).withStyle(ChatFormatting.BLUE));
         return list;
     }
 
@@ -116,7 +116,7 @@ public class EarthPromise extends CursedCurioItem {
                         player.getCooldowns().addCooldown(EnigmaticItems.EARTH_PROMISE.get(), tick);
                         if (player.level() instanceof ServerLevel level) {
                             level.sendParticles(ParticleTypes.FLASH, player.getX(), player.getY(), player.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
-                            level.sendParticles((ParticleOptions) EnigmaticParticles.ICHOR.get(), player.getX(), player.getY(0.5F), player.getZ(), 36, 0.1D, 0.1D, 0.1D, 0.2D);
+                            level.sendParticles(EnigmaticParticles.ICHOR.get(), player.getX(), player.getY(0.5F), player.getZ(), 36, 0.1D, 0.1D, 0.1D, 0.2D);
                             player.level().playSound(null, player, SoundEvents.ENDER_EYE_DEATH, SoundSource.PLAYERS, 5.0F, 1.5F);
                         }
                         player.addEffect(new MobEffectInstance(EnigmaticEffects.PURE_RESISTANCE, 100, 4));

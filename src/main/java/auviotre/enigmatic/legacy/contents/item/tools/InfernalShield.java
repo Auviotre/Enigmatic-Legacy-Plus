@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -46,10 +47,13 @@ public class InfernalShield extends BaseCursedItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalShield7");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalShield8");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalShield9");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalShield10");
         } else TooltipHandler.holdShift(list);
         TooltipHandler.line(list);
         TooltipHandler.cursedOnly(list, stack);
+    }
+
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+        if (isSelected) entity.clearFire();
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {

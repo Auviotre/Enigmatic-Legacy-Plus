@@ -59,6 +59,7 @@ public class HeavenScroll extends BaseCurioItem {
         entity.getAttributes().removeAttributeModifiers(this.getModifiers());
         if (entity instanceof Player player)
             player.getData(EnigmaticAttachments.ENIGMATIC_DATA).setInBeaconRangeTick(0);
+        super.onUnequip(context, newStack, stack);
     }
 
     public void curioTick(@NotNull SlotContext slotContext, ItemStack stack) {

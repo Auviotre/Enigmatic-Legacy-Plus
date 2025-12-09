@@ -1,12 +1,19 @@
 package auviotre.enigmatic.legacy.contents.item.generic;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.IItemDecorator;
 import org.jetbrains.annotations.NotNull;
 
 public class BaseItem extends Item {
@@ -37,4 +44,18 @@ public class BaseItem extends Item {
     public static ResourceLocation getLocation(Item item) {
         return BuiltInRegistries.ITEM.getKey(item);
     }
+
+
+    @OnlyIn(Dist.CLIENT)
+    public static class WIPDecorator implements IItemDecorator {
+        static final ResourceLocation SPRITE = EnigmaticLegacy.location("decorator/wip_warn");
+
+        public boolean render(GuiGraphics graphics, Font font, @NotNull ItemStack stack, int x, int y) {
+            graphics.pose().pushPose();
+            graphics.blitSprite(SPRITE, x, y, 16, 16);
+            graphics.pose().popPose();
+            return true;
+        }
+    }
+
 }

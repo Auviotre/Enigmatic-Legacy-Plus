@@ -22,7 +22,7 @@ public class EnigmaticBlocks {
     public static final DeferredBlock<EtheriumOre> ETHERIUM_ORE = registerFireResistanceBlock("etherium_ore", EtheriumOre::new);
     public static final DeferredBlock<Block> ETHERIUM_BLOCK = registerFireResistanceBlock("etherium_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERITE_BLOCK).mapColor(MapColor.COLOR_LIGHT_BLUE).lightLevel(state -> 10)));
     public static final DeferredBlock<EtherealLantern> ETHEREAL_LANTERN = registerBlock("ethereal_lantern", EtherealLantern::new, EtherealLantern.Item::new);
-    public static final DeferredBlock<Block> ASTRAL_DUST_SACK = registerBlock("astral_dust_sack", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).mapColor(MapColor.COLOR_PINK)), Rarity.COMMON);
+    public static final DeferredBlock<AstralDustSack> ASTRAL_DUST_SACK = registerBlock("astral_dust_sack", AstralDustSack::new, Rarity.COMMON);
     public static final DeferredBlock<DimensionalAnchor> DIMENSIONAL_ANCHOR = registerFireResistanceBlock("dimensional_anchor", DimensionalAnchor::new);
     public static final DeferredBlock<CosmicCake> COSMIC_CAKE = registerBlock("cosmic_cake", CosmicCake::new, CosmicCake.Item::new);
 

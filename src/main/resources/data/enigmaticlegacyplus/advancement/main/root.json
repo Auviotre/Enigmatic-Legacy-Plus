@@ -1,5 +1,15 @@
 {
     "criteria": {
+        "has_book": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:the_acknowledgment"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
         "has_item": {
             "conditions": {
                 "items": [
@@ -19,7 +29,7 @@
         },
         "icon": {
             "count": 1,
-            "id": "enigmaticlegacyplus:unwitnessed_amulet"
+            "id": "enigmaticlegacyplus:the_acknowledgment"
         },
         "show_toast": false,
         "title": {
@@ -28,6 +38,7 @@
     },
     "requirements": [
         [
+            "has_book",
             "has_item"
         ]
     ],

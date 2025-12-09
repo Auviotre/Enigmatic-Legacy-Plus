@@ -216,7 +216,7 @@ public class PermanentItemEntity extends Entity {
 
         if (compound.contains("Item", 10)) {
             CompoundTag compoundtag = compound.getCompound("Item");
-            this.setItem(ItemStack.parse(this.registryAccess(), compoundtag).orElse(ItemStack.EMPTY));
+            this.setItem(ItemStack.parseOptional(this.registryAccess(), compoundtag));
         } else this.discard();
         if (this.getItem().isEmpty()) this.discard();
     }

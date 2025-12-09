@@ -1,0 +1,34 @@
+{
+    "parent": "enigmaticlegacyplus:main/pure_heart",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:the_bless"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.the_bless.desc"
+        },
+        "frame": "goal",
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:the_bless"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.the_bless.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

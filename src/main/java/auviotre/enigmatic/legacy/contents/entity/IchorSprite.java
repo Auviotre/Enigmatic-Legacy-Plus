@@ -1,23 +1,23 @@
 package auviotre.enigmatic.legacy.contents.entity;
 
+import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.packets.client.IchorSpriteBeamPacket;
-import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
-import auviotre.enigmatic.legacy.registries.EnigmaticEntities;
-import auviotre.enigmatic.legacy.registries.EnigmaticMemories;
-import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
+import auviotre.enigmatic.legacy.registries.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -36,7 +36,9 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -71,7 +73,8 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
     private static final EntityDataAccessor<Integer> DATA_ID_ATTACK_TARGET = SynchedEntityData.defineId(IchorSprite.class, EntityDataSerializers.INT);
     @Nullable
     private LivingEntity clientSideCachedAttackTarget;
-    private int clientSideAttackTime;
+    private int clientAnimationTime;
+    private int clientAnimationTime0;
 
     public IchorSprite(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
@@ -111,16 +114,19 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
     public void aiStep() {
         if (this.isAlive()) {
             if (this.level().isClientSide) {
+                this.clientAnimationTime0 = this.clientAnimationTime;
                 if (this.hasActiveAttackTarget()) {
-                    if (this.clientSideAttackTime < 30) ++this.clientSideAttackTime;
+                    if (this.clientAnimationTime < 30) ++this.clientAnimationTime;
                     LivingEntity target = this.getActiveAttackTarget();
                     if (target != null) {
                         this.getLookControl().setLookAt(target, 90.0F, 90.0F);
                         this.getLookControl().tick();
                     }
-                }
+                } else if (this.getBrain().isActive(Activity.IDLE) && !this.getMainHandItem().isEmpty()) {
+                    if (this.clientAnimationTime < 30) ++this.clientAnimationTime;
+                } else this.clientAnimationTime = Math.max(0, this.clientAnimationTime - 10);
                 if (this.tickCount % 4 == 0) {
-                    this.level().addParticle((ParticleOptions) EnigmaticParticles.ICHOR.get(), this.getRandomX(0.5), this.getY() + this.getRandom().nextFloat(), this.getRandomZ(0.5), 0.01, 0.01, 0.01);
+                    this.level().addParticle(EnigmaticParticles.ICHOR.get(), this.getRandomX(0.5), this.getY() + this.getRandom().nextFloat(), this.getRandomZ(0.5), 0.01, 0.01, 0.01);
                 }
             }
             if ((this.getOwner() == null || !this.getOwner().isAlive()) && !this.level().isClientSide) {
@@ -158,7 +164,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
 
     protected void tickDeath() {
         ++this.deathTime;
-        if (this.deathTime >= 20 && !this.level().isClientSide() && !this.isRemoved()) {
+        if (this.deathTime >= 16 && !this.level().isClientSide() && !this.isRemoved()) {
             if (this.level() instanceof ServerLevel server) {
                 server.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1, 0, 0, 0, 0);
                 LivingEntity target = this.getTarget();
@@ -166,7 +172,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
                     target.addEffect(new MobEffectInstance(EnigmaticEffects.ICHOR_CORROSION, 600, 1), this);
                 }
             }
-            this.level().broadcastEntityEvent(this, (byte)60);
+            this.level().broadcastEntityEvent(this, (byte) 60);
             this.remove(RemovalReason.KILLED);
         }
     }
@@ -174,8 +180,8 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
     protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
     }
 
-    public AABB getHitbox() {
-        return this.getBoundingBox().inflate(BEAM_RANGE - 2);
+    protected AABB getAttackBoundingBox() {
+        return super.getAttackBoundingBox().inflate(BEAM_RANGE - 2);
     }
 
     protected void customServerAiStep() {
@@ -228,30 +234,33 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
         if (DATA_ID_ATTACK_TARGET.equals(key)) {
-            this.clientSideAttackTime = 0;
             this.clientSideCachedAttackTarget = null;
         }
 
     }
 
     public float getAttackAnimationScale(float partialTick) {
-        return (this.clientSideAttackTime + partialTick) / 30.0F;
-    }
-
-    public float getClientSideAttackTime() {
-        return this.clientSideAttackTime;
-    }
-
-    public void setClientSideAttackTime(int time) {
-        this.clientSideAttackTime = time;
+        float time = Mth.lerp(partialTick, this.clientAnimationTime0, this.clientAnimationTime);
+        return Math.min(1.0F, time / 25.0F);
     }
 
     public boolean hasActiveAttackTarget() {
         return this.entityData.get(DATA_ID_ATTACK_TARGET) != 0;
     }
 
+    protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemInHand = player.getItemInHand(hand);
+        if (this.getMainHandItem().isEmpty() && this.isEffectiveAi() && this.getBrain().isActive(Activity.IDLE) && itemInHand.isEmpty()) {
+            this.setItemInHand(InteractionHand.MAIN_HAND, itemInHand.copyWithCount(1));
+            itemInHand.consume(1, player);
+            return InteractionResult.sidedSuccess(player.level().isClientSide());
+        }
+        return super.mobInteract(player, hand);
+    }
+
     private static class FollowOwner extends Behavior<IchorSprite> {
         final int range;
+
         public FollowOwner(int range) {
             super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, EnigmaticMemories.ICHOR_SPRITE_OWNER.get(), MemoryStatus.VALUE_PRESENT), 1200);
             this.range = range;
@@ -265,6 +274,39 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             LivingEntity owner = sprite.getOwner();
             if (owner != null && !owner.closerThan(sprite, range * 0.6)) {
                 sprite.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityTracker(owner, true), 1.0F, range));
+            }
+        }
+    }
+
+    private static class PurifyItem extends Behavior<IchorSprite> {
+        private int transTimer = 0;
+
+        public PurifyItem() {
+            super(ImmutableMap.of(EnigmaticMemories.ICHOR_SPRITE_OWNER.get(), MemoryStatus.VALUE_PRESENT), 1200);
+        }
+
+        protected boolean checkExtraStartConditions(ServerLevel level, IchorSprite entity) {
+            LivingEntity owner = entity.getOwner();
+            return owner != null && owner.isAlive() && BehaviorUtils.canSee(entity, owner) && !entity.getMainHandItem().isEmpty();
+        }
+
+        protected boolean canStillUse(ServerLevel level, IchorSprite sprite, long gameTime) {
+            return sprite.getOwner() != null && !sprite.getMainHandItem().isEmpty();
+        }
+
+        protected void tick(ServerLevel level, IchorSprite sprite, long gameTime) {
+            LivingEntity owner = sprite.getOwner();
+            if (owner != null && !sprite.getMainHandItem().isEmpty()) {
+                this.transTimer++;
+                if (this.transTimer > 100) {
+                    ItemStack copy = sprite.getMainHandItem().copy();
+                    copy.set(EnigmaticComponents.BLESSED, true);
+                    BehaviorUtils.throwItem(sprite, copy, sprite.position());
+                    sprite.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                    sprite.swing(InteractionHand.MAIN_HAND);
+                    this.transTimer = 0;
+                    this.doStop(level, sprite, gameTime);
+                }
             }
         }
     }
@@ -335,19 +377,19 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
                 if (!sprite.hasLineOfSight(target)) {
                     this.doStop(level, sprite, gameTime);
                 } else {
-                    ++this.attackTime;
+                    this.attackTime++;
                     if (this.attackTime == 0) {
                         sprite.setActiveAttackTarget(target.getId());
                     } else if (this.attackTime >= 30) {
                         float f = 1.0F;
                         if (sprite.level().getDifficulty() == Difficulty.HARD) f += 2.0F;
+                        if (EnigmaticHandler.isTheCursedOne(target)) f *= 1.6F;
                         PacketDistributor.sendToPlayersNear(level, null, sprite.getX(), sprite.getY(), sprite.getZ(), 16,
-                                new IchorSpriteBeamPacket(sprite.position(), target.getEyePosition().add(0, target.getBbHeight() * 0.5, 0)));
+                                new IchorSpriteBeamPacket(sprite.getEyePosition(), target.position().add(0, target.getBbHeight() * 0.5, 0)));
                         if (target.hurt(sprite.damageSources().indirectMagic(sprite, sprite), f)) {
                             target.addEffect(new MobEffectInstance(EnigmaticEffects.ICHOR_CORROSION, 600), sprite);
                         }
-                        attackTime = 0;
-                        sprite.setClientSideAttackTime(0);
+                        this.attackTime = 0;
                         sprite.doHurtTarget(target);
                         this.doStop(level, sprite, gameTime);
                     }
@@ -378,10 +420,11 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
 
         private static void initIdleActivity(Brain<IchorSprite> brain) {
             brain.addActivity(Activity.IDLE, ImmutableList.of(
-                    Pair.of(0, StartAttacking.create(Ai::getOwnerTarget)),
-                    Pair.of(1, StartAttacking.create(Ai::findNearestValidAttackTarget)),
-                    Pair.of(2, StartAttacking.create(Ai::getHurtBy)),
-                    Pair.of(2, new FollowOwner(6)),
+                    Pair.of(0, new FollowOwner(6)),
+                    Pair.of(0, new PurifyItem()),
+                    Pair.of(1, StartAttacking.create(Ai::getOwnerTarget)),
+                    Pair.of(2, StartAttacking.create(Ai::findNearestValidAttackTarget)),
+                    Pair.of(3, StartAttacking.create(Ai::getHurtBy)),
                     Pair.of(3, new RunOne<>(ImmutableList.of(
                             Pair.of(RandomStroll.fly(1.0F), 2),
                             Pair.of(SetWalkTargetFromLookTarget.create(1.0F, 3), 2),
@@ -424,7 +467,8 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
                 LivingEntity hurtByMob = owner.getLastHurtByMob();
                 LivingEntity lastHurtMob = owner.getLastHurtMob();
                 if (hurtByMob != null && hurtByMob != owner) return Optional.of(hurtByMob);
-                if (owner instanceof Mob mobOwner && mobOwner.getTarget() != null) return Optional.of(mobOwner.getTarget());
+                if (owner instanceof Mob mobOwner && mobOwner.getTarget() != null)
+                    return Optional.of(mobOwner.getTarget());
                 if (lastHurtMob != owner) return Optional.ofNullable(lastHurtMob);
             }
             return Optional.empty();

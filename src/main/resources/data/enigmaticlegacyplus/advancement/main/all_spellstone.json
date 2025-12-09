@@ -60,6 +60,36 @@
                 ]
             },
             "trigger": "minecraft:inventory_changed"
+        },
+        "has_spellstone7": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:forgotten_ice"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_spellstone8": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:lost_engine"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_spellstone9": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:revival_leaf"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
         }
     },
     "display": {
@@ -68,7 +98,7 @@
         },
         "icon": {
             "count": 1,
-            "id": "enigmaticlegacyplus:void_pearl"
+            "id": "enigmaticlegacyplus:spellcore"
         },
         "title": {
             "translate": "advancement.enigmaticlegacy.all_spellstone.title"
@@ -92,6 +122,15 @@
         ],
         [
             "has_spellstone6"
+        ],
+        [
+            "has_spellstone7"
+        ],
+        [
+            "has_spellstone8"
+        ],
+        [
+            "has_spellstone9"
         ]
     ],
     "sends_telemetry_event": true

@@ -75,6 +75,16 @@
                     "weight": 2
                 },
                 {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.25,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:antique_bag"
+                },
+                {
                     "type": "minecraft:empty",
                     "weight": 60
                 }

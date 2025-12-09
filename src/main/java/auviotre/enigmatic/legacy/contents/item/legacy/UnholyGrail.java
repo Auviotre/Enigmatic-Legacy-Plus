@@ -1,10 +1,13 @@
-package auviotre.enigmatic.legacy.contents.item.food;
+package auviotre.enigmatic.legacy.contents.item.legacy;
 
+import auviotre.enigmatic.legacy.contents.item.food.ForbiddenFruit;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticTriggers;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
@@ -37,8 +40,9 @@ public class UnholyGrail extends BaseItem {
     }
 
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity user) {
+        boolean theWorthy = EnigmaticHandler.isTheCursedOne(user) && ForbiddenFruit.isForbiddenCursed(user);
         if (!level.isClientSide()) {
-            if (EnigmaticHandler.isTheCursedOne(user) && ForbiddenFruit.isForbiddenCursed(user)) {
+            if (theWorthy) {
                 user.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 500, 2, false, true));
                 user.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 800, 1, false, true));
                 user.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 1, false, true));
@@ -53,7 +57,11 @@ public class UnholyGrail extends BaseItem {
                 user.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 240, 0, false, true));
             }
         }
-        if (user instanceof Player player) player.awardStat(Stats.ITEM_USED.get(this));
+        if (user instanceof Player player) {
+            player.awardStat(Stats.ITEM_USED.get(this));
+            if (player instanceof ServerPlayer serverPlayer)
+                EnigmaticTriggers.UNHOLY_GRAIL_TRIGGER.get().trigger(serverPlayer, theWorthy);
+        }
         return stack;
     }
 

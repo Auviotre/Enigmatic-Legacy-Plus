@@ -1,7 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.etherium;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.contents.attributes.EtheriumShieldAttribute;
+import auviotre.enigmatic.legacy.contents.attribute.EtheriumShieldAttribute;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;

@@ -1,13 +1,16 @@
 package auviotre.enigmatic.legacy.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.contents.capability.AntiqueBagCapability;
 import auviotre.enigmatic.legacy.contents.command.GetCurseTimeCommand;
 import auviotre.enigmatic.legacy.contents.command.SetCurseTimeCommand;
+import auviotre.enigmatic.legacy.registries.EnigmaticCapability;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticPotions;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,6 +23,7 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.village.WandererTradesEvent;
@@ -31,6 +35,11 @@ import java.util.Optional;
 @Mod(value = EnigmaticLegacy.MODID)
 @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
 public class EnigmaticSetupHandler {
+    @SubscribeEvent
+    private static void onRegisterCap(@NotNull RegisterCapabilitiesEvent event) {
+        event.registerEntity(EnigmaticCapability.ANTIQUE_BAG_INVENTORY, EntityType.PLAYER, (entity, context) -> new AntiqueBagCapability(entity));
+    }
+
     @SubscribeEvent
     private static void onWandererTradesEvent(@NotNull WandererTradesEvent event) {
         List<VillagerTrades.ItemListing> rareTrades = event.getRareTrades();

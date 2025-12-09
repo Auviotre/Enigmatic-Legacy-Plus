@@ -16,15 +16,6 @@
     },
     "thirdperson_lefthand": {
       "parent": "enigmaticlegacyplus:item/infernal_shield_idle_in_hand"
-    },
-    "head": {
-      "parent": "enigmaticlegacyplus:item/infernal_shield_idle_in_hand"
-    },
-    "fixed": {
-      "parent": "enigmaticlegacyplus:item/infernal_shield_idle_in_hand"
-    },
-    "ground": {
-      "parent": "enigmaticlegacyplus:item/infernal_shield_idle_in_hand"
     }
   }
 }

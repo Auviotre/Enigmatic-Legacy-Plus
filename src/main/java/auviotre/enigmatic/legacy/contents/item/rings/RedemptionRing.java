@@ -100,7 +100,6 @@ public class RedemptionRing extends BaseCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.redemptionRingLore1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.redemptionRingLore2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.redemptionRingLore3");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.redemptionRingLore4");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eternallyBound1");
             if (EnigmaticHandler.canUnequipBoundRelics(Minecraft.getInstance().player)) {
@@ -140,6 +139,7 @@ public class RedemptionRing extends BaseCurioItem {
     public interface Helper {
         float[] BLESS_PROGRESSES = {0.0F, 10.0F, 25.0F, 45.0F, 75.0F, 99.0F, 200F};
         long[] BLESS_DURATION = {5, 10, 20, 40, 60, 90, 600};
+
         static int getLevel(ItemStack stack) {
             return Math.clamp(stack.getOrDefault(EnigmaticComponents.REDEMPTION_LEVEL, 0), 0, 6);
         }

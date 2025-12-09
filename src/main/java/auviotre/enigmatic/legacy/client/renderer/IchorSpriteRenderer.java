@@ -38,7 +38,7 @@ public class IchorSpriteRenderer extends MobRenderer<IchorSprite, IchorSpriteMod
         LivingEntity target = entity.getActiveAttackTarget();
         if (target != null) {
             float scale = entity.getAttackAnimationScale(partialTicks);
-            float timer = entity.getClientSideAttackTime() + partialTicks;
+            float timer = scale * 30.0F;
             float f2 = timer * 0.5F % 1.0F;
             float eyeHeight = entity.getEyeHeight();
             poseStack.pushPose();

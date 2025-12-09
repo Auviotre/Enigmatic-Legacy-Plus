@@ -41,6 +41,7 @@ import java.util.List;
 
 public class TheBless extends TheAcknowledgment {
     public static ModConfigSpec.DoubleValue damageBoostByFire;
+
     public TheBless() {
         super(defaultSingleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.CURSED, true).component(EnigmaticComponents.BLESSED, true), 6, -1.6F);
     }
@@ -78,7 +79,7 @@ public class TheBless extends TheAcknowledgment {
     }
 
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        target.igniteForTicks(target.getRemainingFireTicks() + 160);
+        target.igniteForTicks(target.getRemainingFireTicks() + 80);
         if (attacker.getRandom().nextInt(5) == 0) {
             target.addEffect(new MobEffectInstance(EnigmaticEffects.ICHOR_CORROSION, 100), attacker);
             target.playSound(SoundEvents.TRIDENT_HIT, 0.5F, 0.1F);

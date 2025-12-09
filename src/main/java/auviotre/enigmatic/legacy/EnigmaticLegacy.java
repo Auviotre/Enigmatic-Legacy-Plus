@@ -32,7 +32,6 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
@@ -52,10 +51,9 @@ import static auviotre.enigmatic.legacy.contents.item.amulets.EnigmaticAmulet.se
 public class EnigmaticLegacy {
     public static final String MODID = "enigmaticlegacyplus";
     public static final Logger LOGGER = LoggerFactory.getLogger("EnigmaticLegacy");
-    public static CommonProxy PROXY;
+    public static final CommonProxy PROXY = FMLEnvironment.dist.isClient() ? new ClientProxy() : new CommonProxy();
 
     public EnigmaticLegacy(IEventBus modEventBus, @NotNull ModContainer container) {
-        PROXY = FMLLoader.getDist().isClient() ? new ClientProxy() : new CommonProxy();
         EnigmaticItems.ITEMS.register(modEventBus);
         EnigmaticMenus.MENUS.register(modEventBus);
         EnigmaticBlocks.BLOCKS.register(modEventBus);
@@ -67,6 +65,7 @@ public class EnigmaticLegacy {
         EnigmaticAttributes.ATTRIBUTES.register(modEventBus);
         EnigmaticEntities.ENTITY_TYPES.register(modEventBus);
         EnigmaticComponents.COMPONENTS.register(modEventBus);
+        EnigmaticTriggers.TRIGGER_TYPES.register(modEventBus);
         EnigmaticTabs.CREATIVE_MODE_TABS.register(modEventBus);
         EnigmaticRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         EnigmaticParticles.PARTICLE_TYPES.register(modEventBus);
@@ -149,7 +148,7 @@ public class EnigmaticLegacy {
             event.insertAfter(EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.GREEN), EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.BLACK), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.BLACK), EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.BLUE), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticItems.SPELLTUNER.toStack(), EnigmaticBlocks.SPELLSTONE_TABLE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticItems.ASTRAL_DUST.toStack(), EnigmaticBlocks.ASTRAL_DUST_SACK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(EnigmaticItems.ASTRAL_FRUIT.toStack(), EnigmaticBlocks.ASTRAL_DUST_SACK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticItems.COSMIC_HEART.toStack(), EnigmaticBlocks.COSMIC_CAKE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertBefore(EnigmaticItems.RAW_ETHERIUM.toStack(), EnigmaticBlocks.ETHERIUM_ORE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticItems.ETHEREAL_FORGING_CHARM.toStack(), EnigmaticBlocks.ETHEREAL_LANTERN.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);

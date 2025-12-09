@@ -1,0 +1,39 @@
+{
+    "parent": "enigmaticlegacyplus:main/the_bless",
+    "criteria": {
+        "equipped_redemption_ring": {
+            "conditions": {
+                "curios:slot": {
+                    "slots": [
+                        "ring"
+                    ]
+                },
+                "item": {
+                    "items": "enigmaticlegacyplus:redemption_ring"
+                },
+                "location": {}
+            },
+            "trigger": "curios:equip_curio"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.redemption_ring.desc"
+        },
+        "frame": "challenge",
+        "hidden": true,
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:redemption_ring"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.redemption_ring.title"
+        }
+    },
+    "requirements": [
+        [
+            "equipped_redemption_ring"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

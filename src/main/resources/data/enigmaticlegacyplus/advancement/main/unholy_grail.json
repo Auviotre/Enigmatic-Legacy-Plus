@@ -1,0 +1,27 @@
+{
+    "parent": "enigmaticlegacyplus:main/root",
+    "criteria": {
+        "use_item": {
+            "trigger": "enigmaticlegacyplus:unholy_grail"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.unholy_grail.desc"
+        },
+        "hidden": true,
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:unholy_grail"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.unholy_grail.title"
+        }
+    },
+    "requirements": [
+        [
+            "use_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

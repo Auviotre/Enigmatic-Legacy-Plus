@@ -54,7 +54,7 @@ public class DislocationRing extends MagnetRing {
         for (ItemEntity item : items)
             if (this.canPullItem(item)) {
                 if (pulled > 512) break;
-                if (!EnigmaticHandler.canPickStack(player, item.getItem())) continue;
+                if (EnigmaticHandler.canNotPickStack(player, item.getItem())) continue;
                 item.setNoPickUpDelay();
                 item.playerTouch(player);
                 pulled++;

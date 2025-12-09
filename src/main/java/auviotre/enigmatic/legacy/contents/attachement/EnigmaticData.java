@@ -72,6 +72,7 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
     public void InBeaconRangeTick() {
         this.inBeaconRange--;
     }
+
     public float getEtherealShield() {
         return this.etherealShield;
     }

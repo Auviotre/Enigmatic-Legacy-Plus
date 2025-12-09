@@ -126,8 +126,8 @@ public class OceanStone extends SpellstoneItem {
     }
 
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
-        LivingEntity entity = context.entity();
-        entity.getAttributes().removeAttributeModifiers(this.getModifiers(entity));
+        context.entity().getAttributes().removeAttributeModifiers(this.getModifiers(context.entity()));
+        super.onUnequip(context, newStack, stack);
     }
 
     public void curioTick(SlotContext context, ItemStack stack) {

@@ -1,7 +1,7 @@
 package auviotre.enigmatic.legacy.contents.gui;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.contents.item.tools.LoreInscriber;
+import auviotre.enigmatic.legacy.contents.item.legacy.LoreInscriber;
 import auviotre.enigmatic.legacy.registries.EnigmaticMenus;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.component.DataComponents;
@@ -21,18 +21,14 @@ import org.apache.commons.lang3.StringUtils;
 
 public class LoreInscriberMenu extends AbstractContainerMenu {
     public final Player player;
-    protected final ResultContainer result = new ResultContainer();
-    protected final ContainerLevelAccess access;
-    private String unParsedInputField;    protected final Container loreSlot = new SimpleContainer(1) {
+    private final ResultContainer result = new ResultContainer();
+    private final ContainerLevelAccess access;    private final Container loreSlot = new SimpleContainer(1) {
         public void setChanged() {
             super.setChanged();
             LoreInscriberMenu.this.slotsChanged(this);
         }
     };
-    public LoreInscriberMenu(int syncID, Inventory inventory) {
-        this(syncID, inventory, ContainerLevelAccess.create(inventory.player.level(), inventory.player.blockPosition()));
-    }
-
+    private String unParsedInputField;
     public LoreInscriberMenu(int syncID, Inventory inventory, FriendlyByteBuf buf) {
         this(syncID, inventory, ContainerLevelAccess.create(inventory.player.level(), inventory.player.blockPosition()));
     }
@@ -186,15 +182,13 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
         }
 
         public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-            return new LoreInscriberMenu(id, inventory);
+            return new LoreInscriberMenu(id, inventory, ContainerLevelAccess.create(inventory.player.level(), inventory.player.blockPosition()));
         }
 
         public Component getDisplayName() {
             return this.name;
         }
     }
-
-
 
 
 }

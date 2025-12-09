@@ -21,9 +21,6 @@ import java.util.function.BiConsumer;
 import static auviotre.enigmatic.legacy.registries.EnigmaticLootTables.Chests;
 
 public record ELChestLoot(HolderLookup.Provider registries) implements LootTableSubProvider {
-    public ELChestLoot(HolderLookup.Provider registries) {
-        this.registries = registries;
-    }
 
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
         output.accept(Chests.OVERWORLD_SIMPLE,
@@ -35,6 +32,7 @@ public record ELChestLoot(HolderLookup.Provider registries) implements LootTable
                         .add(LootItem.lootTableItem(EnigmaticItems.FORGER_GEM).when(LootItemRandomChanceCondition.randomChance(0.4F)).setWeight(6))
                         .add(LootItem.lootTableItem(EnigmaticItems.ICHOR_BOTTLE).when(LootItemRandomChanceCondition.randomChance(0.25F)).setWeight(5))
                         .add(LootItem.lootTableItem(EnigmaticItems.UNHOLY_GRAIL).when(LootItemRandomChanceCondition.randomChance(0.25F)).setWeight(2))
+                        .add(LootItem.lootTableItem(EnigmaticItems.ANTIQUE_BAG).when(LootItemRandomChanceCondition.randomChance(0.25F)).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(60))
                 )
         );
@@ -55,9 +53,11 @@ public record ELChestLoot(HolderLookup.Provider registries) implements LootTable
                         .add(LootItem.lootTableItem(EnigmaticItems.MENDING_MIXTURE).setWeight(30))
                         .add(LootItem.lootTableItem(EnigmaticItems.RECALL_POTION).setWeight(15))
                         .add(LootItem.lootTableItem(EnigmaticItems.LORE_INSCRIBER).setWeight(10))
+                        .add(LootItem.lootTableItem(EnigmaticItems.ANTIQUE_BAG).when(LootItemRandomChanceCondition.randomChance(0.25F)).setWeight(6))
                         .add(LootItem.lootTableItem(EnigmaticItems.ETHERIUM_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))).setWeight(10))
                         .add(LootItem.lootTableItem(EnigmaticItems.ETHERIUM_NUGGET).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 8.0F))).setWeight(50))
                         .add(LootItem.lootTableItem(EnigmaticItems.ASTRAL_DUST).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F))).setWeight(80))
+                        .add(LootItem.lootTableItem(EnigmaticItems.ASTRAL_FRUIT).when(LootItemRandomChanceCondition.randomChance(0.32F)).setWeight(15))
                         .add(LootItem.lootTableItem(EnigmaticItems.ENDER_ROD).when(LootItemRandomChanceCondition.randomChance(0.4F)).setWeight(15))
                         .add(EmptyLootItem.emptyItem().setWeight(60))
                 )
@@ -100,8 +100,8 @@ public record ELChestLoot(HolderLookup.Provider registries) implements LootTable
     private LootTable.Builder spellstonePool(ItemLike spellstone, float baseChance, float bonusChance) {
         return LootTable.lootTable()
                 .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                        .add(LootItem.lootTableItem(spellstone).setWeight(93).when(SpellstoneLootCondition.chance(baseChance, bonusChance)))
-                        .add(LootItem.lootTableItem(EnigmaticItems.SPELLCORE).setWeight(7).when(SpellstoneLootCondition.chance(baseChance / 4, bonusChance / 2)))
+                        .add(LootItem.lootTableItem(spellstone).setWeight(90).when(SpellstoneLootCondition.chance(baseChance, bonusChance)))
+                        .add(LootItem.lootTableItem(EnigmaticItems.SPELLCORE).setWeight(10).when(SpellstoneLootCondition.chance(baseChance / 4, bonusChance / 2)))
                 ).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(EnigmaticItems.SPELLSTONE_DEBRIS).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))).when(LootItemRandomChanceCondition.randomChance((baseChance + bonusChance) / 2)))
                 );

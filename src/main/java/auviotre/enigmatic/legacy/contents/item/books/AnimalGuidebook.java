@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -48,7 +49,7 @@ public class AnimalGuidebook extends BaseItem {
         private static void onFindTarget(@NotNull LivingChangeTargetEvent event) {
             LivingEntity entity = event.getEntity();
             LivingEntity target = event.getNewAboutToBeSetTarget();
-            if (EnigmaticHandler.hasItem(target, EnigmaticItems.ANIMAL_GUIDEBOOK)) {
+            if (EnigmaticHandler.hasItem(target, EnigmaticItems.ANIMAL_GUIDEBOOK) && entity instanceof TamableAnimal) {
                 if (entity.getLastAttacker() != target) event.setCanceled(true);
             }
         }
@@ -58,7 +59,7 @@ public class AnimalGuidebook extends BaseItem {
             Entity entity = event.getSource().getEntity();
             if (entity instanceof LivingEntity attacker && EnigmaticHandler.hasItem(attacker, EnigmaticItems.ANIMAL_GUIDEBOOK)) {
                 if (event.getEntity() instanceof Animal animal) {
-                    event.setCanceled(!EnigmaticHandler.isAttacker(animal, attacker));
+                    event.setCanceled(EnigmaticHandler.isNotAttacker(animal, attacker));
                 }
             }
         }

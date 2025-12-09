@@ -32,6 +32,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
@@ -56,7 +57,8 @@ public class BerserkEmblem extends CursedCurioItem {
         builder.pop(2);
     }
 
-    public static float getMissingHealthPool(@NotNull LivingEntity entity) {
+    public static float getMissingHealthPool(@Nullable LivingEntity entity) {
+        if (entity == null) return 0.0F;
         return (entity.getMaxHealth() - Math.min(entity.getHealth(), entity.getMaxHealth())) / entity.getMaxHealth();
     }
 
@@ -94,6 +96,9 @@ public class BerserkEmblem extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm4", ChatFormatting.GOLD, String.format("%.1f%%", damageResist));
         }
         TooltipHandler.line(list);
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm8");
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm9");
+        TooltipHandler.line(list);
         TooltipHandler.cursedOnly(list, stack);
     }
 
@@ -106,6 +111,7 @@ public class BerserkEmblem extends CursedCurioItem {
     public void onUnequip(@NotNull SlotContext context, ItemStack newStack, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().removeAttributeModifiers(this.createAttributeMap(entity));
+        super.onUnequip(context, newStack, stack);
     }
 
     @Mod(value = EnigmaticLegacy.MODID)

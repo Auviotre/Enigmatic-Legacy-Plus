@@ -31,7 +31,8 @@ public class QuartzRing extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
-        if (!list.isEmpty()) list.add(Component.translatable("attribute.modifier.take.1", "25", Component.translatable("tooltip.enigmaticlegacy.quartzRingAttribute")).withStyle(ChatFormatting.BLUE));
+        if (!list.isEmpty())
+            list.add(Component.translatable("attribute.modifier.take.1", "25", Component.translatable("tooltip.enigmaticlegacy.quartzRingAttribute")).withStyle(ChatFormatting.BLUE));
         return list;
     }
 

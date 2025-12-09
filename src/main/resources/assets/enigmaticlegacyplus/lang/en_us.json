@@ -10,11 +10,32 @@
   "advancement.enigmaticlegacy.discover_spellstone.title": "Elemental Might",
   "advancement.enigmaticlegacy.discover_spellstone.desc": "Discover your first Spellstone",
 
+  "advancement.enigmaticlegacy.spellstone_table.title": "Spellstone Regenerating",
+  "advancement.enigmaticlegacy.spellstone_table.desc": "Discover or create the Spellstone Table",
+
+  "advancement.enigmaticlegacy.etherium_core.title": "Heart of the Ethereal",
+  "advancement.enigmaticlegacy.etherium_core.desc": "Forge The Etherium Core",
+
   "advancement.enigmaticlegacy.all_spellstone.title": "Stone Grimoire",
   "advancement.enigmaticlegacy.all_spellstone.desc": "Collect every unique spellstone  Would there have been a way to combine them all...",
 
+  "advancement.enigmaticlegacy.the_cube.title": "This Cube Cured My Mortality",
+  "advancement.enigmaticlegacy.the_cube.desc": "Force all spellstones into a shape equally powerful and unnatural, creating Non-Euclidean Cube",
+
   "advancement.enigmaticlegacy.discover_scroll.title": "Supersolid Wizard",
   "advancement.enigmaticlegacy.discover_scroll.desc": "Obtain your first Arcane Scroll",
+
+  "advancement.enigmaticlegacy.darkest_scroll.title": "Deeper Than the Dark Ink",
+  "advancement.enigmaticlegacy.darkest_scroll.desc": "Obtain Darkest Scroll",
+
+  "advancement.enigmaticlegacy.heaven_scroll.title": "Heavenly Scroll",
+  "advancement.enigmaticlegacy.heaven_scroll.desc": "Find or create Gift of the Heaven",
+
+  "advancement.enigmaticlegacy.fabulous_scroll.title": "Touch the Skies",
+  "advancement.enigmaticlegacy.fabulous_scroll.desc": "Obtain Grace of the Creator",
+
+  "advancement.enigmaticlegacy.cursed_scroll.title": "More Curses, No Problems",
+  "advancement.enigmaticlegacy.cursed_scroll.desc": "Create Scroll of a Thousand Curses",
 
   "advancement.enigmaticlegacy.cursed_ring.title": "Darkness Lies Ahead",
   "advancement.enigmaticlegacy.cursed_ring.desc": "Equip the Ring and embrace the Seven Curses",
@@ -24,6 +45,36 @@
 
   "advancement.enigmaticlegacy.twisted_mirror.title": "Warped Beauty",
   "advancement.enigmaticlegacy.twisted_mirror.desc": "Create the Twisted Mirror",
+
+  "advancement.enigmaticlegacy.the_twist.title": "Fateful Twist",
+  "advancement.enigmaticlegacy.the_twist.desc": "Slay the Wither and create The Twist using Nefarious Essence",
+
+  "advancement.enigmaticlegacy.abyssal_heart.title": "Eldritch Horror",
+  "advancement.enigmaticlegacy.abyssal_heart.desc": "Slay the Ender Dragon and claim Heart of the Abyss",
+
+  "advancement.enigmaticlegacy.the_infinitum.title": "Beyond Time and Space",
+  "advancement.enigmaticlegacy.the_infinitum.desc": "Acquire The Infinitum and become the herald of the Abyss",
+
+  "advancement.enigmaticlegacy.desolation_ring.title": "Reality is Bent",
+  "advancement.enigmaticlegacy.desolation_ring.desc": "Forge The Burden of Desolation, and bear it",
+
+  "advancement.enigmaticlegacy.pure_heart.title": "Unholy Purification",
+  "advancement.enigmaticlegacy.pure_heart.desc": "Create the Pure Heart",
+
+  "advancement.enigmaticlegacy.the_bless.title": "The Light of Grace",
+  "advancement.enigmaticlegacy.the_bless.desc": "Create The Bless using Sacred Crystal",
+
+  "advancement.enigmaticlegacy.redemption_ring.title": "The Fate Reverses",
+  "advancement.enigmaticlegacy.redemption_ring.desc": "Break the Ring of Seven Curses to obtain redemption",
+
+  "advancement.enigmaticlegacy.unholy_grail.title": "Ignoring the Advices",
+  "advancement.enigmaticlegacy.unholy_grail.desc": "Drink from Unholy Grail",
+
+  "advancement.enigmaticlegacy.unholy_grail_worthy.title": "Unholy Supremacy",
+  "advancement.enigmaticlegacy.unholy_grail_worthy.desc": "Harness the power of Unholy Grail... but at what cost?",
+
+  "advancement.enigmaticlegacy.lore_inscriber.title": "Lore Writer",
+  "advancement.enigmaticlegacy.lore_inscriber.desc": "Obtain the Architect's Inkwell",
 
   "curios.identifier.scroll": "Arcane Scroll",
   "curios.identifier.spellstone": "Spellstone",
@@ -96,6 +147,7 @@
   "item.enigmaticlegacyplus.abyssal_heart": "Heart of the Abyss",
   "item.enigmaticlegacyplus.angel_blessing": "Angel's Blessing",
   "item.enigmaticlegacyplus.animal_guidebook": "Guide to Animal Companionship",
+  "item.enigmaticlegacyplus.antique_bag": "Antique Book Bag",
   "item.enigmaticlegacyplus.ascension_amulet": "Amulet of Ascension",
   "item.enigmaticlegacyplus.astral_dust": "Astral Dust",
   "item.enigmaticlegacyplus.astral_fruit": "Celestial Fruit",
@@ -108,6 +160,7 @@
   "item.enigmaticlegacyplus.chaos_elytra": "The Arrogance of Chaos",
   "item.enigmaticlegacyplus.cosmic_heart": "Heart of the Cosmos",
   "item.enigmaticlegacyplus.cosmic_scroll": "The Architect's Favor",
+  "item.enigmaticlegacyplus.creation_heart": "Heart of Creation",
   "item.enigmaticlegacyplus.curse_transposer": "Tome of Devoured Malignancy",
   "item.enigmaticlegacyplus.cursed_ring": "Ring of the Seven Curses",
   "item.enigmaticlegacyplus.cursed_scroll": "Scroll of a Thousand Curses",
@@ -123,6 +176,7 @@
   "item.enigmaticlegacyplus.earth_promise": "Promise of the Earth",
   "item.enigmaticlegacyplus.eldritch_amulet": "The Testament of Contempt",
   "item.enigmaticlegacyplus.enchanted_astral_fruit": "Enchanted Celestial Fruit",
+  "item.enigmaticlegacyplus.enchanted_ichor_bottle": "Enchanted Nectar of Ichor",
   "item.enigmaticlegacyplus.enchanter_pearl": "Enchanter's Pearl",
   "item.enigmaticlegacyplus.enchantment_transposer": "Tome of Hungering Knowledge",
   "item.enigmaticlegacyplus.ender_slayer": "The Ender Slayer",
@@ -142,8 +196,9 @@
   "item.enigmaticlegacyplus.etherium_sword": "Etherium Broadsword",
   "item.enigmaticlegacyplus.evil_essence": "Nefarious Essence",
   "item.enigmaticlegacyplus.evil_ingot": "Nefarious Ingot",
-  "item.enigmaticlegacyplus.extradimensional_eye": "Extradimensional Eye",
   "item.enigmaticlegacyplus.execution_axe": "Axe of Executioner",
+  "item.enigmaticlegacyplus.exterminato": "Exterminato",
+  "item.enigmaticlegacyplus.extradimensional_eye": "Extradimensional Eye",
   "item.enigmaticlegacyplus.eye_of_nebula": "Eye of the Nebula",
   "item.enigmaticlegacyplus.fabulous_scroll": "Grace of the Creator",
   "item.enigmaticlegacyplus.forbidden_fruit": "The Forbidden Fruit",
@@ -151,6 +206,7 @@
   "item.enigmaticlegacyplus.forgotten_ice": "Forgotten Ice Crystal",
   "item.enigmaticlegacyplus.golden_ring": "Exquisite Ring",
   "item.enigmaticlegacyplus.golem_heart": "Heart of the Golem",
+  "item.enigmaticlegacyplus.guardian_heart": "Heart of the Guardian",
   "item.enigmaticlegacyplus.heaven_scroll": "Gift of the Heaven",
   "item.enigmaticlegacyplus.hell_blade_charm": "Charm of Hell Blade",
   "item.enigmaticlegacyplus.hunter_guidebook": "Guide to Feral Hunt",
@@ -158,8 +214,10 @@
   "item.enigmaticlegacyplus.ichor_curse_bottle": "Bottle of Penance",
   "item.enigmaticlegacyplus.ichor_droplet": "Ichor Droplet",
   "item.enigmaticlegacyplus.ichor_spear": "Ichor Spear",
+  "item.enigmaticlegacyplus.ichoroot": "Ichoroot",
   "item.enigmaticlegacyplus.infernal_cinder": "Infernal Cinder",
   "item.enigmaticlegacyplus.infernal_shield": "Bulwark of Blazing Pride",
+  "item.enigmaticlegacyplus.infernal_spear": "",
   "item.enigmaticlegacyplus.infinimeal": "Essence of Raging Life",
   "item.enigmaticlegacyplus.iron_ring": "Iron Ring",
   "item.enigmaticlegacyplus.loot_generator": "The One Box",
@@ -504,6 +562,11 @@
 
   "tooltip.enigmaticlegacy.unholyGrail": "§5You'd better not be drinking from it...",
 
+  "tooltip.enigmaticlegacy.antiqueBag1": "§5A container similar to a§d Ender Chest§5.",
+  "tooltip.enigmaticlegacy.antiqueBag2": "§5The books stored in will be considered",
+  "tooltip.enigmaticlegacy.antiqueBag3": "§5as being in the inventory.",
+  "tooltip.enigmaticlegacy.antiqueBag4": "§5The item still works in the§d Ender Chest§5.",
+
   "tooltip.enigmaticlegacy.forbiddenFruitLore": "§5Knowledge is the greatest gift.",
   "tooltip.enigmaticlegacy.forbiddenFruit1": "§5After consuming the fruit you shall never",
   "tooltip.enigmaticlegacy.forbiddenFruit2": "§5experience hunger again, but any form of",
@@ -562,10 +625,9 @@
   "tooltip.enigmaticlegacy.redemptionRingBless5": "§5- §6+%1$s§d Fortune Level",
   "tooltip.enigmaticlegacy.redemptionRingBless6": "§5- Unique drops from some creatures.",
   "tooltip.enigmaticlegacy.redemptionRingBless7": "§5- You can create and use unique relics.",
-  "tooltip.enigmaticlegacy.redemptionRingLore1": "§5This ring shines with a unique",
-  "tooltip.enigmaticlegacy.redemptionRingLore2": "§5luster, remembering those years",
-  "tooltip.enigmaticlegacy.redemptionRingLore3": "§5of torment, and also, it is a",
-  "tooltip.enigmaticlegacy.redemptionRingLore4": "§5proof of power......",
+  "tooltip.enigmaticlegacy.redemptionRingLore1": "§5This ring shines with a unique luster, remembering",
+  "tooltip.enigmaticlegacy.redemptionRingLore2": "§5those period of torment, and at the same time, it",
+  "tooltip.enigmaticlegacy.redemptionRingLore3": "§5is a certification of your past......",
   "tooltip.enigmaticlegacy.blessLevel": "Level of Blessing: %1$s",
 
   "tooltip.enigmaticlegacy.cursedOnesOnly1": "Only those who bear the Seven Curses",
@@ -616,6 +678,8 @@
   "tooltip.enigmaticlegacy.berserkCharm5": "§5These traits are multiplied by how many percents",
   "tooltip.enigmaticlegacy.berserkCharm6": "§5of your health pool you're currently missing.",
   "tooltip.enigmaticlegacy.berserkCharm7": "§dCurrent traits:",
+  "tooltip.enigmaticlegacy.berserkCharm8": "§5When any damage received takes §6Blazing Might§5 away,",
+  "tooltip.enigmaticlegacy.berserkCharm9": "§5the damage will be reduced according to the amplifier.",
 
   "tooltip.enigmaticlegacy.sanguinaryHandbookBuff": "§5- §6%1$s§d Pet Attack Damage",
   "tooltip.enigmaticlegacy.sanguinaryHandbook1": "§5- If equipped the §6Emblem of Bloodstained Valor",
@@ -629,9 +693,8 @@
   "tooltip.enigmaticlegacy.infernalShield5": "§5- Can block §6Piercing§5-enchanted arrows.",
   "tooltip.enigmaticlegacy.infernalShield6": "§5- Cannot be disabled by weapons normally effective against shields.",
   "tooltip.enigmaticlegacy.infernalShield7": "§5- Burns attackers when blocking melee damage.",
-  "tooltip.enigmaticlegacy.infernalShield8": "§5- Successful blocks grant increasing §6Blazing Might§5",
-  "tooltip.enigmaticlegacy.infernalShield9": "§5  effect, but any damage received takes it away.",
-  "tooltip.enigmaticlegacy.infernalShield10": "§5- Enemy attacks from behind deal §650%§5 more damage.",
+  "tooltip.enigmaticlegacy.infernalShield8": "§5- Successful blocks grant increasing §6Blazing Might§5 effect.",
+  "tooltip.enigmaticlegacy.infernalShield9": "§5- Enemy attacks from behind deal §650%§5 more damage.",
 
   "tooltip.enigmaticlegacy.cursedStone1": "§5If you die in the §6Nether§5, in the middle of",
   "tooltip.enigmaticlegacy.cursedStone2": "§5sufficiently large lava lake with this stone",
@@ -777,6 +840,7 @@
   "subtitle.enigmaticlegacy.item.armor.equip_etherium": "Etherium armor clanks",
 
   "gui.enigmaticlegacy.permanent_death_screen_title": "The End",
+  "gui.enigmaticlegacy.antique_bag": "Magic Book Bag",
   "gui.enigmaticlegacy.lore_inscriber": "Write Name & Lore",
   "gui.enigmaticlegacy.blazing_core_bar_title": "Heat",
   "gui.enigmaticlegacy.spellstone_crafting": "Crafting",
@@ -909,6 +973,7 @@
   "enigmaticlegacyplus.configuration.healthThreshold": "Health Threshold",
 
   "enigmaticlegacyplus.configuration.abyssItems": "Abyss Items Configs",
+  "enigmaticlegacyplus.configuration.keepInventory": "Keep Inventory",
   "enigmaticlegacyplus.configuration.abyssalHeartCount": "Maximum count for obtaining Abyssal Heart",
   "enigmaticlegacyplus.configuration.effectiveRange": "Effective Range",
   "enigmaticlegacyplus.configuration.flyingSpeedModifier": "Flying Speed Modifier",
@@ -916,6 +981,7 @@
   "enigmaticlegacyplus.configuration.descendingCooldown": "Cooldown of Descending Skill",
 
   "enigmaticlegacyplus.configuration.else": "Else Configs",
+  "enigmaticlegacyplus.configuration.enable": "Whether to Enable",
   "enigmaticlegacyplus.configuration.armorDebuff1": "Armor Debuff Multiplier",
   "enigmaticlegacyplus.configuration.freezingBoost": "Freezing Boost",
   "enigmaticlegacyplus.configuration.magneticRange": "Attracting Range",

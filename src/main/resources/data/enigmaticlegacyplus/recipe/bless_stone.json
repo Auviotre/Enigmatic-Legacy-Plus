@@ -8,9 +8,6 @@
         "B": {
             "item": "minecraft:glowstone_dust"
         },
-        "C": {
-            "item": "enigmaticlegacyplus:cosmic_heart"
-        },
         "I": {
             "item": "enigmaticlegacyplus:ichor_droplet"
         },
@@ -22,7 +19,7 @@
         }
     },
     "pattern": [
-        "ICI",
+        "IAI",
         "AXA",
         "BPB"
     ],

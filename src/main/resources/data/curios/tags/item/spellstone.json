@@ -1,7 +1,8 @@
 {
     "values": [
-        "#curios:materials_of_the_cube",
+        "#enigmaticlegacyplus:materials_of_the_cube",
+        "enigmaticlegacyplus:etherium_core",
         "enigmaticlegacyplus:the_cube",
-        "enigmaticlegacyplus:etherium_core"
+        "enigmaticlegacyplus:creation_heart"
     ]
 }

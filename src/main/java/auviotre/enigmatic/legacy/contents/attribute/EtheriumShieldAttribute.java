@@ -1,4 +1,4 @@
-package auviotre.enigmatic.legacy.contents.attributes;
+package auviotre.enigmatic.legacy.contents.attribute;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;

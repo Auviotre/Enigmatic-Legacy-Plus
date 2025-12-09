@@ -1,11 +1,11 @@
 package auviotre.enigmatic.legacy.data.tag;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.registries.EnigmaticEntities;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
@@ -18,12 +18,17 @@ public class ELEntityTypeTags extends EntityTypeTagsProvider {
     }
 
     protected void addTags(HolderLookup.Provider provider) {
-        this.tag(EnigmaticTags.EntityTypes.NEUTRAL_ANGER_BLACKLIST).addOptional(ResourceLocation.fromNamespaceAndPath("the_bumblezone", "bee_queen"));
         this.tag(EnigmaticTags.EntityTypes.END_DWELLERS).add(
                 EntityType.ENDERMAN,
                 EntityType.ENDERMITE,
                 EntityType.ENDER_DRAGON,
                 EntityType.SHULKER
+        );
+        this.tag(EnigmaticTags.EntityTypes.GUARDIAN_HEART_EXCLUDED).add(
+                EntityType.GUARDIAN,
+                EntityType.PIGLIN,
+                EntityType.PIGLIN_BRUTE,
+                EnigmaticEntities.PIGLIN_WANDERER.get()
         );
     }
 }

@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.registries;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.contents.attachement.AntiqueBagInventory;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.attachement.IchorPermeation;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -14,4 +15,5 @@ public class EnigmaticAttachments {
 
     public static final Supplier<AttachmentType<EnigmaticData>> ENIGMATIC_DATA = ATTACHMENT_TYPES.register("enigmatic_data", () -> AttachmentType.serializable(EnigmaticData::new).copyOnDeath().build());
     public static final Supplier<AttachmentType<IchorPermeation>> ICHOR_PERMEATION = ATTACHMENT_TYPES.register("ichor_permeation", () -> AttachmentType.serializable(IchorPermeation::new).copyOnDeath().build());
+    public static final Supplier<AttachmentType<AntiqueBagInventory>> ANTIQUE_BAG_INVENTORY = ATTACHMENT_TYPES.register("antique_bag_inventory", () -> AttachmentType.serializable(AntiqueBagInventory::new).copyOnDeath().build());
 }

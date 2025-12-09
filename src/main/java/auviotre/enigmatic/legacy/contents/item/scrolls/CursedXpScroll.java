@@ -141,6 +141,7 @@ public class CursedXpScroll extends XpScroll {
 
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(getModifiers(stack));
+        super.onUnequip(context, newStack, stack);
     }
 
     @Mod(value = EnigmaticLegacy.MODID)

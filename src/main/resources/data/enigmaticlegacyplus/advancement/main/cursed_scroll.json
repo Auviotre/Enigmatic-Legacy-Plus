@@ -1,0 +1,33 @@
+{
+    "parent": "enigmaticlegacyplus:main/darkest_scroll",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:cursed_scroll"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.cursed_scroll.desc"
+        },
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:cursed_scroll"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.cursed_scroll.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

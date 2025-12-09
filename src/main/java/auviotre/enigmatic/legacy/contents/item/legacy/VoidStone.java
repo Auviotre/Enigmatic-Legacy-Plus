@@ -1,4 +1,4 @@
-package auviotre.enigmatic.legacy.contents.item.misc;
+package auviotre.enigmatic.legacy.contents.item.legacy;
 
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;

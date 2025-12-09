@@ -22,7 +22,7 @@ public class ClientProxy extends CommonProxy {
         try {
             ResourceLocation eldritchLocation = EnigmaticLegacy.location("eldritch_open");
             ClampedItemPropertyFunction taintedFunc = (stack, level, entity, i) -> ITaintable.isTainted(stack) ? 1.0F : 0.0F;
-            ClampedItemPropertyFunction eldritchFunc = (stack, level, entity, i) -> entity == null ? 0.0F : stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
+            ClampedItemPropertyFunction eldritchFunc = (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
             ItemProperties.register(EnigmaticItems.TWISTED_HEART.get(), ITaintable.LOCATION, taintedFunc);
             ItemProperties.register(EnigmaticItems.PURE_HEART.get(), ITaintable.LOCATION, taintedFunc);
             ItemProperties.register(EnigmaticItems.ABYSSAL_HEART.get(), eldritchLocation, (stack, level, entity, i) -> entity == null ? (ITaintable.isTainted(stack) ? 1.0F : 0.0F) : stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F));

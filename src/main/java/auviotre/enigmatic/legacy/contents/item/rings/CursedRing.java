@@ -126,7 +126,7 @@ public class CursedRing extends CursedCurioItem {
         ultraHardcore = builder.define("ultraHardcore", false);
         maxSoulCrystalLoss = builder.defineInRange("maxSoulCrystalLoss", 9, 0, 10);
         forTheWorthyMode = builder.define("forTheWorthy", true);
-        neutralWhiteList = builder.defineList("neutralWhiteList", List.of("minecraft:bee"), () -> "minecraft:player", Objects::nonNull);
+        neutralWhiteList = builder.defineList("neutralWhiteList", List.of("minecraft:bee", "the_bumblezone:bee_queen"), () -> "minecraft:player", Objects::nonNull);
         builder.pop();
     }
 
@@ -187,31 +187,30 @@ public class CursedRing extends CursedCurioItem {
         if (context.entity().level().isClientSide || !(context.entity() instanceof Player player)) return;
         if (player.isCreative() || player.isSpectator()) return;
 
+        if (EnigmaticHandler.hasItem(player, EnigmaticItems.ODE_TO_LIVING)) return;
         List<LivingEntity> genericMobs = player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(5));
         for (LivingEntity mob : genericMobs) {
             double visibility = player.getVisibilityPercent(mob);
             double noCheckDistance = Math.max(neutralAngerRange.getAsDouble() / 3.2, 4.8);
             double angerDistance = Math.max(neutralAngerRange.getAsDouble() * visibility, noCheckDistance);
             if (!player.hasLineOfSight(mob) && player.distanceTo(mob) > 4.8) continue;
+            ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType());
+            if (neutralWhiteList.get().contains(key.toString())) continue;
             if (mob.distanceToSqr(player.getX(), player.getY(), player.getZ()) <= angerDistance * angerDistance) {
                 if (mob instanceof Piglin piglin && !EnigmaticHandler.hasCurio(player, EnigmaticItems.AVARICE_SCROLL)) {
                     if (piglin.getTarget() == null || !piglin.getTarget().isAlive())
                         if (player.hasLineOfSight(mob) || player.distanceTo(mob) <= noCheckDistance)
                             PiglinAi.wasHurtBy(piglin, player);
                 } else if (mob instanceof NeutralMob neutral) {
-                    if (!mob.getType().is(EnigmaticTags.EntityTypes.NEUTRAL_ANGER_BLACKLIST)) {
-                        if (neutral == player) continue;
-                        if (neutral instanceof TraceableEntity ownable && ownable.getOwner() != null && player.is(ownable.getOwner()))
-                            continue;
-                        if (neutral instanceof OwnableEntity ownable && ownable.getOwner() != null && player.is(ownable.getOwner()))
-                            continue;
-                        if (neutral instanceof TamableAnimal tamable && tamable.isTame()) continue;
-                        if (neutral instanceof IronGolem golem && golem.isPlayerCreated()) continue;
-                        ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType());
-                        if (neutralWhiteList.get().contains(key.toString())) return;
-                        if ((neutral.getTarget() == null || !neutral.getTarget().isAlive()) && (player.hasLineOfSight(mob) || player.distanceTo(mob) <= noCheckDistance)) {
-                            neutral.setTarget(player);
-                        }
+                    if (neutral == player) continue;
+                    if (neutral instanceof TraceableEntity ownable && ownable.getOwner() != null && player.is(ownable.getOwner()))
+                        continue;
+                    if (neutral instanceof OwnableEntity ownable && ownable.getOwner() != null && player.is(ownable.getOwner()))
+                        continue;
+                    if (neutral instanceof TamableAnimal tamable && tamable.isTame()) continue;
+                    if (neutral instanceof IronGolem golem && golem.isPlayerCreated()) continue;
+                    if ((neutral.getTarget() == null || !neutral.getTarget().isAlive()) && (player.hasLineOfSight(mob) || player.distanceTo(mob) <= noCheckDistance)) {
+                        neutral.setTarget(player);
                     }
                 }
             }
@@ -262,6 +261,7 @@ public class CursedRing extends CursedCurioItem {
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(this.getArmorModifiers());
         EnigmaticHandler.setCurrentWorldCursed(false);
+        super.onUnequip(context, newStack, stack);
     }
 
     public int getLootingLevel(SlotContext context, @Nullable LootContext lootContext, ItemStack stack) {
@@ -290,7 +290,7 @@ public class CursedRing extends CursedCurioItem {
                     return;
                 }
 
-                if (EnigmaticHandler.hasCurio(player, EnigmaticItems.ENIGMATIC_AMULET) || EnigmaticHandler.hasCurio(player, EnigmaticItems.ASCENSION_AMULET))
+                if (StorageCrystal.enable.get() && (EnigmaticHandler.hasCurio(player, EnigmaticItems.ENIGMATIC_AMULET) || EnigmaticHandler.hasCurio(player, EnigmaticItems.ASCENSION_AMULET)))
                     POSSESSIONS.put(player, EnigmaticItems.ENIGMATIC_AMULET);
 
                 boolean flag = false;
@@ -319,7 +319,7 @@ public class CursedRing extends CursedCurioItem {
                     }
                 }
 
-                if (EnigmaticHandler.hasCurio(player, EnigmaticItems.ELDRITCH_AMULET)) {
+                if (EldritchAmulet.keepInventory.get() && EnigmaticHandler.hasCurio(player, EnigmaticItems.ELDRITCH_AMULET)) {
                     POSSESSIONS.put(player, EnigmaticItems.ELDRITCH_AMULET);
                     EldritchAmulet.storeInventory(player);
                 }
@@ -331,7 +331,7 @@ public class CursedRing extends CursedCurioItem {
             if (event.getEntity() instanceof ServerPlayer player) {
                 SoulArchive.DimensionalPosition dimPoint = new SoulArchive.DimensionalPosition(player.getX(), player.getY(), player.getZ(), player.level());
                 boolean dropSoulCrystal = EnigmaticHandler.canDropSoulCrystal(player, POSSESSIONS.containsEntry(player, EnigmaticItems.CURSED_RING));
-                if (POSSESSIONS.containsEntry(player, EnigmaticItems.ENIGMATIC_AMULET) && !event.getDrops().isEmpty()) {
+                if (POSSESSIONS.containsEntry(player, EnigmaticItems.ENIGMATIC_AMULET) && StorageCrystal.enable.get() && !event.getDrops().isEmpty()) {
                     ItemStack soulCrystal = dropSoulCrystal ? SoulCrystal.createCrystalFrom(player) : ItemStack.EMPTY;
                     ItemStack storageCrystal = StorageCrystal.storeDropsOnCrystal(event.getDrops(), player, soulCrystal);
                     PermanentItemEntity entity = new PermanentItemEntity(dimPoint.world, dimPoint.getPosX(), dimPoint.getPosY() + 1, dimPoint.getPosZ(), storageCrystal);

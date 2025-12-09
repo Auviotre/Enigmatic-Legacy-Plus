@@ -9,7 +9,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -86,10 +85,10 @@ public class ClientPackets {
         Vec3 delta = tarPos.subtract(self).normalize();
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null) {
-            for (double i = 0.2; i < dist; i += 0.4) {
-                level.addParticle((ParticleOptions) EnigmaticParticles.ICHOR.get(),
+            for (double i = 0.1; i < dist; i += 0.2 * level.random.nextDouble() + 0.2) {
+                level.addParticle(EnigmaticParticles.ICHOR.get(),
                         self.x + delta.x * i, self.y + delta.y * i, self.z + delta.z * i,
-                        delta.x * 0.1, delta.y * 0.1, delta.z * 0.1
+                        delta.x * 0.05, delta.y * 0.05, delta.z * 0.05
                 );
             }
         }
