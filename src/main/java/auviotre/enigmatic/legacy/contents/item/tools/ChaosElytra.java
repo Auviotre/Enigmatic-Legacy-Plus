@@ -155,6 +155,11 @@ public class ChaosElytra extends BaseElytraItem {
         public static final Map<LivingEntity, Integer> TICK_MAP = new WeakHashMap<>();
         public static final Map<LivingEntity, Vec3> MOVEMENT_MAP = new WeakHashMap<>();
 
+        private static Vec3 getMovement(LivingEntity entity) {
+            Vec3 vec = MOVEMENT_MAP.get(entity);
+            return vec == null ? Vec3.ZERO : vec;
+        }
+
         @SubscribeEvent
         private static void onTick(PlayerTickEvent.@NotNull Pre event) {
             Player player = event.getEntity();
@@ -173,7 +178,9 @@ public class ChaosElytra extends BaseElytraItem {
                 }
             }
             Vec3 movement = player.getDeltaMovement();
-            if (data.isElytraBoosting() && movement.length() > 0.6F && TICK_MAP.get(player) > 20) {
+            Integer tickValue = TICK_MAP.get(player);
+            int currentTick = tickValue != null ? tickValue : 0;
+            if (data.isElytraBoosting() && movement.length() > 0.6F && currentTick > 20) {
                 AABB box = player.getBoundingBox();
                 Vec3 pos = player.position();
                 EntityHitResult result = ProjectileUtil.getEntityHitResult(player, pos, pos.add(movement), box.expandTowards(movement), entity -> entity.isAlive() && entity.invulnerableTime == 0, 0.0F);
@@ -214,7 +221,11 @@ public class ChaosElytra extends BaseElytraItem {
                     Vec3 pos = target == null ? owner.position() : target.position().add(0, target.getBbHeight() / 2, 0);
                     PacketDistributor.sendToPlayersNear(level, null, pos.x, pos.y, pos.z, 32, new ChaosDescendingPacket(pos, target != null));
                 }
-                double range = 3.5 + MOVEMENT_MAP.get(owner).length();
+                Vec3 movement = MOVEMENT_MAP.get(owner);
+                if (movement == null) {
+                    movement = Vec3.ZERO;
+                }
+                double range = 3.5 + movement.length();
 //                SuperpositionHandler.setPersistentBoolean(owner, "ChaoAchievementCheck", true);
                 List<LivingEntity> entities = owner.level().getEntitiesOfClass(LivingEntity.class, owner.getBoundingBox().inflate(range));
                 for (LivingEntity entity : entities) {
@@ -224,7 +235,7 @@ public class ChaosElytra extends BaseElytraItem {
                     Vec3 vec = new Vec3(delta.x, 0, delta.z).normalize().scale(modifier);
                     entity.addDeltaMovement(new Vec3(vec.x, entity.onGround() ? 1.2F * modifier : 0.0F, vec.z));
                     double powerModifier = descendingPowerModifier.getAsDouble() * (target == null ? 1.0 : 0.25);
-                    double pow = Math.pow(powerModifier, Math.abs(MOVEMENT_MAP.get(owner).y));
+                    double pow = Math.pow(powerModifier, Math.abs(movement.y));
                     AttributeInstance attribute = owner.getAttribute(Attributes.ATTACK_DAMAGE);
                     double baseValue = attribute == null ? owner.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) : attribute.getValue();
                     DamageSource source = EnigmaticDamageTypes.source(entity.level(), EnigmaticDamageTypes.ABYSS, owner);
