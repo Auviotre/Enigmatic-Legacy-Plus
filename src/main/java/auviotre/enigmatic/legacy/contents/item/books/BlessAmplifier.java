@@ -63,8 +63,8 @@ public class BlessAmplifier extends BaseCursedItem {
             if (event.getClickAction() != ClickAction.PRIMARY && slot.mayPickup(player) && slot.hasItem()) {
                 ItemStack target = slot.getItem();
                 if (carried.getItem() instanceof BlessAmplifier amplifier && amplifier.canAmplify(player, carried, target)) {
-                    ItemEnchantments.Mutable enchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
                     ItemEnchantments origin = EnchantmentHelper.getEnchantmentsForCrafting(target);
+                    ItemEnchantments.Mutable enchantments = new ItemEnchantments.Mutable(origin);
                     List<Holder<Enchantment>> list = origin.keySet().stream().toList();
                     for (Holder<Enchantment> holder : list) {
                         int maxLevel = holder.value().getMaxLevel();
