@@ -41,6 +41,8 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 
 public class AngelBlessing extends SpellstoneItem {
+    public static ModConfigSpec.DoubleValue accelerationModifier;
+    public static ModConfigSpec.DoubleValue accelerationModifierElytra;
     public static ModConfigSpec.IntValue deflectChance;
     public static ModConfigSpec.DoubleValue vulnerabilityModifier;
     public static ModConfigSpec.IntValue cooldown;
@@ -52,6 +54,8 @@ public class AngelBlessing extends SpellstoneItem {
     @SubscribeConfig
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.translation("item.enigmaticlegacyplus.angel_blessing").push("spellstone.angelBlessing");
+        accelerationModifier = builder.defineInRange("accelerationModifier", 1.0, 0, 256.0);
+        accelerationModifierElytra = builder.defineInRange("accelerationModifierElytra", 0.6, 0, 256.0);
         deflectChance = builder.defineInRange("deflectChance", 40, 0, 100);
         vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
         cooldown = builder.defineInRange("cooldown", 30, 10, 100);
@@ -104,10 +108,10 @@ public class AngelBlessing extends SpellstoneItem {
         Vec3 motionVec = player.getDeltaMovement();
 
         if (player.isFallFlying()) {
-            accelerationVec = accelerationVec.scale(0.6F);
+            accelerationVec = accelerationVec.scale(accelerationModifierElytra.get());
             accelerationVec = accelerationVec.scale(1 / (Math.max(0.15D, motionVec.length()) * 2.25D));
         } else {
-            accelerationVec = accelerationVec.scale(1.0F);
+            accelerationVec = accelerationVec.scale(accelerationModifier.get());
         }
 
         return motionVec.add(motionVec.x + accelerationVec.x,motionVec.y + accelerationVec.y, motionVec.z + accelerationVec.z);

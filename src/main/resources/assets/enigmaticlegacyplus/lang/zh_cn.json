@@ -813,6 +813,8 @@
   "enigmaticlegacyplus.configuration.underwaterCreaturesResistance": "水生生物伤害抗性",
   "enigmaticlegacyplus.configuration.xpCostModifier": "经验消耗倍率",
   "enigmaticlegacyplus.configuration.preventOxygenBarRender": "阻止氧气条渲染",
+  "enigmaticlegacyplus.configuration.accelerationModifier": "主动技能的加速修正值。数值越高，获得的动量就越大。",
+  "enigmaticlegacyplus.configuration.accelerationModifierElytra": "当玩家使用翼膜飞行时，为主动技能设置独立的加速修饰器。",
   "enigmaticlegacyplus.configuration.deflectChance": "偏转弹射物概率",
   "enigmaticlegacyplus.configuration.magicBoost": "魔法伤害提升",
   "enigmaticlegacyplus.configuration.magicResistance": "魔法伤害抗性",
