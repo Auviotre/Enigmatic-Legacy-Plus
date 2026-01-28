@@ -203,6 +203,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
             this.clearContainer(player, this.coreSlot);
             this.clearContainer(player, this.debrisSlot);
             this.clearContainer(player, this.ingredientSlot);
+            this.clearContainer(player, this.spellstoneSlot);
         });
     }
 

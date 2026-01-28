@@ -63,9 +63,7 @@ public class ChaosElytra extends BaseElytraItem {
     public static ModConfigSpec.IntValue descendingCooldown;
 
     public ChaosElytra() {
-        super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC).durability(3248)
-                .component(EnigmaticComponents.ELDRITCH, true)
-        );
+        super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC).durability(3248).component(EnigmaticComponents.ELDRITCH, true));
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
 
@@ -190,6 +188,7 @@ public class ChaosElytra extends BaseElytraItem {
         }
 
         private static boolean spaceCheck(BlockPos pos, Level level) {
+            if (level.isClientSide()) return false;
             Iterable<BlockPos> iterable = BlockPos.betweenClosed(pos.offset(2, 2, 2), pos.offset(-2, -2, -2));
             int space = 0;
             for (BlockPos blockPos : iterable) {

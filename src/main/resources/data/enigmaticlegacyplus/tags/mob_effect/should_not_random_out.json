@@ -1,6 +1,7 @@
 {
     "values": [
         "minecraft:infested",
-        "minecraft:weaving"
+        "minecraft:weaving",
+        "enigmaticlegacyplus:abyss_corruption"
     ]
 }

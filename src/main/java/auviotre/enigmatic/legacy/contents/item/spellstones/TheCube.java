@@ -6,6 +6,7 @@ import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.packets.client.TheCubeRevivePacket;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
@@ -130,6 +131,7 @@ public class TheCube extends SpellstoneItem {
         builder.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(getLocation(this), 0.6, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(getLocation(this), 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         builder.put(Attributes.LUCK, new AttributeModifier(getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(getLocation(this), 0.35, AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }
 

@@ -10,6 +10,10 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -28,6 +32,7 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -62,13 +67,21 @@ public class InfernalSpear extends BaseItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         MobEffectInstance effect = player.getEffect(EnigmaticEffects.BLAZING_MIGHT);
-        if (stack.is(this) && effect != null && effect.getAmplifier() == 9) {
+        if (stack.is(this) && effect != null && effect.getAmplifier() == 9 && level instanceof ServerLevel server) {
             player.getAttributes().addTransientAttributeModifiers(getBoost());
             List<LivingEntity> entities = EnigmaticHandler.getObservedEntities(player, level, 2, 12, false);
+            Vec3 position = player.getEyePosition();
+            Vec3 vec3 = player.getLookAngle().scale(0.5);
+            server.playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.8F, 2.0F);
+            for (int i = 0; i < 24; i++) {
+                position = position.add(vec3);
+                server.sendParticles(ParticleTypes.CRIMSON_SPORE, position.x, position.y, position.z, 8, 0.1, 0.1, 0.1, 0);
+                server.sendParticles(ParticleTypes.ASH, position.x, position.y, position.z, 8, 0.1, 0.1, 0.1, 0);
+            }
             for (LivingEntity entity : entities) player.attack(entity);
             player.removeEffect(EnigmaticEffects.BLAZING_MIGHT);
             player.getAttributes().removeAttributeModifiers(getBoost());
-            player.swing(hand);
+            player.swing(hand, true);
             return InteractionResultHolder.consume(stack);
         }
         return super.use(level, player, hand);
@@ -77,7 +90,7 @@ public class InfernalSpear extends BaseItem {
     public float getAttackDamageBonus(Entity target, float damage, DamageSource source) {
         if (source.getEntity() instanceof LivingEntity attacker) {
             MobEffectInstance effect = attacker.getEffect(EnigmaticEffects.BLAZING_MIGHT);
-            if (effect != null) return effect.getAmplifier() * 2.0F + 2.0F;
+            if (effect != null) return effect.getAmplifier() * 1.5F + 2.0F;
         }
         return super.getAttackDamageBonus(target, damage, source);
     }

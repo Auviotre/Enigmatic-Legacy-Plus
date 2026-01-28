@@ -4,6 +4,7 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
@@ -137,6 +138,8 @@ public class EnigmaticAmulet extends BaseCurioItem {
             map.put(Attributes.GRAVITY, new AttributeModifier(getLocation(this), -0.2F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         } else if (color == AmuletColor.BLUE) {
             map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(getLocation(this), 0.25F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        } else if (color == AmuletColor.VIOLET) {
+            map.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(getLocation(this), 0.15F, AttributeModifier.Operation.ADD_VALUE));
         }
         return map;
     }
@@ -147,6 +150,7 @@ public class EnigmaticAmulet extends BaseCurioItem {
         map.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(getLocation(this), entity.isSprinting() ? 0.15F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(Attributes.GRAVITY, new AttributeModifier(getLocation(this), -0.2F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(getLocation(this), 0.25F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        map.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(getLocation(this), 0.15F, AttributeModifier.Operation.ADD_VALUE));
         return map;
     }
 

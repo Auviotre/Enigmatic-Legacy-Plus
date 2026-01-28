@@ -627,5 +627,13 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .requires(EnigmaticItems.ENDER_ROD)
                 .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
                 .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EnigmaticItems.COSMIC_SCROLL)
+                .pattern("DAD").pattern("IXI").pattern("DCD")
+                .define('D', EnigmaticItems.ASTRAL_DUST).define('A', Items.ENCHANTED_GOLDEN_APPLE)
+                .define('X', EnigmaticItems.DARKEST_SCROLL).define('I', EnigmaticItems.ETHERIUM_INGOT)
+                .define('C', EnigmaticItems.COSMIC_HEART)
+                .unlockedBy("has_scroll", has(EnigmaticItems.COSMIC_SCROLL))
+                .save(output);
     }
 }

@@ -47,7 +47,7 @@ public class AbyssCorruption extends MobEffect {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onEffectApply(MobEffectEvent.Applicable event) {
+    public void onEffectApply(MobEffectEvent.@NotNull Applicable event) {
         if (event.getEffectInstance() != null && event.getEffectInstance().is(EnigmaticEffects.ABYSS_CORRUPTION)) {
             event.setResult(MobEffectEvent.Applicable.Result.APPLY);
         }

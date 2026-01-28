@@ -1,6 +1,6 @@
 {
     "parent": "enigmaticlegacyplus:item/enigmatic_amulet",
     "textures": {
-        "layer0": "enigmaticlegacyplus:item/enigmatic_amulet_red"
+        "layer0": "enigmaticlegacyplus:item/enigmatic_amulet/blue"
     }
 }

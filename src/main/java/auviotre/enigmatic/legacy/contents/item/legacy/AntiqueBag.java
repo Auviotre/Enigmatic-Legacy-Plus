@@ -1,15 +1,22 @@
 package auviotre.enigmatic.legacy.contents.item.legacy;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.contents.capability.IAntiqueBagHandler;
 import auviotre.enigmatic.legacy.contents.gui.AntiqueBagContainerMenu;
+import auviotre.enigmatic.legacy.contents.item.books.TheInfinitum;
+import auviotre.enigmatic.legacy.contents.item.books.TheTwist;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
+import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticCapability;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -18,8 +25,15 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -62,5 +76,34 @@ public class AntiqueBag extends BaseItem {
         player.startUsingItem(hand);
         if (!world.isClientSide) player.openMenu(new AntiqueBagContainerMenu.Provider());
         return InteractionResultHolder.success(player.getItemInHand(hand));
+    }
+
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
+            DamageSource source = event.getSource();
+            if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
+                if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES)) {
+                    if (AntiqueBag.hasBook(EnigmaticItems.THE_TWIST.toStack(), attacker) && EnigmaticHandler.canUse(attacker, EnigmaticItems.THE_TWIST.toStack())) {
+                        event.setAmount(event.getAmount() * (1 + 0.001F * TheTwist.specialDamageBoost.get() / 30));
+                    }
+                    if (AntiqueBag.hasBook(EnigmaticItems.THE_INFINITUM.toStack(), attacker) && EnigmaticHandler.isTheWorthyOne(attacker)) {
+                        event.setAmount(event.getAmount() * (1 + 0.001F * TheInfinitum.specialDamageBoost.get()));
+                    }
+                }
+            }
+        }
+
+        @SubscribeEvent
+        private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
+            DamageSource source = event.getSource();
+            if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
+                if (AntiqueBag.hasBook(EnigmaticItems.THE_INFINITUM.toStack(), attacker) && EnigmaticHandler.isTheWorthyOne(attacker)) {
+                    attacker.heal(event.getNewDamage() * 0.01F * TheInfinitum.lifeSteal.get());
+                }
+            }
+        }
     }
 }

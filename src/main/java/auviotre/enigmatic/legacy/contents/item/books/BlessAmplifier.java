@@ -72,7 +72,7 @@ public class BlessAmplifier extends BaseCursedItem {
                             double multiplier = EnigmaticHandler.isTheBlessedOne(player) ? 1.4 : 1;
                             int newLevel = (int) Math.min(maxLevel * multiplier, origin.getLevel(holder) * 1.4 + 0.8);
                             enchantments.set(holder, Math.max(newLevel, origin.getLevel(holder)));
-                        }
+                        } else enchantments.set(holder, origin.getLevel(holder));
                     }
                     EnchantmentHelper.setEnchantments(target, enchantments.toImmutable());
                     int cost = target.getOrDefault(DataComponents.REPAIR_COST, 0);

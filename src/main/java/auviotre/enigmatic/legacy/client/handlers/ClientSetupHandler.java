@@ -58,9 +58,7 @@ public class ClientSetupHandler {
         event.register(EnigmaticItems.TOTEM_OF_MALICE, new TotemOfMalice.Decorator());
         event.register(EnigmaticItems.THE_CUBE, new BaseItem.WIPDecorator());
         event.register(EnigmaticItems.CREATION_HEART, new BaseItem.WIPDecorator());
-        event.register(EnigmaticItems.VOID_STONE, new BaseItem.WIPDecorator());
         event.register(EnigmaticItems.INFERNAL_SPEAR, new BaseItem.WIPDecorator());
-        event.register(EnigmaticItems.COSMIC_SCROLL, new BaseItem.WIPDecorator());
     }
 
 

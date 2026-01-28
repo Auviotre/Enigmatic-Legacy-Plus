@@ -5,6 +5,7 @@ import auviotre.enigmatic.legacy.client.screen.SpellstoneTableScreen;
 import auviotre.enigmatic.legacy.compat.jei.category.SpellstoneCraftingCategory;
 import auviotre.enigmatic.legacy.compat.jei.category.TaintingCategory;
 import auviotre.enigmatic.legacy.compat.jei.extension.CursedRecipeExtension;
+import auviotre.enigmatic.legacy.compat.jei.subtype.AmuletSubtypeInterpreter;
 import auviotre.enigmatic.legacy.compat.jei.subtype.TaintableSubtypeInterpreter;
 import auviotre.enigmatic.legacy.contents.crafting.CursedShapedRecipe;
 import auviotre.enigmatic.legacy.contents.crafting.SpellstoneTableRecipe;
@@ -54,7 +55,7 @@ public class JEIHandler implements IModPlugin {
         registration.registerSubtypeInterpreter(EnigmaticItems.TWISTED_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
         registration.registerSubtypeInterpreter(EnigmaticItems.PURE_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
         registration.registerSubtypeInterpreter(EnigmaticItems.ABYSSAL_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
-//        registration.registerSubtypeInterpreter(EnigmaticItems.ENIGMATIC_AMULET.get(), AmuletSubtypeInterpreter.INSTANCE);
+        registration.registerSubtypeInterpreter(EnigmaticItems.ENIGMATIC_AMULET.get(), AmuletSubtypeInterpreter.INSTANCE);
     }
 
     public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
@@ -66,7 +67,7 @@ public class JEIHandler implements IModPlugin {
     }
 
     public void registerRecipeTransferHandlers(@NotNull IRecipeTransferRegistration registration) {
-        registration.addRecipeTransferHandler(SpellstoneTableMenu.class, EnigmaticMenus.SPELLSTONE_TABLE_MENU.get(), EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, 0, 9, 10, 36);
+        registration.addRecipeTransferHandler(SpellstoneTableMenu.class, EnigmaticMenus.SPELLSTONE_TABLE_MENU.get(), EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, 0, 10, 11, 36);
     }
 
     public void registerVanillaCategoryExtensions(@NotNull IVanillaCategoryExtensionRegistration registration) {

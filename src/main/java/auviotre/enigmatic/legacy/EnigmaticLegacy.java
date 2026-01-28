@@ -160,6 +160,7 @@ public class EnigmaticLegacy {
     private void attributeSetup(final EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> type : event.getTypes()) {
             event.add(type, EnigmaticAttributes.ETHERIUM_SHIELD);
+            event.add(type, EnigmaticAttributes.PROJECTILE_DEFLECT);
         }
     }
 

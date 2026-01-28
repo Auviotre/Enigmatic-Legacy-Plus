@@ -8,43 +8,43 @@
             "predicate": {
                 "enigmaticlegacyplus:amulet_color": 0.1
             },
-            "model": "enigmaticlegacyplus:item/enigmatic_amulet_01"
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet/red"
         },
 		{
             "predicate": {
                 "enigmaticlegacyplus:amulet_color": 0.2
             },
-            "model": "enigmaticlegacyplus:item/enigmatic_amulet_02"
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet/aqua"
         },
 		{
             "predicate": {
                 "enigmaticlegacyplus:amulet_color": 0.3
             },
-            "model": "enigmaticlegacyplus:item/enigmatic_amulet_03"
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet/violet"
         },
 		{
             "predicate": {
                 "enigmaticlegacyplus:amulet_color": 0.4
             },
-            "model": "enigmaticlegacyplus:item/enigmatic_amulet_04"
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet/magenta"
         },
 		{
             "predicate": {
                 "enigmaticlegacyplus:amulet_color": 0.5
             },
-            "model": "enigmaticlegacyplus:item/enigmatic_amulet_05"
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet/green"
         },
 		{
             "predicate": {
                 "enigmaticlegacyplus:amulet_color": 0.6
             },
-            "model": "enigmaticlegacyplus:item/enigmatic_amulet_06"
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet/black"
         },
 		{
             "predicate": {
                 "enigmaticlegacyplus:amulet_color": 0.7
             },
-            "model": "enigmaticlegacyplus:item/enigmatic_amulet_07"
+            "model": "enigmaticlegacyplus:item/enigmatic_amulet/blue"
         }
     ]
 }

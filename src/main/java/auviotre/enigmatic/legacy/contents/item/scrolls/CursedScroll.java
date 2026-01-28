@@ -49,7 +49,7 @@ public class CursedScroll extends CursedCurioItem {
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.translation("item.enigmaticlegacyplus.cursed_scroll").push("cursedItems.cursedScroll");
         damageBoost = builder.defineInRange("attackDamage", 4, 1, 20);
-        miningBoost = builder.defineInRange("miningSpeed", 4, 1, 20);
+        miningBoost = builder.defineInRange("miningSpeed", 4, 0, 20);
         regenBoost = builder.defineInRange("regeneration", 4, 1, 20);
         builder.pop(2);
     }
@@ -94,7 +94,7 @@ public class CursedScroll extends CursedCurioItem {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll6");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll1", ChatFormatting.GOLD, (damageBoost.get() * curses) + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll2", ChatFormatting.GOLD, (miningBoost.get() * curses) + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll2", ChatFormatting.GOLD, Math.min(miningBoost.get() * curses, 200) + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll3", ChatFormatting.GOLD, (regenBoost.get() * curses) + "%");
         }
         TooltipHandler.line(list);
@@ -109,7 +109,7 @@ public class CursedScroll extends CursedCurioItem {
             LivingEntity entity = event.getEntity();
             if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.CURSED_SCROLL)) {
                 float multiplier = getCurseAmount(entity) * 0.01F * miningBoost.get();
-                event.setNewSpeed(event.getOriginalSpeed() * multiplier + event.getNewSpeed());
+                event.setNewSpeed(event.getOriginalSpeed() * Math.min(multiplier, 2) + event.getNewSpeed());
             }
         }
 

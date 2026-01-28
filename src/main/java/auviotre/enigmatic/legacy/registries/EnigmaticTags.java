@@ -78,6 +78,7 @@ public interface EnigmaticTags {
         TagKey<DamageType> FORGOTTEN_ICE_RESISTANT_TO = registerSpellstone("forgotten_ice/resistant_to");
         TagKey<DamageType> THE_CUBE_IMMUNE_TO = registerSpellstone("the_cube/immune_to");
         TagKey<DamageType> ETHERIUM_CORE_IMMUNE_TO = registerSpellstone("etherium_core/immune_to");
+        TagKey<DamageType> CREATION_HEART_IMMUNE_TO = registerSpellstone("creation_heart/immune_to");
 
         private static TagKey<DamageType> registerSpellstone(String name) {
             return TagKey.create(Registries.DAMAGE_TYPE, EnigmaticLegacy.location("spellstone/" + name));

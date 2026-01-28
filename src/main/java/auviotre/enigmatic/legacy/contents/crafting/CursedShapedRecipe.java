@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.crafting;
 
 import auviotre.enigmatic.legacy.api.item.ITaintable;
+import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticRecipes;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -46,10 +47,12 @@ public class CursedShapedRecipe extends ShapedRecipe {
     }
 
     public boolean matches(CraftingInput input, Level level) {
-        for (int i = 0; i < input.size(); i++) {
-            ItemStack stack = input.getItem(i);
-            if (stack.getItem() instanceof ITaintable && !ITaintable.isTainted(stack))
-                return false;
+        if (EnigmaticHandler.isCursedItem(this.result) || EnigmaticHandler.isBlessedItem(this.result)) {
+            for (int i = 0; i < input.size(); i++) {
+                ItemStack stack = input.getItem(i);
+                if (stack.getItem() instanceof ITaintable && !ITaintable.isTainted(stack))
+                    return false;
+            }
         }
         return super.matches(input, level);
     }

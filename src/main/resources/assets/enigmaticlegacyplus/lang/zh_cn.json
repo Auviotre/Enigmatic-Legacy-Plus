@@ -83,6 +83,7 @@
   "attribute.name.fortune_level": "时运等级",
   "attribute.name.looting_level": "抢夺等级",
   "attribute.name.etherium_shield": "以太护盾阈值",
+  "attribute.name.projectile_deflect": "弹射物偏移",
 
   "key.enderRing": "末影之戒",
   "key.spellstoneAbility": "术石能力激活",
@@ -446,7 +447,7 @@
   "tooltip.enigmaticlegacy.majesticElytra3": "§5加速时耐久消耗更快",
 
   "tooltip.enigmaticlegacy.ichorBottle1": "§5藐视神明的前提是了解神明…",
-  "tooltip.enigmaticlegacy.ichorBottle2": "§5饮用以永久§6 +1 §d饰品栏位",
+  "tooltip.enigmaticlegacy.ichorBottle2": "§5饮用以永久§6 +1 §d护符栏位",
 
   "tooltip.enigmaticlegacy.spelltunerContext": "§d当前调律：§6%1$s",
   "tooltip.enigmaticlegacy.spelltunerContextAbsent": "§d当前调律：§4无",
@@ -560,6 +561,15 @@
   "tooltip.enigmaticlegacy.etheriumCore4": "§5- 将受到伤害的 §6%1$s§5 转化",
   "tooltip.enigmaticlegacy.etheriumCore5": "§5  为下一次攻击的增幅",
   "tooltip.enigmaticlegacy.etheriumCore6": "§5- 免疫挤压，荆棘与爆炸伤害",
+
+  "tooltip.enigmaticlegacy.creationHeart1": "§5- 免疫大部分负面状态效果",
+  "tooltip.enigmaticlegacy.creationHeart2": "§5- 给予你飞行能力",
+  "tooltip.enigmaticlegacy.creationHeart3": "§5- 补偿飞行时的挖掘速度损失",
+  "tooltip.enigmaticlegacy.creationHeart4": "§5- 将其装备或放在物品栏时",
+  "tooltip.enigmaticlegacy.creationHeart5": "§5  你将不朽",
+  "tooltip.enigmaticlegacy.creationHeart6": "§5- 免疫窒息、摔落、碰撞、",
+  "tooltip.enigmaticlegacy.creationHeart7": "§5  挤压、饥饿、虚空、荆棘、",
+  "tooltip.enigmaticlegacy.creationHeart8": "§5  火焰和熔岩伤害",
 
   "tooltip.enigmaticlegacy.unholyGrail": "§5最好别用它来喝水...",
 
@@ -771,9 +781,6 @@
   "tooltip.enigmaticlegacy.cursedXpScroll4": "§5死亡后丢失所有经验",
   "tooltip.enigmaticlegacy.cursedXpScroll5": "§6+%1$s §d击退抗性",
 
-  "tooltip.enigmaticlegacy.divineFruitPie": "§5",
-  "tooltip.enigmaticlegacy.divineFruitPieBlock": "§c不要轻易触碰神之珍馐",
-
   "tooltip.enigmaticlegacy.abyssalHeart1": "§5此物超脱三界、亵渎至极、不可理解，令万物陷入癫狂",
   "tooltip.enigmaticlegacy.abyssalHeart2": "§5未曾有如此存在凝视此世",
   "tooltip.enigmaticlegacy.abyssalHeart3": "§5世界因其视线而战栗",
@@ -802,6 +809,13 @@
   "tooltip.enigmaticlegacy.chaosElytra1": "§5减少 §6%1$s §5来自背后的伤害",
   "tooltip.enigmaticlegacy.chaosElytra2": "§5加速垂直冲向地面时会产生范围伤害",
   "tooltip.enigmaticlegacy.chaosElytra3": "§5空中冲刺也可以撞击目标",
+
+  "tooltip.enigmaticlegacy.cosmicScroll1": "§5你对未被选召的玩家造成的§d伤害 §6+%1$s§5",
+  "tooltip.enigmaticlegacy.cosmicScroll2": "§5而且你的近战伤害可以点燃他们",
+  "tooltip.enigmaticlegacy.cosmicScroll3": "§5当遭受到致命伤害时，生命值将",
+  "tooltip.enigmaticlegacy.cosmicScroll4": "§5恢复到 §650%§5，并获得强力效果",
+  "tooltip.enigmaticlegacy.cosmicScroll5": "§5这一能力有 §6%1$s §6秒§5冷却时间",
+  "tooltip.enigmaticlegacy.cosmicScrollCooldown": "§d剩余冷却时间：§6%1$s§6s",
 
   "tooltip.enigmaticlegacy.theJudgement1": "§5攻击时对以目标为中心",
   "tooltip.enigmaticlegacy.theJudgement2": "§5半径 §6%s §6方块§5内",

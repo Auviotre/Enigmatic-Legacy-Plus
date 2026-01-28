@@ -12,8 +12,7 @@ public class AmuletSubtypeInterpreter implements ISubtypeInterpreter<ItemStack> 
     public static final AmuletSubtypeInterpreter INSTANCE = new AmuletSubtypeInterpreter();
 
     public @Nullable Float getSubtypeData(@NotNull ItemStack ingredient, UidContext context) {
-        if (!ingredient.has(EnigmaticComponents.AMULET_COLOR)) return null;
-        return EnigmaticAmulet.getColor(ingredient).getColorVar();
+        return !ingredient.has(EnigmaticComponents.AMULET_COLOR) ? 0.0F : EnigmaticAmulet.getColor(ingredient).getColorVar();
     }
 
     public String getLegacyStringSubtypeInfo(@NotNull ItemStack ingredient, UidContext context) {

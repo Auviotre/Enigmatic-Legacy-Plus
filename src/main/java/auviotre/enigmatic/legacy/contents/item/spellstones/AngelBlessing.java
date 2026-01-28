@@ -7,11 +7,15 @@ import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.packets.client.ForceProjectileRotationsPacket;
 import auviotre.enigmatic.legacy.packets.client.PlayerMotionPacket;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,6 +23,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -87,6 +93,12 @@ public class AngelBlessing extends SpellstoneItem {
         return cooldown.get();
     }
 
+    protected Multimap<Holder<Attribute>, AttributeModifier> getModifiers() {
+        Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
+        map.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(getLocation(this), 0.01 * deflectChance.get(), AttributeModifier.Operation.ADD_VALUE));
+        return map;
+    }
+
     public void triggerActiveAbility(ServerLevel level, ServerPlayer player, ItemStack stack) {
         if (player.getCooldowns().isOnCooldown(this)) return;
         if (player.getAbilities().flying) return;
@@ -111,7 +123,7 @@ public class AngelBlessing extends SpellstoneItem {
 
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity living = context.entity();
-
+        living.getAttributes().addTransientAttributeModifiers(getModifiers());
         if (!(living.level() instanceof ServerLevel level)) return;
 
         AABB box = new AABB(living.getX() - 4, living.getY() - 4, living.getZ() - 4, living.getX() + 4, living.getY() + 4, living.getZ() + 4);
@@ -126,23 +138,27 @@ public class AngelBlessing extends SpellstoneItem {
         for (ThrowableItemProjectile entity : potionEntities) this.redirect(level, living, entity);
     }
 
+    public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
+        context.entity().getAttributes().removeAttributeModifiers(this.getModifiers());
+        super.onUnequip(context, newStack, stack);
+    }
 
     public void redirect(ServerLevel level, LivingEntity bearer, Entity redirected) {
         if (redirected instanceof WitherSkull) return;
         if ((redirected instanceof AbstractArrow arrow && arrow.getOwner() == bearer)
                 || (redirected instanceof ThrowableItemProjectile projectile && projectile.getOwner() == bearer)) {
-            if (redirected.getTags().contains("AB_ACCELERATED")) {
+            if (redirected.getTags().contains("AngelBlessingAccelerated")) {
                 return;
             }
 
-            if (redirected.getTags().stream().anyMatch(tag -> tag.startsWith("AB_DEFLECTED")))
+            if (redirected.getTags().stream().anyMatch(tag -> tag.startsWith("ProjectileDeflected")))
                 return;
 
             if (redirected instanceof ThrownTrident trident) {
                 if (trident.clientSideReturnTridentTickCount > 0) return;
             }
 
-            if (redirected.addTag("AB_ACCELERATED")) {
+            if (redirected.addTag("AngelBlessingAccelerated")) {
                 redirected.setDeltaMovement(redirected.getDeltaMovement().x * 1.75D, redirected.getDeltaMovement().y * 1.75D, redirected.getDeltaMovement().z * 1.75D);
                 Vec3 movement = redirected.getDeltaMovement();
                 List<ServerPlayer> players = level.getPlayers(player -> player.distanceToSqr(redirected) < 16.0);

@@ -9,8 +9,9 @@
         "minecraft:cramming",
         "minecraft:fly_into_wall",
         "minecraft:cactus",
+        "minecraft:starve",
         "minecraft:in_wall",
-        "minecraft:falling_block",
-        "minecraft:sweet_berry_bush"
+        "minecraft:sweet_berry_bush",
+        "minecraft:out_of_world"
     ]
 }

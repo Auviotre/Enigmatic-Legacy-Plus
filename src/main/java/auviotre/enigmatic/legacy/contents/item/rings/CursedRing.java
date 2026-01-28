@@ -599,7 +599,11 @@ public class CursedRing extends CursedCurioItem {
                                 ItemStack stack = EnigmaticItems.REDEMPTION_RING.toStack();
                                 stack.set(EnigmaticComponents.REDEMPTION_LEVEL, RedemptionRing.Helper.getPossibleLevel(player));
                                 curios.setStackInSlot(i, stack);
-                            } else if (EnigmaticHandler.isCursedItem(stackInSlot) && !EnigmaticHandler.isBlessedItem(stackInSlot)) {
+                            }
+                        }
+                        for (int i = 0; i < handler.getSlots(); ++i) {
+                            ItemStack stackInSlot = curios.getStackInSlot(i);
+                            if (EnigmaticHandler.isCursedItem(stackInSlot)) {
                                 PermanentItemEntity itemEntity = new PermanentItemEntity(player.level(), player.getRandomX(4), player.getRandomY(), player.getRandomZ(4), stackInSlot);
                                 itemEntity.setGlowingTag(true);
                                 player.level().addFreshEntity(itemEntity);

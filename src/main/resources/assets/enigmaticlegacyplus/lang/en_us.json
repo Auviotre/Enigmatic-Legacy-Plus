@@ -83,6 +83,7 @@
   "attribute.name.fortune_level": "Fortune Level",
   "attribute.name.looting_level": "Looting Level",
   "attribute.name.etherium_shield": "Etherium Shield Threshold",
+  "attribute.name.projectile_deflect": "Deflect Chance",
 
   "key.enderRing": "Ring of Ender",
   "key.spellstoneAbility": "Spellstone Active Ability",
@@ -560,6 +561,15 @@
   "tooltip.enigmaticlegacy.etheriumCore5": "§5  an increase for the next attack.",
   "tooltip.enigmaticlegacy.etheriumCore6": "§5- Immunity to pressure, pricking and explosion damage.",
 
+  "tooltip.enigmaticlegacy.creationHeart1": "§5- Immunity to most debuffs.",
+  "tooltip.enigmaticlegacy.creationHeart2": "§5- Grants you an ability to fly.",
+  "tooltip.enigmaticlegacy.creationHeart3": "§5- Compensates mining speed penalty when flying.",
+  "tooltip.enigmaticlegacy.creationHeart4": "§5- You are immortal while having it equipped",
+  "tooltip.enigmaticlegacy.creationHeart5": "§5  or in your inventory.",
+  "tooltip.enigmaticlegacy.creationHeart6": "§5- Immunity to suffocation, falling, collision,",
+  "tooltip.enigmaticlegacy.creationHeart7": "§5  pressure, hunger, void, pricking, fire and",
+  "tooltip.enigmaticlegacy.creationHeart8": "§5  lava damage.",
+
   "tooltip.enigmaticlegacy.unholyGrail": "§5You'd better not be drinking from it...",
 
   "tooltip.enigmaticlegacy.antiqueBag1": "§5A container similar to a§d Ender Chest§5.",
@@ -770,9 +780,6 @@
   "tooltip.enigmaticlegacy.cursedXpScroll4": "§5Lose all experiences after death.",
   "tooltip.enigmaticlegacy.cursedXpScroll5": "§6+%1$s §dKnockback Resistance",
 
-  "tooltip.enigmaticlegacy.divineFruitPie": "§5",
-  "tooltip.enigmaticlegacy.divineFruitPieBlock": "§cDon't touch the God's feast.",
-
   "tooltip.enigmaticlegacy.abyssalHeart1": "§5It is alive. It is watching. Never before have",
   "tooltip.enigmaticlegacy.abyssalHeart2": "§5this realm shuddered beneath the gaze of",
   "tooltip.enigmaticlegacy.abyssalHeart3": "§5something so alien, so unholy, so unknowable",
@@ -801,6 +808,13 @@
   "tooltip.enigmaticlegacy.chaosElytra1": "§5Reduce §6%1$s §5of damage from back.",
   "tooltip.enigmaticlegacy.chaosElytra2": "§5When accelerating vertically towards",
   "tooltip.enigmaticlegacy.chaosElytra3": "§5the ground, it will cause range damage.",
+
+  "tooltip.enigmaticlegacy.cosmicScroll1": "§5You deal §6+%1$s §dDamage§5 to players who are not",
+  "tooltip.enigmaticlegacy.cosmicScroll2": "§5chosen, and your melee attacks set them ablaze.",
+  "tooltip.enigmaticlegacy.cosmicScroll3": "§5When you receive lethal damage, your health is",
+  "tooltip.enigmaticlegacy.cosmicScroll4": "§5restored to §650%§5 and powerful buffs are applied.",
+  "tooltip.enigmaticlegacy.cosmicScroll5": "§5This ability has §6%1$s §6seconds§5 cooldown.",
+  "tooltip.enigmaticlegacy.cosmicScrollCooldown": "§dRemaining Cooldown: §6%1$s§6s",
 
   "tooltip.enigmaticlegacy.theJudgement1": "§5Upon attack, deals damage to every",
   "tooltip.enigmaticlegacy.theJudgement2": "§5creature within a radius of §6%s§6 blocks§5",

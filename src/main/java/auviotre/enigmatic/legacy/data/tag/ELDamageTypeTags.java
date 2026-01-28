@@ -62,7 +62,6 @@ public class ELDamageTypeTags extends DamageTypeTagsProvider {
         this.tag(EnigmaticTags.DamageTypes.THE_CUBE_IMMUNE_TO)
                 .addTag(DamageTypeTags.IS_FALL)
                 .addTag(DamageTypeTags.IS_DROWNING)
-                .addTag(DamageTypeTags.IS_DROWNING)
                 .addTag(DamageTypeTags.BURN_FROM_STEPPING)
                 .add(
                         DamageTypes.ON_FIRE,
@@ -81,6 +80,22 @@ public class ELDamageTypeTags extends DamageTypeTagsProvider {
                 DamageTypes.IN_WALL,
                 DamageTypes.FALLING_BLOCK,
                 DamageTypes.SWEET_BERRY_BUSH
+        );
+        this.tag(EnigmaticTags.DamageTypes.CREATION_HEART_IMMUNE_TO)
+                .addTag(DamageTypeTags.IS_FALL)
+                .addTag(DamageTypeTags.IS_DROWNING)
+                .addTag(DamageTypeTags.BURN_FROM_STEPPING)
+                .add(
+                        DamageTypes.ON_FIRE,
+                        DamageTypes.IN_FIRE,
+                        DamageTypes.LAVA,
+                        DamageTypes.CRAMMING,
+                        DamageTypes.FLY_INTO_WALL,
+                        DamageTypes.CACTUS,
+                        DamageTypes.STARVE,
+                        DamageTypes.IN_WALL,
+                        DamageTypes.SWEET_BERRY_BUSH,
+                        DamageTypes.FELL_OUT_OF_WORLD
         );
     }
 }
