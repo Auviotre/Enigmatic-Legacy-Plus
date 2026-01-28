@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.rings;
 
+import auviotre.enigmatic.legacy.ELConfig;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
@@ -490,6 +491,7 @@ public class CursedRing extends CursedCurioItem {
                 EnigmaticHandler.setCurrentWorldFractured(true);
             } else EnigmaticHandler.setCurrentWorldFractured(false);
 
+            if (!ELConfig.CONFIG.giveStarterGear.get()) return;
             try {
                 if (!ModList.get().isLoaded("customstartinggear")) {
                     EnigmaticLegacy.LOGGER.info("Granting starter gear to " + player.getGameProfile().getName());
