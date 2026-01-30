@@ -145,6 +145,9 @@
   "block.enigmaticlegacyplus.etherium_ore": "Etherium Ore",
   "block.enigmaticlegacyplus.spellstone_table": "Spellstone Table",
 
+  "item.enigmaticlegacy.enigmatic_eye_dormant": "Dormant Eye",
+  "item.enigmaticlegacy.enigmatic_eye_active": "Inscrutable Eye",
+
   "item.enigmaticlegacyplus.abyssal_heart": "Heart of the Abyss",
   "item.enigmaticlegacyplus.angel_blessing": "Angel's Blessing",
   "item.enigmaticlegacyplus.animal_guidebook": "Guide to Animal Companionship",
@@ -800,6 +803,17 @@
   "tooltip.enigmaticlegacy.eldritchAmulet5": "§5down and weakened.",
   "tooltip.enigmaticlegacy.eldritchAmuletStat1": "§6+%1$s §dAttack Damage",
   "tooltip.enigmaticlegacy.eldritchAmuletStat2": "§6+%1$s §dLifesteal",
+
+  "tooltip.enigmaticlegacy.enigmaticEye1": "§5It is connected to location beyond your space and",
+	"tooltip.enigmaticlegacy.enigmaticEye2": "§5time. You can awaken the eye, if you wish to risk",
+	"tooltip.enigmaticlegacy.enigmaticEye3": "§5drawing attention of someone... or something.",
+	
+	"tooltip.enigmaticlegacy.enigmaticEyeAwakened1": "§5Now that you have drawn his attention, whoever uses",
+	"tooltip.enigmaticlegacy.enigmaticEyeAwakened2": "§5the eye to observe you and the world does not seem to",
+	"tooltip.enigmaticlegacy.enigmaticEyeAwakened3": "§5need it in order to reach you. Whether he is incapable",
+	"tooltip.enigmaticlegacy.enigmaticEyeAwakened4": "§5or simply unwilling to establish any contact beyond",
+	"tooltip.enigmaticlegacy.enigmaticEyeAwakened5": "§5mental remains a mystery.",
+	"tooltip.enigmaticlegacy.enigmaticEyeAwakened6": "§5Reveals true name of players bearing §6Charming Insignia§5.",
 
   "tooltip.enigmaticlegacy.desolationRing1": "§6Prevents any dropping from slain mob.",
   "tooltip.enigmaticlegacy.desolationRing2": "§6Neutral creatures§5 will not spawn in your proximity.",

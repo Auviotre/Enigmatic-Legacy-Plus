@@ -49,6 +49,12 @@ public class SpecialLootModifier extends LootModifier {
         Vec3 origin = context.getParamOrNull(LootContextParams.ORIGIN);
         if (entity instanceof ServerPlayer player) {
             CompoundTag data = EnigmaticHandler.getPersistedData(player);
+
+            if (!data.contains("LootedArchitectEye") && context.getQueriedLootTableId().getPath().startsWith("chests/")) {
+                data.putBoolean("LootedArchitectEye", true);
+                list.set(0, EnigmaticItems.ENIGMATIC_EYE.toStack());
+            }
+
             if (!data.contains("LootedIchorBottle")) {
                 if (list.stream().anyMatch(stack -> stack.is(EnigmaticItems.ICHOR_BOTTLE))) {
                     data.putBoolean("LootedIchorBottle", true);

@@ -50,6 +50,7 @@ public class EnigmaticItems {
     public static final DeferredItem<UnwitnessedAmulet> UNWITNESSED_AMULET = registerWithTab("unwitnessed_amulet", UnwitnessedAmulet::new);
     public static final DeferredItem<EnigmaticAmulet> ENIGMATIC_AMULET = ITEMS.register("enigmatic_amulet", () -> new EnigmaticAmulet());
     public static final DeferredItem<Item> SPELLSTONE_DEBRIS = registerWithTab("spellstone_debris", () -> new Item(BaseItem.defaultProperties(32).rarity(Rarity.UNCOMMON)));
+    public static final DeferredItem<EnigmaticEye> ENIGMATIC_EYE = registerWithTab("enigmatic_eye", EnigmaticEye::new);
     public static final DeferredItem<Spellcore> SPELLCORE = registerWithTab("spellcore", Spellcore::new);
     public static final DeferredItem<Spelltuner> SPELLTUNER = registerWithTab("spelltuner", Spelltuner::new);
     public static final DeferredItem<GolemHeart> GOLEM_HEART = registerWithTab("golem_heart", GolemHeart::new);
