@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.client.renderer;
 
 import auviotre.enigmatic.legacy.contents.item.books.TheAcknowledgment;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -26,19 +27,17 @@ public class AcknowledgmentNameRenderer {
         this.book = gui.book;
         this.font = font;
 
-        Component customName = this.book.getBookItem().getHoverName();
+        Component customName = EnigmaticItems.THE_ACKNOWLEDGMENT.toStack().getHoverName();
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player != null) {
             ItemStack stack = minecraft.player.getOffhandItem();
             if (stack.isEmpty() || !(stack.getItem() instanceof TheAcknowledgment)) {
                 stack = minecraft.player.getMainHandItem();
             }
-            if (!stack.isEmpty()) {
-                if (stack.getItem() instanceof TheAcknowledgment)
-                    customName = stack.getItem().getName(stack);
+            if (!stack.isEmpty() && stack.getItem() instanceof TheAcknowledgment) {
+                customName = stack.getItem().getName(stack);
             }
         }
-        System.out.print(customName + "\n");
         this.name = customName;
     }
 

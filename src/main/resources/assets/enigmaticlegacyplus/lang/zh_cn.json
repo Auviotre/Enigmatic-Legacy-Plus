@@ -440,7 +440,7 @@
   "tooltip.enigmaticlegacy.etheriumSword": "§5手持时有 §6%1$s §d几率§5不受到伤害",
   "tooltip.enigmaticlegacy.etheriumDisable": "§5按住 §6Shift§5 以禁用此效果",
   "tooltip.enigmaticlegacy.etherealLantern": "§5向周围玩家提供临时护盾",
-  "tooltip.enigmaticlegacy.etherealForgingCharm": "§5携带的物品不会损坏",
+  "tooltip.enigmaticlegacy.etherealForgingCharm": "§5极大减缓携带物品的耐久消耗",
 
   "tooltip.enigmaticlegacy.majesticElytra1": "§5滑翔时按住跳跃键以",
   "tooltip.enigmaticlegacy.majesticElytra2": "§5持续向前加速",
@@ -946,6 +946,8 @@
   "enigmaticlegacyplus.configuration.abyssThreshold.tooltip": "启用深渊物品所需要的时间占比",
   "enigmaticlegacyplus.configuration.forTheWorthy": "怪物强化",
   "enigmaticlegacyplus.configuration.forTheWorthy.tooltip": "加强 The Worthy 玩家所遇到怪物的能力",
+  "enigmaticlegacyplus.configuration.giveStarterGear": "给予初始物品",
+  "enigmaticlegacyplus.configuration.giveStarterGear.tooltip": "若启用，模组将在首次登录时给予初始物品",
   "enigmaticlegacyplus.configuration.neutralWhiteList": "中立激怒白名单",
   "enigmaticlegacyplus.configuration.neutralWhiteList.tooltip": "不会被七咒激怒的生物名单",
 

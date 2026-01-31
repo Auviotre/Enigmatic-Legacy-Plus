@@ -45,6 +45,7 @@ public class SpecialLootModifier extends LootModifier {
 
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> list, LootContext context) {
         ServerLevel level = context.getLevel();
+        if (list.isEmpty()) return list;
         Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
         Vec3 origin = context.getParamOrNull(LootContextParams.ORIGIN);
         if (entity instanceof ServerPlayer player) {

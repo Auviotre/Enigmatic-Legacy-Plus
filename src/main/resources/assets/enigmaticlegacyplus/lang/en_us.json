@@ -439,7 +439,7 @@
   "tooltip.enigmaticlegacy.etheriumSword": "§5When held, provides §6%1$s §dChance§5 to avoid damage.",
   "tooltip.enigmaticlegacy.etheriumDisable": "§5Hold §6Shift§5 to suppress this effect.",
   "tooltip.enigmaticlegacy.etherealLantern": "§5Provide temporary shields to nearby players.",
-  "tooltip.enigmaticlegacy.etherealForgingCharm": "§5All items in inventory will not damaged.",
+  "tooltip.enigmaticlegacy.etherealForgingCharm": "§5Greatly reduce the durability consumption of items in inventory.",
 
   "tooltip.enigmaticlegacy.majesticElytra1": "§5Hold jump key while flying to continuously",
   "tooltip.enigmaticlegacy.majesticElytra2": "§5accelerate forward. Elytra is damaged",
@@ -945,6 +945,8 @@
   "enigmaticlegacyplus.configuration.abyssThreshold.tooltip": "The time needed to enable the Abyss items as a percentage.",
   "enigmaticlegacyplus.configuration.forTheWorthy": "Monster Enhancement",
   "enigmaticlegacyplus.configuration.forTheWorthy.tooltip": "Enhance the abilities of monsters encountered by the Worthy players.",
+  "enigmaticlegacyplus.configuration.giveStarterGear": "Give Starter Gear",
+  "enigmaticlegacyplus.configuration.giveStarterGear.tooltip": "If true, Mod will grant starter items on first login.",
   "enigmaticlegacyplus.configuration.neutralWhiteList": "Neutral Mob Enrage Whitelist",
   "enigmaticlegacyplus.configuration.neutralWhiteList.tooltip": "The list of creatures that will not be aggressive towards you via the Seven Curses.",
 
