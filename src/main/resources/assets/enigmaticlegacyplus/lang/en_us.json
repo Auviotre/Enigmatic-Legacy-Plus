@@ -890,6 +890,8 @@
   "enigmaticlegacyplus.configuration.underwaterCreaturesResistance": "Damage Resistance against Underwater Creatures",
   "enigmaticlegacyplus.configuration.xpCostModifier": "Experience Cost Modifier",
   "enigmaticlegacyplus.configuration.preventOxygenBarRender": "Prevent Oxygen Bar Render",
+  "enigmaticlegacyplus.configuration.accelerationModifier": "Acceleration Modifier",
+  "enigmaticlegacyplus.configuration.accelerationModifierElytra": "Acceleration Modifier with Elytra",
   "enigmaticlegacyplus.configuration.deflectChance": "Chance of Projectile Deflecting",
   "enigmaticlegacyplus.configuration.magicBoost": "Magic Damage Boost",
   "enigmaticlegacyplus.configuration.magicResistance": "Magic Damage Resistance",
