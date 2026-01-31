@@ -70,6 +70,8 @@ public class EnigmaticEye extends BaseCurioItem {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEye2");
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEye3");
             } else {
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.enchantersPearl1");
+                TooltipHandler.line(list);
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEyeAwakened1");
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEyeAwakened2");
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEyeAwakened3");
@@ -176,7 +178,6 @@ public class EnigmaticEye extends BaseCurioItem {
     }
 
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
-        tooltips.clear();
-        return tooltips;
+        return super.getAttributesTooltip(tooltips, context, stack);
     }
 }
