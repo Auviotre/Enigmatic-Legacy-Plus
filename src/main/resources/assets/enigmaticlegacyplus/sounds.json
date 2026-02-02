@@ -84,5 +84,229 @@
         "stream": false
       }
     ]
+  },
+  "quote.no_peril": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/no_peril",
+        "stream": false
+      }
+    ]
+  },
+  "quote.i_wandered": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/i_wandered",
+        "stream": false
+      }
+    ]
+  },
+  "quote.another_demigod": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/another_demigod",
+        "stream": false
+      }
+    ]
+  },
+  "quote.another_eon": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/another_eon",
+        "stream": false
+      }
+    ]
+  },
+  "quote.death_may": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/death_may",
+        "stream": false
+      }
+    ]
+  },
+  "quote.demise_is": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/demise_is",
+        "stream": false
+      }
+    ]
+  },
+  "quote.end_doorstep": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/end_doorstep",
+        "stream": false
+      }
+    ]
+  },
+  "quote.eternity_to_keep": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/eternity_to_keep",
+        "stream": false
+      }
+    ]
+  },
+  "quote.oblivion_rejects": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/oblivion_rejects",
+        "stream": false
+      }
+    ]
+  },
+  "quote.only_because": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/only_because",
+        "stream": false
+      }
+    ]
+  },
+  "quote.perhaps_you": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/perhaps_you",
+        "stream": false
+      }
+    ]
+  },
+  "quote.setback": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/setback",
+        "stream": false
+      }
+    ]
+  },
+  "quote.sulfur_air": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/sulfur_air",
+        "stream": false
+      }
+    ]
+  },
+  "quote.tortured_rocks": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/tortured_rocks",
+        "stream": false
+      }
+    ]
+  },
+  "quote.violence_calls": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/violence_calls",
+        "stream": false
+      }
+    ]
+  },
+  "quote.we_fall": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/we_fall",
+        "stream": false
+      }
+    ]
+  },
+  "quote.you_will_endure": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/you_will_endure",
+        "stream": false
+      }
+    ]
+  },
+  "quote.immortal": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/immortal",
+        "stream": false
+      }
+    ]
+  },
+  "quote.appalling_presence": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/appalling_presence",
+        "stream": false
+      }
+    ]
+  },
+  "quote.toll_paid": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/toll_paid",
+        "stream": false
+      }
+    ]
+  },
+  "quote.its_destruction": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/its_destruction",
+        "stream": false
+      }
+    ]
+  },
+  "quote.breathes_relieved": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/breathes_relieved",
+        "stream": false
+      }
+    ]
+  },
+  "quote.whether_it_is": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/whether_it_is",
+        "stream": false
+      }
+    ]
+  },
+  "quote.poor_creature": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/poor_creature",
+        "stream": false
+      }
+    ]
+  },
+  "quote.horrible_existence": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/horrible_existence",
+        "stream": false
+      }
+    ]
+  },
+  "quote.countless_dead": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/countless_dead",
+        "stream": false
+      }
+    ]
+  },
+  "quote.with_dragons": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/with_dragons",
+        "stream": false
+      }
+    ]
+  },
+  "quote.terrifying_form": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacyplus:quote/terrifying_form",
+        "stream": false
+      }
+    ]
   }
 }

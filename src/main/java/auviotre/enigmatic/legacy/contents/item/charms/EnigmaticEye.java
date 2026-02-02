@@ -1,7 +1,13 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.client.Quote;
+import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
+import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumArmor;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
 import com.google.common.collect.HashMultimap;
@@ -11,6 +17,7 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -25,12 +32,22 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 
 public class EnigmaticEye extends BaseCurioItem {
+    public static ModConfigSpec.BooleanValue quoteSubtitles;
+
+    @SubscribeConfig(receiveClient = true)
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        if (type == ModConfig.Type.CLIENT) {
+            EnigmaticEye.quoteSubtitles = builder.define("quoteSubtitles", true);
+        }
+    }
 //    private static final ResourceLocation EYE_ADVANCEMENT = new ResourceLocation(EnigmaticLegacy.MODID, "book/relics/enigmatic_eye");
 
     public EnigmaticEye() {
@@ -70,8 +87,6 @@ public class EnigmaticEye extends BaseCurioItem {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEye2");
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEye3");
             } else {
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.enchantersPearl1");
-                TooltipHandler.line(list);
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEyeAwakened1");
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEyeAwakened2");
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEyeAwakened3");
@@ -121,47 +136,47 @@ public class EnigmaticEye extends BaseCurioItem {
         }
 
         if (pEntity instanceof Player player && !this.isDormant(pStack)) {
-            // TODO: Add Narrator
-//            if (!TransientPlayerData.get(player).getUnlockedNarrator()) {
-//                TransientPlayerData.get(player).setUnlockedNarrator(true);
-//                Quote.getRandom(Quote.NARRATOR_INTROS).play(player, 60);
-//            }
-//
-//            if (player.tickCount % 100 == 0)
-//                if (!SuperpositionHandler.hasAdvancement(player, EYE_ADVANCEMENT)) {
-//                    SuperpositionHandler.grantAdvancement(player, EYE_ADVANCEMENT);
-//                }
+            EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
+
+            if (!data.getUnlockedNarrator()) {
+                data.setUnlockedNarrator(true);
+                Quote.getRandom(Quote.NARRATOR_INTROS).play((ServerPlayer) player, 60);
+            }
         }
 
         super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player pPlayer, InteractionHand pHand) {
-        ItemStack stack = pPlayer.getItemInHand(pHand);
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand pHand) {
+        ItemStack stack = player.getItemInHand(pHand);
 
         if (this.isDormant(stack) && !stack.has(EnigmaticComponents.ACTIVATION_ANIMATION)) {
-            if (pPlayer instanceof Player player) {
-                this.activateWithAnimation(stack);
-//                TransientPlayerData data = TransientPlayerData.get(player);
-//                boolean wasNarratorUnlocked = data.getUnlockedNarrator();
 
-                player.level().playSound(null, player.blockPosition(), EnigmaticSounds.CHARGED_ON.get(), SoundSource.PLAYERS, 1.0F, 0.95F + player.getRandom().nextFloat() * 0.1F);
+            this.activateWithAnimation(stack);
+            EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
 
-//                if (!wasNarratorUnlocked) {
-//                    data.setUnlockedNarrator(true);
-//                    data.needsSync = true;
-//                    Quote.getRandom(Quote.NARRATOR_INTROS).play(player, 80);
-//                }
-//
-//                if (!SuperpositionHandler.hasAdvancement(player, EYE_ADVANCEMENT)) {
-//                    SuperpositionHandler.grantAdvancement(player, EYE_ADVANCEMENT);
-//                }
+            if (!level.isClientSide) {
+
+                level.playSound(null, player.blockPosition(),
+                        EnigmaticSounds.CHARGED_ON.get(),
+                        SoundSource.PLAYERS, 1.0F,
+                        0.95F + player.getRandom().nextFloat() * 0.1F
+                );
+
+                if (!data.getUnlockedNarrator()) {
+                    data.setUnlockedNarrator(true);
+                    // data.needsSync = true;
+
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        Quote.getRandom(Quote.NARRATOR_INTROS).play(serverPlayer, 80);
+                    }
+                }
             }
 
             return InteractionResultHolder.success(stack);
         }
 
-        return super.use(level, pPlayer, pHand);
+        return super.use(level, player, pHand);
     }
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
