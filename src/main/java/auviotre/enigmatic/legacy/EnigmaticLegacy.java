@@ -132,6 +132,7 @@ public class EnigmaticLegacy {
         registrar.playToClient(ChaosDescendingPacket.TYPE, ChaosDescendingPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(TheCubeRevivePacket.TYPE, TheCubeRevivePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(SlotUnlockToastPacket.TYPE, SlotUnlockToastPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(PlayQuotePacket.TYPE, PlayQuotePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {

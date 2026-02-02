@@ -165,7 +165,6 @@ public class EnigmaticEye extends BaseCurioItem {
 
                 if (!data.getUnlockedNarrator()) {
                     data.setUnlockedNarrator(true);
-                    // data.needsSync = true;
 
                     if (player instanceof ServerPlayer serverPlayer) {
                         Quote.getRandom(Quote.NARRATOR_INTROS).play(serverPlayer, 80);

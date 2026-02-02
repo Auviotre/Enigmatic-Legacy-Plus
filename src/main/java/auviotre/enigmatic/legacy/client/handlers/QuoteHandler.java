@@ -18,6 +18,7 @@ import net.minecraft.util.RandomSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -48,23 +49,50 @@ public class QuoteHandler {
         }
     }
 
+//    @SubscribeEvent
+//    public void onPlayerTick(PlayerTickEvent event) {
+//        if (event.getEntity() == Minecraft.getInstance().player) {
+//            if (this.delayTicks > 0 && !(Minecraft.getInstance().screen instanceof LevelLoadingScreen)
+//                    && !(Minecraft.getInstance().screen instanceof ReceivingLevelScreen)) {
+//                this.delayTicks--;
+//
+//                if (this.delayTicks == 0) {
+//                    SimpleSoundInstance instance = new SimpleSoundInstance(this.currentQuote.getSound().getLocation(),
+//                            SoundSource.VOICE, 0.7F, 1, RANDOM, false, 0, SoundInstance.Attenuation.NONE, 0, 0, 0, true);
+//
+//                    Minecraft.getInstance().getSoundManager().play(instance);
+//
+//                    this.startedPlaying = System.currentTimeMillis();
+//                }
+//            }
+//        }
+//    }
+
     @SubscribeEvent
-    public void onPlayerTick(PlayerTickEvent event) {
-        if (event.getEntity() == Minecraft.getInstance().player) {
-            if (this.delayTicks > 0 && !(Minecraft.getInstance().screen instanceof LevelLoadingScreen)
-                    && !(Minecraft.getInstance().screen instanceof ReceivingLevelScreen)) {
-                this.delayTicks--;
+    public void onClientTick(ClientTickEvent.Post event) {
+        if (delayTicks <= 0 || currentQuote == null) return;
 
-                if (this.delayTicks == 0) {
-                    SimpleSoundInstance instance = new SimpleSoundInstance(this.currentQuote.getSound().getLocation(),
-                            SoundSource.VOICE, 0.7F, 1, RANDOM, false, 0, SoundInstance.Attenuation.NONE, 0, 0, 0, true);
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.level == null) return;
 
-                    Minecraft.getInstance().getSoundManager().play(instance);
+        delayTicks--;
 
-                    this.startedPlaying = System.currentTimeMillis();
-                }
-            }
+        if (delayTicks == 0) {
+            playSound();
+            startedPlaying = System.currentTimeMillis();
         }
+    }
+
+    private void playSound() {
+        Minecraft mc = Minecraft.getInstance();
+
+        SimpleSoundInstance instance = SimpleSoundInstance.forUI(
+                currentQuote.getSound(),
+                0.7F,
+                1.0F
+        );
+
+        mc.getSoundManager().play(instance);
     }
 
     @SubscribeEvent
