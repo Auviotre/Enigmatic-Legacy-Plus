@@ -169,14 +169,6 @@ public class ClientPackets {
 
     public static void handle(PlayQuotePacket packet) {
         Quote quote = Quote.getByID(packet.quoteId());
-        EnigmaticLegacy.LOGGER.info("CLIENT: received PlayQuotePacket {}", packet.quoteId());
-
-//        EnigmaticLegacy.LOGGER.info(String.valueOf(quote.getSubtitles()));
-//        EnigmaticLegacy.LOGGER.info(String.valueOf(quote.getName()));
         quote.play(packet.delay());
-
-        System.out.println("Quote SHOULD DISPLAY NOW");
-        System.out.println("player = " + Minecraft.getInstance().player);
-        System.out.println("level = " + Minecraft.getInstance().level);
     }
 }

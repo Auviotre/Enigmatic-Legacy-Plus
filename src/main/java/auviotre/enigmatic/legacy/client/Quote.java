@@ -112,8 +112,6 @@ public class Quote {
 
     public void play(ServerPlayer player, int delayTicks) {
         PacketDistributor.sendToPlayer(player, new PlayQuotePacket(this.getID(), delayTicks));
-        EnigmaticLegacy.LOGGER.info("Quote.play called, delay={}", delayTicks);
-
         lastQuote = this;
     }
 
