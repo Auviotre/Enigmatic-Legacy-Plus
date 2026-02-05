@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy;
 
 import auviotre.enigmatic.legacy.client.ClientConfig;
+import auviotre.enigmatic.legacy.client.handlers.QuoteHandler;
 import auviotre.enigmatic.legacy.compat.CompatHandler;
 import auviotre.enigmatic.legacy.contents.item.amulets.EnigmaticAmulet;
 import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
@@ -87,6 +88,7 @@ public class EnigmaticLegacy {
         container.registerConfig(ModConfig.Type.SERVER, ELConfig.SPEC);
         if (FMLEnvironment.dist.isClient()) {
             modEventBus.addListener(this::onClientSetup);
+            NeoForge.EVENT_BUS.register(QuoteHandler.INSTANCE);
             container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
             container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         }

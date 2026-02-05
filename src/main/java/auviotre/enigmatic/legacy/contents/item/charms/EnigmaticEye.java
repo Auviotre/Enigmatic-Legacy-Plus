@@ -4,7 +4,6 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.client.Quote;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
-import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumArmor;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
@@ -32,8 +31,13 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -193,5 +197,19 @@ public class EnigmaticEye extends BaseCurioItem {
 
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         return super.getAttributesTooltip(tooltips, context, stack);
+    }
+
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+
+        @SubscribeEvent
+        private static void onPlayerRespawn(PlayerEvent.@NotNull PlayerRespawnEvent event) {
+            Player player = event.getEntity();
+
+            if (player instanceof ServerPlayer serverPlayer) {
+                Quote.getRandom(Quote.DEATH_QUOTES).play(serverPlayer, 10);
+            }
+        }
     }
 }
