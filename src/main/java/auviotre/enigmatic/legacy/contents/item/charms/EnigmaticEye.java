@@ -2,6 +2,9 @@ package auviotre.enigmatic.legacy.contents.item.charms;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.event.EndPortalActivatedEvent;
+import auviotre.enigmatic.legacy.api.event.EnterBlockEvent;
+import auviotre.enigmatic.legacy.api.event.SummonedEntityEvent;
 import auviotre.enigmatic.legacy.client.Quote;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
@@ -15,6 +18,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -24,11 +28,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -204,11 +211,59 @@ public class EnigmaticEye extends BaseCurioItem {
     public static class Events {
 
         @SubscribeEvent
+        public static void onPlayerTravel(PlayerEvent.@NotNull PlayerChangedDimensionEvent event) {
+            Player player = event.getEntity();
+            ResourceKey<Level> playerDimension = player.level().dimension();
+
+            if (player instanceof ServerPlayer serverPlayer) {
+                if (playerDimension == Level.NETHER) {
+                    Quote.SULFUR_AIR.playOnceIfUnlocked(serverPlayer, 240);
+                } else if (playerDimension == Level.END) {
+                    Quote.TORTURED_ROCKS.playOnceIfUnlocked(serverPlayer, 240);
+                }
+            }
+        }
+
+        @SubscribeEvent
+        public static void onEndPortal(EndPortalActivatedEvent event) {
+            Player player = event.getEntity();
+
+            if (player instanceof ServerPlayer serverPlayer) {
+                Quote.END_DOORSTEP.playOnceIfUnlocked(serverPlayer, 40);
+            }
+        }
+
+        @SubscribeEvent
+        public static void onEntitySummon(SummonedEntityEvent event) {
+            Player player = event.getEntity();
+            Entity entity = event.getSummonedEntity();
+
+            if (player instanceof ServerPlayer serverPlayer) {
+                if (entity instanceof WitherBoss) {
+                    Quote.COUNTLESS_DEAD.playOnceIfUnlocked(serverPlayer, 20);
+                } else if (entity instanceof EnderDragon) {
+                    Quote.HORRIBLE_EXISTENCE.playOnceIfUnlocked(serverPlayer, 100);
+                }
+            }
+        }
+
+        @SubscribeEvent
+        public static void onEnteredBlock(EnterBlockEvent event) {
+            Player player = event.getEntity();
+
+            if (player instanceof ServerPlayer serverPlayer && event.getBlockState().getBlock() == Blocks.END_GATEWAY) {
+                Quote.I_WANDERED.playOnceIfUnlocked(serverPlayer, 160);
+            }
+        }
+
+        @SubscribeEvent
         private static void onPlayerRespawn(PlayerEvent.@NotNull PlayerRespawnEvent event) {
             Player player = event.getEntity();
 
             if (player instanceof ServerPlayer serverPlayer) {
-                Quote.getRandom(Quote.DEATH_QUOTES).play(serverPlayer, 10);
+                if (event.isEndConquered()) return;
+
+                Quote.getRandom(Quote.DEATH_QUOTES).playIfUnlocked(serverPlayer, 10);
             }
         }
     }

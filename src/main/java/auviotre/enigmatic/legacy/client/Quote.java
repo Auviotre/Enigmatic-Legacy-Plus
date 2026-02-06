@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import static auviotre.enigmatic.legacy.contents.item.charms.EnigmaticEye.quoteSubtitles;
+
 public class Quote {
     private static final Random RANDOM = new Random();
     private static final List<Quote> ALL_QUOTES = new ArrayList<>();
@@ -126,8 +128,8 @@ public class Quote {
 
     @OnlyIn(Dist.CLIENT)
     public void play(int delayTicks) {
-        if (delayTicks < 1)
-            throw new IllegalArgumentException("Delay cannot be less than 1 tick!");
+        if (!quoteSubtitles.getAsBoolean()) return;
+        if (delayTicks < 1) throw new IllegalArgumentException("Delay cannot be less than 1 tick!");
 
         QuoteHandler.INSTANCE.playQuote(this, delayTicks);
     }

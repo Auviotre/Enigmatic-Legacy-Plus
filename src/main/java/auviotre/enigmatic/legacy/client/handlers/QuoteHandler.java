@@ -26,8 +26,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static auviotre.enigmatic.legacy.contents.item.charms.EnigmaticEye.quoteSubtitles;
-
 @OnlyIn(Dist.CLIENT)
 public class QuoteHandler {
     public static final QuoteHandler INSTANCE = new QuoteHandler();
@@ -61,7 +59,7 @@ public class QuoteHandler {
 
         this.delayTicks--;
 
-        if (this.delayTicks == 0 || quoteSubtitles.getAsBoolean()) {
+        if (this.delayTicks == 0) {
             SimpleSoundInstance instance = new SimpleSoundInstance(
                     this.currentQuote.getSound().getLocation(),
                     SoundSource.VOICE, 0.7F, 1, RANDOM, false, 0, SoundInstance.Attenuation.NONE, 0, 0, 0, true
@@ -90,7 +88,7 @@ public class QuoteHandler {
     }
 
     private void drawQuote(GuiGraphics graphics) {
-        if (!quoteSubtitles.getAsBoolean() || currentQuote == null) return;
+        if (currentQuote == null) return;
 
         Window window = Minecraft.getInstance().getWindow();
         Subtitles subtitles = currentQuote.getSubtitles();
