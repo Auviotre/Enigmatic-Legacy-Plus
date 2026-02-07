@@ -88,11 +88,10 @@ public class Quote {
     }
 
     public void playOnceIfUnlocked(ServerPlayer player, int delayTicks) {
-        if (player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getUnlockedNarrator()) {
-            if (!EnigmaticHandler.getPersistedData(player).contains("ELHeardQuote:" + this.name)) {
-                EnigmaticHandler.getPersistedData(player).putBoolean("ELHeardQuote:" + this.name, true);
-                this.play(player, delayTicks);
-            }
+        if (!player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getUnlockedNarrator()) return;
+        if (!EnigmaticHandler.getPersistedData(player).contains("HeardQuote:" + this.name)) {
+            EnigmaticHandler.getPersistedData(player).putBoolean("HeardQuote:" + this.name, true);
+            this.play(player, delayTicks);
         }
     }
 

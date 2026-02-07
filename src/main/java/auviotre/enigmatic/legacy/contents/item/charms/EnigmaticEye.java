@@ -28,6 +28,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
@@ -43,6 +44,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -90,7 +93,7 @@ public class EnigmaticEye extends BaseCurioItem {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
         TooltipHandler.line(list);
         if (Screen.hasShiftDown()) {
             if (this.isDormant(stack)) {
@@ -129,14 +132,15 @@ public class EnigmaticEye extends BaseCurioItem {
     }
 
     @Override
-    public Component getName(ItemStack stack) {
+    @NotNull
+    public Component getName(@NotNull ItemStack stack) {
         if (this.isDormant(stack))
             return Component.translatable("item.enigmaticlegacy.enigmatic_eye_dormant");
         else
             return Component.translatable("item.enigmaticlegacy.enigmatic_eye_active");
     }
 
-    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+    public void inventoryTick(ItemStack pStack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
         int animTicks = pStack.getOrDefault(EnigmaticComponents.ACTIVATION_ANIMATION.get(), -1);
 
         if (animTicks > 0) {
@@ -146,20 +150,20 @@ public class EnigmaticEye extends BaseCurioItem {
             this.setDormant(pStack, false);
         }
 
-        if (pEntity instanceof Player player && !this.isDormant(pStack)) {
+        if (entity instanceof Player player && !this.isDormant(pStack)) {
             EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
 
-            if (!data.getUnlockedNarrator()) {
-                data.setUnlockedNarrator(true);
-                Quote.getRandom(Quote.NARRATOR_INTROS).play((ServerPlayer) player, 60);
-            }
+            if (data.getUnlockedNarrator()) return;
+
+            data.setUnlockedNarrator(true);
+            Quote.getRandom(Quote.NARRATOR_INTROS).play((ServerPlayer) player, 60);
         }
 
-        super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
+        super.inventoryTick(pStack, level, entity, slotId, isSelected);
     }
-
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand pHand) {
-        ItemStack stack = player.getItemInHand(pHand);
+    @NotNull
+    public InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
 
         if (this.isDormant(stack) && !stack.has(EnigmaticComponents.ACTIVATION_ANIMATION)) {
 
@@ -186,7 +190,7 @@ public class EnigmaticEye extends BaseCurioItem {
             return InteractionResultHolder.success(stack);
         }
 
-        return super.use(level, player, pHand);
+        return super.use(level, player, hand);
     }
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
@@ -253,6 +257,39 @@ public class EnigmaticEye extends BaseCurioItem {
 
             if (player instanceof ServerPlayer serverPlayer && event.getBlockState().getBlock() == Blocks.END_GATEWAY) {
                 Quote.I_WANDERED.playOnceIfUnlocked(serverPlayer, 160);
+            }
+        }
+
+        @SubscribeEvent
+        public static void onConfirmedDeath(@NotNull LivingDeathEvent event) {
+            if (event.getSource().getEntity() instanceof ServerPlayer serverPlayer) {
+                if (event.getEntity() instanceof WitherBoss) {
+                    EnigmaticData data = serverPlayer.getData(EnigmaticAttachments.ENIGMATIC_DATA);
+
+                    int witherKills = data.getWitherKills() + 1;
+                    data.setWitherKills(witherKills);
+
+                    switch (witherKills) {
+                        case 1: Quote.BREATHES_RELIEVED.playIfUnlocked(serverPlayer, 140);
+                        case 2: Quote.APPALLING_PRESENCE.playIfUnlocked(serverPlayer, 140);
+                        case 3: Quote.TERRIFYING_FORM.playIfUnlocked(serverPlayer, 140);
+                        case 5: Quote.WHETHER_IT_IS.playIfUnlocked(serverPlayer, 140);
+                    }
+                }
+            }
+        }
+
+        @SubscribeEvent
+        public static void onAttack(@NotNull AttackEntityEvent event) {
+            Player player = event.getEntity();
+            Entity target = event.getTarget();
+
+            if (target instanceof EnderDragonPart part) {
+                target = part.parentMob;
+            }
+
+            if (player instanceof ServerPlayer serverPlayer && target instanceof EnderDragon) {
+                Quote.POOR_CREATURE.playOnceIfUnlocked(serverPlayer, 60);
             }
         }
 

@@ -16,6 +16,7 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
     private int fireImmunityTimer = 0;
     private int fireImmunityTimerLast = 0;
     private int inBeaconRange = 0;
+    private int witherKills = 0;
     private float etherealShield = 0;
 
     public boolean isMagnetRingEnable() {
@@ -38,9 +39,10 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         this.timeWithoutCurses = time;
     }
 
-    public Boolean getUnlockedNarrator() {
-        return unlockedNarrator;
+    public boolean getUnlockedNarrator() {
+        return this.unlockedNarrator;
     }
+
     public void setUnlockedNarrator(Boolean unlockedNarrator) {
         this.unlockedNarrator = unlockedNarrator;
     }
@@ -79,6 +81,14 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
 
     public void InBeaconRangeTick() {
         this.inBeaconRange--;
+    }
+
+    public int getWitherKills() {
+        return this.witherKills;
+    }
+
+    public void setWitherKills(int amount) {
+        this.witherKills = amount;
     }
 
     public float getEtherealShield() {
@@ -132,6 +142,7 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         tag.putInt("FireImmunityTimer", this.fireImmunityTimer);
         tag.putInt("FireImmunityTimerLast", this.fireImmunityTimerLast);
         tag.putInt("InBeaconRangeTick", this.inBeaconRange);
+        tag.putInt("WitherKills", this.witherKills);
         tag.putFloat("EtherealShield", this.etherealShield);
         tag.putLong("timeWithCurses", this.timeWithCurses);
         tag.putLong("timeWithoutCurses", this.timeWithoutCurses);
@@ -147,6 +158,7 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         this.fireImmunityTimer = tag.getInt("FireImmunityTimer");
         this.fireImmunityTimerLast = tag.getInt("FireImmunityTimerLast");
         this.inBeaconRange = tag.getInt("InBeaconRangeTick");
+        this.witherKills = tag.getInt("WitherKills");
         this.etherealShield = tag.getFloat("EtherealShield");
         this.timeWithCurses = tag.getLong("timeWithCurses");
         this.timeWithoutCurses = tag.getLong("timeWithoutCurses");
