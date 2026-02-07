@@ -125,12 +125,12 @@ public class QuoteHandler {
         // Background
         for (int layer = 0; layer < 3; layer++) {
             int offset = 4 + layer * 4;
-            float edgeFactor = 0.8f - (layer / 3.0f);
+            float edgeFactor = 1f - (layer / 3.0f);
 
-//            // Layers alpha
-//            if (layer == 0) edgeFactor = 0.6f;
-//            if (layer == 1) edgeFactor = 0.4f;
-//            if (layer == 2) edgeFactor = 0.2f;
+            // Layers alpha
+            if (layer == 0) edgeFactor = 0.45f;
+            if (layer == 1) edgeFactor = 0.35f;
+            if (layer == 2) edgeFactor = 0.25f;
 
 
             int layerAlpha = (int) (alpha * edgeFactor);
