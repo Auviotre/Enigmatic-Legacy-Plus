@@ -75,6 +75,10 @@ public class EnigmaticComponents {
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> REVIVE_COOLDOWN = COMPONENTS.register("revive_cooldown",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> DORMANT = COMPONENTS.register("dormant",
+            () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> ACTIVATION_ANIMATION = COMPONENTS.register("activation_animation",
+            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 
 
     @Mod(value = EnigmaticLegacy.MODID)

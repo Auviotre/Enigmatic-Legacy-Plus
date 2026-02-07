@@ -39,6 +39,7 @@ public class ClientProxy extends CommonProxy {
             ItemProperties.register(EnigmaticItems.INFERNAL_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
             ItemProperties.register(EnigmaticItems.ENIGMATIC_AMULET.get(), EnigmaticLegacy.location("amulet_color"), (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.AMULET_COLOR, 0.0F));
             EnigmaticItems.SOUL_COMPASS.get().registerVariants();
+            EnigmaticItems.ENIGMATIC_EYE.get().registerVariants();
         } catch (Exception exception) {
             EnigmaticLegacy.LOGGER.warn("Could not load item models.");
         }

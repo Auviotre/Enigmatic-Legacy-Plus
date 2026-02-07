@@ -1,0 +1,6 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "enigmaticlegacyplus:item/enigmatic_eye_dormant_1"
+    }
+}

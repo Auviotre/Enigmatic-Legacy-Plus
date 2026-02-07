@@ -61,4 +61,8 @@ public class ClientPayloadHandler {
     public void handle(final SlotUnlockToastPacket data, final IPayloadContext ctx) {
         handle(ctx, () -> ClientPackets.handle(data));
     }
+
+    public void handle(final PlayQuotePacket data, final IPayloadContext ctx) {
+        handle(ctx, () -> ClientPackets.handle(data));
+    }
 }
