@@ -157,6 +157,8 @@ public class EnigmaticLegacy {
             event.insertAfter(EnigmaticItems.ETHEREAL_FORGING_CHARM.toStack(), EnigmaticBlocks.ETHEREAL_LANTERN.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticItems.ETHERIUM_NUGGET.toStack(), EnigmaticBlocks.ETHERIUM_BLOCK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(EnigmaticBlocks.ETHERIUM_BLOCK.toStack(), EnigmaticBlocks.DIMENSIONAL_ANCHOR.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(EnigmaticItems.GUARDIAN_HEART.toStack(), EnigmaticItems.ENCHANTED_ASTRAL_FRUIT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(EnigmaticItems.ENCHANTED_ASTRAL_FRUIT.toStack(), EnigmaticItems.ENCHANTED_ICHOR_BOTTLE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
     }
 
