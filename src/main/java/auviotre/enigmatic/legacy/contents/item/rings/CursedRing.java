@@ -586,6 +586,7 @@ public class CursedRing extends CursedCurioItem {
                             SoulCrystal.setLostCrystals(player, SoulCrystal.getLostCrystals(player) + 1);
                             EnigmaticHandler.destroyCurio(player, EnigmaticItems.CURSED_RING);
                             player.level().playSound(null, player.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 1.0F, 0.5F);
+                            EnigmaticHandler.getPersistedData(player).putBoolean("DestroyedCursedRing", true);
                             return;
                         }
                     }
@@ -594,6 +595,7 @@ public class CursedRing extends CursedCurioItem {
                 if (POSSESSIONS.containsEntry(player, EnigmaticItems.BLESS_STONE)) {
                     event.addOverride(stack -> stack != null && stack.is(EnigmaticItems.CURSED_RING), ICurio.DropRule.DESTROY);
                     player.level().playSound(null, player.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 1.0F, 0.5F);
+                    EnigmaticHandler.getPersistedData(player).putBoolean("DestroyedCursedRing", true);
                     CuriosApi.getCuriosInventory(player).ifPresent((handler) -> {
                         IItemHandlerModifiable curios = handler.getEquippedCurios();
                         for (int i = 0; i < handler.getSlots(); ++i) {

@@ -316,18 +316,27 @@ public class EnigmaticEye extends BaseCurioItem {
             Player player = event.getEntity();
 
             if (!(player instanceof ServerPlayer serverPlayer)) return;
-
             CompoundTag data = EnigmaticHandler.getPersistedData(serverPlayer);
 
-            if (event.isEndConquered()) return;
-            if (Math.clamp(RANDOM.nextInt(), 0, 100) > deathQuoteChance.get()) return;
+            boolean deathFromEntity = data.getBoolean("DeathFromEntity");
+            data.remove("DeathFromEntity");
 
-            if (data.getBoolean("DeathFromEntity"))
+            if (event.isEndConquered()) return;
+
+            // On Cursed Ring Destroyed
+            if (data.getBoolean("DestroyedCursedRing")) {
+                Quote.getRandom(Quote.RING_DESTRUCTION).play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(10));
+                data.remove("DestroyedCursedRing");
+                return;
+            }
+
+            // Death Quote
+            if (RANDOM.nextInt(100) + 1 > deathQuoteChance.get()) return;
+
+            if (deathFromEntity)
                 Quote.getRandom(Quote.DEATH_QUOTES_ENTITY).play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(10));
             else
                 Quote.getRandom(Quote.DEATH_QUOTES).play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(10));
-
-            data.remove("DeathFromEntity");
         }
     }
 }
