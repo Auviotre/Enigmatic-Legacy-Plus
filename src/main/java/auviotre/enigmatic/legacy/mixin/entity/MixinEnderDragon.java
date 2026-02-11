@@ -49,7 +49,7 @@ public abstract class MixinEnderDragon extends Mob implements Enemy, AbyssalHear
             }
 
             List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, EnigmaticHandler.getBoundingBoxAroundEntity(this, 256));
-            players.forEach(player -> Quote.WITH_DRAGONS.playOnceIfUnlocked(player, 140));
+            players.forEach(player -> Quote.WITH_DRAGONS.play(player, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(140)));
         }
     }
 

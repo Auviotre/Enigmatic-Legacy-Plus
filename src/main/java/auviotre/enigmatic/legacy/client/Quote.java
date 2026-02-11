@@ -7,6 +7,8 @@ import auviotre.enigmatic.legacy.packets.client.PlayQuotePacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -87,54 +89,76 @@ public class Quote {
         return this;
     }
 
-    public void playOnceIfUnlocked(ServerPlayer player, int delayTicks) {
-        if (!player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getUnlockedNarrator()) return;
-        if (!EnigmaticHandler.getPersistedData(player).contains("HeardQuote:" + this.name)) {
-            EnigmaticHandler.getPersistedData(player).putBoolean("HeardQuote:" + this.name, true);
-            this.play(player, delayTicks);
+    public record PlayOptions(
+            boolean requireUnlocked,
+            boolean playOnce,
+            int delayTicks
+    ) {
+        public static PlayOptions defaultPlay() {
+            return new PlayOptions(false, false, 1);
+        }
+
+        public PlayOptions once() {
+            return new PlayOptions(requireUnlocked, true, delayTicks);
+        }
+
+        public PlayOptions ifUnlocked() {
+            return new PlayOptions(true, playOnce, delayTicks);
+        }
+
+        public PlayOptions delay(int ticks) {
+            return new PlayOptions(requireUnlocked, playOnce, ticks);
         }
     }
 
-    public void playOnceIfUnlocked(ServerPlayer player) {
-        this.playOnceIfUnlocked(player, 1);
+    private boolean hasHeard(ServerPlayer player) {
+        CompoundTag heard = getHeardContainer(player);
+        return heard.getBoolean(this.name);
     }
 
-    public void playIfUnlocked(ServerPlayer player) {
-        if (player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getUnlockedNarrator()) {
-            this.play(player);
+    private void markHeardIfNeeded(ServerPlayer player, PlayOptions options) {
+        if (!options.playOnce) return;
+
+        CompoundTag heard = getHeardContainer(player);
+        heard.putBoolean(this.name, true);
+    }
+
+    private static final String HEARD_TAG = "HeardQuotes";
+    private CompoundTag getHeardContainer(ServerPlayer player) {
+        CompoundTag data = EnigmaticHandler.getPersistedData(player);
+
+        if (!data.contains(HEARD_TAG, Tag.TAG_COMPOUND)) {
+            data.put(HEARD_TAG, new CompoundTag());
         }
+
+        return data.getCompound(HEARD_TAG);
     }
 
-    public void playIfUnlocked(ServerPlayer player, int delayTicks) {
-        if (player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getUnlockedNarrator()) {
-            this.play(player, delayTicks);
+    public void play(ServerPlayer player, PlayOptions options) {
+        if (options.requireUnlocked &&
+                !player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getUnlockedNarrator()) {
+            return;
         }
-    }
 
-    public void play(ServerPlayer player, int delayTicks) {
-        PacketDistributor.sendToPlayer(player, new PlayQuotePacket(this.getID(), delayTicks));
+        if (options.playOnce && hasHeard(player)) {
+            return;
+        }
+
+        markHeardIfNeeded(player, options);
+
+        PacketDistributor.sendToPlayer(
+                player,
+                new PlayQuotePacket(this.getID(), options.delayTicks())
+        );
+
         lastQuote = this;
     }
 
-    public void play(ServerPlayer player) {
-        this.play(player, 1);
-    }
-
     @OnlyIn(Dist.CLIENT)
-    public void play() {
-        this.play(1);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void play(int delayTicks) {
+    public void playClient(int delayTicks) {
         if (!quoteSubtitles.getAsBoolean()) return;
-        if (delayTicks < 1) throw new IllegalArgumentException("Delay cannot be less than 1 tick!");
 
         QuoteHandler.INSTANCE.playQuote(this, delayTicks);
-    }
-
-    public ResourceLocation getSoundId() {
-        return soundId;
     }
 
     public SoundEvent getSound() {

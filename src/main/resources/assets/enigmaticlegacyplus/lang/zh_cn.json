@@ -1037,6 +1037,7 @@
   "enigmaticlegacyplus.configuration.OffsetXCreative": "磁力按钮X轴偏移",
   "enigmaticlegacyplus.configuration.OffsetYCreative": "磁力按钮Y轴偏移",
   "enigmaticlegacyplus.configuration.quoteSubtitles": "Show quotes from the Inscrutable Eye",
+  "enigmaticlegacyplus.configuration.deathQuoteChance": "Chance of quote after death",
 
   "quote.no_peril_1": "倘若过程中没有曲折艰辛，那也就无法成就最终的荣耀。",
   "quote.end_doorstep_1": "终末之地的门户已经打开……只差迈出最后一步了。",

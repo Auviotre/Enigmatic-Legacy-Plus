@@ -1036,6 +1036,7 @@
   "enigmaticlegacyplus.configuration.OffsetXCreative": "X-axis Offset in Creative Inventory",
   "enigmaticlegacyplus.configuration.OffsetYCreative": "Y-axis Offset in Creative Inventory",
   "enigmaticlegacyplus.configuration.quoteSubtitles": "Show quotes from the Inscrutable Eye",
+  "enigmaticlegacyplus.configuration.deathQuoteChance": "Chance of quote after death",
 
   "quote.no_peril_1": "Where there is no peril in the task - there can be no glory in its accomplishment.",
   "quote.end_doorstep_1": "The doorstep of The End... single step now separates you from it.",

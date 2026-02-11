@@ -8,6 +8,7 @@ import auviotre.enigmatic.legacy.api.event.SummonedEntityEvent;
 import auviotre.enigmatic.legacy.client.Quote;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
+import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -17,6 +18,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Holder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +26,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -52,14 +56,17 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
+import java.util.Random;
 
 public class EnigmaticEye extends BaseCurioItem {
     public static ModConfigSpec.BooleanValue quoteSubtitles;
+    public static ModConfigSpec.IntValue deathQuoteChance;
 
     @SubscribeConfig(receiveClient = true)
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         if (type == ModConfig.Type.CLIENT) {
             EnigmaticEye.quoteSubtitles = builder.define("quoteSubtitles", true);
+            EnigmaticEye.deathQuoteChance = builder.defineInRange("deathQuoteChance", 80, 0, 100);
         }
     }
 //    private static final ResourceLocation EYE_ADVANCEMENT = new ResourceLocation(EnigmaticLegacy.MODID, "book/relics/enigmatic_eye");
@@ -156,7 +163,7 @@ public class EnigmaticEye extends BaseCurioItem {
             if (data.getUnlockedNarrator()) return;
 
             data.setUnlockedNarrator(true);
-            Quote.getRandom(Quote.NARRATOR_INTROS).play((ServerPlayer) player, 60);
+            Quote.getRandom(Quote.NARRATOR_INTROS).play((ServerPlayer) player, Quote.PlayOptions.defaultPlay().delay(60));
         }
 
         super.inventoryTick(pStack, level, entity, slotId, isSelected);
@@ -182,7 +189,7 @@ public class EnigmaticEye extends BaseCurioItem {
                     data.setUnlockedNarrator(true);
 
                     if (player instanceof ServerPlayer serverPlayer) {
-                        Quote.getRandom(Quote.NARRATOR_INTROS).play(serverPlayer, 80);
+                        Quote.getRandom(Quote.NARRATOR_INTROS).play(serverPlayer, Quote.PlayOptions.defaultPlay().delay(80));
                     }
                 }
             }
@@ -221,9 +228,9 @@ public class EnigmaticEye extends BaseCurioItem {
 
             if (player instanceof ServerPlayer serverPlayer) {
                 if (playerDimension == Level.NETHER) {
-                    Quote.SULFUR_AIR.playOnceIfUnlocked(serverPlayer, 240);
+                    Quote.SULFUR_AIR.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(240));
                 } else if (playerDimension == Level.END) {
-                    Quote.TORTURED_ROCKS.playOnceIfUnlocked(serverPlayer, 240);
+                    Quote.TORTURED_ROCKS.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(240));
                 }
             }
         }
@@ -233,7 +240,7 @@ public class EnigmaticEye extends BaseCurioItem {
             Player player = event.getEntity();
 
             if (player instanceof ServerPlayer serverPlayer) {
-                Quote.END_DOORSTEP.playOnceIfUnlocked(serverPlayer, 40);
+                Quote.END_DOORSTEP.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(40));
             }
         }
 
@@ -244,9 +251,9 @@ public class EnigmaticEye extends BaseCurioItem {
 
             if (player instanceof ServerPlayer serverPlayer) {
                 if (entity instanceof WitherBoss) {
-                    Quote.COUNTLESS_DEAD.playOnceIfUnlocked(serverPlayer, 20);
+                    Quote.COUNTLESS_DEAD.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(20));
                 } else if (entity instanceof EnderDragon) {
-                    Quote.HORRIBLE_EXISTENCE.playOnceIfUnlocked(serverPlayer, 100);
+                    Quote.HORRIBLE_EXISTENCE.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(100));
                 }
             }
         }
@@ -256,25 +263,34 @@ public class EnigmaticEye extends BaseCurioItem {
             Player player = event.getEntity();
 
             if (player instanceof ServerPlayer serverPlayer && event.getBlockState().getBlock() == Blocks.END_GATEWAY) {
-                Quote.I_WANDERED.playOnceIfUnlocked(serverPlayer, 160);
+                Quote.I_WANDERED.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(160));
             }
         }
 
         @SubscribeEvent
         public static void onConfirmedDeath(@NotNull LivingDeathEvent event) {
-            if (event.getSource().getEntity() instanceof ServerPlayer serverPlayer) {
-                if (event.getEntity() instanceof WitherBoss) {
-                    EnigmaticData data = serverPlayer.getData(EnigmaticAttachments.ENIGMATIC_DATA);
+            DamageSource damageSource = event.getSource();
+            Entity victim = event.getEntity();
+            Entity attacker = damageSource.getEntity();
 
-                    int witherKills = data.getWitherKills() + 1;
-                    data.setWitherKills(witherKills);
+            if (victim instanceof ServerPlayer serverPlayer) {
+                CompoundTag data = EnigmaticHandler.getPersistedData(serverPlayer);
+                boolean deathFromEntity = attacker instanceof LivingEntity;
 
-                    switch (witherKills) {
-                        case 1: Quote.BREATHES_RELIEVED.playIfUnlocked(serverPlayer, 140);
-                        case 2: Quote.APPALLING_PRESENCE.playIfUnlocked(serverPlayer, 140);
-                        case 3: Quote.TERRIFYING_FORM.playIfUnlocked(serverPlayer, 140);
-                        case 5: Quote.WHETHER_IT_IS.playIfUnlocked(serverPlayer, 140);
-                    }
+                data.putBoolean("DeathFromEntity", deathFromEntity);
+            }
+
+            if (attacker instanceof ServerPlayer serverPlayer && victim instanceof WitherBoss) {
+                EnigmaticData data = serverPlayer.getData(EnigmaticAttachments.ENIGMATIC_DATA);
+
+                int witherKills = data.getWitherKills() + 1;
+                data.setWitherKills(witherKills);
+
+                switch (witherKills) {
+                    case 1: Quote.BREATHES_RELIEVED.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(140));
+                    case 2: Quote.APPALLING_PRESENCE.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(140));
+                    case 3: Quote.TERRIFYING_FORM.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(140));
+                    case 5: Quote.WHETHER_IT_IS.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(140));
                 }
             }
         }
@@ -289,19 +305,29 @@ public class EnigmaticEye extends BaseCurioItem {
             }
 
             if (player instanceof ServerPlayer serverPlayer && target instanceof EnderDragon) {
-                Quote.POOR_CREATURE.playOnceIfUnlocked(serverPlayer, 60);
+                Quote.POOR_CREATURE.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(60));
             }
         }
 
         @SubscribeEvent
         private static void onPlayerRespawn(PlayerEvent.@NotNull PlayerRespawnEvent event) {
+            // TODO: Remove magic numbers and make the entire codebase more readable (Sisyphus's labor lol)
+            final Random RANDOM = new Random();
             Player player = event.getEntity();
 
-            if (player instanceof ServerPlayer serverPlayer) {
-                if (event.isEndConquered()) return;
+            if (!(player instanceof ServerPlayer serverPlayer)) return;
 
-                Quote.getRandom(Quote.DEATH_QUOTES).playIfUnlocked(serverPlayer, 10);
-            }
+            CompoundTag data = EnigmaticHandler.getPersistedData(serverPlayer);
+
+            if (event.isEndConquered()) return;
+            if (Math.clamp(RANDOM.nextInt(), 0, 100) > deathQuoteChance.get()) return;
+
+            if (data.getBoolean("DeathFromEntity"))
+                Quote.getRandom(Quote.DEATH_QUOTES_ENTITY).play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(10));
+            else
+                Quote.getRandom(Quote.DEATH_QUOTES).play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(10));
+
+            data.remove("DeathFromEntity");
         }
     }
 }

@@ -169,6 +169,6 @@ public class ClientPackets {
 
     public static void handle(PlayQuotePacket packet) {
         Quote quote = Quote.getByID(packet.quoteId());
-        quote.play(packet.delay());
+        quote.playClient(packet.delay());
     }
 }
