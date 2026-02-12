@@ -69,7 +69,6 @@ public class EnigmaticEye extends BaseCurioItem {
             EnigmaticEye.deathQuoteChance = builder.defineInRange("deathQuoteChance", 80, 0, 100);
         }
     }
-//    private static final ResourceLocation EYE_ADVANCEMENT = new ResourceLocation(EnigmaticLegacy.MODID, "book/relics/enigmatic_eye");
 
     public EnigmaticEye() {
         super(defaultSingleProperties().rarity(Rarity.EPIC).fireResistant());

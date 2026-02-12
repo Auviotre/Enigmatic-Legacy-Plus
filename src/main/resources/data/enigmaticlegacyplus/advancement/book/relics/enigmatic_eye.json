@@ -1,0 +1,24 @@
+{
+  "parent": "enigmaticlegacyplus:book/root",
+  "rewards": {},
+  "criteria": {
+    "has_items": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enigmaticlegacyplus:enigmatic_eye",
+            "components": {
+              "enigmaticlegacyplus:dormant": false
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_items"
+    ]
+  ]
+}
