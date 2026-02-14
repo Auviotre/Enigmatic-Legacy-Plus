@@ -202,13 +202,11 @@ public class EnigmaticEye extends BaseCurioItem {
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
 
-        if (!this.isDormant(stack)) {
-            if (context.entity() instanceof Player) {
-                CuriosApi.addSlotModifier(attributes, "charm", getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
-                attributes.put(Attributes.BLOCK_INTERACTION_RANGE, new AttributeModifier(getLocation(this), 3.0, AttributeModifier.Operation.ADD_VALUE));
-            }
-        }
+        if (this.isDormant(stack)) return attributes;
+        if (!(context.entity() instanceof Player)) return attributes;
 
+        CuriosApi.addSlotModifier(attributes, "charm", getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
+        attributes.put(Attributes.BLOCK_INTERACTION_RANGE, new AttributeModifier(getLocation(this), 3.0, AttributeModifier.Operation.ADD_VALUE));
         return attributes;
     }
 
@@ -225,12 +223,12 @@ public class EnigmaticEye extends BaseCurioItem {
             Player player = event.getEntity();
             ResourceKey<Level> playerDimension = player.level().dimension();
 
-            if (player instanceof ServerPlayer serverPlayer) {
-                if (playerDimension == Level.NETHER) {
-                    Quote.SULFUR_AIR.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(240));
-                } else if (playerDimension == Level.END) {
-                    Quote.TORTURED_ROCKS.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(240));
-                }
+            if (!(player instanceof ServerPlayer serverPlayer)) return;
+
+            if (playerDimension == Level.NETHER) {
+                Quote.SULFUR_AIR.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(240));
+            } else if (playerDimension == Level.END) {
+                Quote.TORTURED_ROCKS.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(240));
             }
         }
 
@@ -248,12 +246,12 @@ public class EnigmaticEye extends BaseCurioItem {
             Player player = event.getEntity();
             Entity entity = event.getSummonedEntity();
 
-            if (player instanceof ServerPlayer serverPlayer) {
-                if (entity instanceof WitherBoss) {
-                    Quote.COUNTLESS_DEAD.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(20));
-                } else if (entity instanceof EnderDragon) {
-                    Quote.HORRIBLE_EXISTENCE.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(100));
-                }
+            if (!(player instanceof ServerPlayer serverPlayer)) return;
+
+            if (entity instanceof WitherBoss) {
+                Quote.COUNTLESS_DEAD.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(20));
+            } else if (entity instanceof EnderDragon) {
+                Quote.HORRIBLE_EXISTENCE.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(100));
             }
         }
 
