@@ -145,6 +145,9 @@
   "block.enigmaticlegacyplus.etherium_ore": "Etherium Ore",
   "block.enigmaticlegacyplus.spellstone_table": "Spellstone Table",
 
+  "item.enigmaticlegacy.enigmatic_eye_dormant": "Dormant Eye",
+  "item.enigmaticlegacy.enigmatic_eye_active": "Inscrutable Eye",
+
   "item.enigmaticlegacyplus.abyssal_heart": "Heart of the Abyss",
   "item.enigmaticlegacyplus.angel_blessing": "Angel's Blessing",
   "item.enigmaticlegacyplus.animal_guidebook": "Guide to Animal Companionship",
@@ -801,6 +804,17 @@
   "tooltip.enigmaticlegacy.eldritchAmuletStat1": "§6+%1$s §dAttack Damage",
   "tooltip.enigmaticlegacy.eldritchAmuletStat2": "§6+%1$s §dLifesteal",
 
+  "tooltip.enigmaticlegacy.enigmaticEye1": "§5It is connected to location beyond your space and",
+  "tooltip.enigmaticlegacy.enigmaticEye2": "§5time. You can awaken the eye, if you wish to risk",
+  "tooltip.enigmaticlegacy.enigmaticEye3": "§5drawing attention of someone... or something.",
+
+  "tooltip.enigmaticlegacy.enigmaticEyeAwakened1": "§5Now that you have drawn his attention, whoever uses",
+  "tooltip.enigmaticlegacy.enigmaticEyeAwakened2": "§5the eye to observe you and the world does not seem to",
+  "tooltip.enigmaticlegacy.enigmaticEyeAwakened3": "§5need it in order to reach you. Whether he is incapable",
+  "tooltip.enigmaticlegacy.enigmaticEyeAwakened4": "§5or simply unwilling to establish any contact beyond",
+  "tooltip.enigmaticlegacy.enigmaticEyeAwakened5": "§5mental remains a mystery.",
+  "tooltip.enigmaticlegacy.enigmaticEyeAwakened6": "§5Reveals true name of players bearing §6Charming Insignia§5.",
+
   "tooltip.enigmaticlegacy.desolationRing1": "§6Prevents any dropping from slain mob.",
   "tooltip.enigmaticlegacy.desolationRing2": "§6Neutral creatures§5 will not spawn in your proximity.",
   "tooltip.enigmaticlegacy.desolationRing3": "§6Enemies §5will not target you actively.",
@@ -1021,11 +1035,75 @@
   "enigmaticlegacyplus.configuration.OffsetY": "Y-axis Offset",
   "enigmaticlegacyplus.configuration.OffsetXCreative": "X-axis Offset in Creative Inventory",
   "enigmaticlegacyplus.configuration.OffsetYCreative": "Y-axis Offset in Creative Inventory",
+  "enigmaticlegacyplus.configuration.quoteSubtitles": "Show quotes from the Inscrutable Eye",
+  "enigmaticlegacyplus.configuration.deathQuoteChance": "Chance of quote after death",
+
+  "quote.no_peril_1": "Where there is no peril in the task - there can be no glory in its accomplishment.",
+  "quote.end_doorstep_1": "The doorstep of The End... single step now separates you from it.",
+  "quote.only_because_1": "Only because you have fallen does not yet mean you backed down.",
+  "quote.demise_is_1": "Demise is but a temporary inconvenience for a demigod such as you.",
+  "quote.we_fall_1": "We fall, so that we may learn how to pick ourselves back up.",
+  "quote.you_will_endure_1": "You will endure this loss, and learn from it.",
+  "quote.oblivion_rejects_1": "Oblivion rejects you... make use of such opportunity, while you still can.",
+  "quote.setback_1": "A setback, but not a defeat.",
+  "quote.death_may_1": "Death may impede your conquest, but only broken will can halt it.",
+  "quote.eternity_to_keep_1": "You have eternity to keep trying. Do what it takes.",
+  "quote.violence_calls_1": "Violence calls for vengeance. Return, and dispense it!",
+  "quote.immortal_1": "You are immortal! Return and give that pitiful creature a demonstration of this fact.",
+  "quote.appalling_presence_1": "The shell is gone... but appalling presence will forever remain imprinted upon this realm.",
+  "quote.its_destruction_1": "Its destruction is a small consolation... given the implications of its terrible existence.",
+
+  "quote.i_wandered_1": "Yes, I wandered those lands many times...",
+  "quote.i_wandered_2": "A desolate reminder of everything that was, and all that could have been.",
+
+  "quote.another_demigod_1": "Another demigod wanders this forsaken land...",
+  "quote.another_demigod_2": "Let me accompany you in your journey. Perhaps, you will manage that which others could not.",
+
+  "quote.another_eon_1": "Another eon, another wanderer. Another story to be told...",
+  "quote.another_eon_2": "I will observe yours with great curiosity.",
+
+  "quote.perhaps_you_1": "Perhaps, you will be the one to uncover the long-forgotten history of this land...",
+  "quote.perhaps_you_2": "If so, I must bear witness to your accomplishments.",
+
+  "quote.sulfur_air_1": "Sulfur in the air, sharp scent of burnt rock and flesh...",
+  "quote.sulfur_air_2": "This place is a Hell indeed.",
+
+  "quote.tortured_rocks_1": "Tortured rocks, pale as bones, hanged up above infinite, all-consuming blackness.",
+  "quote.tortured_rocks_2": "The End... is almost like a fever dream.",
+
+  "quote.breathes_relieved_1": "The world breathes relieved without the burdensome presence of that horror...",
+  "quote.breathes_relieved_2": "So long at least.",
+
+  "quote.whether_it_is_1": "Whether it is power, or redemption that you seek in repeatedly returning Wither from and to its grave...",
+  "quote.whether_it_is_2": "...at least, you give that damnable creature a purpose.",
+
+  "quote.poor_creature_1": "Poor creature... The last of her kind, bound to guard the godforsaken island...",
+  "quote.poor_creature_2": "...in the middle of nothingness. Lay her to the deserved rest.",
+
+  "quote.horrible_existence_1": "What a horrible existence... Brought back from the dead, only to be slain once more.",
+  "quote.horrible_existence_2": "You must truly be devoid of compassion.",
+
+  "quote.countless_dead_1": "Countless dead souls, merged into abomination of such terrible form that it defies description.",
+  "quote.countless_dead_2": "The earth is stained by the very presence of this foul creature.",
+
+  "quote.with_dragons_1": "With dragon's imminent demise, this place seems even more empty and purposeless than before.",
+  "quote.with_dragons_2": "Will you wander those fractured, deserted lands...",
+  "quote.with_dragons_3": "...or return to the facade of sanity and liveliness the Overworld provides?",
+  "quote.with_dragons_4": "Of course, we both know the answer... you cannot resist exploring the unknown, be it now or later.",
+
+  "quote.terrifying_form_1": "...its terrifying form is destructible, but not its soul.",
+  "quote.terrifying_form_2": "It bears curse not dissimilar to yours... Curse of immortality.",
+
+  "quote.toll_paid_1": "With the toll paid, you are free from the burdensome swell of hatred and sorrow...",
+  "quote.toll_paid_2": "...imprisoned in that ring.",
 
   "book.enigmaticlegacy.landing_text": "In front of you lies the well of great knowledge, a place where some of this world's greatest mysteries belong, scrupulously researched and carefully cataloged.<br2/>As your journey continues and the world reveals itself to you, you may revisit and behold knowledge you gathered within these pages.",
 
   "book.enigmaticlegacy.category.world.name": "The World",
   "book.enigmaticlegacy.category.world.desc": "Some choose to mindlessly scavenge whatever they come across for treasures, leaving behind anything else. That isn't an entirely unjustified path, but does it make one any better than those monsters blindly seeking blood in the night?... Sometimes, if you look just a bit closer, ruins and traces of the former ages can tell you a lot about long history before your advent.",
+
+  "book.enigmaticlegacy.category.relics.name": "Artifacts",
+  "book.enigmaticlegacy.category.relics.desc": "Countless relics are scattered across this world, many forgotten in ages, others - persisted in legends...<br2/>And as both explorer and conqueror, they just so happen to be your primary point of interest, as they are keys for reaching unimaginable power, and signs that may lead you to the answers you seek.",
 
   "book.enigmaticlegacy.category.materials.name": "Resources & Materials",
   "book.enigmaticlegacy.category.materials.desc": "You are perfectly familiar with most mundane materials and resources, which this world holds plenty of. But should you dig a little further - and you might discover things even you have never beheld before.<br2/>As you keep seeking new materials to forge better tools and armor from, it would be worth to denote unusual properties of some of them.",
@@ -1094,5 +1172,12 @@
   "book.enigmaticlegacy.entry.abyssal_heart.page.1": "When this unearthly abomination fell into your hands for the first time, description-defying mix of feelings have overcome your mind, among which there was a place for terror and excitement, admiration and disgust. The gaze of its lonely eye befell you with intent impossible to comprehend, but once initial wave of emotions retreated - you have",
   "book.enigmaticlegacy.entry.abyssal_heart.page.2": "concluded that it poses no threat to you.<br2/>Still, you know not what it truly is, and where it came from. Perhaps your insufferable existence, and efforts to live in spite of Seven Curses were noticed by some unnameable eldritch power, and through your",
   "book.enigmaticlegacy.entry.abyssal_heart.page.3": "damnable being it have chosen to channel itself into the world. Perhaps it is a mere accident, a fluke in reality itself that allowed something like this to appear. Perhaps it is your ailing mind that have conceived this horror in some nightmarish fever, and with its growth - corruption of the curses have managed to manifest it into the mortal realm?<br2/>Perhaps it's best to never know, for some truths are much",
-  "book.enigmaticlegacy.entry.abyssal_heart.page.4": "more unsettling than anything a man's imagination can come up with.<br2/>Regardless, now you are the rightful owner of this thing. And it will not be long before you can put it to some unimaginably violent, frightening use... The world will suffer tenfold for all the suffering it caused to you."
+  "book.enigmaticlegacy.entry.abyssal_heart.page.4": "more unsettling than anything a man's imagination can come up with.<br2/>Regardless, now you are the rightful owner of this thing. And it will not be long before you can put it to some unimaginably violent, frightening use... The world will suffer tenfold for all the suffering it caused to you.",
+
+  "book.enigmaticlegacy.entry.enigmatic_eye.name": "Inscrutable Eye",
+  "book.enigmaticlegacy.entry.enigmatic_eye.heading.1": "The Eye",
+  "book.enigmaticlegacy.entry.enigmatic_eye.page.1": "An unexpected find among piles of treasure and junk, this eye have immediately consumed your attention with its distinguished unearthly form. You could not resist the temptation of curiosity, and have chosen to awake it from slumber that lasted many centuries at least, and perhaps even many millennia.<br2/>Creator of the eye have soon",
+  "book.enigmaticlegacy.entry.enigmatic_eye.page.2": "made himself known to you, and now that he is aware of your presence in this world - the eye itself is no longer necessary for him to observe and speak to you. He follows your footsteps since, remarking on things now and then. So far communication between you remains entirely unilateral, and thus it is hard",
+  "book.enigmaticlegacy.entry.enigmatic_eye.page.3": "to establish what he is, and what motive he has to scrupulously contemplate your every move.<br2/>What can be said for sure is that he is no stranger to the world you currently inhabit, nor to higher beings such as you. Most certainly he once walked these lands himself, but extent of his participation in their past history remains a mystery yet. Much as where he is now, why he have chosen to speak to you, and what",
+  "book.enigmaticlegacy.entry.enigmatic_eye.page.4": "expectations he places upon your journey.<br2/>For now, you can only hope that in time he will supply you with desired answers."
 }

@@ -146,6 +146,9 @@
   "block.enigmaticlegacyplus.etherium_ore": "以太矿石",
   "block.enigmaticlegacyplus.spellstone_table": "术石台",
 
+  "item.enigmaticlegacy.enigmatic_eye_dormant": "休眠之眼",
+  "item.enigmaticlegacy.enigmatic_eye_active": "莫测之眼",
+
   "item.enigmaticlegacyplus.abyssal_heart": "深渊之心",
   "item.enigmaticlegacyplus.angel_blessing": "天使之祝",
   "item.enigmaticlegacyplus.animal_guidebook": "兽友指南",
@@ -802,6 +805,17 @@
   "tooltip.enigmaticlegacy.eldritchAmuletStat1": "§6+%1$s §d攻击伤害",
   "tooltip.enigmaticlegacy.eldritchAmuletStat2": "§6+%1$s §d生命窃取",
 
+  "tooltip.enigmaticlegacy.enigmaticEye1": "§5它链接于凌驾时空之地。",
+  "tooltip.enigmaticlegacy.enigmaticEye2": "§5你可以冒着引起某人……或某物注意的风险唤醒它。",
+  "tooltip.enigmaticlegacy.enigmaticEye3": "§5",
+
+  "tooltip.enigmaticlegacy.enigmaticEyeAwakened1": "§5现在你引起了祂的注意。",
+  "tooltip.enigmaticlegacy.enigmaticEyeAwakened2": "§5没人知道是谁在使用这个眼睛来观察你和你身处的世界，",
+  "tooltip.enigmaticlegacy.enigmaticEyeAwakened3": "§5但可以确定的是似乎其并没有表现出与你建立联系的意图。",
+  "tooltip.enigmaticlegacy.enigmaticEyeAwakened4": "§5祂是出于没有能力的缘故还是仅仅不想与你建立",
+  "tooltip.enigmaticlegacy.enigmaticEyeAwakened5": "§5非精神的联系？这个问题依旧有待解答。",
+  "tooltip.enigmaticlegacy.enigmaticEyeAwakened6": "§5显示装备§6迷人徽章§5的玩家的真名。",
+
   "tooltip.enigmaticlegacy.desolationRing1": "§5击杀生物将不再掉落物品",
   "tooltip.enigmaticlegacy.desolationRing2": "§6中立生物§5将不会生成在周围",
   "tooltip.enigmaticlegacy.desolationRing3": "§6敌对生物§5将不会以你为目标",
@@ -1022,6 +1036,67 @@
   "enigmaticlegacyplus.configuration.OffsetY": "Y轴偏移",
   "enigmaticlegacyplus.configuration.OffsetXCreative": "磁力按钮X轴偏移",
   "enigmaticlegacyplus.configuration.OffsetYCreative": "磁力按钮Y轴偏移",
+  "enigmaticlegacyplus.configuration.quoteSubtitles": "Show quotes from the Inscrutable Eye",
+  "enigmaticlegacyplus.configuration.deathQuoteChance": "Chance of quote after death",
+
+  "quote.no_peril_1": "倘若过程中没有曲折艰辛，那也就无法成就最终的荣耀。",
+  "quote.end_doorstep_1": "终末之地的门户已经打开……只差迈出最后一步了。",
+  "quote.only_because_1": "跌倒，并不意味着你将就此踌躇不前。",
+  "quote.demise_is_1": "对于如你一样的半神而言，死亡不过是暂时的不便罢了。",
+  "quote.we_fall_1": "我们之所以跌倒，是为了学习如何重新站起来。",
+  "quote.you_will_endure_1": "你将承担这次失败的代价，并从中吸取教训。",
+  "quote.oblivion_rejects_1": "湮灭拒绝了你……不要浪费这次机会，趁你还有能力时好好利用它。",
+  "quote.setback_1": "一次挫折，绝非失败。",
+  "quote.death_may_1": "死亡可能会阻挡你前进的脚步，但只要意志尚存，这就只是暂时的障碍。",
+  "quote.eternity_to_keep_1": "不惜一切代价去尝试吧——你的不朽意味着你还有无数次机会。",
+  "quote.violence_calls_1": "暴力必将唤起复仇。现在回归，还以颜色！",
+  "quote.immortal_1": "你即为不朽！回归，向那可怜造物展示你的力量！",
+  "quote.appalling_presence_1": "它的躯壳已逝……但留下的伤痕仍然深深刻在这方土地之上。",
+  "quote.its_destruction_1": "它的毁灭无疑是莫大慰藉……尤其考虑到其存在本身造成的后患。",
+
+  "quote.i_wandered_1": "我曾数次游历过这些破碎的陆地……",
+  "quote.i_wandered_2": "沧海桑田，繁华转瞬即逝，只留下满目荒凉。",
+
+  "quote.another_demigod_1": "又一位游荡在这废弃土地上的半神……",
+  "quote.another_demigod_2": "让我在这段旅途中陪伴你吧。人生苦短，但或许你能成就他人穷极一生都无法完成之事。",
+
+  "quote.another_eon_1": "又一个时代，又一位流浪者。又一段故事开始了……",
+  "quote.another_eon_2": "我将以我全部之热情见证你的传说。",
+
+  "quote.perhaps_you_1": "或许，你将最终发掘这世界早已遗忘的秘密……",
+  "quote.perhaps_you_2": "倘若如此，我便是这无上成就的见证者。",
+
+  "quote.sulfur_air_1": "空气中弥漫着刺鼻的硫磺味、烧焦的大地，烧焦的尸体……",
+  "quote.sulfur_air_2": "这便是名副其实的地狱。",
+
+  "quote.tortured_rocks_1": "扭曲的、如骨般苍白的岩石，漂浮在这片无尽的、择人而噬的虚空之上。",
+  "quote.tortured_rocks_2": "末地……就如同一场荒唐的幻梦。",
+
+  "quote.breathes_relieved_1": "从如此沉重的恐怖之中解放出来，这世界都仿佛松了一口气……",
+  "quote.breathes_relieved_2": "至少，暂时如此。",
+
+  "quote.whether_it_is_1": "在你不断让凋灵复生而又亲手将其送入坟墓之时……你是否找到了你所追求的力量或救赎呢？",
+  "quote.whether_it_is_2": "至少，你为这该死的生物赋予了存在的意义。",
+
+  "quote.poor_creature_1": "可怜的生物……最后一条巨龙，孤单的守护着同样孤单的岛屿……",
+  "quote.poor_creature_2": "……直到永恒。让它得到真正的安息吧。",
+
+  "quote.horrible_existence_1": "可悲、可怜……打扰它的长眠，只为再次让它体会到死亡的苦痛……",
+  "quote.horrible_existence_2": "你可是真的毫无慈悲啊。",
+
+  "quote.countless_dead_1": "无穷无尽的逝去的灵魂，其怨念最终化成了难以言表的恐怖怪物……",
+  "quote.countless_dead_2": "位于如此邪恶的生物之下，这片大地都在恐惧中颤抖。",
+
+  "quote.with_dragons_1": "随着末影龙的逝去，这片虚空变得比以往更加空旷、更加毫无生机。",
+  "quote.with_dragons_2": "你会继续向着这片破碎的大地深处探索……",
+  "quote.with_dragons_3": "……还是回到主世界，回到理智与活力的怀抱中？",
+  "quote.with_dragons_4": "当然，你我都心知肚明……你无法抗拒探索这片无尽的未知的冲动，只是时间早晚的问题。",
+
+  "quote.terrifying_form_1": "……它可怖的躯壳并非永生，但它的灵魂永不安息。",
+  "quote.terrifying_form_2": "它身上有着不死的诅咒……与你所背负的如出一辙。",
+
+  "quote.toll_paid_1": "命运的代价得到了支付。你终于能够从这戒指所带来的仇恨与悲伤中……",
+  "quote.toll_paid_2": "……得到救赎与解脱。",
 
   "book.enigmaticlegacy.landing_text": "在你手中，在你面前，这本书好似一口深井，伟大之知皆聚于此。一些世间最为深邃的奥秘，连带着对这些谜团的严谨研究以及详细分类，皆蕴藏于其中。<br2/>于尘世旅行不息，书中内容亦会逐渐自见。路中见知虽载于书页之中，却仍需你常读常新。",
 
