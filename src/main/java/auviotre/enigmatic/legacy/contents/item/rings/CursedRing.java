@@ -341,7 +341,7 @@ public class CursedRing extends CursedCurioItem {
                     entity.setOwnerId(player.getUUID());
                     dimPoint.world.addFreshEntity(entity);
                     event.getDrops().clear();
-                    EnigmaticLegacy.LOGGER.info("Teared Extradimensional Storage Crystal from " + player.getGameProfile().getName() + " at X: " + dimPoint.getPosX() + ", Y: " + dimPoint.getPosY() + ", Z: " + dimPoint.getPosZ());
+                    EnigmaticLegacy.LOGGER.info("Teared Extradimensional Storage Crystal from {} at X: {}, Y: {}, Z: {}", player.getGameProfile().getName(), dimPoint.getPosX(), dimPoint.getPosY(), dimPoint.getPosZ());
                     SoulArchive.getInstance().addItem(entity);
                 } else if (dropSoulCrystal) {
                     ItemStack soulCrystal = SoulCrystal.createCrystalFrom(player);
@@ -349,7 +349,7 @@ public class CursedRing extends CursedCurioItem {
                     entity.setThrowerId(player.getUUID());
                     entity.setOwnerId(player.getUUID());
                     dimPoint.world.addFreshEntity(entity);
-                    EnigmaticLegacy.LOGGER.info("Teared Soul Crystal from " + player.getGameProfile().getName() + " at X: " + dimPoint.getPosX() + ", Y: " + dimPoint.getPosY() + ", Z: " + dimPoint.getPosZ());
+                    EnigmaticLegacy.LOGGER.info("Teared Soul Crystal from {} at X: {}, Y: {}, Z: {}", player.getGameProfile().getName(), dimPoint.getPosX(), dimPoint.getPosY(), dimPoint.getPosZ());
                     SoulArchive.getInstance().addItem(entity);
                 }
                 if (SoulCrystal.isPermanentlyDead(player)) {
@@ -372,17 +372,7 @@ public class CursedRing extends CursedCurioItem {
 
         @SubscribeEvent
         private static void onUseItem(@NotNull LivingEntityUseItemEvent.Start event) {
-            if (EnigmaticHandler.isCursedItem(event.getItem())) {
-                if (EnigmaticHandler.isBlessedItem(event.getItem()) && RedemptionRing.Helper.canUseRelic(event.getEntity()))
-                    return;
-                if (!EnigmaticHandler.isTheCursedOne(event.getEntity())) {
-                    event.setCanceled(true);
-                    return;
-                }
-                if (EnigmaticHandler.isEldritchItem(event.getItem()) && !EnigmaticHandler.isTheWorthyOne(event.getEntity())) {
-                    event.setCanceled(true);
-                }
-            }
+            if (!EnigmaticHandler.canUse(event.getEntity(), event.getItem())) event.setCanceled(true);
         }
 
         @SubscribeEvent
@@ -416,18 +406,7 @@ public class CursedRing extends CursedCurioItem {
         @SubscribeEvent
         private static void onAttack(@NotNull AttackEntityEvent event) {
             Player player = event.getEntity();
-            boolean redemption = RedemptionRing.Helper.canUseRelic(player);
-            if (!EnigmaticHandler.isTheCursedOne(player)) {
-                boolean blessed = EnigmaticHandler.isBlessedItem(player.getMainHandItem());
-                if (EnigmaticHandler.isCursedItem(player.getMainHandItem()) && !blessed || blessed && !redemption) {
-                    event.setCanceled(true);
-                    return;
-                }
-                blessed = EnigmaticHandler.isBlessedItem(player.getOffhandItem());
-                if (EnigmaticHandler.isCursedItem(player.getOffhandItem()) && !blessed || blessed && !redemption) {
-                    event.setCanceled(true);
-                }
-            }
+            if (!EnigmaticHandler.canUse(player, player.getWeaponItem())) event.setCanceled(true);
         }
 
         @SubscribeEvent
@@ -435,15 +414,7 @@ public class CursedRing extends CursedCurioItem {
             if (event.getAmount() >= Float.MAX_VALUE) return;
             DamageSource source = event.getSource();
             if (source.getDirectEntity() instanceof LivingEntity entity && (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK))) {
-                if (EnigmaticHandler.isCursedItem(entity.getMainHandItem()) && !EnigmaticHandler.isTheCursedOne(entity)) {
-                    if (!(EnigmaticHandler.isBlessedItem(entity.getMainHandItem()) && RedemptionRing.Helper.canUseRelic(entity))) {
-                        event.setCanceled(true);
-                        return;
-                    }
-                }
-                if (EnigmaticHandler.isEldritchItem(entity.getMainHandItem()) && !EnigmaticHandler.isTheWorthyOne(entity)) {
-                    event.setCanceled(true);
-                }
+                if (!EnigmaticHandler.canUse(entity, entity.getWeaponItem())) event.setCanceled(true);
             }
 
             if (EnigmaticHandler.isTheCursedOne(event.getEntity())) {
@@ -460,7 +431,7 @@ public class CursedRing extends CursedCurioItem {
             }
             if (event.getEntity() instanceof Monster || event.getEntity() instanceof EnderDragon) {
                 if (event.getSource().getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheCursedOne(entity)) {
-                    if (!entity.getMainHandItem().is(EnigmaticTags.Items.BYPASS_FOURTH_CURSE)) {
+                    if (!entity.getWeaponItem().is(EnigmaticTags.Items.BYPASS_FOURTH_CURSE)) {
                         float modifier = 1.0F - 0.01F * monsterDamageDebuff.getAsInt();
                         event.setAmount(event.getAmount() * modifier);
                     }
@@ -495,7 +466,7 @@ public class CursedRing extends CursedCurioItem {
             if (!giveStarterGear.get()) return;
             try {
                 if (!ModList.get().isLoaded("customstartinggear")) {
-                    EnigmaticLegacy.LOGGER.info("Granting starter gear to " + player.getGameProfile().getName());
+                    EnigmaticLegacy.LOGGER.info("Granting starter gear to {}", player.getGameProfile().getName());
                     CompoundTag data = EnigmaticHandler.getPersistedData(player);
 
                     if (!data.getBoolean("UnwitnessedAmuletGift")) {

@@ -1,0 +1,30 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "E": {
+            "item": "minecraft:basalt"
+        },
+        "N": {
+            "item": "minecraft:netherite_scrap"
+        },
+        "P": {
+            "item": "enigmaticlegacyplus:pure_heart"
+        },
+        "Q": {
+            "item": "enigmaticlegacyplus:sacred_crystal"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:blazing_core"
+        }
+    },
+    "pattern": [
+        "N N",
+        "QXQ",
+        "EPE"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:scorched_charm"
+    }
+}

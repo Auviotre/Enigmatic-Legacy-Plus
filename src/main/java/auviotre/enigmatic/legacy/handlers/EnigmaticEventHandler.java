@@ -45,6 +45,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
@@ -54,12 +55,18 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
+import top.theillusivec4.curios.api.event.CurioCanEquipEvent;
 
 import java.util.function.Predicate;
 
 @Mod(value = EnigmaticLegacy.MODID)
 @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
 public class EnigmaticEventHandler {
+    @SubscribeEvent
+    private static void canEquip(@NotNull CurioCanEquipEvent event) {
+        if (!EnigmaticHandler.canUse(event.getEntity(), event.getStack())) event.setEquipResult(TriState.FALSE);
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
         LivingEntity victim = event.getEntity();

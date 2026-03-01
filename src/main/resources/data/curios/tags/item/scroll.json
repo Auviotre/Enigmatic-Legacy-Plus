@@ -1,5 +1,6 @@
 {
     "values": [
+        "enigmaticlegacyplus:survival_scroll",
         "enigmaticlegacyplus:xp_scroll",
         "enigmaticlegacyplus:heaven_scroll",
         "enigmaticlegacyplus:fabulous_scroll",
@@ -7,6 +8,8 @@
         "enigmaticlegacyplus:cursed_scroll",
         "enigmaticlegacyplus:avarice_scroll",
         "enigmaticlegacyplus:cursed_xp_scroll",
+        "enigmaticlegacyplus:thunder_scroll",
+        "enigmaticlegacyplus:violence_scroll",
         "enigmaticlegacyplus:cosmic_scroll"
     ]
 }

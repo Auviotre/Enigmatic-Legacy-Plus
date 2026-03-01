@@ -9,6 +9,7 @@ import auviotre.enigmatic.legacy.contents.item.legacy.AntiqueBag;
 import auviotre.enigmatic.legacy.contents.item.materials.AbyssalHeart;
 import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
+import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
 import auviotre.enigmatic.legacy.contents.item.tools.InfernalShield;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -93,9 +94,12 @@ public interface EnigmaticHandler {
     List<Holder<MobEffect>> DEBUFF_LIST = new ArrayList<>();
 
     static boolean canUse(LivingEntity entity, ItemStack stack) {
-        if (isBlessedItem(stack) && isTheOne(entity)) return true;
-        if (isCursedItem(stack) && !isTheCursedOne(entity)) return false;
-        return !isEldritchItem(stack) || isTheWorthyOne(entity);
+        if (isEldritchItem(stack)) return isTheWorthyOne(entity);
+        if (isCursedItem(stack)) {
+            if (isTheCursedOne(entity)) return true;
+            return isBlessedItem(stack) && RedemptionRing.Helper.canUseRelic(entity);
+        }
+        return true;
     }
 
     static boolean isTheCursedOne(LivingEntity entity) {
@@ -148,8 +152,7 @@ public interface EnigmaticHandler {
     static boolean hasCurio(@Nullable LivingEntity entity, ItemLike itemLike) {
         if (entity == null) return false;
         Item item = itemLike.asItem();
-        if (isCursedItem(item.getDefaultInstance()) && !isTheCursedOne(entity)) return false;
-        else if (isEldritchItem(item.getDefaultInstance()) && !isTheWorthyOne(entity)) return false;
+        if (!canUse(entity, item.getDefaultInstance())) return false;
         Optional<ICuriosItemHandler> curios = CuriosApi.getCuriosInventory(entity);
         return curios.map(curiosItemHandler -> curiosItemHandler.findFirstCurio(item).isPresent()).orElse(false);
     }
@@ -166,8 +169,7 @@ public interface EnigmaticHandler {
     static boolean hasItem(@Nullable LivingEntity entity, ItemLike itemLike) {
         if (entity == null) return false;
         Item item = itemLike.asItem();
-        if (isCursedItem(item.getDefaultInstance()) && !isTheCursedOne(entity)) return false;
-        else if (isEldritchItem(item.getDefaultInstance()) && !isTheWorthyOne(entity)) return false;
+        if (!canUse(entity, item.getDefaultInstance())) return false;
         Item antiqueBag = EnigmaticItems.ANTIQUE_BAG.asItem();
         if (item != antiqueBag && AntiqueBag.isBook(item.getDefaultInstance())) {
             boolean enderCheck = entity instanceof Player player && player.getEnderChestInventory().countItem(antiqueBag) > 0;
@@ -182,8 +184,7 @@ public interface EnigmaticHandler {
     static ItemStack getItem(@Nullable LivingEntity entity, ItemLike itemLike) {
         if (entity == null) return ItemStack.EMPTY;
         Item item = itemLike.asItem();
-        if (isCursedItem(item.getDefaultInstance()) && !isTheCursedOne(entity)) return ItemStack.EMPTY;
-        else if (isEldritchItem(item.getDefaultInstance()) && !isTheWorthyOne(entity)) return ItemStack.EMPTY;
+        if (!canUse(entity, item.getDefaultInstance())) return ItemStack.EMPTY;
         if (entity instanceof Player player) {
             for (NonNullList<ItemStack> compartment : player.getInventory().compartments) {
                 for (ItemStack stack : compartment) {
@@ -546,6 +547,8 @@ public interface EnigmaticHandler {
                                     AttributeInstance attribute = player.getAttribute(Attributes.ATTACK_DAMAGE);
                                     float damage = attribute == null ? 2.0F : 2.0F + (float) attribute.getValue() * 0.4F;
                                     living.hurt(living.damageSources().source(DamageTypes.ON_FIRE, player), damage);
+                                    Vec3 delta = living.position().subtract(source.getSourcePosition());
+                                    living.knockback(0.125F, delta.x(), delta.y());
                                     living.igniteForSeconds(4);
                                 }
                             }

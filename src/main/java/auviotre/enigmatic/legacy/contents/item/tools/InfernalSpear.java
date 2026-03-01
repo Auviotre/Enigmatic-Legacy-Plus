@@ -4,13 +4,16 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.effect.BlazingMight;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
+import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -20,19 +23,19 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -53,6 +56,16 @@ public class InfernalSpear extends BaseItem {
                         .add(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(AttributeUtil.BASE_ENTITY_REACH_ID, 1.8, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
                         .build())
         );
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+        if (Screen.hasShiftDown()) {
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalSpear1");
+            TooltipHandler.line(list);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalSpear2");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalSpear3");
+        } else TooltipHandler.holdShift(list);
     }
 
     public static Multimap<Holder<Attribute>, AttributeModifier> getBoost() {
@@ -79,9 +92,10 @@ public class InfernalSpear extends BaseItem {
                 server.sendParticles(ParticleTypes.ASH, position.x, position.y, position.z, 8, 0.1, 0.1, 0.1, 0);
             }
             for (LivingEntity entity : entities) player.attack(entity);
-            player.removeEffect(EnigmaticEffects.BLAZING_MIGHT);
             player.getAttributes().removeAttributeModifiers(getBoost());
+            player.removeEffect(EnigmaticEffects.BLAZING_MIGHT);
             player.swing(hand, true);
+            stack.hurtAndBreak(5, player, InteractionHand.MAIN_HAND.equals(hand) ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
             return InteractionResultHolder.consume(stack);
         }
         return super.use(level, player, hand);
@@ -110,7 +124,7 @@ public class InfernalSpear extends BaseItem {
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
             LivingEntity victim = event.getEntity();
             if (event.getSource().getEntity() instanceof LivingEntity attacker && event.getSource().is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-                if (!attacker.getMainHandItem().is(EnigmaticItems.INFERNAL_SPEAR)) return;
+                if (!attacker.getWeaponItem().is(EnigmaticItems.INFERNAL_SPEAR)) return;
                 int ticks = victim.getRemainingFireTicks();
                 if (ticks >= 100) {
                     BlazingMight.addAmplifier(attacker, Math.min(3, ticks / 100), 500 + ticks);

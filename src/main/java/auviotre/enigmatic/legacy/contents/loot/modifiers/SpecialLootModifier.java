@@ -64,6 +64,13 @@ public class SpecialLootModifier extends LootModifier {
                 }
             }
 
+            if (list.stream().anyMatch(stack -> stack.is(EnigmaticItems.VOID_TOME))) {
+                if (data.contains("LootedVoidTome")) {
+                    list.removeIf(stack -> stack.is(EnigmaticItems.VOID_TOME));
+                }
+                data.putBoolean("LootedVoidTome", true);
+            }
+
             if (BuiltInLootTables.END_CITY_TREASURE.location().equals(context.getQueriedLootTableId()) && EnigmaticHandler.isTheCursedOne(player)) {
                 if (level.dimension().equals(Level.END) && !data.contains("LootedFirstEndCityChest") && list.stream().anyMatch(stack -> stack.is(EnigmaticItems.ASTRAL_FRUIT))) {
                     data.putBoolean("LootedFirstEndCityChest", true);
@@ -83,7 +90,9 @@ public class SpecialLootModifier extends LootModifier {
             if (SUSPICIOUS_TABLES.stream().anyMatch(table -> table.equals(context.getQueriedLootTableId()))) {
                 if (context.getRandom().nextFloat() < 0.075F) {
                     list.clear();
-                    if (context.getRandom().nextFloat() < 0.25F) list.add(EnigmaticItems.EARTH_HEART.toStack());
+                    float value = context.getRandom().nextFloat();
+                    if (value < 0.02F) list.add(EnigmaticItems.SPELLSTONE_DEBRIS.toStack());
+                    else if (value < 0.25F) list.add(EnigmaticItems.EARTH_HEART.toStack());
                     else list.add(EnigmaticItems.EARTH_HEART_FRAGMENT.toStack());
                 }
             }

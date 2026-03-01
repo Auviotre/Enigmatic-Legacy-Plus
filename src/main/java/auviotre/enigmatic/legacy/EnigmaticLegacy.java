@@ -118,6 +118,7 @@ public class EnigmaticLegacy {
     public void onPacketSetup(final RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(MODID + ".1.0").optional();
         registrar.playToServer(EnderRingKeyPacket.TYPE, EnderRingKeyPacket.STREAM_CODEC, EnderRingKeyPacket::handle);
+        registrar.playToServer(EmptyLeftClickPacket.TYPE, EmptyLeftClickPacket.STREAM_CODEC, EmptyLeftClickPacket::handle);
         registrar.playToServer(ToggleMagnetEffectKeyPacket.TYPE, ToggleMagnetEffectKeyPacket.STREAM_CODEC, ToggleMagnetEffectKeyPacket::handle);
         registrar.playToServer(SpellstoneKeyPacket.TYPE, SpellstoneKeyPacket.STREAM_CODEC, SpellstoneKeyPacket::handle);
         registrar.playToServer(ScrollKeyPacket.TYPE, ScrollKeyPacket.STREAM_CODEC, ScrollKeyPacket::handle);

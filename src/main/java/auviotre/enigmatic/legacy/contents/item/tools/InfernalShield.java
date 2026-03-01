@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -25,6 +26,7 @@ import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -71,6 +73,10 @@ public class InfernalShield extends BaseCursedItem {
 
     public boolean isValidRepairItem(ItemStack stack, ItemStack repairCandidate) {
         return super.isValidRepairItem(stack, repairCandidate) || repairCandidate.is(Blocks.OBSIDIAN.asItem());
+    }
+
+    public @Nullable EquipmentSlot getEquipmentSlot(ItemStack stack) {
+        return EquipmentSlot.OFFHAND;
     }
 
     public UseAnim getUseAnimation(ItemStack stack) {

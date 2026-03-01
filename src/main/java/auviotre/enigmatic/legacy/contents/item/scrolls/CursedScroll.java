@@ -5,6 +5,7 @@ import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -12,6 +13,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -40,6 +42,7 @@ public class CursedScroll extends CursedCurioItem {
     public static ModConfigSpec.IntValue damageBoost;
     public static ModConfigSpec.IntValue miningBoost;
     public static ModConfigSpec.IntValue regenBoost;
+    private static final float FACTOR = 0.9F;
 
     public CursedScroll() {
         super(defaultSingleProperties().rarity(Rarity.RARE));
@@ -60,9 +63,18 @@ public class CursedScroll extends CursedCurioItem {
         for (ItemStack hand : entity.getHandSlots()) amount.addAndGet(getItemCurseLevel(hand));
         CuriosApi.getCuriosInventory(entity).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
-            for (int i = 0; i < curios.getSlots(); i++)
-                amount.addAndGet(getItemCurseLevel(curios.getStackInSlot(i)));
+            for (int i = 0; i < curios.getSlots(); i++) {
+                ItemStack stack = curios.getStackInSlot(i);
+                amount.addAndGet(getItemCurseLevel(stack));
+                if (stack.is(EnigmaticItems.VIOLENCE_SCROLL)) amount.addAndGet(ViolenceScroll.AbsorbedEnchants.getCount(stack));
+            }
         });
+        ItemStack curio = EnigmaticHandler.getCurio(entity, EnigmaticItems.VIOLENCE_SCROLL);
+        if (!curio.isEmpty()) {
+            int count = ViolenceScroll.AbsorbedEnchants.getCount(curio);
+            MobEffectInstance effect = entity.getEffect(EnigmaticEffects.VIOLENCE_CURSE);
+            if (effect != null) amount.addAndGet((int) ((effect.getAmplifier() + 1) * (1 + count * 0.08)));
+        }
         return amount.get();
     }
 
@@ -90,12 +102,12 @@ public class CursedScroll extends CursedCurioItem {
         } else TooltipHandler.holdShift(list);
         Player player = Minecraft.getInstance().player;
         if (player != null && EnigmaticHandler.getCurio(player, this) == stack) {
-            int curses = getCurseAmount(player);
+            double curses = Math.pow(getCurseAmount(player), FACTOR);
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll6");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll1", ChatFormatting.GOLD, (damageBoost.get() * curses) + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll2", ChatFormatting.GOLD, Math.min(miningBoost.get() * curses, 200) + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll3", ChatFormatting.GOLD, (regenBoost.get() * curses) + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll1", ChatFormatting.GOLD, String.format("%.1f%%", damageBoost.get() * curses));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll2", ChatFormatting.GOLD, String.format("%.1f%%", Math.min(miningBoost.get() * curses, 200)));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedScroll3", ChatFormatting.GOLD, String.format("%.1f%%", (regenBoost.get() * curses)));
         }
         TooltipHandler.line(list);
         TooltipHandler.cursedOnly(list, stack);
@@ -108,7 +120,8 @@ public class CursedScroll extends CursedCurioItem {
         private static void getBreakSpeed(PlayerEvent.@NotNull BreakSpeed event) {
             LivingEntity entity = event.getEntity();
             if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.CURSED_SCROLL)) {
-                float multiplier = getCurseAmount(entity) * 0.01F * miningBoost.get();
+                float amount = (int) (Math.pow(getCurseAmount(entity), FACTOR) * 10) * 0.1F;
+                float multiplier = amount * 0.01F * miningBoost.get();
                 event.setNewSpeed(event.getOriginalSpeed() * Math.min(multiplier, 2) + event.getNewSpeed());
             }
         }
@@ -116,7 +129,8 @@ public class CursedScroll extends CursedCurioItem {
         @SubscribeEvent
         private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
             if (event.getSource().getEntity() instanceof LivingEntity entity && EnigmaticHandler.hasCurio(entity, EnigmaticItems.CURSED_SCROLL)) {
-                float multiplier = getCurseAmount(entity) * 0.01F * damageBoost.get() + 1;
+                float amount = (int) (Math.pow(getCurseAmount(entity), FACTOR) * 10) * 0.1F;
+                float multiplier = amount * 0.01F * damageBoost.get() + 1;
                 event.setAmount(event.getAmount() * multiplier);
             }
         }
@@ -125,7 +139,8 @@ public class CursedScroll extends CursedCurioItem {
         private static void onHeal(@NotNull LivingHealEvent event) {
             LivingEntity entity = event.getEntity();
             if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.CURSED_SCROLL)) {
-                float multiplier = getCurseAmount(entity) * 0.01F * regenBoost.get() + 1;
+                float amount = (int) (Math.pow(getCurseAmount(entity), FACTOR) * 10) * 0.1F;
+                float multiplier = amount * 0.01F * regenBoost.get() + 1;
                 event.setAmount(event.getAmount() * multiplier);
             }
         }

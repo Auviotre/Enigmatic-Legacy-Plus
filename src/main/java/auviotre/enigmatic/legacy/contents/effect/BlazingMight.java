@@ -29,7 +29,7 @@ public class BlazingMight extends MobEffect {
             MobEffectInstance instance = entity.getEffect(EnigmaticEffects.BLAZING_MIGHT);
             strength = instance == null ? 0 : instance.getAmplifier();
             entity.removeEffect(EnigmaticEffects.BLAZING_MIGHT);
-            boolean flag = entity.getMainHandItem().is(EnigmaticItems.INFERNAL_SPEAR);
+            boolean flag = entity.getWeaponItem().is(EnigmaticItems.INFERNAL_SPEAR);
             strength = Math.max(strength, Math.min(strength + add, flag ? 9 : 4));
             duration = Math.max(instance == null ? 0 : instance.getDuration() / 2, duration);
         }

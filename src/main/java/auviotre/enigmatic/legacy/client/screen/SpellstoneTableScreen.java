@@ -19,7 +19,7 @@ public class SpellstoneTableScreen extends AbstractContainerScreen<SpellstoneTab
 
     protected void init() {
         super.init();
-        this.titleLabelX += 15;
+        this.titleLabelX += 7;
         this.titleLabelY -= 1;
     }
 

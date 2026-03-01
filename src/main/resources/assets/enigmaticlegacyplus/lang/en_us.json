@@ -130,12 +130,15 @@
   "effect.enigmaticlegacyplus.molten_heart.desc": "Makes you immune to fire and grants you clear vision in lava.",
   "effect.enigmaticlegacyplus.pure_resistance": "Pure Resistance",
   "effect.enigmaticlegacyplus.pure_resistance.desc": "Reduce the damage received while having a chance to block damage.",
+  "effect.enigmaticlegacyplus.violence_curse": "Curse of Violence",
+  "effect.enigmaticlegacyplus.violence_curse.desc": "Temporary curses generated in battle.",
 
   "entity.enigmaticlegacyplus.cobweb_ball": "Cobweb Ball",
   "entity.enigmaticlegacyplus.dragon_breath_arrow": "Dragon Breath Arrow",
   "entity.enigmaticlegacyplus.ichor_sprite": "Pure Ichor Spirit",
   "entity.enigmaticlegacyplus.ichor_spear": "Ichor Spear",
   "entity.enigmaticlegacyplus.piglin_wanderer": "Piglin Wanderer",
+  "entity.enigmaticlegacyplus.ultimate_wither_skull": "Ultimate Wither Skull",
 
   "block.enigmaticlegacyplus.astral_dust_sack": "Sack of Astral Dust",
   "block.enigmaticlegacyplus.cosmic_cake": "The Eternal Cake",
@@ -221,7 +224,7 @@
   "item.enigmaticlegacyplus.ichoroot": "Ichoroot",
   "item.enigmaticlegacyplus.infernal_cinder": "Infernal Cinder",
   "item.enigmaticlegacyplus.infernal_shield": "Bulwark of Blazing Pride",
-  "item.enigmaticlegacyplus.infernal_spear": "",
+  "item.enigmaticlegacyplus.infernal_spear": "Infernal Blazing Spear",
   "item.enigmaticlegacyplus.infinimeal": "Essence of Raging Life",
   "item.enigmaticlegacyplus.iron_ring": "Iron Ring",
   "item.enigmaticlegacyplus.loot_generator": "The One Box",
@@ -246,25 +249,30 @@
   "item.enigmaticlegacyplus.revival_leaf": "Revival Leaves",
   "item.enigmaticlegacyplus.sacred_crystal": "Sacred Crystal",
   "item.enigmaticlegacyplus.sanguinary_handbook": "Sanguinary Hunting Handbook",
+  "item.enigmaticlegacyplus.scorched_charm": "Charm of Scorched Sun",
   "item.enigmaticlegacyplus.soul_compass": "Wayfinder of the Damned",
   "item.enigmaticlegacyplus.soul_crystal": "Soul Crystal",
   "item.enigmaticlegacyplus.spellcore": "Spellcore",
   "item.enigmaticlegacyplus.spellstone_debris": "Spellstone Debris",
   "item.enigmaticlegacyplus.spelltuner": "Spelltuner",
   "item.enigmaticlegacyplus.storage_crystal": "Extradimensional Vessel",
+  "item.enigmaticlegacyplus.survival_scroll": "Tribute to the Survivor",
   "item.enigmaticlegacyplus.the_acknowledgment": "The Acknowledgment",
   "item.enigmaticlegacyplus.the_bless": "The Bless",
   "item.enigmaticlegacyplus.the_cube": "Non-Euclidean Cube",
   "item.enigmaticlegacyplus.the_infinitum": "The Infinitum",
   "item.enigmaticlegacyplus.the_judgement": "The Judgement",
   "item.enigmaticlegacyplus.the_twist": "The Twist",
+  "item.enigmaticlegacyplus.thunder_scroll": "Scroll of Thunder Embrace",
   "item.enigmaticlegacyplus.totem_of_malice": "Totem of Malice",
   "item.enigmaticlegacyplus.twisted_heart": "Twisted Heart",
   "item.enigmaticlegacyplus.twisted_mirror": "Twisted Mirror",
   "item.enigmaticlegacyplus.unholy_grail": "Unholy Grail",
   "item.enigmaticlegacyplus.unwitnessed_amulet": "Unwitnessed Amulet",
+  "item.enigmaticlegacyplus.violence_scroll": "The Curse of Violence",
   "item.enigmaticlegacyplus.void_pearl": "Pearl of the Void",
   "item.enigmaticlegacyplus.void_stone": "Keystone of The Oblivion",
+  "item.enigmaticlegacyplus.void_tome": "Tome of Void",
   "item.enigmaticlegacyplus.wormhole_potion": "Potion of Wormhole",
   "item.enigmaticlegacyplus.xp_scroll": "Scroll of Ageless Wisdom",
 
@@ -345,6 +353,10 @@
   "tooltip.enigmaticlegacy.monsterCharmAttribute": "Damage against Undead Creature",
   "tooltip.enigmaticlegacy.monsterCharm": "§5Slain monsters drop double as much experience.",
 
+  "tooltip.enigmaticlegacy.suvivalScroll1": "§5When the health is low:",
+  "tooltip.enigmaticlegacy.suvivalScroll2": "§5Gain certain attribute improvements",
+  "tooltip.enigmaticlegacy.suvivalScroll3": "§5and accelerate eating speed.",
+
   "tooltip.enigmaticlegacy.xpScrollMode": "§dMode: %1$s",
   "tooltip.enigmaticlegacy.xpScrollStoredXP": "§dStored Experience:",
   "tooltip.enigmaticlegacy.xpScrollUnits": "§6%1$s§6 units, or §6%2$s§6 levels",
@@ -394,8 +406,8 @@
   "tooltip.enigmaticlegacy.wormholePotion2": "§5Records the information of the first §6Holder §5and",
   "tooltip.enigmaticlegacy.wormholePotion3": "§5it will become the target for teleporting after use.",
 
-  "tooltip.enigmaticlegacy.mendingMixture1": "§5Combine with any tool, weapon or armor in a",
-  "tooltip.enigmaticlegacy.mendingMixture2": "§5crafting grid to fully restore its durability.",
+  "tooltip.enigmaticlegacy.mendingMixture1": "§5Right-click on any tool, weapon or armor",
+  "tooltip.enigmaticlegacy.mendingMixture2": "§5to fully restore its durability.",
 
   "tooltip.enigmaticlegacy.extradimensionalEye1": "§5Bind to desired location by pressing",
   "tooltip.enigmaticlegacy.extradimensionalEye2": "§6Shift§5+§6Right-Click§5 while standing there.",
@@ -430,6 +442,10 @@
 
   "tooltip.enigmaticlegacy.ichorSpear": "§5A one-time corruption throwing spear",
   "tooltip.enigmaticlegacy.ichorSpearFull": "§5Not consuming",
+
+  "tooltip.enigmaticlegacy.infernalSpear1": "§5When held, increase the max level of the §6Blazing Might§5 effect.",
+  "tooltip.enigmaticlegacy.infernalSpear2": "§5When the effect level of §6Blazing Might§5 reaches its maximum,",
+  "tooltip.enigmaticlegacy.infernalSpear3": "§6Right-click§5 to release a piercing attack and clear the effect.",
 
   "tooltip.enigmaticlegacy.dragonBreathBowAmmo": "§5Using §d%s§5 as ammunition.",
   "tooltip.enigmaticlegacy.dragonBreathBowEffects": "§5Current Effects:",
@@ -564,6 +580,7 @@
   "tooltip.enigmaticlegacy.etheriumCore5": "§5  an increase for the next attack.",
   "tooltip.enigmaticlegacy.etheriumCore6": "§5- Immunity to pressure, pricking and explosion damage.",
 
+  "tooltip.enigmaticlegacy.creationHeartSkill": "§6- Rains down devastating Wither Skulls.",
   "tooltip.enigmaticlegacy.creationHeart1": "§5- Immunity to most debuffs.",
   "tooltip.enigmaticlegacy.creationHeart2": "§5- Grants you an ability to fly.",
   "tooltip.enigmaticlegacy.creationHeart3": "§5- Compensates mining speed penalty when flying.",
@@ -574,6 +591,8 @@
   "tooltip.enigmaticlegacy.creationHeart8": "§5  lava damage.",
 
   "tooltip.enigmaticlegacy.unholyGrail": "§5You'd better not be drinking from it...",
+
+  "tooltip.enigmaticlegacy.voidTome" : "§5Use to obtain §6+1§d Arcane Scroll Slot§5.",
 
   "tooltip.enigmaticlegacy.antiqueBag1": "§5A container similar to a§d Ender Chest§5.",
   "tooltip.enigmaticlegacy.antiqueBag2": "§5The books stored in will be considered",
@@ -709,6 +728,19 @@
   "tooltip.enigmaticlegacy.infernalShield8": "§5- Successful blocks grant increasing §6Blazing Might§5 effect.",
   "tooltip.enigmaticlegacy.infernalShield9": "§5- Enemy attacks from behind deal §650%§5 more damage.",
 
+  "tooltip.enigmaticlegacy.guardianHeart1": "§5While in inventory, §6Guardians§5 within §6%1$s§6 blocks",
+  "tooltip.enigmaticlegacy.guardianHeart2": "§5from you are rendered neutral towards you",
+  "tooltip.enigmaticlegacy.guardianHeart3": "§5and will target nearby monsters.",
+  "tooltip.enigmaticlegacy.guardianHeart4": "§5While on hotbar, casting your sight upon the",
+  "tooltip.enigmaticlegacy.guardianHeart5": "§5monster within §6%1$s§6 blocks§5 from you causes it to",
+  "tooltip.enigmaticlegacy.guardianHeart6": "§5become temporarily enraged, gaining greater",
+  "tooltip.enigmaticlegacy.guardianHeart7": "§5strength and switching target to other closest",
+  "tooltip.enigmaticlegacy.guardianHeart8": "§5monster within §6%1$s§6 blocks§5 from it.",
+  "tooltip.enigmaticlegacy.guardianHeart9": "§5Other monsters within this radius will instantly",
+  "tooltip.enigmaticlegacy.guardianHeart10": "§5prioritize attacking enraged monster.",
+  "tooltip.enigmaticlegacy.guardianHeart11": "§6Some monsters are immune to being enraged.",
+  "tooltip.enigmaticlegacy.guardianHeart12": "§5This ability has §6%1$s§6 seconds§5 cooldown.",
+
   "tooltip.enigmaticlegacy.cursedStone1": "§5If you die in the §6Nether§5, in the middle of",
   "tooltip.enigmaticlegacy.cursedStone2": "§5sufficiently large lava lake with this stone",
   "tooltip.enigmaticlegacy.cursedStone3": "§5in your inventory, §6Ring of the Seven Curses",
@@ -749,6 +781,12 @@
   "tooltip.enigmaticlegacy.blessAmplifier2": "§5to upgrade the enchantments on the item.",
   "tooltip.enigmaticlegacy.blessAmplifier3": "§5Can break the level limit.",
 
+  "tooltip.enigmaticlegacy.scorchedCharm1": "§5Immunize the wearer against the fire damage",
+  "tooltip.enigmaticlegacy.scorchedCharm2": "§5And be able to walk on the lava.",
+  "tooltip.enigmaticlegacy.scorchedCharm3": "§5Obtain natural regeneration when in contact with lava.",
+  "tooltip.enigmaticlegacy.scorchedCharm4": "§5Trigger lifesteal when attacking a target on fire.",
+  "tooltip.enigmaticlegacy.scorchedCharm5": "§6%1$s §5chance to resist the attack damage.",
+
   "tooltip.enigmaticlegacy.earthPromise1": "§5When receiving damage worth §6%1$s §5of your",
   "tooltip.enigmaticlegacy.earthPromise2": "§5health, block the attack and cooldown for§6 %1$s §5sec.",
 
@@ -782,6 +820,12 @@
   "tooltip.enigmaticlegacy.cursedXpScroll3": "§5But the EXP gained from experience orb will decrease,",
   "tooltip.enigmaticlegacy.cursedXpScroll4": "§5Lose all experiences after death.",
   "tooltip.enigmaticlegacy.cursedXpScroll5": "§6+%1$s §dKnockback Resistance",
+
+  "tooltip.enigmaticlegacy.thunderScroll1": "§5Immune to§d Lightning damage§5.",
+  "tooltip.enigmaticlegacy.thunderScroll2": "§5Sweep attack deals §6100% §5damage.",
+  "tooltip.enigmaticlegacy.thunderScroll3": "§5After being hit much times,the target",
+  "tooltip.enigmaticlegacy.thunderScroll4": "§5will be struck by §6lightning bolt§5.",
+  "tooltip.enigmaticlegacy.thunderScroll5": "§5Deal more damage to§d armored §5targets.",
 
   "tooltip.enigmaticlegacy.abyssalHeart1": "§5It is alive. It is watching. Never before have",
   "tooltip.enigmaticlegacy.abyssalHeart2": "§5this realm shuddered beneath the gaze of",
@@ -818,6 +862,19 @@
   "tooltip.enigmaticlegacy.desolationRing1": "§6Prevents any dropping from slain mob.",
   "tooltip.enigmaticlegacy.desolationRing2": "§6Neutral creatures§5 will not spawn in your proximity.",
   "tooltip.enigmaticlegacy.desolationRing3": "§6Enemies §5will not target you actively.",
+
+  "tooltip.enigmaticlegacy.violenceScrollLore1": "§5An accursed being is one rarely worth creating an enemy of.",
+  "tooltip.enigmaticlegacy.violenceScrollLore2": "§5Whether their curse be one of luck, of pain, of destitution -",
+  "tooltip.enigmaticlegacy.violenceScrollLore3": "§5they have lost much of what they had attained, and easily",
+  "tooltip.enigmaticlegacy.violenceScrollLore4": "§5fight without care toward their own wellbeing.",
+  "tooltip.enigmaticlegacy.violenceScrollCount": "§dUnique Curses Absorbed: §6%1$s§",
+  "tooltip.enigmaticlegacy.violenceScroll1": "§5Reduce the duration of invincibility caused by attacks.",
+  "tooltip.enigmaticlegacy.violenceScroll2": "§5Gain§d Curse effect§5 continuously in combat.",
+  "tooltip.enigmaticlegacy.violenceScroll3": "",
+  "tooltip.enigmaticlegacy.violenceScroll4": "§6Right-click§5 on other items in the inventory to absorb their curse enchantments.",
+  "tooltip.enigmaticlegacy.violenceScroll5": "§5- §6%1$s §dAttack Speed",
+  "tooltip.enigmaticlegacy.violenceScroll6": "§5- §6%1$s §dEntity Reach",
+  "tooltip.enigmaticlegacy.violenceScroll7": "§5- §6%1$s §dKnockback Resistance",
 
   "tooltip.enigmaticlegacy.chaosElytra1": "§5Reduce §6%1$s §5of damage from back.",
   "tooltip.enigmaticlegacy.chaosElytra2": "§5When accelerating vertically towards",
@@ -1003,6 +1060,9 @@
   "enigmaticlegacyplus.configuration.redemptionLevel": "Time Proportion Required For Each Redemption Level",
   "enigmaticlegacyplus.configuration.firstCurseModifier": "First Curse Correction Coefficient",
   "enigmaticlegacyplus.configuration.healthThreshold": "Health Threshold",
+  "enigmaticlegacyplus.configuration.lavaHealAmount": "Lava Healing Amount",
+  "enigmaticlegacyplus.configuration.lifestealModifier": "Lifesteal Modifier",
+  "enigmaticlegacyplus.configuration.resistanceProbability": "Resistance Probability",
 
   "enigmaticlegacyplus.configuration.abyssItems": "Abyss Items Configs",
   "enigmaticlegacyplus.configuration.keepInventory": "Keep Inventory",
@@ -1011,6 +1071,10 @@
   "enigmaticlegacyplus.configuration.flyingSpeedModifier": "Flying Speed Modifier",
   "enigmaticlegacyplus.configuration.descendingPowerModifier": "Damage Modifier of Descending Skill",
   "enigmaticlegacyplus.configuration.descendingCooldown": "Cooldown of Descending Skill",
+  "enigmaticlegacyplus.configuration.entityReach": "Entity Reach Boost",
+  "enigmaticlegacyplus.configuration.entityReach.tooltip": "Entity Reach increase in unit. Measured as percentage.",
+  "enigmaticlegacyplus.configuration.knockbackResistanceBoost": "Knockback Resistance Boost",
+  "enigmaticlegacyplus.configuration.knockbackResistanceBoost.tooltip": "Knockback Resistance increase in unit. Measured as percentage.",
 
   "enigmaticlegacyplus.configuration.else": "Else Configs",
   "enigmaticlegacyplus.configuration.enable": "Whether to Enable",
@@ -1025,6 +1089,7 @@
   "enigmaticlegacyplus.configuration.baseDamage": "Base Damage",
   "enigmaticlegacyplus.configuration.duration": "Effect Duration",
   "enigmaticlegacyplus.configuration.amplifier": "Effect Amplifier",
+  "enigmaticlegacyplus.configuration.extraBookList": "Extra Allowed Book List",
 
   "enigmaticlegacyplus.configuration.section.enigmaticlegacyplus.client.toml": "Client Configs",
   "enigmaticlegacyplus.configuration.section.enigmaticlegacyplus.client.toml.title": "Enigmatic Legacy Client Configs",

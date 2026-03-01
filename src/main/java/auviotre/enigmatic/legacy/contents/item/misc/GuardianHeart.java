@@ -7,6 +7,8 @@ import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -57,6 +59,29 @@ public class GuardianHeart extends BaseCursedItem {
         builder.pop(2);
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+        TooltipHandler.line(list);
+        if (Screen.hasShiftDown()) {
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart1", ChatFormatting.GOLD, String.format("%.0f", effectiveRange.get()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart2");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart3");
+            TooltipHandler.line(list);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart4");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart5", ChatFormatting.GOLD, String.format("%.0f", effectiveRange.get()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart6");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart7");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart8", ChatFormatting.GOLD, String.format("%.0f", effectiveRange.get()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart9");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart10");
+            TooltipHandler.line(list);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart11");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart12", ChatFormatting.GOLD, cooldown.get() / 20);
+        } else TooltipHandler.holdShift(list);
+        TooltipHandler.line(list);
+        TooltipHandler.cursedOnly(list, stack);
+    }
+
     public static boolean doesObserveEntity(Player player, LivingEntity entity) {
         Vec3 vector3d = player.getViewVector(1.0F).normalize();
         Vec3 vector3d1 = new Vec3(entity.getX() - player.getX(), entity.getEyeY() - player.getEyeY(), entity.getZ() - player.getZ());
@@ -81,11 +106,6 @@ public class GuardianHeart extends BaseCursedItem {
             }
         }
         return closest;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        TooltipHandler.cursedOnly(list, stack);
     }
 
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {

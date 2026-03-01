@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:infernal_cinder"
+        },
+        "B": {
+            "item": "minecraft:magma_cream"
+        },
+        "S": {
+            "item": "minecraft:netherite_scrap"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:ichor_spear"
+        }
+    },
+    "pattern": [
+        " AS",
+        "BXA",
+        "AB "
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:infernal_spear"
+    }
+}

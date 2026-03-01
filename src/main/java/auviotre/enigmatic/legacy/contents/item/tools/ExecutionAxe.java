@@ -108,7 +108,7 @@ public class ExecutionAxe extends SwordItem {
         private static void onDrop(@NotNull LivingDropsEvent event) {
             LivingEntity victim = event.getEntity();
             if (SKULL_MAP.containsKey(victim.getClass()) && event.isRecentlyHit() && event.getSource().getEntity() != null && event.getSource().getEntity() instanceof LivingEntity attacker) {
-                ItemStack item = attacker.getMainHandItem();
+                ItemStack item = attacker.getWeaponItem();
                 Item skull = SKULL_MAP.get(victim.getClass()).asItem();
                 Collection<ItemEntity> drops = event.getDrops();
                 int looting = getLootingLevel(attacker, attacker.level());

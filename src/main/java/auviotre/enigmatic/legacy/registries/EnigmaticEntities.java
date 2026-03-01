@@ -7,6 +7,7 @@ import auviotre.enigmatic.legacy.contents.entity.PiglinWanderer;
 import auviotre.enigmatic.legacy.contents.entity.projectile.CobwebBall;
 import auviotre.enigmatic.legacy.contents.entity.projectile.DragonBreathArrow;
 import auviotre.enigmatic.legacy.contents.entity.projectile.ThrownIchorSpear;
+import auviotre.enigmatic.legacy.contents.entity.projectile.UltimateWitherSkull;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -27,6 +28,7 @@ public class EnigmaticEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<CobwebBall>> COBWEB_BALL = register("cobweb_ball", EntityType.Builder.<CobwebBall>of(CobwebBall::new, MobCategory.MISC).sized(0.4F, 0.4F).clientTrackingRange(4).updateInterval(10));
     public static final DeferredHolder<EntityType<?>, EntityType<DragonBreathArrow>> DRAGON_BREATH_ARROW = register("dragon_breath_arrow", EntityType.Builder.<DragonBreathArrow>of(DragonBreathArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
     public static final DeferredHolder<EntityType<?>, EntityType<ThrownIchorSpear>> THROWN_ICHOR_SPEAR = register("ichor_spear", EntityType.Builder.<ThrownIchorSpear>of(ThrownIchorSpear::new, MobCategory.MISC).sized(0.35F, 0.35F).clientTrackingRange(4).setUpdateInterval(20));
+    public static final DeferredHolder<EntityType<?>, EntityType<UltimateWitherSkull>> ULTIMATE_WITHER_SKULL = register("ultimate_wither_skull", EntityType.Builder.<UltimateWitherSkull>of(UltimateWitherSkull::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(64));
 
     public static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> register(String name, EntityType.Builder<T> builder) {
         return ENTITY_TYPES.register(name, () -> builder.build(EnigmaticLegacy.MODID + ":" + name));

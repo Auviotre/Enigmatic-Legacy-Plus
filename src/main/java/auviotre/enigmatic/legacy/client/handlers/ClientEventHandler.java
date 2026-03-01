@@ -15,6 +15,7 @@ import auviotre.enigmatic.legacy.packets.server.EnderRingKeyPacket;
 import auviotre.enigmatic.legacy.packets.server.ScrollKeyPacket;
 import auviotre.enigmatic.legacy.packets.server.SpellstoneKeyPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.illusivesoulworks.caelus.api.RenderCapeEvent;
@@ -25,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -39,10 +41,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
-import net.neoforged.neoforge.client.event.RenderTooltipEvent;
-import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -62,7 +61,6 @@ public class ClientEventHandler {
     private static void onTooltipRendering(RenderTooltipEvent.@NotNull Color event) {
         ItemStack stack = event.getItemStack();
         if (!stack.isEmpty()) {
-            LocalPlayer player = Minecraft.getInstance().player;
             if (EnigmaticHandler.isCursedItem(stack)) {
                 if (EnigmaticHandler.isBlessedItem(stack)) {
                     event.setBackground(0xF01a0a07);
@@ -154,20 +152,59 @@ public class ClientEventHandler {
     private static void onFogRender(ViewportEvent.RenderFog event) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
-        if (event.getCamera().getFluidInCamera() == FogType.LAVA) {
+        if (event.getType() == FogType.LAVA) {
             if (player.hasEffect(EnigmaticEffects.MOLTEN_HEART)) {
-                RenderSystem.setShaderFogStart(0.0F);
-                RenderSystem.setShaderFogEnd(6.0F);
+                event.setNearPlaneDistance(0.0F);
+                event.setFarPlaneDistance(6.0F);
+                event.setCanceled(true);
             } else if (EnigmaticHandler.hasCurio(player, EnigmaticItems.BLAZING_CORE)) {
-                RenderSystem.setShaderFogStart(0.0F);
-                RenderSystem.setShaderFogEnd(10.0F);
+                event.setNearPlaneDistance(0.0F);
+                event.setFarPlaneDistance(10.0F);
+                event.setCanceled(true);
             }
+        }
+        ItemStack curio = EnigmaticHandler.getCurio(player, EnigmaticItems.VIOLENCE_SCROLL);
+        if (!curio.isEmpty() && event.getCamera().getFluidInCamera() == FogType.NONE) {
+            float timer = 1.0F - (float) (curio.getOrDefault(EnigmaticComponents.VIOLENCE_CURSE_TIMER, 0) + event.getPartialTick()) / 1000.0F;
+            float f = Math.max(event.getFarPlaneDistance() * (float) Math.pow(timer, 6.0F), 5F);
+            event.setNearPlaneDistance(event.getMode() == FogRenderer.FogMode.FOG_SKY ? 0.0F : f * 0.6F);
+            event.setFarPlaneDistance(f);
+            event.setCanceled(true);
+        }
+    }
+
+
+    @SubscribeEvent
+    private static void getFogColor(ViewportEvent.ComputeFogColor event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return;
+        ItemStack curio = EnigmaticHandler.getCurio(player, EnigmaticItems.VIOLENCE_SCROLL);
+        if (!curio.isEmpty()) {
+            float timer = 1.0F - (float) (curio.getOrDefault(EnigmaticComponents.VIOLENCE_CURSE_TIMER, 0) + event.getPartialTick()) / 1000.0F;
+            event.setBlue(event.getBlue() * timer + (1 - timer) * 0.07F);
+            event.setGreen(event.getGreen() * timer + (1 - timer) * 0.06F);
+            event.setRed(event.getRed() * timer + (1 - timer) * 0.12F);
         }
     }
 
     @SubscribeEvent
     private static void renderCape(@NotNull RenderCapeEvent event) {
         if (!BaseElytraItem.getElytra(event.getEntity()).isEmpty()) event.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    private static void renderScreenEffect(@NotNull RenderBlockScreenEffectEvent event) {
+        RenderBlockScreenEffectEvent.OverlayType overlayType = event.getOverlayType();
+        Player player = event.getPlayer();
+        if (overlayType.equals(RenderBlockScreenEffectEvent.OverlayType.FIRE)) {
+            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.BLAZING_CORE)) {
+                event.setCanceled(true);
+            } else if (EnigmaticHandler.hasCurio(player, EnigmaticItems.SCORCHED_CHARM)) {
+                event.setCanceled(true);
+            } else if (EnigmaticHandler.hasCurio(player, EnigmaticItems.THE_CUBE)) {
+                event.setCanceled(true);
+            }
+        }
     }
 
     @SubscribeEvent(receiveCanceled = true)

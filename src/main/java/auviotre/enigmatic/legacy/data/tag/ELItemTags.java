@@ -30,7 +30,7 @@ public class ELItemTags extends ItemTagsProvider {
                 ENCHANTMENT_TRANSPOSER.get(), CURSE_TRANSPOSER.get(),
                 BLESS_AMPLIFIER.get(), THE_ACKNOWLEDGMENT.get(),
                 THE_TWIST.get(), THE_BLESS.get(),
-                THE_INFINITUM.get()
+                THE_INFINITUM.get(), VOID_TOME.get()
         );
         this.tag(ItemTags.LECTERN_BOOKS).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get());
         this.tag(ItemTags.VANISHING_ENCHANTABLE).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get(), INFERNAL_SHIELD.get());
@@ -80,10 +80,12 @@ public class ELItemTags extends ItemTagsProvider {
                 LOST_ENGINE.get()
         );
         this.tag(EnigmaticTags.Items.SCROLLS).add(
+                SURVIVAL_SCROLL.get(),
                 XP_SCROLL.get(), HEAVEN_SCROLL.get(),
                 FABULOUS_SCROLL.get(), NIGHT_SCROLL.get(),
                 CURSED_SCROLL.get(), AVARICE_SCROLL.get(),
-                CURSED_XP_SCROLL.get(), COSMIC_SCROLL.get()
+                CURSED_XP_SCROLL.get(), THUNDER_SCROLL.get(),
+                VIOLENCE_SCROLL.get(), COSMIC_SCROLL.get()
         );
         this.tag(EnigmaticTags.Items.AMULETS).add(UNWITNESSED_AMULET.get(), ENIGMATIC_AMULET.get(), ASCENSION_AMULET.get(), ELDRITCH_AMULET.get());
 
@@ -115,7 +117,7 @@ public class ELItemTags extends ItemTagsProvider {
                 MINING_CHARM.get(), MONSTER_CHARM.get(),
                 FORGER_GEM.get(), HELL_BLADE_CHARM.get(),
                 ETHEREAL_FORGING_CHARM.get(), BERSERK_EMBLEM.get(),
-                ENCHANTER_PEARL.get(), SPELLTUNER.get()
+                ENCHANTER_PEARL.get(), SCORCHED_CHARM.get(), SPELLTUNER.get()
         );
         this.tag(CuriosTags.BACK).add(MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
     }

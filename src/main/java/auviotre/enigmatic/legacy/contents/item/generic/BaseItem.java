@@ -50,7 +50,7 @@ public class BaseItem extends Item {
     public static class WIPDecorator implements IItemDecorator {
         static final ResourceLocation SPRITE = EnigmaticLegacy.location("decorator/wip_warn");
 
-        public boolean render(GuiGraphics graphics, Font font, @NotNull ItemStack stack, int x, int y) {
+        public boolean render(@NotNull GuiGraphics graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             graphics.pose().pushPose();
             graphics.blitSprite(SPRITE, x, y, 16, 16);
             graphics.pose().popPose();

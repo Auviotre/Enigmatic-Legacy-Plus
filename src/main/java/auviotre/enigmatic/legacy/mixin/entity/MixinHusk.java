@@ -22,7 +22,7 @@ public abstract class MixinHusk extends Zombie {
 
     @Inject(method = "doHurtTarget", at = @At("RETURN"))
     public void doHurtTargetMix(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue() && EnigmaticHandler.isCurseBoosted(this) && this.getMainHandItem().isEmpty() && entity instanceof LivingEntity living) {
+        if (cir.getReturnValue() && EnigmaticHandler.isCurseBoosted(this) && this.getWeaponItem().isEmpty() && entity instanceof LivingEntity living) {
             float effectiveDifficulty = this.level().getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
             living.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100 * (int) effectiveDifficulty), this);
         }

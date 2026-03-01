@@ -29,6 +29,7 @@ public class ClientProxy extends CommonProxy {
             ItemProperties.register(EnigmaticItems.THE_INFINITUM.get(), eldritchLocation, eldritchFunc);
             ItemProperties.register(EnigmaticItems.ELDRITCH_AMULET.get(), eldritchLocation, eldritchFunc);
             ItemProperties.register(EnigmaticItems.DESOLATION_RING.get(), eldritchLocation, eldritchFunc);
+            ItemProperties.register(EnigmaticItems.VIOLENCE_SCROLL.get(), eldritchLocation, eldritchFunc);
             ItemProperties.register(EnigmaticItems.CHAOS_ELYTRA.get(), eldritchLocation, eldritchFunc);
             ItemProperties.register(EnigmaticItems.MINER_RING.get(), ResourceLocation.withDefaultNamespace("on"), (stack, level, entity, i) -> MinerRing.getPoint(stack) > 0 ? 1.0F : 0.0F);
             ItemProperties.register(EnigmaticItems.ICHOR_SPEAR.get(), ResourceLocation.withDefaultNamespace("using"), (stack, level, entity, i) -> entity != null && entity.getUseItem().equals(stack) ? 1.0F : 0.0F);

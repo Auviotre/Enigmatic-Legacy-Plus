@@ -112,7 +112,7 @@ public class TheInfinitum extends TheAcknowledgment {
         if (!EnigmaticHandler.isTheWorthyOne(player)) return InteractionResultHolder.pass(player.getItemInHand(hand));
         if (hand == InteractionHand.MAIN_HAND) {
             ItemStack offhandStack = player.getOffhandItem();
-            if (!offhandStack.isEmpty() && (offhandStack.getItem().getUseAnimation(offhandStack) == UseAnim.BLOCK))
+            if (!offhandStack.isEmpty() && (offhandStack.getItem().getUseAnimation(offhandStack) != UseAnim.NONE))
                 return InteractionResultHolder.pass(player.getItemInHand(hand));
         }
         return super.use(world, player, hand);
@@ -123,8 +123,9 @@ public class TheInfinitum extends TheAcknowledgment {
     public static class Events {
         @SubscribeEvent
         private static void onTick(PlayerTickEvent.@NotNull Pre event) {
-            if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheWorthyOne(entity)) {
-                if (entity.getMainHandItem().is(EnigmaticItems.THE_INFINITUM))
+            LivingEntity entity = event.getEntity();
+            if (EnigmaticHandler.isTheWorthyOne(entity)) {
+                if (entity.getWeaponItem().is(EnigmaticItems.THE_INFINITUM))
                     entity.getAttributes().addTransientAttributeModifiers(getKnockbackModifier());
                 else entity.getAttributes().removeAttributeModifiers(getKnockbackModifier());
             }
@@ -133,7 +134,7 @@ public class TheInfinitum extends TheAcknowledgment {
         @SubscribeEvent
         private static void onDeath(@NotNull LivingDeathEvent event) {
             if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheWorthyOne(entity)) {
-                if (entity.getMainHandItem().is(EnigmaticItems.THE_INFINITUM) || entity.getOffhandItem().is(EnigmaticItems.THE_INFINITUM)) {
+                if (entity.getWeaponItem().is(EnigmaticItems.THE_INFINITUM) || entity.getOffhandItem().is(EnigmaticItems.THE_INFINITUM)) {
                     if (event.getSource().is(Tags.DamageTypes.IS_TECHNICAL)) return;
                     if (entity.getRandom().nextInt(100) < undeadProbability.get()) {
                         event.setCanceled(true);
@@ -148,7 +149,7 @@ public class TheInfinitum extends TheAcknowledgment {
             if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES)) {
                 DamageSource source = event.getSource();
                 if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-                    if (attacker.getMainHandItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
+                    if (attacker.getWeaponItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
                         event.setAmount(event.getAmount() * (1 + 0.01F * specialDamageBoost.get()));
                     }
                 }
@@ -159,7 +160,7 @@ public class TheInfinitum extends TheAcknowledgment {
         private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
             DamageSource source = event.getSource();
             if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-                if (attacker.getMainHandItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
+                if (attacker.getWeaponItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
                     attacker.heal(event.getNewDamage() * 0.01F * lifeSteal.get());
                     Holder<MobEffect> debuff = EnigmaticHandler.getRandomDebuff(attacker);
                     MobEffectInstance instance = new MobEffectInstance(debuff, 200, 0, false, true);

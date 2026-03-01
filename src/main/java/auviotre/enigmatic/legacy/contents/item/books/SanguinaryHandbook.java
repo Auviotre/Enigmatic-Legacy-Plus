@@ -7,12 +7,14 @@ import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.contents.item.scrolls.CursedScroll;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
@@ -101,9 +103,12 @@ public class SanguinaryHandbook extends BaseCursedItem {
                         double damageMultiplier = SanguinaryHandbook.damageMultiplier.get();
                         if (EnigmaticHandler.hasCurio(owner, EnigmaticItems.BERSERK_EMBLEM))
                             damageMultiplier += 0.5F * (BerserkEmblem.getMissingHealthPool(owner) * BerserkEmblem.attackDamage.get());
-                        if (EnigmaticHandler.hasCurio(owner, EnigmaticItems.CURSED_SCROLL)) {
+                        if (EnigmaticHandler.hasCurio(owner, EnigmaticItems.CURSED_SCROLL))
                             damageMultiplier += 0.75F * (CursedScroll.getCurseAmount(owner) * CursedScroll.damageBoost.get() * 0.01F);
-                        }
+                        MobEffectInstance effect = owner.getEffect(EnigmaticEffects.BLAZING_MIGHT);
+                        if (effect != null && effect.getAmplifier() > 2)
+                            damageMultiplier += 2 * effect.getAmplifier();
+
                         event.setAmount(event.getAmount() * (1.0F + (float) damageMultiplier));
                     }
                 }

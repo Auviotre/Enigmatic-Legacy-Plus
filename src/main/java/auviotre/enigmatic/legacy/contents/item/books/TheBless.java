@@ -96,7 +96,7 @@ public class TheBless extends TheAcknowledgment {
         if (!EnigmaticHandler.canUse(player, stack)) return InteractionResultHolder.pass(stack);
         if (hand == InteractionHand.MAIN_HAND) {
             ItemStack offhandStack = player.getOffhandItem();
-            if (!offhandStack.isEmpty() && (offhandStack.getItem().getUseAnimation(offhandStack) == UseAnim.BLOCK))
+            if (!offhandStack.isEmpty() && (offhandStack.getItem().getUseAnimation(offhandStack) != UseAnim.NONE))
                 return InteractionResultHolder.pass(stack);
         }
         return super.use(world, player, hand);
@@ -108,8 +108,8 @@ public class TheBless extends TheAcknowledgment {
     public static class Events {
         @SubscribeEvent
         private static void onTick(PlayerTickEvent.@NotNull Pre event) {
-            if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.hasItem(entity, EnigmaticItems.THE_BLESS)) {
-                entity.clearFire();
+            if (EnigmaticHandler.hasItem(event.getEntity(), EnigmaticItems.THE_BLESS)) {
+                event.getEntity().clearFire();
             }
         }
 
@@ -117,7 +117,7 @@ public class TheBless extends TheAcknowledgment {
         private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
             DamageSource source = event.getSource();
             if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-                ItemStack stack = attacker.getMainHandItem();
+                ItemStack stack = attacker.getWeaponItem();
                 if (stack.is(EnigmaticItems.THE_BLESS) && EnigmaticHandler.canUse(attacker, stack) && EnigmaticHandler.isTheBlessedOne(attacker)) {
                     event.setAmount(event.getAmount() * (float) (1 + Math.min(1.0F, event.getEntity().getRemainingFireTicks() * 0.01F * damageBoostByFire.get())));
                 }

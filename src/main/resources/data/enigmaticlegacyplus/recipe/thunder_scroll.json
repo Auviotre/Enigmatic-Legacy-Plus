@@ -1,0 +1,36 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "B": {
+            "item": "minecraft:ink_sac"
+        },
+        "E": {
+            "item": "minecraft:lapis_lazuli"
+        },
+        "I": {
+            "item": "enigmaticlegacyplus:ichor_droplet"
+        },
+        "P": {
+            "item": "enigmaticlegacyplus:sacred_crystal"
+        },
+        "S": {
+            "item": "enigmaticlegacyplus:ocean_stone"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:darkest_scroll"
+        },
+        "Y": {
+            "item": "minecraft:feather"
+        }
+    },
+    "pattern": [
+        "ISI",
+        "BXY",
+        "EPE"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:thunder_scroll"
+    }
+}
