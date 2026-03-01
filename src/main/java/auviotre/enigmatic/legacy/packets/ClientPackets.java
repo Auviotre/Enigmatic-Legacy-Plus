@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.packets;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.client.Quote;
 import auviotre.enigmatic.legacy.client.screen.toast.SlotUnlockedToast;
 import auviotre.enigmatic.legacy.packets.client.*;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
@@ -164,5 +165,10 @@ public class ClientPackets {
 //            level.addParticle(EnigmaticAddonParticles.ABYSS_CHAOS, packet.x + range * Math.sin(Math.PI / amount * i), packet.y + 0.1 * Math.random(), packet.z + range * Math.cos(Math.PI / amount * i), 0.0, Math.random(), 0.0);
 //        }
         }
+    }
+
+    public static void handle(PlayQuotePacket packet) {
+        Quote quote = Quote.getByID(packet.quoteId());
+        quote.playClient(packet.delay());
     }
 }

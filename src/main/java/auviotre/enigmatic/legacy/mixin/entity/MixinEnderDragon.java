@@ -1,11 +1,13 @@
 package auviotre.enigmatic.legacy.mixin.entity;
 
 import auviotre.enigmatic.legacy.api.entity.AbyssalHeartBearer;
+import auviotre.enigmatic.legacy.client.Quote;
 import auviotre.enigmatic.legacy.contents.entity.PermanentItemEntity;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.Enemy;
@@ -16,6 +18,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
 
 @Mixin(EnderDragon.class)
 public abstract class MixinEnderDragon extends Mob implements Enemy, AbyssalHeartBearer {
@@ -43,6 +47,9 @@ public abstract class MixinEnderDragon extends Mob implements Enemy, AbyssalHear
 
                 data.putInt("AbyssalHeartsGained", heartsGained + 1);
             }
+
+            List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, EnigmaticHandler.getBoundingBoxAroundEntity(this, 256));
+            players.forEach(player -> Quote.WITH_DRAGONS.play(player, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(140)));
         }
     }
 

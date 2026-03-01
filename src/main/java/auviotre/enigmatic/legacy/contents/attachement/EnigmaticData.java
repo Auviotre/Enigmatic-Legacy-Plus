@@ -8,6 +8,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 public class EnigmaticData implements INBTSerializable<CompoundTag> {
     private boolean magnetRingEffect = false;
+    private boolean unlockedNarrator = false;
     private boolean nebulaPower = false;
     private boolean isElytraBoosting = false;
     private boolean isForbiddenCursed = false;
@@ -15,6 +16,7 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
     private int fireImmunityTimer = 0;
     private int fireImmunityTimerLast = 0;
     private int inBeaconRange = 0;
+    private int witherKills = 0;
     private float etherealShield = 0;
 
     public boolean isMagnetRingEnable() {
@@ -35,6 +37,14 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
 
     public void setTimeWithoutCurses(long time) {
         this.timeWithoutCurses = time;
+    }
+
+    public boolean getUnlockedNarrator() {
+        return this.unlockedNarrator;
+    }
+
+    public void setUnlockedNarrator(Boolean unlockedNarrator) {
+        this.unlockedNarrator = unlockedNarrator;
     }
 
     public boolean getNebulaPower() {
@@ -71,6 +81,14 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
 
     public void InBeaconRangeTick() {
         this.inBeaconRange--;
+    }
+
+    public int getWitherKills() {
+        return this.witherKills;
+    }
+
+    public void setWitherKills(int amount) {
+        this.witherKills = amount;
     }
 
     public float getEtherealShield() {
@@ -117,12 +135,14 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         tag.putBoolean("MagnetRingEffect", this.magnetRingEffect);
+        tag.putBoolean("UnlockedNarrator", this.unlockedNarrator);
         tag.putBoolean("NebulaPower", this.nebulaPower);
         tag.putBoolean("ElytraBoosting", this.isElytraBoosting);
         tag.putBoolean("isForbiddenCursed", this.isForbiddenCursed);
         tag.putInt("FireImmunityTimer", this.fireImmunityTimer);
         tag.putInt("FireImmunityTimerLast", this.fireImmunityTimerLast);
         tag.putInt("InBeaconRangeTick", this.inBeaconRange);
+        tag.putInt("WitherKills", this.witherKills);
         tag.putFloat("EtherealShield", this.etherealShield);
         tag.putLong("timeWithCurses", this.timeWithCurses);
         tag.putLong("timeWithoutCurses", this.timeWithoutCurses);
@@ -131,12 +151,14 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
 
     public void load(@NotNull CompoundTag tag) {
         this.magnetRingEffect = tag.getBoolean("MagnetRingEffect");
+        this.unlockedNarrator = tag.getBoolean("UnlockedNarrator");
         this.nebulaPower = tag.getBoolean("NebulaPower");
         this.isElytraBoosting = tag.getBoolean("ElytraBoosting");
         this.isForbiddenCursed = tag.getBoolean("isForbiddenCursed");
         this.fireImmunityTimer = tag.getInt("FireImmunityTimer");
         this.fireImmunityTimerLast = tag.getInt("FireImmunityTimerLast");
         this.inBeaconRange = tag.getInt("InBeaconRangeTick");
+        this.witherKills = tag.getInt("WitherKills");
         this.etherealShield = tag.getFloat("EtherealShield");
         this.timeWithCurses = tag.getLong("timeWithCurses");
         this.timeWithoutCurses = tag.getLong("timeWithoutCurses");

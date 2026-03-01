@@ -1,0 +1,26 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "enigmaticlegacyplus:item/enigmatic_eye_dormant"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "enigmatic_eye_activated": 0.33
+            },
+            "model": "enigmaticlegacyplus:item/enigmatic_eye_dormant_1"
+        },
+        {
+            "predicate": {
+                "enigmatic_eye_activated": 0.66
+            },
+            "model": "enigmaticlegacyplus:item/enigmatic_eye_dormant_2"
+        },
+		{
+            "predicate": {
+                "enigmatic_eye_activated": 1.0
+            },
+            "model": "enigmaticlegacyplus:item/enigmatic_eye_active"
+        }
+    ]
+}
