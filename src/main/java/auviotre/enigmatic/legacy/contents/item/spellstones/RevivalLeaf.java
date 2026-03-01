@@ -174,7 +174,6 @@ public class RevivalLeaf extends SpellstoneItem {
     }
 
     public void triggerActiveAbility(ServerLevel level, ServerPlayer player, ItemStack stack) {
-        if (player.getCooldowns().isOnCooldown(this)) return;
         boolean paybackReceived = false;
         int expLevel = player.experienceLevel;
         if (player.totalExperience >= 40) {

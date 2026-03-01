@@ -88,7 +88,7 @@ public class TheCube extends SpellstoneItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkill");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCubeSkill");
             TooltipHandler.line(list);
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneCooldown", ChatFormatting.GOLD, String.format("%.01f", 0.05F * getCooldown()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneCooldown", ChatFormatting.GOLD, String.format("%.2f", 0.05F * getCooldown()));
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstonePassive");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCube1");
@@ -176,8 +176,6 @@ public class TheCube extends SpellstoneItem {
     }
 
     public void triggerActiveAbility(ServerLevel level, ServerPlayer player, ItemStack stack) {
-        if (player.getCooldowns().isOnCooldown(this)) return;
-
         GlobalPos location = null;
         if (LOCATION_CACHE.containsKey(player)) {
             try {

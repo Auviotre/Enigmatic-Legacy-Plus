@@ -8,7 +8,7 @@
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "baseChance": 0.018,
+                            "baseChance": 0.017,
                             "bonusChance": 0.01,
                             "condition": "enigmaticlegacyplus:spellstone"
                         }
@@ -20,7 +20,7 @@
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "baseChance": 0.0045,
+                            "baseChance": 0.00425,
                             "bonusChance": 0.005,
                             "condition": "enigmaticlegacyplus:spellstone"
                         }
@@ -38,7 +38,7 @@
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "chance": 0.0139999995,
+                            "chance": 0.0135,
                             "condition": "minecraft:random_chance"
                         }
                     ],

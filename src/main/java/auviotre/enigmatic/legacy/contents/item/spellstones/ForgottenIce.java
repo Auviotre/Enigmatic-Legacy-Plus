@@ -150,7 +150,6 @@ public class ForgottenIce extends SpellstoneItem {
     }
 
     public void triggerActiveAbility(ServerLevel level, ServerPlayer player, ItemStack stack) {
-        if (player.getCooldowns().isOnCooldown(this)) return;
         ItemParticleOption particle = new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Blocks.BLUE_ICE));
         SimpleParticleType snowflake = ParticleTypes.SNOWFLAKE;
         List<LivingEntity> entities = player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(5.0));

@@ -31,6 +31,7 @@ public record ELChestLoot(HolderLookup.Provider registries) implements LootTable
                         .add(LootItem.lootTableItem(EnigmaticItems.LORE_FRAGMENT).setWeight(5))
                         .add(LootItem.lootTableItem(EnigmaticItems.FORGER_GEM).when(LootItemRandomChanceCondition.randomChance(0.4F)).setWeight(6))
                         .add(LootItem.lootTableItem(EnigmaticItems.ICHOR_BOTTLE).when(LootItemRandomChanceCondition.randomChance(0.25F)).setWeight(5))
+                        .add(LootItem.lootTableItem(EnigmaticItems.VOID_TOME).when(LootItemRandomChanceCondition.randomChance(0.25F)).setWeight(4))
                         .add(LootItem.lootTableItem(EnigmaticItems.UNHOLY_GRAIL).when(LootItemRandomChanceCondition.randomChance(0.25F)).setWeight(2))
                         .add(LootItem.lootTableItem(EnigmaticItems.ANTIQUE_BAG).when(LootItemRandomChanceCondition.randomChance(0.25F)).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(60))
@@ -68,14 +69,14 @@ public record ELChestLoot(HolderLookup.Provider registries) implements LootTable
                         .add(LootItem.lootTableItem(EnigmaticItems.DARKEST_SCROLL).when(LootItemRandomChanceCondition.randomChance(0.5F)))
                 )
         );
-        output.accept(Chests.GOLEM_HEART, spellstonePool(EnigmaticItems.GOLEM_HEART, 0.064F, 0.036F));
-        output.accept(Chests.BLAZING_CORE, spellstonePool(EnigmaticItems.BLAZING_CORE, 0.046F, 0.018F));
-        output.accept(Chests.OCEAN_STONE, spellstonePool(EnigmaticItems.OCEAN_STONE, 0.087F, 0.021F));
-        output.accept(Chests.ANGEL_BLESSING, spellstonePool(EnigmaticItems.ANGEL_BLESSING, 0.105F, 0.025F));
-        output.accept(Chests.EYE_OF_NEBULA, spellstonePool(EnigmaticItems.EYE_OF_NEBULA, 0.043F, 0.027F));
-        output.accept(Chests.VOID_PEARL, spellstonePool(EnigmaticItems.VOID_PEARL, 0.018F, 0.01F));
-        output.accept(Chests.FORGOTTEN_ICE, spellstonePool(EnigmaticItems.FORGOTTEN_ICE, 0.048F, 0.024F));
-        output.accept(Chests.REVIVAL_LEAF, spellstonePool(EnigmaticItems.REVIVAL_LEAF, 0.048F, 0.024F));
+        output.accept(Chests.GOLEM_HEART, spellstonePool(EnigmaticItems.GOLEM_HEART, 0.062F, 0.036F));
+        output.accept(Chests.BLAZING_CORE, spellstonePool(EnigmaticItems.BLAZING_CORE, 0.042F, 0.016F));
+        output.accept(Chests.OCEAN_STONE, spellstonePool(EnigmaticItems.OCEAN_STONE, 0.075F, 0.024F));
+        output.accept(Chests.ANGEL_BLESSING, spellstonePool(EnigmaticItems.ANGEL_BLESSING, 0.097F, 0.025F));
+        output.accept(Chests.EYE_OF_NEBULA, spellstonePool(EnigmaticItems.EYE_OF_NEBULA, 0.042F, 0.027F));
+        output.accept(Chests.VOID_PEARL, spellstonePool(EnigmaticItems.VOID_PEARL, 0.017F, 0.01F));
+        output.accept(Chests.FORGOTTEN_ICE, spellstonePool(EnigmaticItems.FORGOTTEN_ICE, 0.049F, 0.024F));
+        output.accept(Chests.REVIVAL_LEAF, spellstonePool(EnigmaticItems.REVIVAL_LEAF, 0.049F, 0.024F));
         output.accept(Chests.LOST_ENGINE, spellstonePool(EnigmaticItems.LOST_ENGINE, 0.05F, 0.014F));
 
         output.accept(Chests.SPELLSTONE_HUT_TREASURE, LootTable.lootTable()

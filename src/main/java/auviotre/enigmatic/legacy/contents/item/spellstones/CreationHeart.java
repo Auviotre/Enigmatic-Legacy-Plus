@@ -3,6 +3,7 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
+import auviotre.enigmatic.legacy.contents.entity.projectile.UltimateWitherSkull;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -12,18 +13,25 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
@@ -61,7 +69,7 @@ public class CreationHeart extends SpellstoneItem {
         TooltipHandler.line(list);
         if (Screen.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkill");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkillAbsent");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.creationHeartSkill");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneCooldown", ChatFormatting.GOLD, String.format("%.01f", 0.05F * getCooldown()));
             TooltipHandler.line(list);
@@ -99,12 +107,10 @@ public class CreationHeart extends SpellstoneItem {
                 continue;
             }
 
-            if (!value.isBeneficial()) {
-                entity.removeEffect(effect.getEffect());
-            }
+            if (!value.isBeneficial()) entity.removeEffect(effect.getEffect());
         }
-
     }
+
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(NeoForgeMod.CREATIVE_FLIGHT, new AttributeModifier(getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
@@ -114,6 +120,35 @@ public class CreationHeart extends SpellstoneItem {
     public List<Component> getAttributesTooltip(@NotNull List<Component> tooltips, TooltipContext context, ItemStack stack) {
         tooltips.clear();
         return tooltips;
+    }
+
+    public void triggerActiveAbility(ServerLevel level, @NotNull ServerPlayer player, ItemStack stack) {
+        this.launchWitherSkull(level, player, player.getRandom().nextDouble() <= 0.25);
+        super.triggerActiveAbility(level, player, stack);
+    }
+
+    private void launchWitherSkull(ServerLevel level, Player player, boolean invulnerable) {
+        level.levelEvent(null, 1024, BlockPos.containing(player.position()), 0);
+        RandomSource random = player.getRandom();
+        double playerRot = Math.toRadians(player.getYRot() + 90);
+        Vec3 look = new Vec3(Math.cos(playerRot), 0, Math.sin(playerRot));
+        Vec3 rand = new Vec3(random.nextDouble() - 0.5, random.nextDouble() * 0.2 + 0.1, random.nextDouble() - 0.5).normalize();
+        double dot = rand.dot(look.normalize());
+        rand = rand.subtract(look.scale(dot)).normalize().scale(1.2);
+        look = look.normalize().scale(-2);
+        Vec3 pl = look.add(player.getEyePosition()).add(0, 1.6, 0);
+        Vec3 end = pl.add(rand);
+
+        LivingEntity target = EnigmaticHandler.getObservedEntity(player, level, 3, 64);
+        UltimateWitherSkull skull = new UltimateWitherSkull(level, player, target);
+        skull.setDeltaMovement(player.getLookAngle().scale(0.1));
+        skull.xRotO = player.xRotO;
+        skull.yRotO = player.yRotO;
+        if (invulnerable) skull.setDangerous(true);
+        skull.setPos(end.x, end.y, end.z);
+        level.addFreshEntity(skull);
+
+        level.sendParticles(ParticleTypes.LARGE_SMOKE, skull.getX(), skull.getY(), skull.getZ(), 8, 0.05, 0.05, 0.05, 0.1);
     }
 
     @Mod(value = EnigmaticLegacy.MODID)

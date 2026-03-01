@@ -90,7 +90,7 @@ public class EtheriumSword extends SwordItem {
                 entity.getUseItem().hurtAndBreak(1, entity, entity.getUsedItemHand().equals(InteractionHand.MAIN_HAND) ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
                 event.setAmount(event.getAmount() * 0.6F);
             }
-            if (entity.getMainHandItem().is(EnigmaticItems.ETHERIUM_SWORD) && entity.getRandom().nextFloat() < 0.01 + threshold / 2) {
+            if (entity.getWeaponItem().is(EnigmaticItems.ETHERIUM_SWORD) && entity.getRandom().nextFloat() < 0.01 + threshold / 2) {
                 if (event.getSource().getDirectEntity() instanceof LivingEntity attacker) {
                     Vec3 vec = entity.position().subtract(attacker.position()).normalize().scale(0.25F);
                     attacker.knockback(0.4F, vec.x, vec.z);

@@ -118,7 +118,6 @@ public class EyeOfNebula extends SpellstoneItem {
     }
 
     public void triggerActiveAbility(ServerLevel level, @NotNull ServerPlayer player, ItemStack stack) {
-        if (player.getCooldowns().isOnCooldown(this)) return;
         LivingEntity target = EnigmaticHandler.getObservedEntity(player, player.level(), 3.0F, 32);
         if (target == null) return;
         double hOffset = player.getBbWidth() / 6;

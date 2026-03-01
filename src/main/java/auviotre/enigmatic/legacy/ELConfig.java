@@ -11,8 +11,7 @@ public class ELConfig {
     public static final ELConfig CONFIG;
 
     static {
-        final Pair<ELConfig, ModConfigSpec> pair =
-                new ModConfigSpec.Builder().configure(ELConfig::new);
+        final Pair<ELConfig, ModConfigSpec> pair = new ModConfigSpec.Builder().configure(ELConfig::new);
         SPEC = pair.getRight();
         CONFIG = pair.getLeft();
     }

@@ -15,5 +15,6 @@ public class EnigmaticEffects {
     public static final DeferredHolder<MobEffect, IchorCurse> ICHOR_CURSE = EFFECTS.register("ichor_curse", IchorCurse::new);
     public static final DeferredHolder<MobEffect, IchorCorrosion> ICHOR_CORROSION = EFFECTS.register("ichor_corrosion", IchorCorrosion::new);
     public static final DeferredHolder<MobEffect, PureResistance> PURE_RESISTANCE = EFFECTS.register("pure_resistance", PureResistance::new);
+    public static final DeferredHolder<MobEffect, ViolenceCurse> VIOLENCE_CURSE = EFFECTS.register("violence_curse", ViolenceCurse::new);
     public static final DeferredHolder<MobEffect, AbyssCorruption> ABYSS_CORRUPTION = EFFECTS.register("abyss_corruption", AbyssCorruption::new);
 }

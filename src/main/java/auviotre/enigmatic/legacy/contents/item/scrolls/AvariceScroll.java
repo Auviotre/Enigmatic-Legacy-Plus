@@ -78,7 +78,6 @@ public class AvariceScroll extends CursedCurioItem {
         return true;
     }
 
-
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {

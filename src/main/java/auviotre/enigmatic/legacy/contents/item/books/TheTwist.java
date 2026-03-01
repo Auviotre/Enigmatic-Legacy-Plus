@@ -86,7 +86,7 @@ public class TheTwist extends TheAcknowledgment {
         if (!EnigmaticHandler.canUse(player, stack)) return InteractionResultHolder.pass(stack);
         if (hand == InteractionHand.MAIN_HAND) {
             ItemStack offhandStack = player.getOffhandItem();
-            if (!offhandStack.isEmpty() && (offhandStack.getItem().getUseAnimation(offhandStack) == UseAnim.BLOCK))
+            if (!offhandStack.isEmpty() && (offhandStack.getItem().getUseAnimation(offhandStack) != UseAnim.NONE))
                 return InteractionResultHolder.pass(stack);
         }
         return super.use(world, player, hand);
@@ -97,8 +97,9 @@ public class TheTwist extends TheAcknowledgment {
     public static class Events {
         @SubscribeEvent
         private static void onTick(PlayerTickEvent.@NotNull Pre event) {
-            if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.canUse(entity, entity.getMainHandItem())) {
-                if (entity.getMainHandItem().is(EnigmaticItems.THE_TWIST))
+            LivingEntity entity = event.getEntity();
+            if (EnigmaticHandler.canUse(entity, entity.getWeaponItem())) {
+                if (entity.getWeaponItem().is(EnigmaticItems.THE_TWIST))
                     entity.getAttributes().addTransientAttributeModifiers(getKnockbackModifier());
                 else entity.getAttributes().removeAttributeModifiers(getKnockbackModifier());
             }
@@ -109,7 +110,7 @@ public class TheTwist extends TheAcknowledgment {
             if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES)) {
                 DamageSource source = event.getSource();
                 if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-                    ItemStack stack = attacker.getMainHandItem();
+                    ItemStack stack = attacker.getWeaponItem();
                     if (stack.is(EnigmaticItems.THE_TWIST) && EnigmaticHandler.canUse(attacker, stack)) {
                         event.setAmount(event.getAmount() * (1 + 0.01F * specialDamageBoost.get()));
                     }

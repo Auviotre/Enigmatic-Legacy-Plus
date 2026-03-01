@@ -59,7 +59,7 @@ public class IchorCurse extends MobEffect {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onEffectApply(MobEffectEvent.@NotNull Applicable event) {
-        if (!EnigmaticHandler.isTheOne(event.getEntity()) && event.getEffectInstance() != null && event.getEffectInstance().is(EnigmaticEffects.ICHOR_CURSE)) {
+        if (!EnigmaticHandler.isTheOne(event.getEntity()) && event.getEffectInstance().is(EnigmaticEffects.ICHOR_CURSE)) {
             event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
         }
     }
@@ -70,7 +70,7 @@ public class IchorCurse extends MobEffect {
         if (event.getEntity().hasEffect(EnigmaticEffects.ICHOR_CURSE)) {
             MobEffectInstance instance = event.getEffectInstance();
             MobEffectInstance old = event.getOldEffectInstance();
-            if (instance != null && old != null && instance.is(EnigmaticEffects.ICHOR_CORROSION)) {
+            if (old != null && instance.is(EnigmaticEffects.ICHOR_CORROSION)) {
                 if (instance.getDuration() < old.getDuration()) instance.duration = old.getDuration();
                 int amplifier = instance.getAmplifier();
                 instance.amplifier = Math.max(Math.min(4, 1 + amplifier + old.getAmplifier()), amplifier);

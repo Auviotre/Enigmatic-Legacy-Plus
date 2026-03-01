@@ -104,7 +104,6 @@ public class AngelBlessing extends SpellstoneItem {
     }
 
     public void triggerActiveAbility(ServerLevel level, ServerPlayer player, ItemStack stack) {
-        if (player.getCooldowns().isOnCooldown(this)) return;
         if (player.getAbilities().flying) return;
 
         Vec3 finalMotion = getVec3(player);

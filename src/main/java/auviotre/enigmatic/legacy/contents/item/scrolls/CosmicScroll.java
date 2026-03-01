@@ -70,13 +70,13 @@ public class CosmicScroll extends BaseCurioItem {
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
         if (!list.isEmpty())
-            list.add(Component.translatable("attribute.modifier.take.1", "80", Component.translatable("tooltip.enigmaticlegacy.spelltunerPassive")).withStyle(ChatFormatting.BLUE));
+            list.add(Component.translatable("attribute.modifier.take.1", "60", Component.translatable("tooltip.enigmaticlegacy.spelltunerPassive")).withStyle(ChatFormatting.BLUE));
         return list;
     }
 
     public boolean canEquip(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
-        return entity instanceof Player player && player.hasInfiniteMaterials();
+        return super.canEquip(context, stack) && entity instanceof Player; // && player.hasInfiniteMaterials();
     }
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {

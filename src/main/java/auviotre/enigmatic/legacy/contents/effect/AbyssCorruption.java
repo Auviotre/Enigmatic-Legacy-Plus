@@ -4,7 +4,6 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticDamageTypes;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -48,15 +47,14 @@ public class AbyssCorruption extends MobEffect {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onEffectApply(MobEffectEvent.@NotNull Applicable event) {
-        if (event.getEffectInstance() != null && event.getEffectInstance().is(EnigmaticEffects.ABYSS_CORRUPTION)) {
+        if (event.getEffectInstance().is(EnigmaticEffects.ABYSS_CORRUPTION)) {
             event.setResult(MobEffectEvent.Applicable.Result.APPLY);
         }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onEffectRemoveLow(MobEffectEvent.@NotNull Remove event) {
-        Holder<MobEffect> effect = event.getEffect();
-        if (effect.equals(EnigmaticEffects.ABYSS_CORRUPTION)) event.setCanceled(true);
+        if (event.getEffect().equals(EnigmaticEffects.ABYSS_CORRUPTION)) event.setCanceled(true);
     }
 
     @SubscribeEvent

@@ -1,0 +1,33 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:abyssal_heart"
+        },
+        "C": {
+            "item": "enigmaticlegacyplus:cosmic_heart"
+        },
+        "E": {
+            "item": "enigmaticlegacyplus:evil_essence"
+        },
+        "T": {
+            "item": "enigmaticlegacyplus:twisted_heart"
+        },
+        "V": {
+            "item": "enigmaticlegacyplus:curse_transposer"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:cursed_scroll"
+        }
+    },
+    "pattern": [
+        "CAC",
+        "EXE",
+        "TVT"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:violence_scroll"
+    }
+}

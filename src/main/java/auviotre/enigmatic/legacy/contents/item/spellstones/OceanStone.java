@@ -106,8 +106,6 @@ public class OceanStone extends SpellstoneItem {
     }
 
     public void triggerActiveAbility(ServerLevel level, @NotNull ServerPlayer player, ItemStack stack) {
-        if (player.getCooldowns().isOnCooldown(this)) return;
-
         if (player.level().dimensionType().natural())
             if (!level.getLevelData().isThundering()) {
                 boolean paybackReceived = false;
