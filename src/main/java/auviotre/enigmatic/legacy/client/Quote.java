@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static auviotre.enigmatic.legacy.contents.item.charms.EnigmaticEye.quoteSubtitles;
+import static auviotre.enigmatic.legacy.contents.item.legacy.EnigmaticEye.quoteSubtitles;
 
 public class Quote {
     private static final Random RANDOM = new Random();

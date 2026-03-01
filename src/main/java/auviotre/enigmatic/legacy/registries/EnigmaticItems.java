@@ -17,10 +17,7 @@ import auviotre.enigmatic.legacy.contents.item.food.ForbiddenFruit;
 import auviotre.enigmatic.legacy.contents.item.food.Ichoroot;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
-import auviotre.enigmatic.legacy.contents.item.legacy.AntiqueBag;
-import auviotre.enigmatic.legacy.contents.item.legacy.LoreInscriber;
-import auviotre.enigmatic.legacy.contents.item.legacy.UnholyGrail;
-import auviotre.enigmatic.legacy.contents.item.legacy.VoidStone;
+import auviotre.enigmatic.legacy.contents.item.legacy.*;
 import auviotre.enigmatic.legacy.contents.item.materials.*;
 import auviotre.enigmatic.legacy.contents.item.misc.*;
 import auviotre.enigmatic.legacy.contents.item.op.LootGenerator;
@@ -50,7 +47,6 @@ public class EnigmaticItems {
     public static final DeferredItem<UnwitnessedAmulet> UNWITNESSED_AMULET = registerWithTab("unwitnessed_amulet", UnwitnessedAmulet::new);
     public static final DeferredItem<EnigmaticAmulet> ENIGMATIC_AMULET = ITEMS.register("enigmatic_amulet", () -> new EnigmaticAmulet());
     public static final DeferredItem<Item> SPELLSTONE_DEBRIS = registerWithTab("spellstone_debris", () -> new Item(BaseItem.defaultProperties(32).rarity(Rarity.UNCOMMON)));
-    public static final DeferredItem<EnigmaticEye> ENIGMATIC_EYE = registerWithTab("enigmatic_eye", EnigmaticEye::new);
     public static final DeferredItem<Spellcore> SPELLCORE = registerWithTab("spellcore", Spellcore::new);
     public static final DeferredItem<Spelltuner> SPELLTUNER = registerWithTab("spelltuner", Spelltuner::new);
     public static final DeferredItem<GolemHeart> GOLEM_HEART = registerWithTab("golem_heart", GolemHeart::new);
@@ -90,6 +86,7 @@ public class EnigmaticItems {
     public static final DeferredItem<MiningCharm> MINING_CHARM = registerWithTab("mining_charm", MiningCharm::new);
     public static final DeferredItem<MonsterCharm> MONSTER_CHARM = registerWithTab("monster_charm", MonsterCharm::new);
     public static final DeferredItem<ExtradimensionalEye> EXTRADIMENSIONAL_EYE = registerWithTab("extradimensional_eye", ExtradimensionalEye::new);
+    public static final DeferredItem<EnigmaticEye> ENIGMATIC_EYE = registerWithTab("enigmatic_eye", EnigmaticEye::new);
     public static final DeferredItem<Infinimeal> INFINIMEAL = registerWithTab("infinimeal", Infinimeal::new);
     public static final DeferredItem<ExecutionAxe> EXECUTION_AXE = registerWithTab("execution_axe", ExecutionAxe::new);
     public static final DeferredItem<ForgerGem> FORGER_GEM = registerWithTab("forger_gem", ForgerGem::new);

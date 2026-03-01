@@ -1,10 +1,8 @@
-package auviotre.enigmatic.legacy.contents.item.charms;
+package auviotre.enigmatic.legacy.contents.item.legacy;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.event.EndPortalActivatedEvent;
-import auviotre.enigmatic.legacy.api.event.EnterBlockEvent;
-import auviotre.enigmatic.legacy.api.event.SummonedEntityEvent;
 import auviotre.enigmatic.legacy.client.Quote;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
@@ -15,6 +13,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Holder;
@@ -31,7 +30,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
@@ -40,15 +38,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
@@ -66,34 +65,20 @@ public class EnigmaticEye extends BaseCurioItem {
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         if (type == ModConfig.Type.CLIENT) {
             EnigmaticEye.quoteSubtitles = builder.define("quoteSubtitles", true);
-            EnigmaticEye.deathQuoteChance = builder.defineInRange("deathQuoteChance", 80, 0, 100);
+            EnigmaticEye.deathQuoteChance = builder.defineInRange("deathQuoteChance", 60, 0, 100);
         }
     }
 
     public EnigmaticEye() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC).fireResistant());
+        super(defaultSingleProperties().rarity(Rarity.UNCOMMON).fireResistant());
     }
 
     @OnlyIn(Dist.CLIENT)
     public void registerVariants() {
         ItemProperties.register(this, ResourceLocation.withDefaultNamespace("enigmatic_eye_activated"), (stack, world, entity, number) -> {
-            if (!this.isDormant(stack))
-                return 1F;
-
+            if (!this.isDormant(stack)) return 1F;
             int animTicks = stack.getOrDefault(EnigmaticComponents.ACTIVATION_ANIMATION.get(), -1);
-
-            if (animTicks > -1) {
-                float result;
-
-                if (animTicks > 2) {
-                    result = 0.4F;
-                } else {
-                    result = 0.8F;
-                }
-
-                return result;
-            }
-
+            if (animTicks > -1) return animTicks > 2 ? 0.4F : 0.8F;
             return 0F;
         });
     }
@@ -132,18 +117,13 @@ public class EnigmaticEye extends BaseCurioItem {
         }
     }
 
-    @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
         return super.canEquip(context, stack) && !this.isDormant(stack);
     }
 
-    @Override
-    @NotNull
     public Component getName(@NotNull ItemStack stack) {
-        if (this.isDormant(stack))
-            return Component.translatable("item.enigmaticlegacy.enigmatic_eye_dormant");
-        else
-            return Component.translatable("item.enigmaticlegacy.enigmatic_eye_active");
+        if (this.isDormant(stack)) return Component.translatable("item.enigmaticlegacyplus.enigmatic_eye_dormant");
+        else return Component.translatable("item.enigmaticlegacyplus.enigmatic_eye_active");
     }
 
     public void inventoryTick(ItemStack pStack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
@@ -158,26 +138,22 @@ public class EnigmaticEye extends BaseCurioItem {
 
         if (entity instanceof Player player && !this.isDormant(pStack)) {
             EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
-
             if (data.getUnlockedNarrator()) return;
-
             data.setUnlockedNarrator(true);
             Quote.getRandom(Quote.NARRATOR_INTROS).play((ServerPlayer) player, Quote.PlayOptions.defaultPlay().delay(60));
         }
 
         super.inventoryTick(pStack, level, entity, slotId, isSelected);
     }
-    @NotNull
+
     public InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
         if (this.isDormant(stack) && !stack.has(EnigmaticComponents.ACTIVATION_ANIMATION)) {
-
             this.activateWithAnimation(stack);
             EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
 
             if (!level.isClientSide) {
-
                 level.playSound(null, player.blockPosition(),
                         EnigmaticSounds.CHARGED_ON.get(),
                         SoundSource.PLAYERS, 1.0F,
@@ -186,40 +162,29 @@ public class EnigmaticEye extends BaseCurioItem {
 
                 if (!data.getUnlockedNarrator()) {
                     data.setUnlockedNarrator(true);
-
                     if (player instanceof ServerPlayer serverPlayer) {
                         Quote.getRandom(Quote.NARRATOR_INTROS).play(serverPlayer, Quote.PlayOptions.defaultPlay().delay(80));
                     }
                 }
             }
-
             return InteractionResultHolder.success(stack);
         }
-
         return super.use(level, player, hand);
     }
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-
         if (this.isDormant(stack)) return attributes;
         if (!(context.entity() instanceof Player)) return attributes;
-
         CuriosApi.addSlotModifier(attributes, "charm", getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
-        attributes.put(Attributes.BLOCK_INTERACTION_RANGE, new AttributeModifier(getLocation(this), 3.0, AttributeModifier.Operation.ADD_VALUE));
         return attributes;
-    }
-
-    public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
-        return super.getAttributesTooltip(tooltips, context, stack);
     }
 
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
-
         @SubscribeEvent
-        public static void onPlayerTravel(PlayerEvent.@NotNull PlayerChangedDimensionEvent event) {
+        private static void onPlayerTravel(PlayerEvent.@NotNull PlayerChangedDimensionEvent event) {
             Player player = event.getEntity();
             ResourceKey<Level> playerDimension = player.level().dimension();
 
@@ -233,7 +198,7 @@ public class EnigmaticEye extends BaseCurioItem {
         }
 
         @SubscribeEvent
-        public static void onEndPortal(EndPortalActivatedEvent event) {
+        private static void onEndPortal(@NotNull EndPortalActivatedEvent event) {
             Player player = event.getEntity();
 
             if (player instanceof ServerPlayer serverPlayer) {
@@ -242,30 +207,23 @@ public class EnigmaticEye extends BaseCurioItem {
         }
 
         @SubscribeEvent
-        public static void onEntitySummon(SummonedEntityEvent event) {
-            Player player = event.getEntity();
-            Entity entity = event.getSummonedEntity();
-
-            if (!(player instanceof ServerPlayer serverPlayer)) return;
-
-            if (entity instanceof WitherBoss) {
-                Quote.COUNTLESS_DEAD.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(20));
-            } else if (entity instanceof EnderDragon) {
-                Quote.HORRIBLE_EXISTENCE.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(100));
+        private static void onGrantAdvancement(AdvancementEvent.@NotNull AdvancementProgressEvent event) {
+            if (!(event.getEntity() instanceof ServerPlayer player)) return;
+            AdvancementEvent.AdvancementProgressEvent.ProgressType progress = event.getProgressType();
+            AdvancementHolder advancement = event.getAdvancement();
+            if (progress == AdvancementEvent.AdvancementProgressEvent.ProgressType.GRANT) {
+                if (advancement.id().equals(ResourceLocation.withDefaultNamespace("end/enter_end_gateway"))) {
+                    Quote.I_WANDERED.play(player, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(160));
+                } else if (advancement.id().equals(ResourceLocation.withDefaultNamespace("end/respawn_dragon"))) {
+                    Quote.HORRIBLE_EXISTENCE.play(player, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(100));
+                } else if (advancement.id().equals(ResourceLocation.withDefaultNamespace("nether/summon_wither"))) {
+                    Quote.COUNTLESS_DEAD.play(player, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(20));
+                }
             }
         }
 
-        @SubscribeEvent
-        public static void onEnteredBlock(EnterBlockEvent event) {
-            Player player = event.getEntity();
-
-            if (player instanceof ServerPlayer serverPlayer && event.getBlockState().getBlock() == Blocks.END_GATEWAY) {
-                Quote.I_WANDERED.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(160));
-            }
-        }
-
-        @SubscribeEvent
-        public static void onConfirmedDeath(@NotNull LivingDeathEvent event) {
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        private static void onConfirmedDeath(@NotNull LivingDeathEvent event) {
             DamageSource damageSource = event.getSource();
             Entity victim = event.getEntity();
             Entity attacker = damageSource.getEntity();
@@ -293,7 +251,7 @@ public class EnigmaticEye extends BaseCurioItem {
         }
 
         @SubscribeEvent
-        public static void onAttack(@NotNull AttackEntityEvent event) {
+        private static void onAttack(@NotNull AttackEntityEvent event) {
             Player player = event.getEntity();
             Entity target = event.getTarget();
 

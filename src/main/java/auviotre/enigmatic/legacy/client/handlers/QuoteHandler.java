@@ -120,18 +120,12 @@ public class QuoteHandler {
         // Textbox size
         int maxWidth = lines.stream().mapToInt(font::width).max().orElse(0);
         int x = window.getGuiScaledWidth() / 2 - maxWidth / 2;
-        int y = window.getGuiScaledHeight() - 70 - lines.size() * (font.lineHeight + 2);
+        int y = window.getGuiScaledHeight() - 72 - lines.size() * (font.lineHeight + 2);
 
         // Background
-        for (int layer = 0; layer < 3; layer++) {
-            int offset = 4 + layer * 4;
-            float edgeFactor = 1f - (layer / 3.0f);
-
-            // Layers alpha
-            if (layer == 0) edgeFactor = 0.45f;
-            if (layer == 1) edgeFactor = 0.35f;
-            if (layer == 2) edgeFactor = 0.25f;
-
+        for (int layer = 0; layer < 8; layer++) {
+            int offset = 4 + layer;
+            float edgeFactor = 0.16f - layer * 0.01f;
 
             int layerAlpha = (int) (alpha * edgeFactor);
             layerAlpha = Mth.clamp(layerAlpha, 0, 255);
