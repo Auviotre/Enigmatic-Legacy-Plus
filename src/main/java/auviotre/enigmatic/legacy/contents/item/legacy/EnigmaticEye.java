@@ -126,40 +126,34 @@ public class EnigmaticEye extends BaseCurioItem {
         else return Component.translatable("item.enigmaticlegacyplus.enigmatic_eye_active");
     }
 
-    public void inventoryTick(ItemStack pStack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
-        int animTicks = pStack.getOrDefault(EnigmaticComponents.ACTIVATION_ANIMATION.get(), -1);
+    public void inventoryTick(ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
+        int animTicks = stack.getOrDefault(EnigmaticComponents.ACTIVATION_ANIMATION.get(), -1);
 
         if (animTicks > 0) {
-            pStack.set(EnigmaticComponents.ACTIVATION_ANIMATION.get(), animTicks - 1);
+            stack.set(EnigmaticComponents.ACTIVATION_ANIMATION.get(), animTicks - 1);
         } else if (animTicks == 0) {
-            pStack.set(EnigmaticComponents.ACTIVATION_ANIMATION.get(), -1);
-            this.setDormant(pStack, false);
+            stack.set(EnigmaticComponents.ACTIVATION_ANIMATION.get(), -1);
+            this.setDormant(stack, false);
         }
 
-        if (entity instanceof Player player && !this.isDormant(pStack)) {
+        if (entity instanceof ServerPlayer player && !this.isDormant(stack)) {
             EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
-            if (data.getUnlockedNarrator()) return;
-            data.setUnlockedNarrator(true);
-            Quote.getRandom(Quote.NARRATOR_INTROS).play((ServerPlayer) player, Quote.PlayOptions.defaultPlay().delay(60));
+            if (!data.getUnlockedNarrator()) {
+                data.setUnlockedNarrator(true);
+                Quote.getRandom(Quote.NARRATOR_INTROS).play(player, Quote.PlayOptions.defaultPlay().delay(60));
+            }
         }
 
-        super.inventoryTick(pStack, level, entity, slotId, isSelected);
+        super.inventoryTick(stack, level, entity, slotId, isSelected);
     }
 
     public InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-
         if (this.isDormant(stack) && !stack.has(EnigmaticComponents.ACTIVATION_ANIMATION)) {
             this.activateWithAnimation(stack);
             EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
-
             if (!level.isClientSide) {
-                level.playSound(null, player.blockPosition(),
-                        EnigmaticSounds.CHARGED_ON.get(),
-                        SoundSource.PLAYERS, 1.0F,
-                        0.95F + player.getRandom().nextFloat() * 0.1F
-                );
-
+                level.playSound(null, player.blockPosition(), EnigmaticSounds.CHARGED_ON.get(), SoundSource.PLAYERS, 1.0F, 0.95F + player.getRandom().nextFloat() * 0.1F);
                 if (!data.getUnlockedNarrator()) {
                     data.setUnlockedNarrator(true);
                     if (player instanceof ServerPlayer serverPlayer) {

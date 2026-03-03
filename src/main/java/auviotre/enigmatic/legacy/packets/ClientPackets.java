@@ -28,7 +28,7 @@ public class ClientPackets {
     public static void handle(final EnigmaticDataSyncPacket packet) {
         Player player = Minecraft.getInstance().player;
         if (player != null) {
-            player.getData(EnigmaticAttachments.ENIGMATIC_DATA).load(packet.dataTag);
+            player.getData(EnigmaticAttachments.ENIGMATIC_DATA).load(packet.dataTag());
         }
     }
 
