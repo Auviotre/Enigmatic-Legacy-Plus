@@ -75,8 +75,9 @@ public class CosmicScroll extends BaseCurioItem {
     }
 
     public boolean canEquip(SlotContext context, ItemStack stack) {
-        LivingEntity entity = context.entity();
-        return super.canEquip(context, stack) && entity instanceof Player; // && player.hasInfiniteMaterials();
+        String name = stack.getHoverName().getString();
+        if (!name.startsWith("§6") || !name.endsWith("§r")) return false;
+        return super.canEquip(context, stack) && context.entity() instanceof Player; // && player.hasInfiniteMaterials();
     }
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
@@ -121,6 +122,7 @@ public class CosmicScroll extends BaseCurioItem {
                 curio.set(EnigmaticComponents.REVIVE_COOLDOWN, 600 * 20);
             }
         }
+
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
             DamageSource source = event.getSource();

@@ -1,8 +1,0 @@
-// 1.21.1	2025-11-25T14:07:17.4572382	Tags for minecraft:block mod id enigmaticlegacyplus
-11e4f2df234f3815c9d5589b0c3ef9f8480c063d data/c/tags/block/ores.json
-88941ca62609dafa6a3a461e94caf992975dc65a data/c/tags/block/storage_blocks.json
-5a74c9a1a0434bd6bddff64a1c0ea2758f8d335f data/enigmaticlegacyplus/tags/block/all_mineable.json
-df0393530e8b46c86e8dbf81dbd2e7cd823b119d data/minecraft/tags/block/dragon_immune.json
-30f517c1bd98255beba75646653f7d4dbcb7b79b data/minecraft/tags/block/mineable/hoe.json
-8ece70bddd9d698dc023d5804632bd5ef0f74135 data/minecraft/tags/block/mineable/pickaxe.json
-0dbabb7cbe66f0bea9981bdbc4973816811de491 data/minecraft/tags/block/needs_diamond_tool.json

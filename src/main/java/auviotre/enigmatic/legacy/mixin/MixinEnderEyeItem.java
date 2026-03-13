@@ -9,6 +9,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EnderEyeItem.class)
 public class MixinEnderEyeItem {
-    private UseOnContext lastContext;
+    private @Unique UseOnContext lastContext;
 
     @Inject(method = "useOn", at = @At("HEAD"))
     private void onUseOn(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {

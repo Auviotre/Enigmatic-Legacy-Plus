@@ -28,8 +28,8 @@ public class ELDamageTypeTags extends DamageTypeTagsProvider {
         this.tag(DamageTypeTags.BYPASSES_INVULNERABILITY).add(ABYSS);
         this.tag(DamageTypeTags.BYPASSES_COOLDOWN).add(EVIL_CURSE);
         this.tag(DamageTypeTags.WITHER_IMMUNE_TO).add(DARKNESS);
-        this.tag(DamageTypeTags.NO_IMPACT).add(ABYSS);
-        this.tag(DamageTypeTags.NO_KNOCKBACK).add(ABYSS);
+        this.tag(DamageTypeTags.NO_IMPACT).add(ABYSS, EVIL_CURSE);
+        this.tag(DamageTypeTags.NO_KNOCKBACK).add(ABYSS, EVIL_CURSE);
 
         this.tag(EnigmaticTags.DamageTypes.GOLEM_HEART_IMMUNE_TO).add(
                 DamageTypes.CACTUS,
@@ -59,6 +59,12 @@ public class ELDamageTypeTags extends DamageTypeTagsProvider {
                 DamageTypes.SONIC_BOOM,
                 DamageTypes.MOB_PROJECTILE
         );
+        this.tag(EnigmaticTags.DamageTypes.ILLUSION_LANTERN_RESISTANT_TO)
+                .addTag(DamageTypeTags.BYPASSES_INVULNERABILITY)
+                .addTag(DamageTypeTags.BYPASSES_RESISTANCE)
+                .addTag(DamageTypeTags.BYPASSES_ARMOR)
+                .addTag(DamageTypeTags.BYPASSES_ENCHANTMENTS)
+                .addTag(DamageTypeTags.BYPASSES_EFFECTS);
         this.tag(EnigmaticTags.DamageTypes.THE_CUBE_IMMUNE_TO)
                 .addTag(DamageTypeTags.IS_FALL)
                 .addTag(DamageTypeTags.IS_DROWNING)

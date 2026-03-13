@@ -1,7 +1,7 @@
 package auviotre.enigmatic.legacy.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.contents.entity.PermanentItemEntity;
+import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import auviotre.enigmatic.legacy.contents.item.tools.SoulCompass;
 import auviotre.enigmatic.legacy.packets.client.SoulCompassUpdatePacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;

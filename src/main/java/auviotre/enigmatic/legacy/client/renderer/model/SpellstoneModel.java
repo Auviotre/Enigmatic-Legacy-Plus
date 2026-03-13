@@ -9,15 +9,16 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class SpellstoneModel extends Model {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(EnigmaticLegacy.location("spellstone"), "main");
-    private final ModelPart root;
     private final ModelPart main;
 
     public SpellstoneModel(ModelPart root) {
         super(RenderType::entitySolid);
-        this.root = root;
         this.main = root.getChild("main");
     }
 
@@ -37,9 +38,6 @@ public class SpellstoneModel extends Model {
     }
 
     public void render(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-        this.root.render(poseStack, buffer, packedLight, packedOverlay, color);
-    }
-
-    public void setupAnim(float timer, float yRot) {
+        this.main.render(poseStack, buffer, packedLight, packedOverlay, color);
     }
 }

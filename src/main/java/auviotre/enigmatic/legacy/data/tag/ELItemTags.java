@@ -77,10 +77,10 @@ public class ELItemTags extends ItemTagsProvider {
                 OCEAN_STONE.get(), ANGEL_BLESSING.get(),
                 EYE_OF_NEBULA.get(), VOID_PEARL.get(),
                 FORGOTTEN_ICE.get(), REVIVAL_LEAF.get(),
-                LOST_ENGINE.get()
+                LOST_ENGINE.get(), ILLUSION_LANTERN.get()
         );
         this.tag(EnigmaticTags.Items.SCROLLS).add(
-                SURVIVAL_SCROLL.get(),
+                SURVIVAL_SCROLL.get(), EXPLORER_SCROLL.get(),
                 XP_SCROLL.get(), HEAVEN_SCROLL.get(),
                 FABULOUS_SCROLL.get(), NIGHT_SCROLL.get(),
                 CURSED_SCROLL.get(), AVARICE_SCROLL.get(),
@@ -117,7 +117,8 @@ public class ELItemTags extends ItemTagsProvider {
                 MINING_CHARM.get(), MONSTER_CHARM.get(),
                 FORGER_GEM.get(), HELL_BLADE_CHARM.get(),
                 ETHEREAL_FORGING_CHARM.get(), BERSERK_EMBLEM.get(),
-                ENCHANTER_PEARL.get(), SCORCHED_CHARM.get(), SPELLTUNER.get()
+                ENCHANTER_PEARL.get(), SCORCHED_CHARM.get(),
+                SPELLTUNER.get(), ENIGMATIC_EYE.get()
         );
         this.tag(CuriosTags.BACK).add(MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
     }

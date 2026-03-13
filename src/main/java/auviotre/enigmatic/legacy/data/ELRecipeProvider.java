@@ -137,7 +137,15 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .save(output);
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EnigmaticItems.SURVIVAL_SCROLL)
                 .pattern("WLW").pattern("BXI").pattern("EME")
-                .define('W', Items.WHEAT).define('L', Items.LEATHER).define('E', Items.IRON_INGOT).define('M', Blocks.CAMPFIRE)
+                .define('W', Items.WHEAT).define('L', Items.LEATHER)
+                .define('E', Items.GOLD_INGOT).define('M', Blocks.CAMPFIRE)
+                .define('B', Items.INK_SAC).define('I', Items.FEATHER).define('X', EnigmaticItems.BLANK_SCROLL)
+                .unlockedBy("has_item", has(EnigmaticItems.BLANK_SCROLL))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EnigmaticItems.EXPLORER_SCROLL)
+                .pattern("WLW").pattern("BXI").pattern("EME")
+                .define('W', Items.LAPIS_LAZULI).define('L', Items.SUGAR)
+                .define('E', Items.SUGAR_CANE).define('M', Items.RABBIT_FOOT)
                 .define('B', Items.INK_SAC).define('I', Items.FEATHER).define('X', EnigmaticItems.BLANK_SCROLL)
                 .unlockedBy("has_item", has(EnigmaticItems.BLANK_SCROLL))
                 .save(output);
@@ -619,6 +627,16 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .requires(Blocks.GLOWSTONE)
                 .requires(Items.PHANTOM_MEMBRANE)
                 .requires(Items.DRAGON_BREATH)
+                .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
+                .save(output);
+        SpellstoneTableRecipe.Builder.spell(EnigmaticItems.ILLUSION_LANTERN, 10)
+                .requires(Blocks.SOUL_SOIL)
+                .requires(Blocks.CYAN_STAINED_GLASS)
+                .requires(Items.NETHERITE_SCRAP)
+                .requires(Items.BLAZE_POWDER)
+                .requires(Items.NETHERITE_SCRAP)
+                .requires(Blocks.CYAN_STAINED_GLASS)
+                .requires(Blocks.SOUL_SOIL)
                 .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
                 .save(output);
         SpellstoneTableRecipe.Builder.spell(EnigmaticItems.EYE_OF_NEBULA, 7)

@@ -2,7 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.misc;
 
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IPermanentCrystal;
-import auviotre.enigmatic.legacy.contents.entity.PermanentItemEntity;
+import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;

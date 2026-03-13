@@ -5,7 +5,6 @@ import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.packets.server.EmptyLeftClickPacket;
-import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -39,6 +38,7 @@ import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
@@ -46,6 +46,8 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 
 public class ThunderScroll extends CursedCurioItem {
+    public static final String TAG_ID = "ElectricPoint";
+
     public ThunderScroll() {
         super(defaultSingleProperties().rarity(Rarity.RARE), true);
     }
@@ -79,44 +81,16 @@ public class ThunderScroll extends CursedCurioItem {
         return tooltips;
     }
 
-    public void curioTick(SlotContext context, ItemStack stack) {
-        LivingEntity entity = context.entity();
-        int point = stack.getOrDefault(EnigmaticComponents.ELECTRIC_POINT, 0);
-        if (point >= 1200) {
-            point = 0;
-            List<LivingEntity> entities = entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(2.6));
-            for (LivingEntity target : entities) {
-                if (EnigmaticHandler.hasCurio(target, this)) continue;
-                LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(target.level());
-                if (lightningbolt != null) {
-                    lightningbolt.moveTo(Vec3.atBottomCenterOf(target.blockPosition()));
-                    lightningbolt.setSilent(target.getRandom().nextBoolean());
-                    lightningbolt.addTag("HarmlessThunder");
-                    lightningbolt.setDamage(lightningbolt.getDamage() * point / 600.0F);
-                    entity.level().addFreshEntity(lightningbolt);
-                }
-            }
-        }
-        stack.set(EnigmaticComponents.ELECTRIC_POINT, Math.max(0, point - 1));
-    }
-
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
         @SubscribeEvent
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
             DamageSource source = event.getSource();
-            if (EnigmaticHandler.hasCurio(event.getEntity(), EnigmaticItems.THUNDER_SCROLL)) {
-                if (source.is(DamageTypeTags.IS_LIGHTNING)) {
-                    event.setCanceled(true);
-                    ItemStack curio = EnigmaticHandler.getCurio(event.getEntity(), EnigmaticItems.THUNDER_SCROLL);
-                    int point = curio.getOrDefault(EnigmaticComponents.ELECTRIC_POINT, 0);
-                    curio.set(EnigmaticComponents.ELECTRIC_POINT, point + 100);
-                    return;
-                }
-            }
             if (source.getEntity() instanceof LivingEntity entity && EnigmaticHandler.hasCurio(entity, EnigmaticItems.THUNDER_SCROLL)) {
-                event.setAmount(modify(event.getEntity(), event.getAmount()));
+                if (EnigmaticHandler.isTheBlessedOne(entity)) {
+                    event.setAmount(modify(event.getEntity(), event.getAmount()));
+                }
             }
         }
 
@@ -132,13 +106,33 @@ public class ThunderScroll extends CursedCurioItem {
         }
 
         @SubscribeEvent
+        private static void onTick(EntityTickEvent.@NotNull Pre event) {
+            if (event.getEntity() instanceof LivingEntity entity) {
+                int electric = entity.getPersistentData().getInt(TAG_ID);
+                if (electric > 0) {
+                    if (electric > 1200) {
+                        LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(entity.level());
+                        if (lightningbolt != null) {
+                            lightningbolt.moveTo(Vec3.atBottomCenterOf(entity.blockPosition()));
+                            lightningbolt.setSilent(entity.getRandom().nextBoolean());
+                            lightningbolt.addTag("HarmlessThunder");
+                            lightningbolt.setDamage(lightningbolt.getDamage() * electric / 600.0F);
+                            entity.level().addFreshEntity(lightningbolt);
+                        }
+                        entity.getPersistentData().putInt(TAG_ID, (electric - 1200) / 2 + 100);
+                    } else entity.getPersistentData().putInt(TAG_ID, electric - 1);
+                } else entity.getPersistentData().remove(TAG_ID);
+            }
+        }
+
+        @SubscribeEvent
         private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
             DamageSource source = event.getSource();
+            LivingEntity victim = event.getEntity();
             if (source.getEntity() instanceof LivingEntity entity && EnigmaticHandler.hasCurio(entity, EnigmaticItems.THUNDER_SCROLL)) {
-                ItemStack curio = EnigmaticHandler.getCurio(entity, EnigmaticItems.THUNDER_SCROLL);
-                if (entity.getWeaponItem().canPerformAction(ItemAbilities.SWORD_SWEEP)) {
-                    int point = curio.getOrDefault(EnigmaticComponents.ELECTRIC_POINT, 0);
-                    curio.set(EnigmaticComponents.ELECTRIC_POINT, point + 60 + entity.getRandom().nextInt(80) + (int) (event.getNewDamage() * 10));
+                if (entity.getWeaponItem().canPerformAction(ItemAbilities.SWORD_SWEEP) && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
+                    int electric = victim.getPersistentData().getInt(TAG_ID);
+                    victim.getPersistentData().putInt(TAG_ID, electric + 60 + entity.getRandom().nextInt(80) + (int) (event.getNewDamage() * 10));
                 }
             }
         }
@@ -151,7 +145,6 @@ public class ThunderScroll extends CursedCurioItem {
                 PacketDistributor.sendToServer(new EmptyLeftClickPacket(true));
             }
         }
-
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         private static void onLightningStrike(@NotNull EntityStruckByLightningEvent event) {

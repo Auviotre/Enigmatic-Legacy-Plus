@@ -4,7 +4,6 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
-import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
@@ -138,7 +137,7 @@ public class LostEngine extends SpellstoneItem {
         @SubscribeEvent
         private static void onPlayerTick(PlayerTickEvent.@NotNull Pre event) {
             Player player = event.getEntity();
-            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.LOST_ENGINE)) {
+            if (ISpellstone.get(player).is(EnigmaticItems.LOST_ENGINE)) {
                 if (!player.level().isClientSide() && player.tickCount % 3 == 0) player.getCooldowns().tick();
                 if (player.level().isClientSide() && Minecraft.getInstance().player == player) {
                     boolean spaceDown = Minecraft.getInstance().options.keyJump.isDown();
@@ -156,7 +155,7 @@ public class LostEngine extends SpellstoneItem {
         @SubscribeEvent
         private static void onLivingJump(LivingEvent.@NotNull LivingJumpEvent event) {
             LivingEntity entity = event.getEntity();
-            if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.LOST_ENGINE)) {
+            if (ISpellstone.get(entity).is(EnigmaticItems.LOST_ENGINE)) {
                 if (entity.isCrouching()) {
                     float rot = entity.getYRot() * Mth.PI / 180.0F;
                     float sin = -Mth.sin(rot) * 0.055F;
@@ -172,7 +171,7 @@ public class LostEngine extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onCriticalHit(@NotNull CriticalHitEvent event) {
-            if (EnigmaticHandler.hasCurio(event.getEntity(), EnigmaticItems.LOST_ENGINE)) {
+            if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.LOST_ENGINE)) {
                 event.setDamageMultiplier(event.getDamageMultiplier() + 0.01F * bonusCritMultiplier.get());
             }
         }
@@ -181,7 +180,7 @@ public class LostEngine extends SpellstoneItem {
         private static void onLivingChangeTarget(@NotNull LivingChangeTargetEvent event) {
             LivingEntity entity = event.getEntity();
             LivingEntity target = event.getNewAboutToBeSetTarget();
-            if (entity instanceof Targeting targetedEntity && EnigmaticHandler.hasCurio(target, EnigmaticItems.LOST_ENGINE)) {
+            if (entity instanceof Targeting targetedEntity && ISpellstone.get(target).is(EnigmaticItems.LOST_ENGINE)) {
                 if (entity.getLastHurtByMob() != target && (targetedEntity.getTarget() == null || !targetedEntity.getTarget().isAlive())) {
                     if (entity instanceof AbstractGolem || entity.getType().is(EnigmaticTags.EntityTypes.EXTRA_GOLEM)) {
                         event.setCanceled(true);
@@ -193,7 +192,7 @@ public class LostEngine extends SpellstoneItem {
         @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void onDamageLowest(LivingDamageEvent.@NotNull Pre event) {
             LivingEntity victim = event.getEntity();
-            if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.LOST_ENGINE) && event.getSource().is(DamageTypeTags.IS_LIGHTNING)) {
+            if (ISpellstone.get(victim).is(EnigmaticItems.LOST_ENGINE) && event.getSource().is(DamageTypeTags.IS_LIGHTNING)) {
                 event.setNewDamage(event.getNewDamage() * (victim.getRandom().nextInt(4) + 4) + victim.getMaxHealth());
             }
         }

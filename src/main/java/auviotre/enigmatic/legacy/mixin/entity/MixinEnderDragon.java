@@ -2,7 +2,7 @@ package auviotre.enigmatic.legacy.mixin.entity;
 
 import auviotre.enigmatic.legacy.api.entity.AbyssalHeartBearer;
 import auviotre.enigmatic.legacy.client.Quote;
-import auviotre.enigmatic.legacy.contents.entity.PermanentItemEntity;
+import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.nbt.CompoundTag;

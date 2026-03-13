@@ -6,6 +6,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -50,5 +51,21 @@ public class ELBlockTags extends BlockTagsProvider {
                 .addTag(BlockTags.MINEABLE_WITH_AXE)
                 .addTag(BlockTags.MINEABLE_WITH_SHOVEL)
                 .addTag(BlockTags.MINEABLE_WITH_HOE);
+        this.tag(EnigmaticTags.Blocks.PLANTS)
+                .addTag(BlockTags.FLOWERS)
+                .addTag(BlockTags.SAPLINGS)
+                .addTag(BlockTags.LEAVES)
+                .addTag(BlockTags.BEE_GROWABLES)
+                .add(
+                        Blocks.SHORT_GRASS, Blocks.FERN,
+                        Blocks.DEAD_BUSH, Blocks.VINE,
+                        Blocks.GLOW_LICHEN, Blocks.SUNFLOWER,
+                        Blocks.LILAC, Blocks.ROSE_BUSH,
+                        Blocks.PEONY, Blocks.TALL_GRASS,
+                        Blocks.LARGE_FERN, Blocks.HANGING_ROOTS,
+                        Blocks.SEAGRASS, Blocks.TALL_SEAGRASS,
+                        Blocks.PITCHER_PLANT, Blocks.WARPED_ROOTS,
+                        Blocks.NETHER_SPROUTS, Blocks.CRIMSON_ROOTS
+                );
     }
 }

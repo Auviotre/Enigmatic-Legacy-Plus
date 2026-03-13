@@ -22,9 +22,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -63,11 +61,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 
 public class RevivalLeaf extends SpellstoneItem {
-    private static final List<TagKey<Block>> PLANT_SET = List.of(
-            BlockTags.FLOWERS,
-            BlockTags.SAPLINGS,
-            BlockTags.REPLACEABLE_BY_TREES
-    );
+    private static final String TAG_ID = "RevivalFlightLazyPos";
     public static ModConfigSpec.DoubleValue vulnerabilityModifier;
     public static ModConfigSpec.IntValue naturalRegenerationSpeed;
     public static ModConfigSpec.IntValue cooldown;
@@ -209,19 +203,19 @@ public class RevivalLeaf extends SpellstoneItem {
         CompoundTag data = EnigmaticHandler.getPersistedData(player);
         double reach = player.getAttributes().getValue(Attributes.BLOCK_INTERACTION_RANGE);
         int range = (int) Math.pow(reach + 1, 2) + 1;
-        if (player.getPersistentData().contains("RevivalFlightLazyPos")) {
-            BlockPos lazyPos = BlockPos.of(data.getLong("RevivalFlightLazyPos"));
+        if (player.getPersistentData().contains(TAG_ID)) {
+            BlockPos lazyPos = BlockPos.of(data.getLong(TAG_ID));
             BlockState blockState = player.level().getBlockState(lazyPos);
-            if (PLANT_SET.stream().anyMatch(blockState::is)) {
+            if (blockState.is(EnigmaticTags.Blocks.PLANTS)) {
                 if (lazyPos.distToCenterSqr(player.position()) < range) return true;
             }
         }
         Iterable<BlockPos> posSet = BlockPos.betweenClosed(blockPos.offset(-range, -range, -range), blockPos.offset(range, range, range));
         for (BlockPos pos : posSet) {
             BlockState blockState = player.level().getBlockState(pos);
-            if (PLANT_SET.stream().anyMatch(blockState::is)) {
+            if (blockState.is(EnigmaticTags.Blocks.PLANTS)) {
                 if (pos.distToCenterSqr(player.position()) < range) {
-                    player.getPersistentData().putLong("RevivalFlightLazyPos", pos.asLong());
+                    player.getPersistentData().putLong(TAG_ID, pos.asLong());
                     return true;
                 }
             }

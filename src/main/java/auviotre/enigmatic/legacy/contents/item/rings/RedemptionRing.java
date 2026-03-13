@@ -43,6 +43,8 @@ public class RedemptionRing extends BaseCurioItem {
     public static ModConfigSpec.IntValue regenerationSpeed;
     public static ModConfigSpec.IntValue lootingBonus;
     public static ModConfigSpec.IntValue fortuneBonus;
+    public static ModConfigSpec.BooleanValue enableSpecialDrops;
+    public static ModConfigSpec.BooleanValue uniqueLegacy;
 
     public RedemptionRing() {
         super(defaultSingleProperties().rarity(Rarity.EPIC)
@@ -59,6 +61,8 @@ public class RedemptionRing extends BaseCurioItem {
         regenerationSpeed = builder.defineInRange("regenerationSpeed", 20, 5, 100);
         lootingBonus = builder.defineInRange("lootingBonusAlt", 1, 0, 8);
         fortuneBonus = builder.defineInRange("fortuneBonusAlt", 1, 0, 8);
+        enableSpecialDrops = builder.define("enableSpecialDrops", true);
+        uniqueLegacy = builder.define("uniqueLegacy", true);
         builder.pop(2);
     }
 
@@ -88,10 +92,14 @@ public class RedemptionRing extends BaseCurioItem {
                 TooltipHandler.obscure(list, "tooltip.enigmaticlegacy.redemptionRingBless4", random, ChatFormatting.GOLD, 0);
                 TooltipHandler.obscure(list, "tooltip.enigmaticlegacy.redemptionRingBless5", random, ChatFormatting.GOLD, 0);
             }
-            if (level > 3) TooltipHandler.line(list, "tooltip.enigmaticlegacy.redemptionRingBless6");
-            else TooltipHandler.obscure(list, "tooltip.enigmaticlegacy.redemptionRingBless6", random);
-            if (level > 4) TooltipHandler.line(list, "tooltip.enigmaticlegacy.redemptionRingBless7");
-            else TooltipHandler.obscure(list, "tooltip.enigmaticlegacy.redemptionRingBless7", random);
+            if (enableSpecialDrops.get()) {
+                if (level > 3) TooltipHandler.line(list, "tooltip.enigmaticlegacy.redemptionRingBless6");
+                else TooltipHandler.obscure(list, "tooltip.enigmaticlegacy.redemptionRingBless6", random);
+            }
+            if (uniqueLegacy.get()) {
+                if (level > 4) TooltipHandler.line(list, "tooltip.enigmaticlegacy.redemptionRingBless7");
+                else TooltipHandler.obscure(list, "tooltip.enigmaticlegacy.redemptionRingBless7", random);
+            }
             if (flag.isAdvanced()) {
                 TooltipHandler.line(list);
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessLevel", ChatFormatting.DARK_GRAY, level);

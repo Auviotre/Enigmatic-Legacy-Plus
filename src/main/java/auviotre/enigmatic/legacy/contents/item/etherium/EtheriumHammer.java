@@ -2,9 +2,12 @@ package auviotre.enigmatic.legacy.contents.item.etherium;
 
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEnchantments;
+import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -50,6 +53,11 @@ public class EtheriumHammer extends DiggerItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammer", ChatFormatting.GOLD, 3, 1);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumDisable");
+        if (Minecraft.getInstance().level != null) {
+            var holder = EnigmaticHandler.get(Minecraft.getInstance().level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
+            if (stack.getEnchantmentLevel(holder) > 0) TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammerBuff");
+        }
+        if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
     public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
@@ -60,20 +68,20 @@ public class EtheriumHammer extends DiggerItem {
     public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         Level level = attacker.level();
         var holder = EnigmaticHandler.get(level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
+        Boolean flag = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
+        if (flag) return;
         if (stack.getEnchantmentLevel(holder) > 0 && attacker instanceof Player player) {
-            List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(1.25, 0.25, 1.25),
+            stack.set(EnigmaticComponents.BOOLEAN, true);
+            List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(1.4, 0.4, 1.4),
                     entity -> entity.isAlive() && player.canAttack(entity) && entity != target && entity != attacker && entity.distanceTo(target) < 1.25F);
             for (LivingEntity entity : entities) {
-                if (player.getRandom().nextInt(4) == 0) {
-                    entity.hurtMarked = true;
-                    continue;
-                }
                 player.attack(entity);
                 stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND);
             }
             if (level instanceof ServerLevel server) {
-                server.sendParticles(ParticleTypes.END_ROD, target.getX(), target.getY(0.5), target.getZ(), 4, 0.2, 0.2, 0.2, 0.05);
+                server.sendParticles(EnigmaticParticles.BLUE_STAR_DUST.get(), target.getX(), target.getY(0.5), target.getZ(), 4, 0.2, 0.2, 0.2, 0.05);
             }
+            stack.set(EnigmaticComponents.BOOLEAN, false);
         }
         super.postHurtEnemy(stack, target, attacker);
     }

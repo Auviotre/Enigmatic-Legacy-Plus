@@ -1,7 +1,7 @@
 package auviotre.enigmatic.legacy.client.renderer;
 
 import auviotre.enigmatic.legacy.api.item.IPermanentCrystal;
-import auviotre.enigmatic.legacy.contents.entity.PermanentItemEntity;
+import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;

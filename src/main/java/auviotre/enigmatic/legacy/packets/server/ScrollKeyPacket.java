@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.packets.server;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.contents.item.scrolls.ExplorerScroll;
 import auviotre.enigmatic.legacy.contents.item.scrolls.XpScroll;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
@@ -23,7 +24,9 @@ public record ScrollKeyPacket() implements CustomPacketPayload {
             context.enqueueWork(() -> {
                 final Player player = context.player();
                 if (player instanceof ServerPlayer serverPlayer) {
-                    if (EnigmaticHandler.hasCurio(serverPlayer, EnigmaticItems.XP_SCROLL)) {
+                    if (EnigmaticHandler.hasCurio(serverPlayer, EnigmaticItems.EXPLORER_SCROLL)) {
+                        ExplorerScroll.trigger(player.level(), serverPlayer);
+                    } else if (EnigmaticHandler.hasCurio(serverPlayer, EnigmaticItems.XP_SCROLL)) {
                         ItemStack curio = EnigmaticHandler.getCurio(serverPlayer, EnigmaticItems.XP_SCROLL);
                         XpScroll.trigger(player.level(), curio, serverPlayer, InteractionHand.MAIN_HAND, false);
                     } else if (EnigmaticHandler.hasCurio(serverPlayer, EnigmaticItems.CURSED_XP_SCROLL)) {

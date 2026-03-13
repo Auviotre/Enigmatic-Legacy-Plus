@@ -52,6 +52,14 @@ public class ELEntityLoot extends EntityLootSubProvider {
                 )
         );
 
+        this.add(EntityType.RABBIT, EnigmaticLootTables.Entities.RABBIT,
+                LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(Items.RABBIT_FOOT)
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.27F, 0.05F))
+                        )
+                )
+        );
+
         this.add(EntityType.BLAZE, EnigmaticLootTables.Entities.BLAZE,
                 LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(Items.BLAZE_POWDER)

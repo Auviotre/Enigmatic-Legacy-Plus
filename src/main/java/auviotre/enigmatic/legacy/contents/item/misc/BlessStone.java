@@ -1,6 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.misc;
 
-import auviotre.enigmatic.legacy.contents.entity.PermanentItemEntity;
+import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;

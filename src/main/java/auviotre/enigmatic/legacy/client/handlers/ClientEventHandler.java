@@ -166,7 +166,7 @@ public class ClientEventHandler {
         ItemStack curio = EnigmaticHandler.getCurio(player, EnigmaticItems.VIOLENCE_SCROLL);
         if (!curio.isEmpty() && event.getCamera().getFluidInCamera() == FogType.NONE) {
             float timer = 1.0F - (float) (curio.getOrDefault(EnigmaticComponents.VIOLENCE_CURSE_TIMER, 0) + event.getPartialTick()) / 1000.0F;
-            float f = Math.max(event.getFarPlaneDistance() * (float) Math.pow(timer, 6.0F), 5F);
+            float f = Math.max(event.getFarPlaneDistance() * (float) Math.pow(timer, 6.0F), 5.4F);
             event.setNearPlaneDistance(event.getMode() == FogRenderer.FogMode.FOG_SKY ? 0.0F : f * 0.6F);
             event.setFarPlaneDistance(f);
             event.setCanceled(true);

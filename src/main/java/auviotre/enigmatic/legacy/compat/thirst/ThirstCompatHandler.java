@@ -27,6 +27,8 @@ public class ThirstCompatHandler {
         event.addDrink(EnigmaticItems.ENCHANTED_ICHOR_BOTTLE.get(), 6, 10);
         event.addDrink(EnigmaticItems.REDEMPTION_POTION.get(), 6, 10);
         event.addDrink(EnigmaticItems.UNHOLY_GRAIL.get(), 1, 2);
+        event.addDrink(EnigmaticItems.TWISTED_POTION.get(), 5, 3);
+        event.addDrink(EnigmaticItems.ICHOR_CURSE_BOTTLE.get(), 4, 3);
     }
 
     @SubscribeEvent

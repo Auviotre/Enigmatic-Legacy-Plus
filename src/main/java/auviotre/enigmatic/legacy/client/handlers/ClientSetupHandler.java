@@ -7,6 +7,7 @@ import auviotre.enigmatic.legacy.client.particles.StarDustParticle;
 import auviotre.enigmatic.legacy.client.renderer.*;
 import auviotre.enigmatic.legacy.client.renderer.layer.EnigmaticElytraLayer;
 import auviotre.enigmatic.legacy.client.renderer.layer.EtheriumShieldLayer;
+import auviotre.enigmatic.legacy.client.renderer.model.ExplorerMarkerModel;
 import auviotre.enigmatic.legacy.client.renderer.model.IchorSpriteModel;
 import auviotre.enigmatic.legacy.client.renderer.model.SpellstoneModel;
 import auviotre.enigmatic.legacy.client.screen.AntiqueBagScreen;
@@ -15,6 +16,7 @@ import auviotre.enigmatic.legacy.client.screen.SpellstoneTableScreen;
 import auviotre.enigmatic.legacy.client.screen.button.EnderChestInventoryButton;
 import auviotre.enigmatic.legacy.client.screen.button.MagnetRingInventoryButton;
 import auviotre.enigmatic.legacy.contents.item.charms.HellBladeCharm;
+import auviotre.enigmatic.legacy.contents.item.spellstones.IllusionLantern;
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
 import auviotre.enigmatic.legacy.contents.item.tools.TotemOfMalice;
 import auviotre.enigmatic.legacy.registries.*;
@@ -55,6 +57,7 @@ public class ClientSetupHandler {
     private static void registerItemDecorator(@NotNull RegisterItemDecorationsEvent event) {
         event.register(EnigmaticItems.HELL_BLADE_CHARM, new HellBladeCharm.Decorator());
         event.register(EnigmaticItems.TOTEM_OF_MALICE, new TotemOfMalice.Decorator());
+        event.register(EnigmaticItems.ILLUSION_LANTERN, new IllusionLantern.Decorator());
     }
 
 
@@ -88,7 +91,9 @@ public class ClientSetupHandler {
         event.registerEntityRenderer(EnigmaticEntities.DRAGON_BREATH_ARROW.get(), DragonBreathArrowRender::new);
         event.registerEntityRenderer(EnigmaticEntities.THROWN_ICHOR_SPEAR.get(), ThrownIchorSpearRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.ICHOR_SPRITE.get(), IchorSpriteRenderer::new);
+        event.registerEntityRenderer(EnigmaticEntities.SOUL_FLAME_BALL.get(), SoulFlameBallRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.ULTIMATE_WITHER_SKULL.get(), UltimateWitherSkullRenderer::new);
+        event.registerEntityRenderer(EnigmaticEntities.EXPLORER_MARKER.get(), ExplorerMarkerRender::new);
         event.registerEntityRenderer(EnigmaticEntities.PIGLIN_WANDERER.get(), context -> new PiglinWandererRender(context, ModelLayers.PIGLIN_BRUTE, ModelLayers.PIGLIN_BRUTE_INNER_ARMOR, ModelLayers.PIGLIN_BRUTE_OUTER_ARMOR));
         event.registerBlockEntityRenderer(EnigmaticBlockEntities.DIMENSIONAL_ANCHOR_ENTITY.get(), DimensionalAnchorRender::new);
         event.registerBlockEntityRenderer(EnigmaticBlockEntities.SPELLSTONE_TABLE_ENTITY.get(), SpellstoneTableRender::new);
@@ -97,6 +102,7 @@ public class ClientSetupHandler {
     @SubscribeEvent
     private static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(SpellstoneModel.LAYER, SpellstoneModel::createLayer);
+        event.registerLayerDefinition(ExplorerMarkerModel.LAYER, ExplorerMarkerModel::createLayer);
         event.registerLayerDefinition(IchorSpriteModel.LAYER, IchorSpriteModel::createBodyLayer);
     }
 

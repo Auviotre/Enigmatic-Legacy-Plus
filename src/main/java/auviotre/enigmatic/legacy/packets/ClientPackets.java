@@ -59,7 +59,7 @@ public class ClientPackets {
     public static void handle(final PlayerMotionPacket packet) {
         Player player = Minecraft.getInstance().player;
         if (player != null) {
-            player.setDeltaMovement(packet.movement);
+            player.setDeltaMovement(packet.movement());
         }
     }
 
@@ -169,6 +169,6 @@ public class ClientPackets {
 
     public static void handle(PlayQuotePacket packet) {
         Quote quote = Quote.getByID(packet.quoteId());
-        quote.playClient(packet.delay());
+        quote.playClient(packet.delay(), packet.isDeath());
     }
 }

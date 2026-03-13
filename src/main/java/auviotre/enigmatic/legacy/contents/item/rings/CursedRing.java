@@ -3,7 +3,7 @@ package auviotre.enigmatic.legacy.contents.item.rings;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
-import auviotre.enigmatic.legacy.contents.entity.PermanentItemEntity;
+import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import auviotre.enigmatic.legacy.contents.item.amulets.EldritchAmulet;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
@@ -91,6 +91,7 @@ public class CursedRing extends CursedCurioItem {
     public static ModConfigSpec.DoubleValue neutralAngerRange;
     public static ModConfigSpec.IntValue armorDebuff;
     public static ModConfigSpec.IntValue monsterDamageDebuff;
+    public static ModConfigSpec.BooleanValue eternalBurning;
     public static ModConfigSpec.EnumValue<SoulCrystal.LossMode> soulCrystalsMode;
     public static ModConfigSpec.BooleanValue enableInsomnia;
     public static ModConfigSpec.IntValue lootingBonus;
@@ -98,6 +99,8 @@ public class CursedRing extends CursedCurioItem {
     public static ModConfigSpec.IntValue experienceBonus;
     public static ModConfigSpec.IntValue enchantingBonus;
     public static ModConfigSpec.BooleanValue enableSpecialDrops;
+    public static ModConfigSpec.BooleanValue enableEnderRing;
+    public static ModConfigSpec.BooleanValue uniqueLegacy;
     public static ModConfigSpec.BooleanValue autoEquip;
     public static ModConfigSpec.BooleanValue ultraHardcore;
     public static ModConfigSpec.IntValue maxSoulCrystalLoss;
@@ -116,6 +119,7 @@ public class CursedRing extends CursedCurioItem {
         neutralAngerRange = builder.defineInRange("neutralAngerRange", 24.0, 4.0, 100.0);
         armorDebuff = builder.defineInRange("armorDebuff", 30, 0, 100);
         monsterDamageDebuff = builder.defineInRange("monsterDamageDebuff", 40, 0, 100);
+        eternalBurning = builder.define("eternalBurning", true);
         soulCrystalsMode = builder.defineEnum("soulCrystalsMode", SoulCrystal.LossMode.NEED_CURSE_RING);
         enableInsomnia = builder.define("enableInsomnia", true);
         lootingBonus = builder.defineInRange("lootingBonus", 1, 0, 10);
@@ -123,6 +127,8 @@ public class CursedRing extends CursedCurioItem {
         experienceBonus = builder.defineInRange("experienceBonus", 300, 0, 1000);
         enchantingBonus = builder.defineInRange("enchantingBonus", 10, 0, 30);
         enableSpecialDrops = builder.define("enableSpecialDrops", true);
+        enableEnderRing = builder.define("enableEnderRing", true);
+        uniqueLegacy = builder.define("uniqueLegacy", true);
         autoEquip = builder.define("autoEquip", false);
         ultraHardcore = builder.define("ultraHardcore", false);
         maxSoulCrystalLoss = builder.defineInRange("maxSoulCrystalLoss", 9, 0, 10);
@@ -144,18 +150,18 @@ public class CursedRing extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse3", ChatFormatting.GOLD, armorDebuff.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse4", ChatFormatting.GOLD, monsterDamageDebuff.get() + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse5");
+            if (eternalBurning.get()) TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse5");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse6");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse7");
+            if (enableInsomnia.get()) TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse7");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBlesses");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless1", ChatFormatting.GOLD, lootingBonus.get());
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless2", ChatFormatting.GOLD, fortuneBonus.get());
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless3", ChatFormatting.GOLD, experienceBonus.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless4", ChatFormatting.GOLD, enchantingBonus.get());
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless5");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless6");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless7");
+            if (enableSpecialDrops.get()) TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless5");
+            if (enableEnderRing.get()) TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless6");
+            if (uniqueLegacy.get()) TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingBless7");
         } else {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingLore1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingLore2");

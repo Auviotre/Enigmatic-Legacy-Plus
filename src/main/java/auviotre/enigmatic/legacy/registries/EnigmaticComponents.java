@@ -49,7 +49,7 @@ public class EnigmaticComponents {
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MALICE_MAX_DURABILITY = COMPONENTS.register("malice_max_durability",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> ELECTRIC_POINT = COMPONENTS.register("electric_point",
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> ILLUSION_COUNT = COMPONENTS.register("illusion_count",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> XP_SCROLL_ACTIVE = COMPONENTS.register("xp_active",
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());

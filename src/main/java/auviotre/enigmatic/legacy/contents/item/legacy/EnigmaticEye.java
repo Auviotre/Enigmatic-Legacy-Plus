@@ -64,8 +64,8 @@ public class EnigmaticEye extends BaseCurioItem {
     @SubscribeConfig(receiveClient = true)
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         if (type == ModConfig.Type.CLIENT) {
-            EnigmaticEye.quoteSubtitles = builder.define("quoteSubtitles", true);
-            EnigmaticEye.deathQuoteChance = builder.defineInRange("deathQuoteChance", 60, 0, 100);
+            quoteSubtitles = builder.define("quoteSubtitles", true);
+            deathQuoteChance = builder.defineInRange("deathQuoteChance", 60, 0, 100);
         }
     }
 
@@ -85,7 +85,7 @@ public class EnigmaticEye extends BaseCurioItem {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
-        TooltipHandler.line(list);
+        if (!this.isDormant(stack)) TooltipHandler.line(list);
         if (Screen.hasShiftDown()) {
             if (this.isDormant(stack)) {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEye1");
@@ -280,12 +280,10 @@ public class EnigmaticEye extends BaseCurioItem {
             }
 
             // Death Quote
-            if (RANDOM.nextInt(100) + 1 > deathQuoteChance.get()) return;
-
             if (deathFromEntity)
-                Quote.getRandom(Quote.DEATH_QUOTES_ENTITY).play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(10));
+                Quote.getRandom(Quote.DEATH_QUOTES_ENTITY).play(serverPlayer, Quote.PlayOptions.defaultPlay().dead().ifUnlocked().delay(10));
             else
-                Quote.getRandom(Quote.DEATH_QUOTES).play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(10));
+                Quote.getRandom(Quote.DEATH_QUOTES).play(serverPlayer, Quote.PlayOptions.defaultPlay().dead().ifUnlocked().delay(10));
         }
     }
 }

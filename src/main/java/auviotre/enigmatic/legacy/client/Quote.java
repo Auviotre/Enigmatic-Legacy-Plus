@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.client;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.client.handlers.QuoteHandler;
+import auviotre.enigmatic.legacy.contents.item.legacy.EnigmaticEye;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.packets.client.PlayQuotePacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
@@ -20,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import static auviotre.enigmatic.legacy.contents.item.legacy.EnigmaticEye.quoteSubtitles;
 
 public class Quote {
     private static final Random RANDOM = new Random();
@@ -92,22 +91,27 @@ public class Quote {
     public record PlayOptions(
             boolean requireUnlocked,
             boolean playOnce,
+            boolean isDeath,
             int delayTicks
     ) {
         public static PlayOptions defaultPlay() {
-            return new PlayOptions(false, false, 1);
+            return new PlayOptions(false, false, false, 1);
         }
 
         public PlayOptions once() {
-            return new PlayOptions(requireUnlocked, true, delayTicks);
+            return new PlayOptions(requireUnlocked, true, isDeath, delayTicks);
         }
 
         public PlayOptions ifUnlocked() {
-            return new PlayOptions(true, playOnce, delayTicks);
+            return new PlayOptions(true, playOnce, isDeath, delayTicks);
+        }
+
+        public PlayOptions dead() {
+            return new PlayOptions(requireUnlocked, playOnce, true, delayTicks);
         }
 
         public PlayOptions delay(int ticks) {
-            return new PlayOptions(requireUnlocked, playOnce, ticks);
+            return new PlayOptions(requireUnlocked, playOnce, isDeath, ticks);
         }
     }
 
@@ -135,29 +139,21 @@ public class Quote {
     }
 
     public void play(ServerPlayer player, PlayOptions options) {
-        if (options.requireUnlocked &&
-                !player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getUnlockedNarrator()) {
+        if (options.requireUnlocked && !player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getUnlockedNarrator())
             return;
-        }
 
-        if (options.playOnce && hasHeard(player)) {
-            return;
-        }
+        if (options.playOnce && hasHeard(player)) return;
 
         markHeardIfNeeded(player, options);
 
-        PacketDistributor.sendToPlayer(
-                player,
-                new PlayQuotePacket(this.getID(), options.delayTicks())
-        );
-
+        PacketDistributor.sendToPlayer(player, new PlayQuotePacket(this.getID(), options.delayTicks(), options.isDeath()));
         lastQuote = this;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void playClient(int delayTicks) {
-        if (!quoteSubtitles.getAsBoolean()) return;
-
+    public void playClient(int delayTicks, boolean isDeath) {
+        if (!EnigmaticEye.quoteSubtitles.get()) return;
+        if (isDeath && EnigmaticEye.deathQuoteChance.get() < 1 + RANDOM.nextInt(100)) return;
         QuoteHandler.INSTANCE.playQuote(this, delayTicks);
     }
 

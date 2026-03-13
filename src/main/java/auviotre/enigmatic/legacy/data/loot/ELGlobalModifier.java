@@ -45,6 +45,7 @@ public class ELGlobalModifier extends GlobalLootModifierProvider {
         this.addChest(Chests.FORGOTTEN_ICE, IGLOO_CHEST, ANCIENT_CITY_ICE_BOX);
         this.addChest(Chests.LOST_ENGINE, STRONGHOLD_CROSSING, STRONGHOLD_CORRIDOR, SIMPLE_DUNGEON);
 
+        this.addCurse(EntityType.RABBIT, Entities.RABBIT);
         this.addCurse(EntityType.BLAZE, Entities.BLAZE);
         this.addCurse(EntityType.CAVE_SPIDER, Entities.SPIDER);
         this.addCurse(EntityType.CREEPER, Entities.CREEPER);

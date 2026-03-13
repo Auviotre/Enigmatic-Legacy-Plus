@@ -67,6 +67,7 @@ public class EnigmaticSetupHandler {
         builder.addMix(EnigmaticPotions.HASTE, Items.REDSTONE, EnigmaticPotions.LONG_HASTE);
         builder.addMix(EnigmaticPotions.HASTE, Items.GLOWSTONE_DUST, EnigmaticPotions.STRONG_HASTE);
         builder.addMix(Potions.AWKWARD, EnigmaticItems.EARTH_HEART_FRAGMENT.get(), Potions.LUCK);
+        builder.addRecipe(Ingredient.of(EnigmaticItems.RECALL_POTION), Ingredient.of(EnigmaticItems.TWISTED_HEART), EnigmaticItems.TWISTED_POTION.toStack());
         builder.addRecipe(Ingredient.of(Items.OMINOUS_BOTTLE), Ingredient.of(EnigmaticItems.ICHOR_DROPLET), EnigmaticItems.ICHOR_CURSE_BOTTLE.toStack());
     }
 }

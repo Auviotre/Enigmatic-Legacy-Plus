@@ -62,7 +62,6 @@ public class LoreInscriber extends BaseItem {
     }
 
     public interface Helper {
-
         static ItemStack setDisplayName(ItemStack stack, String name) {
             stack.set(DataComponents.ITEM_NAME, Component.literal(name));
             return stack;

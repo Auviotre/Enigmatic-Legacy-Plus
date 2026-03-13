@@ -21,7 +21,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.api.distmarker.Dist;
@@ -86,14 +86,15 @@ public class LootGenerator extends BaseItem {
 
     public InteractionResult useOn(UseOnContext context) {
         Player player = context.getPlayer();
-        Level world = context.getLevel();
+        Level level = context.getLevel();
         ItemStack stack = context.getItemInHand();
         if (player == null) return InteractionResult.FAIL;
 
-        if (world.getBlockState(context.getClickedPos()).hasBlockEntity()) {
-            if (world.getBlockEntity(context.getClickedPos()) instanceof ChestBlockEntity chest && player.isCrouching()) {
+        if (level.getBlockState(context.getClickedPos()).hasBlockEntity()) {
+            if (level.getBlockEntity(context.getClickedPos()) instanceof RandomizableContainerBlockEntity chest && player.isCrouching()) {
                 Direction dir = context.getClickedFace();
                 RandomSource lootRandomizer = player.getRandom();
+                if (level.isClientSide()) return InteractionResult.SUCCESS;
                 if (dir == Direction.UP) {
                     chest.setLootTable(this.lootList.get(getLootTableIndex(stack)), lootRandomizer.nextLong());
                     chest.unpackLootTable(player);
@@ -121,14 +122,12 @@ public class LootGenerator extends BaseItem {
 
                     EnigmaticLegacy.LOGGER.info("Estimated generation complete in 32768 instances, results:");
                     for (Item theItem : lootMap.keySet()) {
-                        EnigmaticLegacy.LOGGER.info("Item: " + theItem.getName(new ItemStack(theItem)).getString() + ", Amount: " + lootMap.get(theItem));
+                        EnigmaticLegacy.LOGGER.info("Item: {}, Amount: {}", theItem.getName(new ItemStack(theItem)).getString(), lootMap.get(theItem));
                     }
 
                     player.sendSystemMessage(Component.translatable("message.enigmaticlegacy.generator_simulation_complete").withStyle(ChatFormatting.DARK_PURPLE));
-                } else {
-                    chest.clearContent();
-                }
-                return InteractionResult.SUCCESS;
+                } else chest.clearContent();
+                return InteractionResult.CONSUME;
             }
         }
         return InteractionResult.PASS;

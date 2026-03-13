@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.handlers;
 
 import auviotre.enigmatic.legacy.contents.item.materials.AbyssalHeart;
+import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -42,11 +43,11 @@ public interface TooltipHandler {
     }
 
     static void cursedOnly(List<Component> list, ItemStack stack) {
-        if (EnigmaticHandler.isBlessedItem(stack) && RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player)) {
+        if (EnigmaticHandler.isBlessedItem(stack) && RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player) && RedemptionRing.uniqueLegacy.get()) {
             list.add(Component.translatable("tooltip.enigmaticlegacy.blessOneAvailable1").withStyle(ChatFormatting.GOLD));
             list.add(Component.translatable("tooltip.enigmaticlegacy.blessOneAvailable2").withStyle(ChatFormatting.GOLD));
         } else {
-            ChatFormatting color = EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
+            ChatFormatting color = EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player) && CursedRing.uniqueLegacy.get() ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
             list.add(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly1").withStyle(color));
             list.add(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly2").withStyle(color));
         }

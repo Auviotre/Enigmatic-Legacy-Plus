@@ -5,6 +5,7 @@ import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticEnchantments;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -58,6 +59,11 @@ public class EtheriumScythe extends HoeItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumScythe", ChatFormatting.GOLD, 3, 3);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumDisable");
+        if (Minecraft.getInstance().level != null) {
+            var holder = EnigmaticHandler.get(Minecraft.getInstance().level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
+            if (stack.getEnchantmentLevel(holder) > 0) TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumScytheBuff");
+        }
+        if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
     public float getDestroySpeed(ItemStack stack, @NotNull BlockState state) {

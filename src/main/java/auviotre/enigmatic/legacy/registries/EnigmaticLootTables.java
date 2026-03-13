@@ -38,6 +38,8 @@ public interface EnigmaticLootTables {
     }
 
     interface Entities {
+        ResourceKey<LootTable> RABBIT = key("rabbit");
+
         ResourceKey<LootTable> BLAZE = key("blaze");
         ResourceKey<LootTable> CREEPER = key("creeper");
         ResourceKey<LootTable> DROWNED = key("drowned");

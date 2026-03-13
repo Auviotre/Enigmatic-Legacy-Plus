@@ -11,10 +11,7 @@ import auviotre.enigmatic.legacy.contents.crafting.CursedShapedRecipe;
 import auviotre.enigmatic.legacy.contents.crafting.SpellstoneTableRecipe;
 import auviotre.enigmatic.legacy.contents.gui.SpellstoneTableMenu;
 import auviotre.enigmatic.legacy.contents.item.tools.TotemOfMalice;
-import auviotre.enigmatic.legacy.registries.EnigmaticBlocks;
-import auviotre.enigmatic.legacy.registries.EnigmaticItems;
-import auviotre.enigmatic.legacy.registries.EnigmaticMenus;
-import auviotre.enigmatic.legacy.registries.EnigmaticRecipes;
+import auviotre.enigmatic.legacy.registries.*;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
@@ -115,6 +112,14 @@ public class JEIHandler implements IModPlugin {
                 EnigmaticItems.RECALL_POTION.toStack(),
                 EnigmaticItems.WORMHOLE_POTION.toStack(),
                 EnigmaticLegacy.location("recall_potion.to.wormhole_potion")
+        ));
+        ItemStack stack = EnigmaticItems.TWISTED_HEART.toStack();
+        stack.set(EnigmaticComponents.TAINTABLE, true);
+        brewingRecipes.add(factory.createBrewingRecipe(
+                List.of(stack),
+                EnigmaticItems.RECALL_POTION.toStack(),
+                EnigmaticItems.TWISTED_POTION.toStack(),
+                EnigmaticLegacy.location("recall_potion.to.twisted_potion")
         ));
         brewingRecipes.add(factory.createBrewingRecipe(
                 List.of(EnigmaticItems.ICHOR_DROPLET.toStack()),

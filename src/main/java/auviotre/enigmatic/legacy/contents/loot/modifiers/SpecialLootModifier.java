@@ -14,6 +14,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -48,6 +50,7 @@ public class SpecialLootModifier extends LootModifier {
         if (list.isEmpty()) return list;
         Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
         Vec3 origin = context.getParamOrNull(LootContextParams.ORIGIN);
+        BlockState blockState = context.getParamOrNull(LootContextParams.BLOCK_STATE);
         if (entity instanceof ServerPlayer player) {
             CompoundTag data = EnigmaticHandler.getPersistedData(player);
 
@@ -94,6 +97,12 @@ public class SpecialLootModifier extends LootModifier {
                     if (value < 0.02F) list.add(EnigmaticItems.SPELLSTONE_DEBRIS.toStack());
                     else if (value < 0.25F) list.add(EnigmaticItems.EARTH_HEART.toStack());
                     else list.add(EnigmaticItems.EARTH_HEART_FRAGMENT.toStack());
+                }
+            }
+
+            if (blockState != null && blockState.is(Blocks.SOUL_SOIL)) {
+                if (context.getRandom().nextFloat() < 0.006F) {
+                    list.add(EnigmaticItems.ILLUSION_LANTERN.toStack());
                 }
             }
         }

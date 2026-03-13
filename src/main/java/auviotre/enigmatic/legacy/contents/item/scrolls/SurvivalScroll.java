@@ -9,6 +9,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -48,9 +49,11 @@ public class SurvivalScroll extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll1");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll2");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll3");
+        if (Screen.hasShiftDown()) {
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll1");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll2");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll3");
+        } else TooltipHandler.holdShift(list);
     }
 
     public void curioTick(SlotContext context, ItemStack stack) {
@@ -84,10 +87,10 @@ public class SurvivalScroll extends BaseCurioItem {
         @SubscribeEvent(priority = EventPriority.LOW)
         private static void onFoodEat(@NotNull LivingEntityUseItemEvent.Start event) {
             LivingEntity entity = event.getEntity();
-            if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.SURVIVAL_SCROLL) && entity.getHealth() < entity.getMaxHealth() * 0.4F) {
+            if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.SURVIVAL_SCROLL) && entity.getHealth() < entity.getMaxHealth() * threshold.get() / 100F) {
                 ItemStack item = event.getItem();
                 if (item.has(DataComponents.FOOD) || item.getUseAnimation() == UseAnim.EAT || item.getUseAnimation() == UseAnim.DRINK) {
-                    event.setDuration(event.getDuration() * 3 / 5);
+                    event.setDuration(event.getDuration() * 3 / 4);
                 }
             }
         }

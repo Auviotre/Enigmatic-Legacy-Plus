@@ -94,10 +94,10 @@ public interface EnigmaticHandler {
     List<Holder<MobEffect>> DEBUFF_LIST = new ArrayList<>();
 
     static boolean canUse(LivingEntity entity, ItemStack stack) {
-        if (isEldritchItem(stack)) return isTheWorthyOne(entity);
+        if (isEldritchItem(stack)) return isTheWorthyOne(entity) && CursedRing.uniqueLegacy.get();
         if (isCursedItem(stack)) {
-            if (isTheCursedOne(entity)) return true;
-            return isBlessedItem(stack) && RedemptionRing.Helper.canUseRelic(entity);
+            if (isTheCursedOne(entity) && CursedRing.uniqueLegacy.get()) return true;
+            return isBlessedItem(stack) && RedemptionRing.Helper.canUseRelic(entity) && RedemptionRing.uniqueLegacy.get();
         }
         return true;
     }

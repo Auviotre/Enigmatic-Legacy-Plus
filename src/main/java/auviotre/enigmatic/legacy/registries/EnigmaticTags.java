@@ -35,6 +35,7 @@ public interface EnigmaticTags {
 
     interface Blocks {
         TagKey<Block> ALL_MINEABLE = register("all_mineable");
+        TagKey<Block> PLANTS = register("plants");
 
         private static TagKey<Block> register(String name) {
             return TagKey.create(Registries.BLOCK, EnigmaticLegacy.location(name));
@@ -76,6 +77,7 @@ public interface EnigmaticTags {
         TagKey<DamageType> ANGEL_BLESSING_VULNERABLE_TO = registerSpellstone("angel_blessing/vulnerable_to");
         TagKey<DamageType> LOST_ENGINE_IMMUNE_TO = registerSpellstone("lost_engine/immune_to");
         TagKey<DamageType> FORGOTTEN_ICE_RESISTANT_TO = registerSpellstone("forgotten_ice/resistant_to");
+        TagKey<DamageType> ILLUSION_LANTERN_RESISTANT_TO = registerSpellstone("illusion_lantern/resistant_to");
         TagKey<DamageType> THE_CUBE_IMMUNE_TO = registerSpellstone("the_cube/immune_to");
         TagKey<DamageType> ETHERIUM_CORE_IMMUNE_TO = registerSpellstone("etherium_core/immune_to");
         TagKey<DamageType> CREATION_HEART_IMMUNE_TO = registerSpellstone("creation_heart/immune_to");

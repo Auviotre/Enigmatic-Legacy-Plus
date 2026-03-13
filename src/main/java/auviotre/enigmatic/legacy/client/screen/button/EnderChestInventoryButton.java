@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.client.screen.button;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.item.rings.EnderRing;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.packets.server.EnderRingKeyPacket;
@@ -79,7 +80,7 @@ public class EnderChestInventoryButton extends ImageButton {
             }
         }
         LocalPlayer player = Minecraft.getInstance().player;
-        if (EnigmaticHandler.isTheCursedOne(player) || EnigmaticHandler.hasCurio(player, EnigmaticItems.ENDER_RING)) {
+        if (EnigmaticHandler.isTheCursedOne(player) && CursedRing.enableEnderRing.get() || EnigmaticHandler.hasCurio(player, EnigmaticItems.ENDER_RING)) {
             super.renderWidget(graphics, mouseX, mouseY, partialTicks);
         } else this.active = false;
     }

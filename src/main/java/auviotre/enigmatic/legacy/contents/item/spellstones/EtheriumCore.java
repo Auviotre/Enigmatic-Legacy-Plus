@@ -41,6 +41,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 
 public class EtheriumCore extends SpellstoneItem {
+    private static final String TAG_ID = "EtheriumCounterattack";
     public static ModConfigSpec.IntValue etheriumThresholdModifier;
     public static ModConfigSpec.IntValue damageConversion;
     public static ModConfigSpec.IntValue damageConversionLimit;
@@ -113,8 +114,8 @@ public class EtheriumCore extends SpellstoneItem {
             if (Spelltuner.hasTune(victim, EnigmaticItems.ETHERIUM_CORE)) {
                 if (victim instanceof Player player) {
                     CompoundTag data = EnigmaticHandler.getPersistedData(player);
-                    float counterattack = Math.min(event.getAmount() * damageConversion.get() * 0.005F + data.getFloat("EtheriumCounterattack"), damageConversionLimit.get());
-                    data.putFloat("EtheriumCounterattack", counterattack);
+                    float counterattack = Math.min(event.getAmount() * damageConversion.get() * 0.005F + data.getFloat(TAG_ID), damageConversionLimit.get());
+                    data.putFloat(TAG_ID, counterattack);
                 }
             }
             if (ISpellstone.get(victim).is(EnigmaticItems.ETHERIUM_CORE)) {
@@ -124,15 +125,15 @@ public class EtheriumCore extends SpellstoneItem {
                 }
                 if (victim instanceof Player player) {
                     CompoundTag data = EnigmaticHandler.getPersistedData(player);
-                    float counterattack = Math.min(event.getAmount() * damageConversion.get() * 0.01F + data.getFloat("EtheriumCounterattack"), damageConversionLimit.get());
-                    data.putFloat("EtheriumCounterattack", counterattack);
+                    float counterattack = Math.min(event.getAmount() * damageConversion.get() * 0.01F + data.getFloat(TAG_ID), damageConversionLimit.get());
+                    data.putFloat(TAG_ID, counterattack);
                 }
             }
             if (event.getSource().getEntity() instanceof Player attacker) {
                 if (ISpellstone.get(attacker).is(EnigmaticItems.ETHERIUM_CORE) || Spelltuner.hasTune(attacker, EnigmaticItems.ETHERIUM_CORE)) {
                     CompoundTag data = EnigmaticHandler.getPersistedData(attacker);
-                    event.setAmount(event.getAmount() + data.getFloat("EtheriumCounterattack"));
-                    data.remove("EtheriumCounterattack");
+                    event.setAmount(event.getAmount() + data.getFloat(TAG_ID));
+                    data.remove(TAG_ID);
                 }
             }
         }

@@ -1,0 +1,31 @@
+{
+    "type": "enigmaticlegacyplus:spellstone_table",
+    "debris_count": 10,
+    "ingredients": [
+        {
+            "item": "minecraft:soul_soil"
+        },
+        {
+            "item": "minecraft:cyan_stained_glass"
+        },
+        {
+            "item": "minecraft:netherite_scrap"
+        },
+        {
+            "item": "minecraft:blaze_powder"
+        },
+        {
+            "item": "minecraft:netherite_scrap"
+        },
+        {
+            "item": "minecraft:cyan_stained_glass"
+        },
+        {
+            "item": "minecraft:soul_soil"
+        }
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:illusion_lantern"
+    }
+}

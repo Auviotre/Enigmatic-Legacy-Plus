@@ -9,8 +9,6 @@ import dev.shadowsoffire.apothic_enchanting.util.MiscUtil;
 import dev.shadowsoffire.placebo.util.EnchantmentUtils;
 import net.minecraft.Util;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -19,8 +17,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -64,18 +60,12 @@ public abstract class MixinApothMenu extends EnchantmentMenu {
                             player.onEnchantmentPerformed(toEnchant, 0);
                             if (list.getFirst().enchantment.is(Ench.Enchantments.INFUSION)) {
                                 InfusionRecipe match = InfusionRecipe.findMatch(world, toEnchant, eterna, quanta, arcana);
-                                if (match == null) {
-                                    return;
-                                }
+                                if (match == null) return;
 
                                 this.enchantSlots.setItem(0, match.assemble(toEnchant, eterna, quanta, arcana));
                             } else {
                                 this.enchantSlots.setItem(0, toEnchant.getItem().applyEnchantments(toEnchant, list));
                             }
-                            Registry<Enchantment> enchantments = world.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
-                            ItemStack doubleEnchanted = EnchantmentHelper.enchantItem(player.getRandom(), toEnchant.copy(), Math.min(this.costs[id] + 7, 40), enchantments.holders().map(holders -> holders));
-
-                            this.enchantSlots.setItem(0, EnigmaticHandler.mergeEnchantments(this.enchantSlots.getItem(0), doubleEnchanted, false, false));
 
                             player.awardStat(Stats.ENCHANT_ITEM);
                             if (player instanceof ServerPlayer sp) {

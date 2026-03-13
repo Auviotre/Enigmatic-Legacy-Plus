@@ -4,7 +4,10 @@ import auviotre.enigmatic.legacy.contents.entity.PiglinWanderer;
 import net.minecraft.client.model.PiglinModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.monster.piglin.PiglinArmPose;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class PiglinWandererModel extends PiglinModel<PiglinWanderer> {
     public PiglinWandererModel(ModelPart part) {
         super(part);
