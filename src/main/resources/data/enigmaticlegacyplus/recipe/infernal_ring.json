@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "B": {
+            "item": "minecraft:blaze_powder"
+        },
+        "C": {
+            "item": "enigmaticlegacyplus:infernal_cinder"
+        },
+        "G": {
+            "item": "minecraft:ghast_tear"
+        },
+        "N": {
+            "item": "minecraft:netherite_scrap"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:iron_ring"
+        }
+    },
+    "pattern": [
+        "CNC",
+        "BXB",
+        "CGC"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:infernal_ring"
+    }
+}

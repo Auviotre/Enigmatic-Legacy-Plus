@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.scrolls;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -21,6 +22,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.EnchantmentTags;
@@ -69,7 +71,7 @@ public class ViolenceScroll extends BaseCurioItem {
     public static ModConfigSpec.IntValue krBoost;
 
     public ViolenceScroll() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true).component(EnigmaticComponents.VIOLENCE_TIMER, 0)
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true).component(EnigmaticComponents.VIOLENCE_TIMER, 0)
                 .component(EnigmaticComponents.ABSORBED_ENCHANTMENTS, AbsorbedEnchants.EMPTY));
     }
 
@@ -141,7 +143,8 @@ public class ViolenceScroll extends BaseCurioItem {
             int modifier = i / 80;
             i -= (1 + modifier);
             MobEffectInstance effect = entity.getEffect(EnigmaticEffects.VIOLENCE_CURSE);
-            if (effect == null) entity.addEffect(new MobEffectInstance(EnigmaticEffects.VIOLENCE_CURSE, 210, Math.min(timer / 100, 9), true, true));
+            if (effect == null)
+                entity.addEffect(new MobEffectInstance(EnigmaticEffects.VIOLENCE_CURSE, 210, Math.min(timer / 100, 9), true, true));
             else {
                 effect.duration = 210;
                 effect.amplifier = Math.min(timer / 100, 9);
@@ -169,12 +172,13 @@ public class ViolenceScroll extends BaseCurioItem {
 
     private Multimap<Holder<Attribute>, AttributeModifier> createAttributeMap(LivingEntity entity, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> multimap = HashMultimap.create();
+        ResourceLocation location = IItemHelper.getLocation(this);
         int count = AbsorbedEnchants.getCount(stack);
         MobEffectInstance effect = entity.getEffect(EnigmaticEffects.VIOLENCE_CURSE);
         if (effect != null) count += (int) ((effect.getAmplifier() + 1) * (1 + count * 0.08));
-        multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(getLocation(this), count * attackSpeed.get() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-        multimap.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(getLocation(this), count * entityReach.get() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-        multimap.put(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(getLocation(this), count * krBoost.get() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(location, count * attackSpeed.get() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        multimap.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(location, count * entityReach.get() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        multimap.put(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(location, count * krBoost.get() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         return multimap;
     }
 
@@ -193,7 +197,7 @@ public class ViolenceScroll extends BaseCurioItem {
             if (AbsorbedEnchants.canDisenchant(stack, other)) {
                 slot.set(AbsorbedEnchants.disenchant(stack, other));
                 if (player.level().isClientSide)
-                    player.level().playSound(player, player.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 0.8F, 1.2F + (float)Math.random() * 0.4F);
+                    player.level().playSound(player, player.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 0.8F, 1.2F + (float) Math.random() * 0.4F);
                 return true;
             }
         }
@@ -201,12 +205,13 @@ public class ViolenceScroll extends BaseCurioItem {
     }
 
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
-        if (!EnigmaticHandler.isTheWorthyOne(player)) return super.overrideOtherStackedOnMe(stack, other, slot, action, player, access);
+        if (!EnigmaticHandler.isTheWorthyOne(player))
+            return super.overrideOtherStackedOnMe(stack, other, slot, action, player, access);
         if (action != ClickAction.PRIMARY && slot.mayPlace(stack) && slot.mayPickup(player) && !other.isEmpty()) {
             if (AbsorbedEnchants.canDisenchant(stack, other)) {
                 access.set(AbsorbedEnchants.disenchant(stack, other));
                 if (player.level().isClientSide)
-                    player.level().playSound(player, player.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 0.8F, 1.2F + (float)Math.random() * 0.4F);
+                    player.level().playSound(player, player.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 0.8F, 1.2F + (float) Math.random() * 0.4F);
                 return true;
             }
         }
@@ -214,7 +219,7 @@ public class ViolenceScroll extends BaseCurioItem {
     }
 
     public record AbsorbedEnchants(int count, List<String> enchantments) {
-        public static final MapCodec<AbsorbedEnchants> MAP_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
+        public static final MapCodec<AbsorbedEnchants> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.INT.fieldOf("count").forGetter(AbsorbedEnchants::count),
                 Codec.list(Codec.STRING).fieldOf("enchantments").forGetter(AbsorbedEnchants::enchantments)
         ).apply(instance, AbsorbedEnchants::of));
@@ -282,12 +287,13 @@ public class ViolenceScroll extends BaseCurioItem {
 
         @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
+            DamageSource source = event.getSource();
+            if (source.getEntity() == event.getEntity()) return;
             if (EnigmaticHandler.hasCurio(event.getEntity(), EnigmaticItems.VIOLENCE_SCROLL)) {
                 ItemStack curio = EnigmaticHandler.getCurio(event.getEntity(), EnigmaticItems.VIOLENCE_SCROLL);
                 int i = curio.getOrDefault(EnigmaticComponents.VIOLENCE_TIMER, 0);
                 curio.set(EnigmaticComponents.VIOLENCE_TIMER, i + 120);
             }
-            DamageSource source = event.getSource();
             if (source.getEntity() instanceof LivingEntity entity && EnigmaticHandler.hasCurio(entity, EnigmaticItems.VIOLENCE_SCROLL)) {
                 ItemStack curio = EnigmaticHandler.getCurio(entity, EnigmaticItems.VIOLENCE_SCROLL);
                 int i = curio.getOrDefault(EnigmaticComponents.VIOLENCE_TIMER, 0);

@@ -1,0 +1,30 @@
+{
+    "parent": "enigmaticlegacyplus:main/infernal_cinder",
+    "criteria": {
+        "use_item": {
+            "conditions": {
+                "trigger_id": 3
+            },
+            "trigger": "enigmaticlegacyplus:enigmatic"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.infernal_spear.desc"
+        },
+        "hidden": true,
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:infernal_spear"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.infernal_spear.title"
+        }
+    },
+    "requirements": [
+        [
+            "use_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

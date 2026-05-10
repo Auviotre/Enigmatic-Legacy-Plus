@@ -11,17 +11,6 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "conditions": [
-                        {
-                            "chance": 0.05,
-                            "condition": "minecraft:random_chance"
-                        }
-                    ],
-                    "name": "enigmaticlegacyplus:forbidden_fruit",
-                    "weight": 5
-                },
-                {
-                    "type": "minecraft:item",
                     "functions": [
                         {
                             "add": false,
@@ -34,7 +23,7 @@
                         }
                     ],
                     "name": "minecraft:wither_rose",
-                    "weight": 25
+                    "weight": 15
                 },
                 {
                     "type": "minecraft:item",
@@ -50,13 +39,13 @@
                         }
                     ],
                     "name": "minecraft:ghast_tear",
-                    "weight": 10
+                    "weight": 15
                 },
                 {
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "chance": 0.25,
+                            "chance": 0.5,
                             "condition": "minecraft:random_chance"
                         }
                     ],
@@ -72,13 +61,13 @@
                         }
                     ],
                     "name": "enigmaticlegacyplus:infernal_cinder",
-                    "weight": 20
+                    "weight": 15
                 },
                 {
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "chance": 0.25,
+                            "chance": 0.5,
                             "condition": "minecraft:random_chance"
                         }
                     ],
@@ -94,22 +83,54 @@
                         }
                     ],
                     "name": "enigmaticlegacyplus:ichor_droplet",
-                    "weight": 20
+                    "weight": 15
+                },
+                {
+                    "type": "minecraft:empty",
+                    "weight": 40
+                }
+            ],
+            "rolls": 1.0
+        },
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.8,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:ichor_curse_bottle",
+                    "weight": 25
                 },
                 {
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "chance": 0.25,
+                            "chance": 0.7,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:forbidden_fruit",
+                    "weight": 15
+                },
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.5,
                             "condition": "minecraft:random_chance"
                         }
                     ],
                     "name": "enigmaticlegacyplus:void_stone",
-                    "weight": 4
+                    "weight": 10
                 },
                 {
                     "type": "minecraft:empty",
-                    "weight": 60
+                    "weight": 125
                 }
             ],
             "rolls": 1.0

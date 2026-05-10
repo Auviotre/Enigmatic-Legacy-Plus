@@ -8,8 +8,8 @@
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "baseChance": 0.097,
-                            "bonusChance": 0.025,
+                            "baseChance": 0.132,
+                            "bonusChance": 0.044,
                             "condition": "enigmaticlegacyplus:spellstone"
                         }
                     ],
@@ -20,8 +20,8 @@
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "baseChance": 0.02425,
-                            "bonusChance": 0.0125,
+                            "baseChance": 0.033,
+                            "bonusChance": 0.022,
                             "condition": "enigmaticlegacyplus:spellstone"
                         }
                     ],
@@ -38,7 +38,7 @@
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "chance": 0.061,
+                            "chance": 0.088,
                             "condition": "minecraft:random_chance"
                         }
                     ],
@@ -47,7 +47,7 @@
                             "add": false,
                             "count": {
                                 "type": "minecraft:uniform",
-                                "max": 2.0,
+                                "max": 3.0,
                                 "min": 0.0
                             },
                             "function": "minecraft:set_count"

@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.materials;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ITaintable;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.contents.item.tools.ExecutionAxe;
@@ -31,7 +32,7 @@ import java.util.List;
 
 public class EarthHeart extends BaseItem implements ITaintable {
     public EarthHeart() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON));
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON));
     }
 
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
@@ -50,7 +51,7 @@ public class EarthHeart extends BaseItem implements ITaintable {
 
     public static class Fragment extends BaseItem {
         public Fragment() {
-            super(defaultProperties().stacksTo(16).rarity(Rarity.UNCOMMON));
+            super(IItemHelper.properties().stacksTo(16).rarity(Rarity.UNCOMMON));
         }
     }
 

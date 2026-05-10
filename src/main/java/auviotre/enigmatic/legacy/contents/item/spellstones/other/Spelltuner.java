@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones.other;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.contents.item.spellstones.*;
@@ -10,7 +11,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticDamageTypes;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.serialization.Codec;
@@ -62,14 +62,14 @@ import java.util.List;
 
 public class Spelltuner extends BaseCurioItem {
     public Spelltuner() {
-        super(defaultSingleProperties().rarity(Rarity.RARE).fireResistant());
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).fireResistant());
     }
 
     public static boolean hasTune(LivingEntity entity, ItemLike item) {
         ItemStack curio = EnigmaticHandler.getCurio(entity, EnigmaticItems.SPELLTUNER);
         if (curio.isEmpty() || EnigmaticHandler.hasCurio(entity, item)) return false;
         Context context = curio.get(EnigmaticComponents.SPELLTUNER_CONTEXT);
-        return context != null && (context.spellstone().is(item.asItem()) || context.spellstone().is(EnigmaticItems.THE_CUBE));
+        return context != null && (context.spellstone().is(item.asItem()) || !context.spellstone().is(EnigmaticItems.CREATION_HEART) && context.spellstone().is(EnigmaticItems.THE_CUBE));
     }
 
     public static int getColor(ItemStack stack) {
@@ -122,9 +122,8 @@ public class Spelltuner extends BaseCurioItem {
         if (hasTune(entity, EnigmaticItems.GOLEM_HEART)) {
             entity.getAttributes().addTransientAttributeModifiers(this.getGolemHeartModifiers());
         }
-        if (hasTune(entity, EnigmaticItems.OCEAN_STONE)) {
-            if (entity.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value())) entity.setAirSupply(entity.getMaxAirSupply());
-            entity.getAttributes().addTransientAttributeModifiers(this.getOceanStoneModifiers());
+        if (hasTune(entity, EnigmaticItems.BLAZING_CORE)) {
+            entity.clearFire();
         }
         if (hasTune(entity, EnigmaticItems.REVIVAL_LEAF)) {
             if (entity.tickCount % RevivalLeaf.naturalRegenerationSpeed.get() == 0 && entity.getHealth() < entity.getMaxHealth()) {
@@ -136,26 +135,23 @@ public class Spelltuner extends BaseCurioItem {
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().removeAttributeModifiers(this.getGolemHeartModifiers());
-        entity.getAttributes().removeAttributeModifiers(this.getOceanStoneModifiers());
         super.onUnequip(context, newStack, stack);
     }
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(Attributes.LUCK, new AttributeModifier(getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.LUCK, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
+        Context context = stack.get(EnigmaticComponents.SPELLTUNER_CONTEXT);
+        if (context != null && context.spellstone().is(EnigmaticItems.CREATION_HEART)) {
+            builder.put(NeoForgeMod.CREATIVE_FLIGHT, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
+        }
         return builder.build();
     }
 
     private Multimap<Holder<Attribute>, AttributeModifier> getGolemHeartModifiers() {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(getLocation(this), GolemHeart.knockbackResistance.getAsDouble() / 2, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(IItemHelper.getLocation(this), GolemHeart.knockbackResistance.getAsDouble() / 2, AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
-    }
-
-    private Multimap<Holder<Attribute>, AttributeModifier> getOceanStoneModifiers() {
-        Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
-        map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(getLocation(this), 1.0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        return map;
     }
 
     public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction action, Player player) {
@@ -174,7 +170,7 @@ public class Spelltuner extends BaseCurioItem {
     }
 
     public record Context(ItemStack spellstone, int color) {
-        public static final MapCodec<Context> MAP_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
+        public static final MapCodec<Context> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 ItemStack.SINGLE_ITEM_CODEC.fieldOf("spellstone").forGetter(Context::spellstone),
                 Codec.INT.fieldOf("color").forGetter(Context::color)
         ).apply(instance, Context::of));

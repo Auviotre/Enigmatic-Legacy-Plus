@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.op;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -32,7 +33,7 @@ public class TheJudgement extends BaseItem {
     public static final double ATTACK_RADIUS = 64D;
 
     public TheJudgement() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC).attributes(createAttributes(Float.POSITIVE_INFINITY - 1, 28F)));
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC).attributes(IItemHelper.createAttributes(Float.POSITIVE_INFINITY - 1, 28F)));
     }
 
     @OnlyIn(Dist.CLIENT)

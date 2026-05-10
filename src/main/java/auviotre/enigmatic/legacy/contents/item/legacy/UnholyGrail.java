@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.legacy;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.food.ForbiddenFruit;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -29,7 +30,7 @@ import java.util.List;
 
 public class UnholyGrail extends BaseItem {
     public UnholyGrail() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON).fireResistant());
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).fireResistant());
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.food;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.effect.BlazingMight;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,7 +12,7 @@ public class Exterminato extends BaseItem {
     public static final FoodProperties PROPERTIES = new FoodProperties.Builder().nutrition(7).saturationModifier(0.7F).alwaysEdible().build();
 
     public Exterminato() {
-        super(defaultSingleProperties().food(PROPERTIES));
+        super(IItemHelper.properties().food(PROPERTIES));
     }
 
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {

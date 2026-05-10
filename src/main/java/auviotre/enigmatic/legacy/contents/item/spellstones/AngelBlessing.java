@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -54,7 +55,7 @@ public class AngelBlessing extends SpellstoneItem {
     public static ModConfigSpec.IntValue cooldown;
 
     public AngelBlessing() {
-        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFFB2DAFF);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE), 0xFFB2DAFF);
     }
 
     @SubscribeConfig
@@ -66,6 +67,21 @@ public class AngelBlessing extends SpellstoneItem {
         vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
         cooldown = builder.defineInRange("cooldown", 30, 10, 100);
         builder.pop(2);
+    }
+
+    private static @NotNull Vec3 getVec3(ServerPlayer player) {
+        Vec3 accelerationVec = player.getLookAngle();
+        Vec3 motionVec = player.getDeltaMovement();
+
+        if (player.isFallFlying()) {
+            accelerationVec = accelerationVec.scale(accelerationModifierElytra.get());
+            accelerationVec = accelerationVec.scale(1 / (Math.max(0.15D, motionVec.length()) * 2.25D));
+        } else {
+            accelerationVec = accelerationVec.scale(accelerationModifier.get());
+            accelerationVec = accelerationVec.add(0, player.getJumpBoostPower() * 0.6 + player.getGravity() * 0.8, 0);
+        }
+
+        return motionVec.add(motionVec.x + accelerationVec.x, motionVec.y + accelerationVec.y, motionVec.z + accelerationVec.z);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -99,7 +115,7 @@ public class AngelBlessing extends SpellstoneItem {
 
     protected Multimap<Holder<Attribute>, AttributeModifier> getModifiers() {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
-        map.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(getLocation(this), 0.01 * deflectChance.get(), AttributeModifier.Operation.ADD_VALUE));
+        map.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(IItemHelper.getLocation(this), 0.01 * deflectChance.get(), AttributeModifier.Operation.ADD_VALUE));
         return map;
     }
 
@@ -112,21 +128,6 @@ public class AngelBlessing extends SpellstoneItem {
         player.setDeltaMovement(finalMotion.x, finalMotion.y, finalMotion.z);
         level.playSound(null, player.blockPosition(), EnigmaticSounds.ACCELERATE.get(), SoundSource.PLAYERS, 1.0F, 0.6F + player.getRandom().nextFloat() * 0.1F);
         super.triggerActiveAbility(level, player, stack);
-    }
-
-    private static @NotNull Vec3 getVec3(ServerPlayer player) {
-        Vec3 accelerationVec = player.getLookAngle();
-        Vec3 motionVec = player.getDeltaMovement();
-
-        if (player.isFallFlying()) {
-            accelerationVec = accelerationVec.scale(accelerationModifierElytra.get());
-            accelerationVec = accelerationVec.scale(1 / (Math.max(0.15D, motionVec.length()) * 2.25D));
-        } else {
-            accelerationVec = accelerationVec.scale(accelerationModifier.get());
-            accelerationVec = accelerationVec.add(0, player.getJumpBoostPower() * 0.6 + player.getGravity() * 0.8, 0);
-        }
-
-        return motionVec.add(motionVec.x + accelerationVec.x,motionVec.y + accelerationVec.y, motionVec.z + accelerationVec.z);
     }
 
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {

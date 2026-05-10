@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.rings;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
@@ -38,8 +39,8 @@ public class QuartzRing extends BaseCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(Attributes.ARMOR, new AttributeModifier(getLocation(this), 2, AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.LUCK, new AttributeModifier(getLocation(this), 1.5, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.ARMOR, new AttributeModifier(IItemHelper.getLocation(this), 2, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.LUCK, new AttributeModifier(IItemHelper.getLocation(this), 1.5, AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }
 

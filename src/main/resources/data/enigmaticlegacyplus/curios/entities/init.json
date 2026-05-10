@@ -5,6 +5,7 @@
     "slots": [
         "charm",
         "ring",
+        "amulet",
         "back",
         "scroll",
         "spellstone"

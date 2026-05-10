@@ -36,6 +36,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -134,7 +135,7 @@ public interface EnigmaticHandler {
     }
 
     static boolean isCurseBoosted(LivingEntity entity) {
-        if (!CursedRing.forTheWorthyMode.get()) {
+        if (!CursedRing.forTheWorthyMode.get() || !entity.isEffectiveAi()) {
             entity.getPersistentData().remove("CurseBoost");
             return false;
         }
@@ -167,21 +168,24 @@ public interface EnigmaticHandler {
     }
 
     static boolean hasItem(@Nullable LivingEntity entity, ItemLike itemLike) {
-        if (entity == null) return false;
-        Item item = itemLike.asItem();
-        if (!canUse(entity, item.getDefaultInstance())) return false;
-        Item antiqueBag = EnigmaticItems.ANTIQUE_BAG.asItem();
-        if (item != antiqueBag && AntiqueBag.isBook(item.getDefaultInstance())) {
-            boolean enderCheck = entity instanceof Player player && player.getEnderChestInventory().countItem(antiqueBag) > 0;
-            if (!getItem(entity, antiqueBag).isEmpty() || enderCheck) {
-                if (AntiqueBag.hasBook(item.getDefaultInstance(), entity))
-                    return true;
-            }
-        }
-        return !getItem(entity, itemLike).isEmpty();
+        ItemStack itemRaw = getItemRaw(entity, itemLike);
+        if (!itemRaw.isEmpty()) return true;
+        ItemStack item = itemLike.asItem().getDefaultInstance();
+        if (!item.is(EnigmaticItems.ANTIQUE_BAG) && AntiqueBag.isBook(item))
+            return AntiqueBag.hasBook(item, entity);
+        return false;
     }
 
     static ItemStack getItem(@Nullable LivingEntity entity, ItemLike itemLike) {
+        ItemStack itemRaw = getItemRaw(entity, itemLike);
+        if (!itemRaw.isEmpty()) return itemRaw;
+        ItemStack item = itemLike.asItem().getDefaultInstance();
+        if (!item.is(EnigmaticItems.ANTIQUE_BAG) && AntiqueBag.isBook(item))
+            return AntiqueBag.getBook(item, entity);
+        return ItemStack.EMPTY;
+    }
+
+    static ItemStack getItemRaw(@Nullable LivingEntity entity, ItemLike itemLike) {
         if (entity == null) return ItemStack.EMPTY;
         Item item = itemLike.asItem();
         if (!canUse(entity, item.getDefaultInstance())) return ItemStack.EMPTY;
@@ -429,20 +433,22 @@ public interface EnigmaticHandler {
         return entities;
     }
 
-    static Holder<MobEffect> getRandomDebuff(LivingEntity entity) {
+    static Holder<MobEffect> getRandomDebuff(@NotNull LivingEntity entity) {
         if (DEBUFF_LIST.isEmpty()) {
-            HolderLookup<MobEffect> holder = entity.level().holderLookup(Registries.MOB_EFFECT);
-            List<ResourceKey<MobEffect>> keys = holder.listElementIds().toList();
-            for (ResourceKey<MobEffect> key : keys) {
-                MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(key);
-                if (effect != null && effect.getCategory().equals(MobEffectCategory.HARMFUL) && !effect.isInstantenous()) {
-                    if (holder.getOrThrow(EnigmaticTags.Effects.SHOULD_NOT_RANDOM_OUT).stream().anyMatch(effectHolder -> effectHolder.value().equals(effect)))
-                        continue;
-                    try {
-                        DEBUFF_LIST.add(holder.getOrThrow(key));
-                    } catch (Exception ignored) {
+            try {
+                HolderLookup<MobEffect> lookup = entity.level().holderLookup(Registries.MOB_EFFECT);
+                List<ResourceKey<MobEffect>> keys = lookup.listElementIds().toList();
+                for (ResourceKey<MobEffect> key : keys) {
+                    MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(key);
+                    if (effect != null && effect.getCategory().equals(MobEffectCategory.HARMFUL) && !effect.isInstantenous()) {
+                        if (lookup.getOrThrow(EnigmaticTags.Effects.SHOULD_NOT_RANDOM_OUT).stream().anyMatch(holder -> holder.value().equals(effect)))
+                            continue;
+                        DEBUFF_LIST.add(lookup.getOrThrow(key));
                     }
                 }
+            } catch (Exception exception) {
+                DEBUFF_LIST.clear();
+                return MobEffects.UNLUCK;
             }
         }
         return DEBUFF_LIST.get(entity.getRandom().nextInt(DEBUFF_LIST.size()));

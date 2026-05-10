@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
@@ -53,7 +54,7 @@ public class BlazingCore extends SpellstoneItem {
     public static ModConfigSpec.DoubleValue vulnerabilityModifier;
 
     public BlazingCore() {
-        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFFD75E12);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE), 0xFFD75E12);
     }
 
     @SubscribeConfig

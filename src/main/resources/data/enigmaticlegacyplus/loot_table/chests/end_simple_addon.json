@@ -7,28 +7,12 @@
                 {
                     "type": "minecraft:item",
                     "name": "enigmaticlegacyplus:mending_mixture",
-                    "weight": 30
-                },
-                {
-                    "type": "minecraft:item",
-                    "name": "enigmaticlegacyplus:recall_potion",
                     "weight": 15
                 },
                 {
                     "type": "minecraft:item",
-                    "name": "enigmaticlegacyplus:lore_inscriber",
+                    "name": "enigmaticlegacyplus:recall_potion",
                     "weight": 10
-                },
-                {
-                    "type": "minecraft:item",
-                    "conditions": [
-                        {
-                            "chance": 0.25,
-                            "condition": "minecraft:random_chance"
-                        }
-                    ],
-                    "name": "enigmaticlegacyplus:antique_bag",
-                    "weight": 6
                 },
                 {
                     "type": "minecraft:item",
@@ -44,7 +28,7 @@
                         }
                     ],
                     "name": "enigmaticlegacyplus:etherium_ingot",
-                    "weight": 10
+                    "weight": 15
                 },
                 {
                     "type": "minecraft:item",
@@ -60,7 +44,7 @@
                         }
                     ],
                     "name": "enigmaticlegacyplus:etherium_nugget",
-                    "weight": 50
+                    "weight": 25
                 },
                 {
                     "type": "minecraft:item",
@@ -76,18 +60,7 @@
                         }
                     ],
                     "name": "enigmaticlegacyplus:astral_dust",
-                    "weight": 80
-                },
-                {
-                    "type": "minecraft:item",
-                    "conditions": [
-                        {
-                            "chance": 0.32,
-                            "condition": "minecraft:random_chance"
-                        }
-                    ],
-                    "name": "enigmaticlegacyplus:astral_fruit",
-                    "weight": 15
+                    "weight": 20
                 },
                 {
                     "type": "minecraft:item",
@@ -102,7 +75,44 @@
                 },
                 {
                     "type": "minecraft:empty",
-                    "weight": 60
+                    "weight": 50
+                }
+            ],
+            "rolls": 1.0
+        },
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.75,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:astral_fruit",
+                    "weight": 20
+                },
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.5,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:antique_bag",
+                    "weight": 10
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "enigmaticlegacyplus:lore_inscriber",
+                    "weight": 15
+                },
+                {
+                    "type": "minecraft:empty",
+                    "weight": 120
                 }
             ],
             "rolls": 1.0

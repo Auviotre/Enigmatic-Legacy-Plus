@@ -1,6 +1,6 @@
 package auviotre.enigmatic.legacy.contents.loot.conditions;
 
-import auviotre.enigmatic.legacy.registries.EnigmaticLootConditions;
+import auviotre.enigmatic.legacy.registries.EnigmaticLoots;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.Entity;
@@ -18,7 +18,7 @@ public record IsMonsterCondition(LootContext.EntityTarget entityTarget) implemen
     }
 
     public LootItemConditionType getType() {
-        return EnigmaticLootConditions.IS_MONSTER.get();
+        return EnigmaticLoots.IS_MONSTER.get();
     }
 
     public boolean test(LootContext context) {

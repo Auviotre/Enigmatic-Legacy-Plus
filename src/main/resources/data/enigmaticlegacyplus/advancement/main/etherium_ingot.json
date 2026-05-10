@@ -1,0 +1,33 @@
+{
+    "parent": "enigmaticlegacyplus:main/astral_dust",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:etherium_ingot"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.etherium_ingot.desc"
+        },
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:etherium_ingot"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.etherium_ingot.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

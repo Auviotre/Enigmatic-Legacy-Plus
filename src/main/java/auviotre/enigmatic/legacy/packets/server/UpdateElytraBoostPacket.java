@@ -30,7 +30,7 @@ public record UpdateElytraBoostPacket(boolean boosting) implements CustomPacketP
                     boolean wasBoosting = data.isElytraBoosting();
                     data.setElytraBoosting(packet.boosting);
                     if (wasBoosting != packet.boosting)
-                        PacketDistributor.sendToPlayer(serverPlayer, new EnigmaticDataSyncPacket(data.save()));
+                        PacketDistributor.sendToPlayer(serverPlayer, new EnigmaticDataSyncPacket(data.save(player.registryAccess())));
                 }
             });
         }

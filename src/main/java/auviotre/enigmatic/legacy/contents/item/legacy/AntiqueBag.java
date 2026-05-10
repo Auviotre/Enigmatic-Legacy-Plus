@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.legacy;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.capability.IAntiqueBagHandler;
 import auviotre.enigmatic.legacy.contents.gui.AntiqueBagContainerMenu;
 import auviotre.enigmatic.legacy.contents.item.books.TheInfinitum;
@@ -19,6 +20,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
@@ -43,7 +45,7 @@ public class AntiqueBag extends BaseItem {
     public static ModConfigSpec.ConfigValue<List<? extends String>> extraBookList;
 
     public AntiqueBag() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON).fireResistant());
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).fireResistant());
     }
 
     @SubscribeConfig
@@ -54,14 +56,24 @@ public class AntiqueBag extends BaseItem {
     }
 
     public static boolean isBook(ItemStack stack) {
-        return extraBookList.get().contains(getLocation(stack.getItem()).toString()) || stack.is(ItemTags.BOOKSHELF_BOOKS);
+        return extraBookList.get().contains(IItemHelper.getLocation(stack.getItem()).toString()) || stack.is(ItemTags.BOOKSHELF_BOOKS);
+    }
+
+    public static ItemStack getBook(ItemStack stack, LivingEntity entity) {
+        Optional<IAntiqueBagHandler> optional = EnigmaticCapability.get(entity, EnigmaticCapability.ANTIQUE_BAG_INVENTORY);
+        if (!hasBag(entity) || optional.isEmpty()) return ItemStack.EMPTY;
+        IAntiqueBagHandler handler = optional.get();
+        return handler.findBook(stack.getItem());
     }
 
     public static boolean hasBook(ItemStack stack, LivingEntity entity) {
-        Optional<IAntiqueBagHandler> optional = EnigmaticCapability.get(entity, EnigmaticCapability.ANTIQUE_BAG_INVENTORY);
-        if (optional.isEmpty()) return false;
-        IAntiqueBagHandler handler = optional.get();
-        return !handler.findBook(stack.getItem()).isEmpty();
+        return hasBag(entity) && !getBook(stack, entity).isEmpty();
+    }
+
+    public static boolean hasBag(LivingEntity entity) {
+        Item antiqueBag = EnigmaticItems.ANTIQUE_BAG.asItem();
+        boolean enderCheck = entity instanceof Player player && player.getEnderChestInventory().countItem(antiqueBag) > 0;
+        return !EnigmaticHandler.getItemRaw(entity, EnigmaticItems.ANTIQUE_BAG).isEmpty() || enderCheck;
     }
 
     @OnlyIn(Dist.CLIENT)

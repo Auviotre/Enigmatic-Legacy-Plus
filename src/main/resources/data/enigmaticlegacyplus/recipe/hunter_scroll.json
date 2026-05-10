@@ -1,0 +1,36 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "B": {
+            "item": "minecraft:ink_sac"
+        },
+        "C": {
+            "item": "minecraft:crossbow"
+        },
+        "E": {
+            "item": "minecraft:ender_pearl"
+        },
+        "I": {
+            "item": "minecraft:feather"
+        },
+        "L": {
+            "item": "minecraft:leather"
+        },
+        "M": {
+            "item": "minecraft:redstone"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:blank_scroll"
+        }
+    },
+    "pattern": [
+        "EME",
+        "BXI",
+        "LCL"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:hunter_scroll"
+    }
+}

@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -50,7 +51,7 @@ public class EyeOfNebula extends SpellstoneItem {
     public static ModConfigSpec.IntValue cooldown;
 
     public EyeOfNebula() {
-        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFF0BDDB8);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE), 0xFF0BDDB8);
     }
 
     @SubscribeConfig

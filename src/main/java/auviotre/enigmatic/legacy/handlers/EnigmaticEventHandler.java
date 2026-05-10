@@ -20,7 +20,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -36,6 +38,7 @@ import net.minecraft.world.entity.ai.goal.RangedCrossbowAttackGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -49,6 +52,8 @@ import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -65,21 +70,6 @@ public class EnigmaticEventHandler {
     @SubscribeEvent
     private static void canEquip(@NotNull CurioCanEquipEvent event) {
         if (!EnigmaticHandler.canUse(event.getEntity(), event.getStack())) event.setEquipResult(TriState.FALSE);
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
-        LivingEntity victim = event.getEntity();
-        if (event.getSource().getEntity() instanceof Monster attacker && EnigmaticHandler.isCurseBoosted(attacker)) {
-            boolean flag = attacker.fallDistance > 0.0F && !attacker.onGround() && !attacker.onClimbable() && !attacker.isInWater() && !attacker.hasEffect(MobEffects.BLINDNESS) && !attacker.isPassenger();
-            if (flag) {
-                if (!victim.level().isClientSide) {
-                    ((ServerLevel) victim.level()).getChunkSource().broadcastAndSend(attacker, new ClientboundAnimatePacket(victim, 4));
-                }
-                attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, attacker.getSoundSource(), 1.0F, 1.0F);
-                event.setAmount(event.getAmount() + 0.5F * event.getOriginalAmount());
-            }
-        }
     }
 
     @SubscribeEvent
@@ -120,7 +110,8 @@ public class EnigmaticEventHandler {
             EnigmaticData data = original.getData(EnigmaticAttachments.ENIGMATIC_DATA);
             data.setNebulaPower(false);
             data.setFireImmunityTimer(0);
-            PacketDistributor.sendToPlayer(player, new EnigmaticDataSyncPacket(data.save()));
+            data.setEtheriumShieldTick(0);
+            PacketDistributor.sendToPlayer(player, new EnigmaticDataSyncPacket(data.save(player.registryAccess())));
             if (event.isWasDeath()) EldritchAmulet.reclaimInventory(original, player);
         }
     }
@@ -156,6 +147,8 @@ public class EnigmaticEventHandler {
         }
     }
 
+    // Curse Boost Related Event
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     private static void onFinalTarget(@NotNull LivingChangeTargetEvent event) {
         LivingEntity entity = event.getEntity();
@@ -187,7 +180,7 @@ public class EnigmaticEventHandler {
         }
         if (entity.getClass() == Drowned.class && entity.getRandom().nextInt(100) <= 5) {
             if (entity.getMainHandItem().isEmpty())
-                entity.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.TRIDENT));
+                entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
         }
         if (entity instanceof AbstractPiglin piglin) {
             addModifier(piglin, Attributes.ATTACK_DAMAGE, new AttributeModifier(location, 1.0, AttributeModifier.Operation.ADD_VALUE));
@@ -241,8 +234,9 @@ public class EnigmaticEventHandler {
             addModifier(blaze, Attributes.ATTACK_KNOCKBACK, new AttributeModifier(location, 1.0, AttributeModifier.Operation.ADD_VALUE));
         }
         if (entity instanceof Phantom phantom) {
-            phantom.setPhantomSize(phantom.getPhantomSize() + 2);
-            addModifier(phantom, Attributes.ATTACK_DAMAGE, new AttributeModifier(location, 2.0, AttributeModifier.Operation.ADD_VALUE));
+            if (phantom.getRandom().nextBoolean()) {
+                phantom.setPhantomSize(phantom.getPhantomSize() + phantom.getRandom().nextInt(3));
+            }
         }
     }
 
@@ -254,7 +248,7 @@ public class EnigmaticEventHandler {
     @SubscribeEvent
     private static void onEntityJoinWorld(@NotNull EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            CompoundTag tag = player.getData(EnigmaticAttachments.ENIGMATIC_DATA).save();
+            CompoundTag tag = player.getData(EnigmaticAttachments.ENIGMATIC_DATA).save(player.registryAccess());
             PacketDistributor.sendToPlayer(player, new EnigmaticDataSyncPacket(tag));
         }
         if (!CursedRing.forTheWorthyMode.get()) return;
@@ -286,6 +280,62 @@ public class EnigmaticEventHandler {
 
     private static int getGoalPriority(@NotNull Mob mob, Predicate<WrappedGoal> filter) {
         return mob.goalSelector.getAvailableGoals().stream().filter(filter).findFirst().map(WrappedGoal::getPriority).orElse(-1);
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+        LivingEntity victim = event.getEntity();
+        if (event.getSource().getDirectEntity() instanceof Monster attacker && attacker.isAlive() && EnigmaticHandler.isCurseBoosted(attacker)) {
+            boolean flag = attacker.fallDistance > 0.0F && !attacker.onGround() && !attacker.onClimbable() && !attacker.isInWater() && !attacker.hasEffect(MobEffects.BLINDNESS) && !attacker.isPassenger();
+            if (flag) {
+                if (!victim.level().isClientSide) {
+                    ((ServerLevel) victim.level()).getChunkSource().broadcastAndSend(attacker, new ClientboundAnimatePacket(victim, 4));
+                }
+                attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, attacker.getSoundSource(), 1.0F, 1.0F);
+                event.setAmount(event.getAmount() + 0.5F * event.getOriginalAmount());
+            }
+        }
+
+        if (event.getEntity() instanceof Shulker shulker && EnigmaticHandler.isCurseBoosted(shulker)) {
+            if (shulker.isClosed() && !event.getSource().is(DamageTypeTags.BYPASSES_SHIELD)) event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
+        LivingEntity victim = event.getEntity();
+        float damage = event.getNewDamage();
+        if (event.getSource().getEntity() instanceof LivingEntity attacker) {
+            if (attacker instanceof Stray && victim.canFreeze() && EnigmaticHandler.isCurseBoosted(attacker))
+                victim.setTicksFrozen(victim.getTicksFrozen() + 65 + Mth.floor(damage * 10));
+
+            if (attacker instanceof MagmaCube && EnigmaticHandler.isCurseBoosted(attacker))
+                victim.igniteForSeconds(3 + Mth.floor(damage));
+
+            if (attacker instanceof Phantom && EnigmaticHandler.isCurseBoosted(attacker))
+                victim.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100 + Mth.floor(damage * 5)), attacker);
+
+            if (attacker instanceof Drowned drowned && EnigmaticHandler.isCurseBoosted(drowned)) {
+                int airSupply = victim.getAirSupply();
+                int air = airSupply * 0.4 < 30 ? airSupply - 30 : Mth.floor(airSupply * 0.6);
+                victim.setAirSupply(Math.max(air, 0));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    private static void onLivingDeath(@NotNull LivingDeathEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (entity instanceof Blaze blaze && EnigmaticHandler.isCurseBoosted(blaze)) {
+            RandomSource random = blaze.getRandom();
+            for (int i = 0; i < 15; ++i) {
+                Vec3 vec3 = new Vec3(random.nextGaussian(), random.nextFloat() - 0.6, random.nextGaussian());
+                SmallFireball fireball = new SmallFireball(blaze.level(), blaze, vec3);
+                fireball.setPos(fireball.getX(), blaze.getY(0.5) + 0.5, fireball.getZ());
+                fireball.setOwner(blaze);
+                blaze.level().addFreshEntity(fireball);
+            }
+        }
     }
 
     @SubscribeEvent

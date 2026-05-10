@@ -1,8 +1,9 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.entity.projectile.DragonBreathArrow;
-import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -28,13 +29,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 public class DragonBreathBow extends ProjectileWeaponItem {
     public DragonBreathBow() {
-        super(BaseItem.defaultSingleProperties().rarity(Rarity.RARE).durability(1574));
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).durability(1574));
     }
 
     public static float getPowerForTime(int tick) {
@@ -82,7 +84,7 @@ public class DragonBreathBow extends ProjectileWeaponItem {
             if (f > 0.1F) {
                 List<ItemStack> list = List.of(projectile);
                 if (level instanceof ServerLevel server) {
-                    this.shoot(server, player, player.getUsedItemHand(), stack, list, f * 3.0F, 1.0F, f == 1.0F, null);
+                    this.shoot(server, player, player.getUsedItemHand(), stack, list, f * 3.2F, 1.0F, f == 1.0F, null);
                 }
                 player.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                 player.awardStat(Stats.ITEM_USED.get(this));
@@ -120,19 +122,39 @@ public class DragonBreathBow extends ProjectileWeaponItem {
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
         if (action != ClickAction.PRIMARY && slot.mayPickup(player) && slot.hasItem()) {
             PotionContents bow = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
-            List<MobEffectInstance> remains = bow.customEffects();
+            List<MobEffectInstance> remains = new ArrayList<>(bow.customEffects());
             if (other.is(Items.SPLASH_POTION)) {
                 PotionContents contents = other.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
                 if (contents.potion().isPresent()) {
-                    access.set(Items.GLASS_BOTTLE.getDefaultInstance());
                     List<MobEffectInstance> effects = contents.potion().get().value().getEffects();
                     List<MobEffectInstance> newEffects = new ArrayList<>();
                     for (MobEffectInstance effect : effects)
                         newEffects.add(new MobEffectInstance(effect.getEffect(), effect.getDuration() / 10, effect.getAmplifier()));
-                    int index = 0;
-                    while (newEffects.size() < 4 && remains.size() > index) newEffects.add(remains.get(index++));
-                    stack.set(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.empty(), newEffects));
-                    return true;
+
+                    boolean update = false;
+                    Collection<MobEffectInstance> copy = ImmutableList.copyOf(newEffects);
+                    for (MobEffectInstance effect : copy) {
+                        boolean isExtra = true;
+                        for (int i = 0; i < remains.size(); i++) {
+                            MobEffectInstance origin = remains.get(i);
+                            if (origin.getEffect().equals(effect.getEffect())) {
+                                isExtra = false;
+                                if (origin.getAmplifier() < effect.getAmplifier() || (origin.getAmplifier() == effect.getAmplifier() && origin.getDuration() < effect.getDuration())) {
+                                    remains.set(i, effect);
+                                    newEffects.remove(effect);
+                                    update = true;
+                                }
+                            }
+                        }
+                        update |= isExtra;
+                    }
+                    if (update) {
+                        int index = 0;
+                        while (newEffects.size() < 4 && remains.size() > index) newEffects.add(remains.get(index++));
+                        access.set(Items.GLASS_BOTTLE.getDefaultInstance());
+                        stack.set(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.empty(), newEffects));
+                        return true;
+                    }
                 }
             }
         }

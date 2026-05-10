@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.charms;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -45,7 +46,7 @@ public class ForgerGem extends BaseCurioItem {
     public static ModConfigSpec.IntValue extraMaxDurability;
 
     public ForgerGem() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON).fireResistant());
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).fireResistant());
     }
 
     @SubscribeConfig
@@ -75,7 +76,7 @@ public class ForgerGem extends BaseCurioItem {
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         if (context.entity() instanceof Player) {
-            CuriosApi.addSlotModifier(attributes, "charm", getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
+            CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
         }
         return attributes;
     }
@@ -86,7 +87,7 @@ public class ForgerGem extends BaseCurioItem {
     }
 
     public record ToolInfo(int originDurability, int extraDurability) {
-        public static final MapCodec<ToolInfo> MAP_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
+        public static final MapCodec<ToolInfo> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.INT.fieldOf("origin").forGetter(ToolInfo::originDurability),
                 Codec.INT.fieldOf("extra").forGetter(ToolInfo::extraDurability)
         ).apply(instance, ToolInfo::of));

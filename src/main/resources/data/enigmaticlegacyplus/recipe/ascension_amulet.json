@@ -18,7 +18,7 @@
             "item": "enigmaticlegacyplus:cosmic_heart"
         },
         "X": {
-            "item": "enigmaticlegacyplus:enigmatic_amulet"
+            "tag": "enigmaticlegacyplus:enigmatic_amulets"
         }
     },
     "pattern": [

@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.entity.misc;
 
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IPermanentCrystal;
 import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
 import auviotre.enigmatic.legacy.contents.item.misc.StorageCrystal;
 import auviotre.enigmatic.legacy.handlers.SoulArchive;
@@ -19,9 +20,12 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -34,8 +38,10 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.include.com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.UUID;
 
 public class PermanentItemEntity extends Entity {
@@ -47,6 +53,8 @@ public class PermanentItemEntity extends Entity {
     private UUID thrower;
     private UUID owner;
     private Vec3 position;
+    // for Storage Crystal
+    private Map<String, ItemStack> restoreMap;
 
     public PermanentItemEntity(EntityType<PermanentItemEntity> type, Level world) {
         super(type, world);
@@ -169,7 +177,7 @@ public class PermanentItemEntity extends Entity {
         if (this.level().isClientSide || !this.isAlive()) return false;
 
         if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-            EnigmaticLegacy.LOGGER.warn("[WARN] Attacked permanent item entity with absolute DamageSource: " + source);
+            EnigmaticLegacy.LOGGER.warn("Attacked permanent item entity with absolute DamageSource: {}", source);
             this.kill();
             return true;
         }
@@ -178,7 +186,7 @@ public class PermanentItemEntity extends Entity {
 
     public void remove(Entity.RemovalReason reason) {
         if (reason == RemovalReason.DISCARDED || reason == RemovalReason.KILLED) {
-            EnigmaticLegacy.LOGGER.warn("[WARN] Removing Permanent Item Entity: " + this);
+            EnigmaticLegacy.LOGGER.warn("Removing Permanent Item Entity: {}", this);
             if (!this.level().isClientSide) SoulArchive.getInstance().removeItem(this);
         }
         super.remove(reason);
@@ -196,6 +204,14 @@ public class PermanentItemEntity extends Entity {
             compound.putDouble("BoundY", this.position.y);
             compound.putDouble("BoundZ", this.position.z);
         }
+        CompoundTag mapTag = new CompoundTag();
+        if (restoreMap != null) {
+            for (String key : restoreMap.keySet()) {
+                ItemStack item = restoreMap.get(key);
+                mapTag.put(key, item.save(this.registryAccess()));
+            }
+        }
+        compound.put("restoreMap", mapTag);
     }
 
     public void readAdditionalSaveData(CompoundTag compound) {
@@ -214,6 +230,14 @@ public class PermanentItemEntity extends Entity {
             this.position = new Vec3(x, y, z);
         }
 
+        ImmutableMap.Builder<String, ItemStack> builder = ImmutableMap.builder();
+        CompoundTag mapTag = compound.getCompound("restoreMap");
+        for (String key : mapTag.getAllKeys()) {
+            ItemStack stack = ItemStack.parseOptional(this.registryAccess(), mapTag.getCompound(key));
+            if (!stack.isEmpty()) builder.put(key, stack);
+        }
+        this.restoreMap = builder.build();
+
         if (compound.contains("Item", 10)) {
             CompoundTag compoundtag = compound.getCompound("Item");
             this.setItem(ItemStack.parseOptional(this.registryAccess(), compoundtag));
@@ -231,14 +255,14 @@ public class PermanentItemEntity extends Entity {
 
             ItemStack copy = stack.copy();
             boolean isPlayerOwner = player.getUUID().equals(this.getOwnerId());
-            boolean allowPickUp = (item instanceof SoulCrystal || item instanceof StorageCrystal) && isPlayerOwner;
+            boolean allowPickUp = item instanceof IPermanentCrystal && isPlayerOwner;
 
             if (allowPickUp) {
                 if (item instanceof StorageCrystal) {
-                    StorageCrystal.StorageInfo info = stack.get(EnigmaticComponents.STORAGE_INFO);
+                    StorageCrystal.Info info = stack.get(EnigmaticComponents.STORAGE_INFO);
                     if (info != null) {
                         ItemStack crystal = info.soulCrystal();
-                        StorageCrystal.retrieveDropsFromCrystal(stack, player, crystal, this.position());
+                        StorageCrystal.retrieveDropsFromCrystal(stack, (ServerPlayer) player, crystal, this.position(), this.restoreMap);
                     }
                     SoulArchive.getInstance().removeItem(this);
                 } else {
@@ -263,13 +287,41 @@ public class PermanentItemEntity extends Entity {
         }
     }
 
+    public boolean isPickable() {
+        return true;
+    }
+
+    public InteractionResult interact(Player player, InteractionHand hand) {
+        if (this.pickupDelay > 0) return InteractionResult.PASS;
+        if (!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) return InteractionResult.PASS;
+        if (player.isSpectator()) return InteractionResult.SUCCESS;
+        ItemStack stack = this.getItem();
+        boolean flag = stack.getItem() instanceof SoulCrystal;
+        if (this.level() instanceof ServerLevel level) {
+            if (flag && player.getUUID().equals(this.getOwnerId())) {
+                if (player.addItem(stack.copy())) {
+                    this.discard();
+                    level.sendParticles(ParticleTypes.DRAGON_BREATH, this.getX(), this.getY(0.5), this.getZ(), 48, 0, 0, 0, 0.03);
+                    return InteractionResult.CONSUME;
+                }
+            }
+            return InteractionResult.PASS;
+        }
+        return flag ? InteractionResult.SUCCESS : InteractionResult.PASS;
+    }
+
+    public void setRestoreMap(Map<String, ItemStack> restoreMap) {
+        this.restoreMap = restoreMap;
+    }
+
     public boolean containsSoul() {
         return this.getItem().is(EnigmaticItems.SOUL_CRYSTAL);
     }
 
     public Component getName() {
         Component itextcomponent = this.getCustomName();
-        return itextcomponent != null ? itextcomponent : this.getItem().getItem().getDescription();
+        ItemStack item = this.getItem();
+        return itextcomponent != null ? itextcomponent : item.getItem().getName(item);
     }
 
     public boolean isAttackable() {

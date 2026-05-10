@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.rings;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -33,6 +34,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
@@ -50,7 +52,7 @@ public class EarthPromise extends CursedCurioItem {
     public static ModConfigSpec.IntValue healthThreshold;
 
     public EarthPromise() {
-        super(defaultSingleProperties().rarity(Rarity.RARE), true);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE), true);
     }
 
     @SubscribeConfig
@@ -72,7 +74,7 @@ public class EarthPromise extends CursedCurioItem {
                 TooltipHandler.line(list);
             }
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.earthPromise1", ChatFormatting.GOLD, healthThreshold.get() + "%");
-            int cool = EnigmaticHandler.isTheBlessedOne(Minecraft.getInstance().player) ? cooldown.get() / 25 : cooldown.get() / 20;
+            int cool = RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player) ? cooldown.get() / 25 : cooldown.get() / 20;
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.earthPromise2", ChatFormatting.GOLD, cool);
 
         } else TooltipHandler.holdShift(list);
@@ -82,9 +84,10 @@ public class EarthPromise extends CursedCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(Attributes.ARMOR, new AttributeModifier(getLocation(this), 5, AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(getLocation(this), 2, AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(getLocation(this), 2, AttributeModifier.Operation.ADD_VALUE));
+        ResourceLocation location = IItemHelper.getLocation(this);
+        builder.put(Attributes.ARMOR, new AttributeModifier(location, 5, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, 2, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(location, 2, AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }
 
@@ -105,14 +108,14 @@ public class EarthPromise extends CursedCurioItem {
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
-        @SubscribeEvent
+        @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
             LivingEntity victim = event.getEntity();
             if (victim instanceof Player player && !player.getCooldowns().isOnCooldown(EnigmaticItems.EARTH_PROMISE.get())) {
                 if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.EARTH_PROMISE)) {
                     float damage = event.getAmount();
                     if (player.isAlive() && !event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY) && damage >= player.getHealth() * healthThreshold.get() * 0.01F) {
-                        int tick = EnigmaticHandler.isTheBlessedOne(player) ? cooldown.get() * 4 / 5 : cooldown.get();
+                        int tick = RedemptionRing.Helper.canUseRelic(player) ? cooldown.get() * 4 / 5 : cooldown.get();
                         player.getCooldowns().addCooldown(EnigmaticItems.EARTH_PROMISE.get(), tick);
                         if (player.level() instanceof ServerLevel level) {
                             level.sendParticles(ParticleTypes.FLASH, player.getX(), player.getY(), player.getZ(), 1, 0.0, 0.0, 0.0, 0.0);

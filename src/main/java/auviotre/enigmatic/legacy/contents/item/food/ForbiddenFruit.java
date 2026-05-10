@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.food;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -41,7 +42,7 @@ public class ForbiddenFruit extends BaseItem {
             .nutrition(2).saturationModifier(0.5F).alwaysEdible().build();
 
     public ForbiddenFruit() {
-        super(defaultSingleProperties().food(FOOD_PROPERTIES).rarity(Rarity.RARE).fireResistant());
+        super(IItemHelper.singleProperties().food(FOOD_PROPERTIES).rarity(Rarity.RARE).fireResistant());
     }
 
     public static boolean isForbiddenCursed(LivingEntity entity) {

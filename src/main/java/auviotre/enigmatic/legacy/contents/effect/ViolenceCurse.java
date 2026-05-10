@@ -21,18 +21,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class ViolenceCurse extends MobEffect {
     public ViolenceCurse() {
-        super(MobEffectCategory.NEUTRAL, 0x392e4d);
+        super(MobEffectCategory.NEUTRAL, 0x392E4D);
         ResourceLocation location = EnigmaticLegacy.location("effect.violence_curse");
         this.addAttributeModifier(Attributes.ATTACK_SPEED, location, 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         NeoForge.EVENT_BUS.register(this);
     }
+
     public ParticleOptions createParticleOptions(MobEffectInstance effect) {
         return EnigmaticParticles.VIOLENCE_CURSE.get();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onEffectRemoveHigh(MobEffectEvent.@NotNull Remove event) {
-        if (event.getEffect().equals(EnigmaticEffects.VIOLENCE_CURSE)) event.setCanceled(true);
+        if (event.getEffect().equals(EnigmaticEffects.VIOLENCE_CURSE) && event.getEntity().isAlive())
+            event.setCanceled(true);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -46,7 +48,8 @@ public class ViolenceCurse extends MobEffect {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onEffectRemoveLow(MobEffectEvent.@NotNull Remove event) {
-        if (event.getEffect().equals(EnigmaticEffects.VIOLENCE_CURSE)) event.setCanceled(true);
+        if (event.getEffect().equals(EnigmaticEffects.VIOLENCE_CURSE) && event.getEntity().isAlive())
+            event.setCanceled(true);
     }
 
     @SubscribeEvent

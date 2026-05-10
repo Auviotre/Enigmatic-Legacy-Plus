@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.rings;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -41,11 +42,11 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 
 public class MinerRing extends BaseCurioItem {
-    private static final int MAX_POINT = 128;
+    private static final int MAX_POINT = 256;
     private final RecipeManager.CachedCheck<SingleRecipeInput, BlastingRecipe> quickCheck = RecipeManager.createCheck(RecipeType.BLASTING);
 
     public MinerRing() {
-        super(defaultSingleProperties().component(EnigmaticComponents.MINER_POINT, 0));
+        super(IItemHelper.singleProperties().component(EnigmaticComponents.MINER_POINT, 0));
     }
 
     public static int getPoint(ItemStack stack) {
@@ -76,8 +77,8 @@ public class MinerRing extends BaseCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(getLocation(this), 2, AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.BLOCK_INTERACTION_RANGE, new AttributeModifier(getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(IItemHelper.getLocation(this), 2, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.BLOCK_INTERACTION_RANGE, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }
 
@@ -121,7 +122,7 @@ public class MinerRing extends BaseCurioItem {
                 }
             }
         }
-        if (getPoint(stack) < 64 && entity.tickCount % 100 == 0) setPoint(stack, getPoint(stack) + 1);
+        if (getPoint(stack) < MAX_POINT && entity.tickCount % 80 == 0) setPoint(stack, getPoint(stack) + 1);
     }
 
     public boolean isBarVisible(ItemStack stack) {

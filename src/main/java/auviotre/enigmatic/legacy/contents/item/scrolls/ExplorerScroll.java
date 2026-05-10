@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.scrolls;
 
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.entity.misc.ExplorerMarker;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -15,6 +16,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -38,25 +41,14 @@ public class ExplorerScroll extends BaseCurioItem {
     @SubscribeConfig
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.translation("item.enigmaticlegacyplus.explorer_scroll").push("else.explorerScroll");
-        distance = builder.defineInRange("effectiveRange", 4, 1, 8);
-        cooldown  = builder.defineInRange("cooldown", 320, 160, 800);
+        distance = builder.defineInRange("effectiveRange", 5, 1, 10);
+        cooldown = builder.defineInRange("cooldown", 320, 160, 800);
         builder.pop(2);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
-        TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.explorerScroll");
-            try {
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.currentKeybind", ChatFormatting.LIGHT_PURPLE, KeyMapping.createNameSupplier("key.scrollAbility").get().getString().toUpperCase());
-            } catch (NullPointerException ignored) {
-            }
-        } else TooltipHandler.holdShift(list);
     }
 
     public static void trigger(Level level, ServerPlayer player) {
         if (player.getCooldowns().isOnCooldown(EnigmaticItems.EXPLORER_SCROLL.get())) return;
+        player.playNotifySound(SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
         player.getCooldowns().addCooldown(EnigmaticItems.EXPLORER_SCROLL.get(), cooldown.get());
         BlockPos blockPos = player.blockPosition();
         int d = distance.get();
@@ -71,12 +63,25 @@ public class ExplorerScroll extends BaseCurioItem {
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
+        TooltipHandler.line(list);
+        if (Screen.hasShiftDown()) {
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.explorerScroll");
+            try {
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.currentKeybind", ChatFormatting.LIGHT_PURPLE, KeyMapping.createNameSupplier("key.scrollAbility").get().getString().toUpperCase());
+            } catch (NullPointerException ignored) {
+            }
+        } else TooltipHandler.holdShift(list);
+    }
+
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(getLocation(this), 0.08, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-        builder.put(Attributes.MOVEMENT_EFFICIENCY, new AttributeModifier(getLocation(this), 0.2, AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.SNEAKING_SPEED, new AttributeModifier(getLocation(this), 0.16, AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.SAFE_FALL_DISTANCE, new AttributeModifier(getLocation(this), 1.2, AttributeModifier.Operation.ADD_VALUE));
+        ResourceLocation location = IItemHelper.getLocation(this);
+        builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(location, 0.08, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        builder.put(Attributes.MOVEMENT_EFFICIENCY, new AttributeModifier(location, 0.2, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.SNEAKING_SPEED, new AttributeModifier(location, 0.16, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.SAFE_FALL_DISTANCE, new AttributeModifier(location, 1.2, AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }
 }

@@ -61,7 +61,8 @@ public class EtheriumScythe extends HoeItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumDisable");
         if (Minecraft.getInstance().level != null) {
             var holder = EnigmaticHandler.get(Minecraft.getInstance().level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
-            if (stack.getEnchantmentLevel(holder) > 0) TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumScytheBuff");
+            if (stack.getEnchantmentLevel(holder) > 0)
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumScytheBuff");
         }
         if (stack.isEnchanted()) TooltipHandler.line(list);
     }

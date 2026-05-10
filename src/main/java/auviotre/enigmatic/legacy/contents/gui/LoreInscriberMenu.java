@@ -22,13 +22,9 @@ import org.apache.commons.lang3.StringUtils;
 public class LoreInscriberMenu extends AbstractContainerMenu {
     public final Player player;
     private final ResultContainer result = new ResultContainer();
-    private final ContainerLevelAccess access;    private final Container loreSlot = new SimpleContainer(1) {
-        public void setChanged() {
-            super.setChanged();
-            LoreInscriberMenu.this.slotsChanged(this);
-        }
-    };
+    private final ContainerLevelAccess access;
     private String unParsedInputField;
+
     public LoreInscriberMenu(int syncID, Inventory inventory, FriendlyByteBuf buf) {
         this(syncID, inventory, ContainerLevelAccess.create(inventory.player.level(), inventory.player.blockPosition()));
     }
@@ -92,7 +88,12 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
     public void slotsChanged(Container container) {
         super.slotsChanged(container);
         if (container == this.loreSlot) this.createResult();
-    }
+    }    private final Container loreSlot = new SimpleContainer(1) {
+        public void setChanged() {
+            super.setChanged();
+            LoreInscriberMenu.this.slotsChanged(this);
+        }
+    };
 
     public boolean createResult() {
         ItemStack input = this.loreSlot.getItem(0);
@@ -189,6 +190,8 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
             return this.name;
         }
     }
+
+
 
 
 }

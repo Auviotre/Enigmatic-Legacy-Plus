@@ -1,6 +1,9 @@
 package auviotre.enigmatic.legacy.contents.item.amulets;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IAmulet;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -16,6 +19,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -31,51 +35,69 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.util.TriState;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.event.CurioCanEquipEvent;
 
 import java.util.List;
 
-public class EnigmaticAmulet extends BaseCurioItem {
-    public EnigmaticAmulet() {
-        super(defaultSingleProperties().fireResistant().rarity(Rarity.RARE));
+public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
+    public static ModConfigSpec.DoubleValue attackDamage;
+    public static ModConfigSpec.IntValue sprintingSpeed;
+    public static ModConfigSpec.IntValue projectileDeflect;
+    public static ModConfigSpec.IntValue gravity;
+    public static ModConfigSpec.DoubleValue miningEfficiency;
+    public static ModConfigSpec.IntValue lifesteal;
+    public static ModConfigSpec.IntValue swimSpeed;
+    protected final Color color;
+
+    public EnigmaticAmulet(Color color) {
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE));
+        this.color = color;
     }
 
-    public EnigmaticAmulet(Properties properties) {
+    public EnigmaticAmulet(Properties properties, Color color) {
         super(properties);
+        this.color = color;
     }
 
-    public static AmuletColor getColor(ItemStack amulet) {
-        if (!amulet.has(EnigmaticComponents.AMULET_COLOR)) return AmuletColor.RED;
-        Float colorVar = amulet.getOrDefault(EnigmaticComponents.AMULET_COLOR, 0.0F);
-        return evaluateColor(colorVar);
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.enigmatic_amulet").push("else.enigmaticAmulet");
+        attackDamage = builder.defineInRange("amuletRed", 2.0, 0.0, 10.0);
+        sprintingSpeed = builder.defineInRange("amuletAqua", 15, 0, 100);
+        projectileDeflect = builder.defineInRange("amuletViolet", 15, 0, 100);
+        gravity = builder.defineInRange("amuletMagenta", 20, 0, 100);
+        miningEfficiency = builder.defineInRange("amuletGreen", 2.0, 0.0, 10.0);
+        lifesteal = builder.defineInRange("amuletBlack", 10, 0, 100);
+        swimSpeed = builder.defineInRange("amuletBlue", 25, 0, 100);
+        builder.pop(2);
     }
 
-    public static ItemStack setColor(@NotNull ItemStack amulet, AmuletColor color) {
-        if (amulet.is(EnigmaticItems.ENIGMATIC_AMULET)) {
-            amulet.set(EnigmaticComponents.AMULET_COLOR, color.getColorVar());
-        }
-        return amulet;
+    public static ItemStack randomColor(RandomSource random) {
+        List<DeferredItem<?>> list = List.of(
+                EnigmaticItems.ENIGMATIC_AMULET_RED,
+                EnigmaticItems.ENIGMATIC_AMULET_AQUA,
+                EnigmaticItems.ENIGMATIC_AMULET_VIOLET,
+                EnigmaticItems.ENIGMATIC_AMULET_MAGENTA,
+                EnigmaticItems.ENIGMATIC_AMULET_GREEN,
+                EnigmaticItems.ENIGMATIC_AMULET_BLACK,
+                EnigmaticItems.ENIGMATIC_AMULET_BLUE
+        );
+        return list.get(random.nextInt(list.size())).toStack();
     }
 
-    private static AmuletColor evaluateColor(float colorVar) {
-        float var = (int) (colorVar * 10F) * 0.1F;
-        for (AmuletColor color : AmuletColor.values())
-            if (var == color.colorVar) return color;
-        return AmuletColor.RED;
+    public Color getColor() {
+        return color;
     }
 
-    public static boolean hasColor(LivingEntity entity, AmuletColor color) {
-        if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.ASCENSION_AMULET))
-            return true;
-
-        ItemStack stack = EnigmaticHandler.getCurio(entity, EnigmaticItems.ENIGMATIC_AMULET);
-        return !stack.isEmpty() && getColor(stack) == color;
+    public Component getName(ItemStack stack) {
+        return Component.translatable("item.enigmaticlegacyplus.enigmatic_amulet");
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -108,7 +130,8 @@ public class EnigmaticAmulet extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     protected void addAttributes(List<Component> list, ItemStack stack) {
         TooltipHandler.line(list, "curios.modifiers.charm", ChatFormatting.GOLD);
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletModifier" + getColor(stack));
+        Color color = IAmulet.getAmulet(stack);
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletModifier" + color, ChatFormatting.GOLD, IAmulet.getAttributeVar(color));
     }
 
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
@@ -121,7 +144,6 @@ public class EnigmaticAmulet extends BaseCurioItem {
         entity.getAttributes().addTransientAttributeModifiers(getModifiers(stack, entity));
     }
 
-    @Override
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         tooltips.clear();
         return tooltips;
@@ -129,74 +151,42 @@ public class EnigmaticAmulet extends BaseCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getModifiers(ItemStack amulet, LivingEntity entity) {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
-        AmuletColor color = getColor(amulet);
-        if (color == AmuletColor.RED) {
-            map.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(getLocation(this), 2, AttributeModifier.Operation.ADD_VALUE));
-        } else if (color == AmuletColor.AQUA) {
-            map.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(getLocation(this), entity.isSprinting() ? 0.15F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        } else if (color == AmuletColor.MAGENTA) {
-            map.put(Attributes.GRAVITY, new AttributeModifier(getLocation(this), -0.2F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        } else if (color == AmuletColor.BLUE) {
-            map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(getLocation(this), 0.25F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        } else if (color == AmuletColor.VIOLET) {
-            map.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(getLocation(this), 0.15F, AttributeModifier.Operation.ADD_VALUE));
+        ResourceLocation location = IItemHelper.getLocation(this);
+        Color color = IAmulet.getAmulet(amulet);
+        if (color == Color.RED) {
+            map.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(location, attackDamage.get(), AttributeModifier.Operation.ADD_VALUE));
+        } else if (color == Color.AQUA) {
+            map.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(location, entity.isSprinting() ? sprintingSpeed.get() * 0.01F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        } else if (color == Color.VIOLET) {
+            map.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(location, projectileDeflect.get() * 0.01F, AttributeModifier.Operation.ADD_VALUE));
+        } else if (color == Color.MAGENTA) {
+            map.put(Attributes.GRAVITY, new AttributeModifier(location, gravity.get() * -0.01F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        } else if (color == Color.GREEN) {
+            map.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(location, miningEfficiency.get(), AttributeModifier.Operation.ADD_VALUE));
+        } else if (color == Color.BLACK) {
+            map.put(EnigmaticAttributes.LIFESTEAL, new AttributeModifier(location, lifesteal.get() * 0.01F, AttributeModifier.Operation.ADD_VALUE));
+        } else if (color == Color.BLUE) {
+            map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(location, swimSpeed.get() * 0.01F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         }
         return map;
     }
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAllModifiers(LivingEntity entity) {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
-        map.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(getLocation(this), 2, AttributeModifier.Operation.ADD_VALUE));
-        map.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(getLocation(this), entity.isSprinting() ? 0.15F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        map.put(Attributes.GRAVITY, new AttributeModifier(getLocation(this), -0.2F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(getLocation(this), 0.25F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        map.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(getLocation(this), 0.15F, AttributeModifier.Operation.ADD_VALUE));
+        ResourceLocation location = IItemHelper.getLocation(this);
+        map.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(location, attackDamage.get(), AttributeModifier.Operation.ADD_VALUE));
+        map.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(location, entity.isSprinting() ? sprintingSpeed.get() * 0.01F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        map.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(location, projectileDeflect.get() * 0.01F, AttributeModifier.Operation.ADD_VALUE));
+        map.put(Attributes.GRAVITY, new AttributeModifier(location, gravity.get() * -0.01F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        map.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(location, miningEfficiency.get(), AttributeModifier.Operation.ADD_VALUE));
+        map.put(EnigmaticAttributes.LIFESTEAL, new AttributeModifier(location, lifesteal.get() * 0.01F, AttributeModifier.Operation.ADD_VALUE));
+        map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(location, swimSpeed.get() * 0.01F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         return map;
-    }
-
-    public enum AmuletColor {
-        RED(0.1F),
-        AQUA(0.2F),
-        VIOLET(0.3F),
-        MAGENTA(0.4F),
-        GREEN(0.5F),
-        BLACK(0.6F),
-        BLUE(0.7F);
-
-        private final float colorVar;
-
-        AmuletColor(float colorVar) {
-            this.colorVar = colorVar;
-        }
-
-        public static AmuletColor getSeededColor(RandomSource rand) {
-            return values()[rand.nextInt(values().length)];
-        }
-
-        public float getColorVar() {
-            return this.colorVar;
-        }
-
     }
 
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
-        @SubscribeEvent
-        private static void getBreakSpeed(PlayerEvent.@NotNull BreakSpeed event) {
-            LivingEntity entity = event.getEntity();
-            if (hasColor(entity, AmuletColor.GREEN)) {
-                event.setNewSpeed(event.getOriginalSpeed() * 0.25F + event.getNewSpeed());
-            }
-        }
-
-        @SubscribeEvent
-        private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
-            if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && !attacker.level().isClientSide()) {
-                if (hasColor(attacker, AmuletColor.BLACK)) attacker.heal(event.getNewDamage() * 0.1F);
-            }
-        }
-
         @SubscribeEvent
         private static void onEquip(@NotNull CurioCanEquipEvent event) {
             if (event.getEntity() instanceof Player player && player.isCreative()) return;

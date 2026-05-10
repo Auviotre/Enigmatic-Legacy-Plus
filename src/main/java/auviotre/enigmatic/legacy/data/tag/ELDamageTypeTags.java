@@ -102,6 +102,6 @@ public class ELDamageTypeTags extends DamageTypeTagsProvider {
                         DamageTypes.IN_WALL,
                         DamageTypes.SWEET_BERRY_BUSH,
                         DamageTypes.FELL_OUT_OF_WORLD
-        );
+                );
     }
 }

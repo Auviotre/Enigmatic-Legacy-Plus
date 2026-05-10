@@ -1,0 +1,30 @@
+{
+    "parent": "enigmaticlegacyplus:main/unholy_grail",
+    "criteria": {
+        "full_filled": {
+            "conditions": {
+                "trigger_id": 2
+            },
+            "trigger": "enigmaticlegacyplus:enigmatic"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.antique_bag_filled.desc"
+        },
+        "hidden": true,
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:antique_bag"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.antique_bag_filled.title"
+        }
+    },
+    "requirements": [
+        [
+            "full_filled"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

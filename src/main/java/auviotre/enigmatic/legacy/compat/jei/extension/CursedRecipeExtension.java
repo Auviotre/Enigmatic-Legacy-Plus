@@ -13,19 +13,20 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CursedRecipeExtension implements ICraftingCategoryExtension<CursedShapedRecipe> {
 
-    public void setRecipe(RecipeHolder<CursedShapedRecipe> recipeHolder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses) {
+    public void setRecipe(@NotNull RecipeHolder<CursedShapedRecipe> recipeHolder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses) {
         CursedShapedRecipe recipe = recipeHolder.value();
         List<List<ItemStack>> inputs = new ArrayList<>();
         for (Ingredient ingredient : recipe.pattern.ingredients()) {
             List<ItemStack> list = new ArrayList<>();
             for (ItemStack stack : ingredient.getItems()) {
-                if (stack.getItem() instanceof ITaintable) stack.set(EnigmaticComponents.TAINTABLE.get(), true);
+                if (stack.getItem() instanceof ITaintable) stack.set(EnigmaticComponents.TAINTABLE, true);
                 list.add(stack);
             }
             inputs.add(list);
@@ -35,7 +36,7 @@ public class CursedRecipeExtension implements ICraftingCategoryExtension<CursedS
         if (level == null) throw new NullPointerException("level must not be null.");
         RegistryAccess registryAccess = level.registryAccess();
         ItemStack result = recipe.getResultItem(registryAccess);
-        if (result.getItem() instanceof ITaintable) result.set(EnigmaticComponents.TAINTABLE.get(), true);
+        if (result.getItem() instanceof ITaintable) result.set(EnigmaticComponents.TAINTABLE, true);
         craftingGridHelper.createAndSetOutputs(builder, List.of(result));
     }
 }

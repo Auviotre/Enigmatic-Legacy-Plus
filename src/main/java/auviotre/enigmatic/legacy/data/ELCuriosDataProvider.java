@@ -16,11 +16,12 @@ public class ELCuriosDataProvider extends CuriosDataProvider {
 
     public void generate(HolderLookup.Provider registries, ExistingFileHelper fileHelper) {
         this.createEntities("init").addEntities(EntityType.PLAYER).addSlots(
-                "charm", "ring", "back", "scroll", "spellstone"
+                "charm", "ring", "amulet", "back", "scroll", "spellstone"
         );
         this.createSlot("back").size(1);
         this.createSlot("ring").size(2);
-        this.createSlot("charm").size(2);
+        this.createSlot("amulet").size(1).icon(EnigmaticLegacy.location("slot/empty_amulet_slot"));
+        this.createSlot("charm").size(1);
         this.createSlot("scroll").size(0).icon(EnigmaticLegacy.location("slot/empty_scroll_slot"));
         this.createSlot("spellstone").size(0).icon(EnigmaticLegacy.location("slot/empty_spellstone_slot"));
     }

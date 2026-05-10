@@ -2,8 +2,10 @@ package auviotre.enigmatic.legacy.contents.item.books;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.ImmutableMultimap;
@@ -12,6 +14,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -27,7 +30,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -52,7 +54,7 @@ public class TheInfinitum extends TheAcknowledgment {
     public static ModConfigSpec.IntValue undeadProbability;
 
     public TheInfinitum() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true), 15, -2.0F);
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true), 15, -2.0F);
     }
 
     @SubscribeConfig
@@ -65,10 +67,11 @@ public class TheInfinitum extends TheAcknowledgment {
         builder.pop(2);
     }
 
-    public static Multimap<Holder<Attribute>, AttributeModifier> getKnockbackModifier() {
+    public static Multimap<Holder<Attribute>, AttributeModifier> getModifier() {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        double modifier = 0.01 * knockbackModifier.getAsInt();
-        builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(getLocation(EnigmaticItems.THE_INFINITUM.get()), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        ResourceLocation location = IItemHelper.getLocation(EnigmaticItems.THE_INFINITUM.get());
+        builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(location, 0.01 * knockbackModifier.getAsInt(), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        builder.put(EnigmaticAttributes.LIFESTEAL, new AttributeModifier(location, 0.01 * lifeSteal.getAsInt(), AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }
 
@@ -109,12 +112,10 @@ public class TheInfinitum extends TheAcknowledgment {
     }
 
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        if (!EnigmaticHandler.isTheWorthyOne(player)) return InteractionResultHolder.pass(player.getItemInHand(hand));
-        if (hand == InteractionHand.MAIN_HAND) {
-            ItemStack offhandStack = player.getOffhandItem();
-            if (!offhandStack.isEmpty() && (offhandStack.getItem().getUseAnimation(offhandStack) != UseAnim.NONE))
-                return InteractionResultHolder.pass(player.getItemInHand(hand));
-        }
+        ItemStack stack = player.getItemInHand(hand);
+        if (!EnigmaticHandler.canUse(player, stack)) return InteractionResultHolder.pass(stack);
+        if (hand == InteractionHand.MAIN_HAND && !player.getOffhandItem().isEmpty())
+            return InteractionResultHolder.pass(stack);
         return super.use(world, player, hand);
     }
 
@@ -123,11 +124,11 @@ public class TheInfinitum extends TheAcknowledgment {
     public static class Events {
         @SubscribeEvent
         private static void onTick(PlayerTickEvent.@NotNull Pre event) {
-            LivingEntity entity = event.getEntity();
-            if (EnigmaticHandler.isTheWorthyOne(entity)) {
+            Player entity = event.getEntity();
+            if (EnigmaticHandler.isTheWorthyOne(entity) && !entity.level().isClientSide()) {
                 if (entity.getWeaponItem().is(EnigmaticItems.THE_INFINITUM))
-                    entity.getAttributes().addTransientAttributeModifiers(getKnockbackModifier());
-                else entity.getAttributes().removeAttributeModifiers(getKnockbackModifier());
+                    entity.getAttributes().addTransientAttributeModifiers(getModifier());
+                else entity.getAttributes().removeAttributeModifiers(getModifier());
             }
         }
 
@@ -161,7 +162,6 @@ public class TheInfinitum extends TheAcknowledgment {
             DamageSource source = event.getSource();
             if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
                 if (attacker.getWeaponItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
-                    attacker.heal(event.getNewDamage() * 0.01F * lifeSteal.get());
                     Holder<MobEffect> debuff = EnigmaticHandler.getRandomDebuff(attacker);
                     MobEffectInstance instance = new MobEffectInstance(debuff, 200, 0, false, true);
                     event.getEntity().addEffect(instance);

@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.misc;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.IPermanentCrystal;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
@@ -9,6 +10,8 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -35,7 +38,7 @@ public class SoulCrystal extends BaseItem implements IPermanentCrystal {
     public static final Map<Player, Multimap<Holder<Attribute>, AttributeModifier>> ATTRIBUTE_DISPATCHER = new WeakHashMap<>();
 
     public SoulCrystal() {
-        super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC));
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.EPIC));
     }
 
     public static ItemStack createCrystalFrom(Player player) {
@@ -95,11 +98,13 @@ public class SoulCrystal extends BaseItem implements IPermanentCrystal {
         ATTRIBUTE_DISPATCHER.put(player, soulMap);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level world, @NotNull Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (retrieveSoulFromCrystal(player)) {
             updatePlayerSoulMap(player);
-            // TODO: Add Particle Packet.
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, player.getX(), player.getY(0.5), player.getZ(), 48, 0, 0, 0, 0.03);
+            }
             player.swing(hand);
             stack.consume(1, player);
             return InteractionResultHolder.success(stack);

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.potions;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseDrinkableItem;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
@@ -12,7 +13,7 @@ import net.minecraft.world.level.Level;
 
 public class RedemptionPotion extends BaseDrinkableItem {
     public RedemptionPotion() {
-        super(defaultSingleProperties().rarity(Rarity.RARE).craftRemainder(Items.GLASS_BOTTLE));
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).craftRemainder(Items.GLASS_BOTTLE));
     }
 
     public void onConsumed(Level level, Player player, ItemStack stack) {

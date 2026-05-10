@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class VoidTome extends BaseItem {
     public VoidTome() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON));
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -40,7 +41,7 @@ public class VoidTome extends BaseItem {
                 world.addParticle(ParticleTypes.SQUID_INK, player.getRandomX(width), player.getRandomY(), player.getRandomZ(width), 0.0, 0.05, 0.0F);
             }
         } else {
-            if (EnigmaticHandler.unlockSpecialSlot("scroll", player, getLocation(this))) {
+            if (EnigmaticHandler.unlockSpecialSlot("scroll", player, IItemHelper.getLocation(this))) {
                 player.level().playLocalSound(player.blockPosition(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 1.0F, 1.0F, true);
             }
         }

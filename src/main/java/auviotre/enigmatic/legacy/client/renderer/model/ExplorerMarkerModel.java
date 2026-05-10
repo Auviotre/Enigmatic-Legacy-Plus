@@ -16,6 +16,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 public class ExplorerMarkerModel extends Model {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(EnigmaticLegacy.location("explorer_marker"), "main");
     private final ModelPart main;
+
     public ExplorerMarkerModel(ModelPart root) {
         super(RenderType::entityTranslucent);
         this.main = root.getChild("main");

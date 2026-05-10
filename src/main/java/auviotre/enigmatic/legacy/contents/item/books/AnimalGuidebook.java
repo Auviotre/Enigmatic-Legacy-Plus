@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -27,7 +28,7 @@ import java.util.List;
 
 public class AnimalGuidebook extends BaseItem {
     public AnimalGuidebook() {
-        super(defaultSingleProperties());
+        super(IItemHelper.singleProperties());
     }
 
     @OnlyIn(Dist.CLIENT)

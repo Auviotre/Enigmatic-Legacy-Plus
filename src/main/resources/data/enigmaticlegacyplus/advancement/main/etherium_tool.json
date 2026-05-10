@@ -1,0 +1,55 @@
+{
+    "parent": "enigmaticlegacyplus:main/etherium_ingot",
+    "criteria": {
+        "has_hammer": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:etherium_hammer"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_scythe": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:etherium_scythe"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_sword": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:etherium_sword"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.etherium_tool.desc"
+        },
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:etherium_hammer"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.etherium_tool.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_sword",
+            "has_hammer",
+            "has_scythe"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

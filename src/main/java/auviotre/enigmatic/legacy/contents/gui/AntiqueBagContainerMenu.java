@@ -6,10 +6,12 @@ import auviotre.enigmatic.legacy.contents.capability.IAntiqueBagHandler;
 import auviotre.enigmatic.legacy.contents.item.legacy.AntiqueBag;
 import auviotre.enigmatic.legacy.registries.EnigmaticCapability;
 import auviotre.enigmatic.legacy.registries.EnigmaticMenus;
+import auviotre.enigmatic.legacy.registries.EnigmaticTriggers;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -89,8 +91,18 @@ public class AntiqueBagContainerMenu extends AbstractContainerMenu {
             if (slotItem.getCount() == stack.getCount()) return ItemStack.EMPTY;
             slot.onTake(player, slotItem);
         }
-
         return stack;
+    }
+
+    public void broadcastChanges() {
+        super.broadcastChanges();
+        boolean flag = true;
+        for (int i = 0; i < AntiqueBagInventory.SLOTS_COUNT && flag; i++) {
+            if (this.slots.get(i).getItem().isEmpty()) flag = false;
+        }
+        if (flag && this.player instanceof ServerPlayer serverPlayer) {
+            EnigmaticTriggers.ENIGMATIC_TRIGGER.get().trigger(serverPlayer, 2);
+        }
     }
 
     public boolean stillValid(Player player) {

@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.entity.projectile.ThrownIchorSpear;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -37,7 +38,7 @@ public class IchorSpear extends BaseItem implements ProjectileItem {
     public static ModConfigSpec.IntValue amplifier;
 
     public IchorSpear() {
-        super(defaultProperties(16));
+        super(IItemHelper.properties(16));
     }
 
     @SubscribeConfig

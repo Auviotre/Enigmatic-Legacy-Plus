@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -67,7 +68,7 @@ public class RevivalLeaf extends SpellstoneItem {
     public static ModConfigSpec.IntValue cooldown;
 
     public RevivalLeaf() {
-        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFF91D93F);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE), 0xFF91D93F);
     }
 
     @SubscribeConfig
@@ -225,7 +226,7 @@ public class RevivalLeaf extends SpellstoneItem {
 
     protected Multimap<Holder<Attribute>, AttributeModifier> getModifiers() {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
-        map.put(NeoForgeMod.CREATIVE_FLIGHT, new AttributeModifier(getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
+        map.put(NeoForgeMod.CREATIVE_FLIGHT, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
         return map;
     }
 

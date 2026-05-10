@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.scrolls;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
@@ -36,7 +38,9 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
+import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerSpawnPhantomsEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
@@ -52,7 +56,7 @@ public class NightScroll extends CursedCurioItem {
     public static ModConfigSpec.IntValue lifeSteal;
 
     public NightScroll() {
-        super(defaultSingleProperties().rarity(Rarity.RARE));
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE));
     }
 
     @SubscribeConfig
@@ -99,7 +103,7 @@ public class NightScroll extends CursedCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-        attributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(getLocation(this), damageBoost.get() / 100.0F * getDarkModifier(slotContext.entity()), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IItemHelper.getLocation(this), damageBoost.get() / 100.0F * getDarkModifier(slotContext.entity()), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return attributes;
     }
 
@@ -107,6 +111,17 @@ public class NightScroll extends CursedCurioItem {
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
         public static final Map<LivingEntity, AABB> BOXES = new WeakHashMap<>();
+
+        @SubscribeEvent
+        private static void onLivingChangeTarget(@NotNull LivingChangeTargetEvent event) {
+            LivingEntity entity = event.getEntity();
+            LivingEntity target = event.getNewAboutToBeSetTarget();
+            if (entity instanceof Phantom phantom && EnigmaticHandler.hasCurio(target, EnigmaticItems.NIGHT_SCROLL)) {
+                if (entity.getLastHurtByMob() != target && (phantom.getTarget() == null || !phantom.getTarget().isAlive())) {
+                    event.setCanceled(true);
+                }
+            }
+        }
 
         @SubscribeEvent
         private static void onTick(EntityTickEvent.@NotNull Pre event) {
@@ -127,6 +142,14 @@ public class NightScroll extends CursedCurioItem {
                         event.setCanceled(true);
                     }
                 }
+            }
+        }
+
+        @SubscribeEvent
+        private static void onPhantomSpawn(@NotNull PlayerSpawnPhantomsEvent event) {
+            Player player = event.getEntity();
+            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.NIGHT_SCROLL)) {
+                event.setResult(PlayerSpawnPhantomsEvent.Result.DENY);
             }
         }
 

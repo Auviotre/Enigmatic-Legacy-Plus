@@ -1,8 +1,10 @@
 {
     "values": [
-        "enigmaticlegacyplus:survival_scroll",
+        "enigmaticlegacyplus:survivor_scroll",
         "enigmaticlegacyplus:explorer_scroll",
+        "enigmaticlegacyplus:hunter_scroll",
         "enigmaticlegacyplus:xp_scroll",
+        "enigmaticlegacyplus:escape_scroll",
         "enigmaticlegacyplus:heaven_scroll",
         "enigmaticlegacyplus:fabulous_scroll",
         "enigmaticlegacyplus:night_scroll",

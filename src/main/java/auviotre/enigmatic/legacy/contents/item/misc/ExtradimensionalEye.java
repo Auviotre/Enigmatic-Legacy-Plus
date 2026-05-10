@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.misc;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -29,7 +30,7 @@ import java.util.List;
 
 public class ExtradimensionalEye extends BaseItem {
     public ExtradimensionalEye() {
-        super(defaultSingleProperties());
+        super(IItemHelper.singleProperties());
     }
 
     @OnlyIn(Dist.CLIENT)

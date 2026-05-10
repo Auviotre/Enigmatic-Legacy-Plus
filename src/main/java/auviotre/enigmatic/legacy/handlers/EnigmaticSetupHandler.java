@@ -2,8 +2,7 @@ package auviotre.enigmatic.legacy.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.capability.AntiqueBagCapability;
-import auviotre.enigmatic.legacy.contents.command.GetCurseTimeCommand;
-import auviotre.enigmatic.legacy.contents.command.SetCurseTimeCommand;
+import auviotre.enigmatic.legacy.contents.command.CurseTimeCommand;
 import auviotre.enigmatic.legacy.registries.EnigmaticCapability;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticPotions;
@@ -24,6 +23,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.client.event.RegisterRecipeBookCategoriesEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.village.WandererTradesEvent;
@@ -42,16 +42,21 @@ public class EnigmaticSetupHandler {
 
     @SubscribeEvent
     private static void onWandererTradesEvent(@NotNull WandererTradesEvent event) {
+        List<VillagerTrades.ItemListing> genericTrades = event.getGenericTrades();
         List<VillagerTrades.ItemListing> rareTrades = event.getRareTrades();
         rareTrades.add((trader, rand) -> new MerchantOffer(new ItemCost(EnigmaticItems.EARTH_HEART_FRAGMENT, 2), Optional.of(new ItemCost(Items.EMERALD, 20)), EnigmaticItems.EARTH_HEART.toStack(), 1, 5, 0.2F));
-        rareTrades.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 4), EnigmaticItems.EARTH_HEART_FRAGMENT.toStack(), 2, 5, 0.25F));
+        genericTrades.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 4), EnigmaticItems.EARTH_HEART_FRAGMENT.toStack(), 2, 5, 0.25F));
+    }
+
+    @SubscribeEvent
+    private static void onRecipeCategoriesRegistry(@NotNull RegisterRecipeBookCategoriesEvent event) {
+        // To Be Done.
     }
 
     @SubscribeEvent
     private static void onCommandRegistry(@NotNull RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
-        GetCurseTimeCommand.register(dispatcher);
-        SetCurseTimeCommand.register(dispatcher);
+        CurseTimeCommand.register(dispatcher);
     }
 
     @SubscribeEvent
@@ -69,5 +74,33 @@ public class EnigmaticSetupHandler {
         builder.addMix(Potions.AWKWARD, EnigmaticItems.EARTH_HEART_FRAGMENT.get(), Potions.LUCK);
         builder.addRecipe(Ingredient.of(EnigmaticItems.RECALL_POTION), Ingredient.of(EnigmaticItems.TWISTED_HEART), EnigmaticItems.TWISTED_POTION.toStack());
         builder.addRecipe(Ingredient.of(Items.OMINOUS_BOTTLE), Ingredient.of(EnigmaticItems.ICHOR_DROPLET), EnigmaticItems.ICHOR_CURSE_BOTTLE.toStack());
+        // Ultimate Potions
+        builder.addMix(Potions.LONG_NIGHT_VISION, EnigmaticItems.ICHOR_DROPLET.get(), EnigmaticPotions.ULTIMATE_NIGHT_VISION);
+        builder.addMix(Potions.LONG_INVISIBILITY, EnigmaticItems.ICHOR_DROPLET.get(), EnigmaticPotions.ULTIMATE_INVISIBILITY);
+        builder.addMix(Potions.LONG_LEAPING, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_LEAPING);
+        builder.addMix(Potions.STRONG_LEAPING, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_LEAPING);
+        builder.addMix(Potions.LONG_FIRE_RESISTANCE, EnigmaticItems.ICHOR_DROPLET.get(), EnigmaticPotions.ULTIMATE_FIRE_RESISTANCE);
+        builder.addMix(Potions.LONG_SWIFTNESS, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_SWIFTNESS);
+        builder.addMix(Potions.STRONG_SWIFTNESS, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_SWIFTNESS);
+        builder.addMix(Potions.LONG_SLOWNESS, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_SLOWNESS);
+        builder.addMix(Potions.STRONG_SLOWNESS, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_SLOWNESS);
+        builder.addMix(Potions.STRONG_TURTLE_MASTER, EnigmaticItems.ICHOR_DROPLET.get(), EnigmaticPotions.ULTIMATE_TURTLE_MASTER);
+        builder.addMix(Potions.LONG_WATER_BREATHING, EnigmaticItems.ICHOR_DROPLET.get(), EnigmaticPotions.ULTIMATE_WATER_BREATHING);
+        builder.addMix(Potions.STRONG_HEALING, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_HEALING);
+        builder.addMix(Potions.STRONG_HARMING, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_HARMING);
+        builder.addMix(Potions.LONG_POISON, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_POISON);
+        builder.addMix(Potions.STRONG_POISON, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_POISON);
+        builder.addMix(Potions.LONG_REGENERATION, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_REGENERATION);
+        builder.addMix(Potions.STRONG_REGENERATION, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_REGENERATION);
+        builder.addMix(Potions.LONG_STRENGTH, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_STRENGTH);
+        builder.addMix(Potions.STRONG_STRENGTH, EnigmaticItems.ASTRAL_DUST.get(), EnigmaticPotions.ULTIMATE_STRENGTH);
+        builder.addMix(Potions.LONG_WEAKNESS, EnigmaticItems.ICHOR_DROPLET.get(), EnigmaticPotions.ULTIMATE_WEAKNESS);
+        builder.addMix(Potions.LUCK, EnigmaticItems.ICHOR_DROPLET.get(), EnigmaticPotions.ULTIMATE_LUCK);
+        builder.addMix(Potions.LONG_SLOW_FALLING, EnigmaticItems.ICHOR_DROPLET.get(), EnigmaticPotions.ULTIMATE_SLOW_FALLING);
+
+        builder.addMix(EnigmaticPotions.ULTIMATE_NIGHT_VISION, Items.FERMENTED_SPIDER_EYE, EnigmaticPotions.ULTIMATE_INVISIBILITY);
+        builder.addMix(EnigmaticPotions.ULTIMATE_SWIFTNESS, Items.FERMENTED_SPIDER_EYE, EnigmaticPotions.ULTIMATE_SLOWNESS);
+        builder.addMix(EnigmaticPotions.ULTIMATE_HEALING, Items.FERMENTED_SPIDER_EYE, EnigmaticPotions.ULTIMATE_HARMING);
+        builder.addMix(EnigmaticPotions.ULTIMATE_POISON, Items.FERMENTED_SPIDER_EYE, EnigmaticPotions.ULTIMATE_HARMING);
     }
 }

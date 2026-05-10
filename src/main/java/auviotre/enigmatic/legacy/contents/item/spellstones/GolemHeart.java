@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -49,7 +50,7 @@ public class GolemHeart extends SpellstoneItem {
     public static ModConfigSpec.DoubleValue GHVulnerabilityModifier;
 
     public GolemHeart() {
-        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFFE40B0B);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE), 0xFFE40B0B);
     }
 
     @SubscribeConfig
@@ -118,8 +119,8 @@ public class GolemHeart extends SpellstoneItem {
 
     private Multimap<Holder<Attribute>, AttributeModifier> getArmorDefaultModifiers() {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(Attributes.ARMOR, new AttributeModifier(getLocation(this), defaultArmorBonus.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(getLocation(this), knockbackResistance.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.ARMOR, new AttributeModifier(IItemHelper.getLocation(this), defaultArmorBonus.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(IItemHelper.getLocation(this), knockbackResistance.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }
 

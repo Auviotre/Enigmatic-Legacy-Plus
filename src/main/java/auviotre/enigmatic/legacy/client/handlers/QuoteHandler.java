@@ -34,11 +34,12 @@ public class QuoteHandler {
     private long startedPlaying = -1;
     private int delayTicks = -1;
 
-    private QuoteHandler() {}
+    private QuoteHandler() {
+    }
 
     private double getPlayTime() {
         long millis = System.currentTimeMillis() - this.startedPlaying;
-        return ((double)millis) / 1000;
+        return ((double) millis) / 1000;
     }
 
     public void playQuote(Quote quote, int delayTicks) {

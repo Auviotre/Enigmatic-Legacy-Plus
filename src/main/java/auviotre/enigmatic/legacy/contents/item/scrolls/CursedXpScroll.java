@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.scrolls;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -50,7 +51,7 @@ public class CursedXpScroll extends XpScroll {
     public static ModConfigSpec.DoubleValue knockbackResistanceBoostLimit;
 
     public CursedXpScroll() {
-        super(defaultSingleProperties().rarity(Rarity.RARE).component(EnigmaticComponents.CURSED, true));
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).component(EnigmaticComponents.CURSED, true));
     }
 
     @SubscribeConfig
@@ -121,7 +122,7 @@ public class CursedXpScroll extends XpScroll {
         double level = getLevelModifier(stack);
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         if (level > 0)
-            attributes.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(getLocation(this), level / 100.0 * knockbackResistanceBoostLimit.get(), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            attributes.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(IItemHelper.getLocation(this), level / 100.0 * knockbackResistanceBoostLimit.get(), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return attributes;
     }
 

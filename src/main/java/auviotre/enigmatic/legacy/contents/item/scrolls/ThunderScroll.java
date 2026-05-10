@@ -1,7 +1,9 @@
 package auviotre.enigmatic.legacy.contents.item.scrolls;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
+import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.packets.server.EmptyLeftClickPacket;
@@ -49,7 +51,7 @@ public class ThunderScroll extends CursedCurioItem {
     public static final String TAG_ID = "ElectricPoint";
 
     public ThunderScroll() {
-        super(defaultSingleProperties().rarity(Rarity.RARE), true);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE), true);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -60,7 +62,7 @@ public class ThunderScroll extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.thunderScroll2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.thunderScroll3");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.thunderScroll4");
-            if (EnigmaticHandler.isTheBlessedOne(Minecraft.getInstance().player)) {
+            if (RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player)) {
                 TooltipHandler.line(list);
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.thunderScroll5");
             }
@@ -72,7 +74,7 @@ public class ThunderScroll extends CursedCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(Attributes.SWEEPING_DAMAGE_RATIO, new AttributeModifier(getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.SWEEPING_DAMAGE_RATIO, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }
 
@@ -88,7 +90,7 @@ public class ThunderScroll extends CursedCurioItem {
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
             DamageSource source = event.getSource();
             if (source.getEntity() instanceof LivingEntity entity && EnigmaticHandler.hasCurio(entity, EnigmaticItems.THUNDER_SCROLL)) {
-                if (EnigmaticHandler.isTheBlessedOne(entity)) {
+                if (RedemptionRing.Helper.canUseRelic(entity)) {
                     event.setAmount(modify(event.getEntity(), event.getAmount()));
                 }
             }

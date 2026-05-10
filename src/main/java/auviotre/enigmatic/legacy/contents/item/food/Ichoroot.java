@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.food;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -19,7 +20,7 @@ public class Ichoroot extends BaseItem {
             .nutrition(3).saturationModifier(0.9F).alwaysEdible().build();
 
     public Ichoroot() {
-        super(defaultSingleProperties().food(PROPERTIES));
+        super(IItemHelper.properties().food(PROPERTIES));
     }
 
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {

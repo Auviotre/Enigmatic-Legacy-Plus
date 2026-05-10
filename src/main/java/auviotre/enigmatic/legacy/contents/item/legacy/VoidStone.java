@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.legacy;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import net.minecraft.network.chat.Component;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class VoidStone extends BaseItem {
     public VoidStone() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON).fireResistant());
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).fireResistant());
     }
 
     @OnlyIn(Dist.CLIENT)

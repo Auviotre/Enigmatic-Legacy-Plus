@@ -2,10 +2,10 @@ package auviotre.enigmatic.legacy.contents.item.charms;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
-import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -15,7 +15,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -26,14 +25,12 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +45,7 @@ public class BerserkEmblem extends CursedCurioItem {
     public static ModConfigSpec.DoubleValue damageResistance;
 
     public BerserkEmblem() {
-        super(defaultSingleProperties().rarity(Rarity.RARE).fireResistant());
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).fireResistant());
     }
 
     @SubscribeConfig
@@ -69,8 +66,8 @@ public class BerserkEmblem extends CursedCurioItem {
     private Multimap<Holder<Attribute>, AttributeModifier> createAttributeMap(LivingEntity entity) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         float missingHealthPool = getMissingHealthPool(entity);
-        attributes.put(Attributes.ATTACK_SPEED, new AttributeModifier(getLocation(this), missingHealthPool * attackSpeed.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-        attributes.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(getLocation(this), missingHealthPool * movementSpeed.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        attributes.put(Attributes.ATTACK_SPEED, new AttributeModifier(IItemHelper.getLocation(this), missingHealthPool * attackSpeed.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        attributes.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(IItemHelper.getLocation(this), missingHealthPool * movementSpeed.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         return attributes;
     }
 
@@ -85,6 +82,9 @@ public class BerserkEmblem extends CursedCurioItem {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm5");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm6");
+            TooltipHandler.line(list);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm8");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm9");
         } else TooltipHandler.holdShift(list);
         LocalPlayer player = Minecraft.getInstance().player;
         if (EnigmaticHandler.getCurio(player, this) == stack) {
@@ -99,9 +99,6 @@ public class BerserkEmblem extends CursedCurioItem {
             double damageResist = percentage * damageResistance.get() * (EnigmaticHandler.hasCurio(player, EnigmaticItems.HELL_BLADE_CHARM) ? 0.6 : 1.0);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm4", ChatFormatting.GOLD, String.format("%.1f%%", damageResist));
         }
-        TooltipHandler.line(list);
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm8");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm9");
         TooltipHandler.line(list);
         TooltipHandler.cursedOnly(list, stack);
     }

@@ -24,7 +24,7 @@ public record ToggleMagnetEffectKeyPacket() implements CustomPacketPayload {
                 if (player instanceof ServerPlayer serverPlayer) {
                     EnigmaticData data = serverPlayer.getData(EnigmaticAttachments.ENIGMATIC_DATA);
                     data.toggleMagnetRingEffect();
-                    PacketDistributor.sendToPlayer(serverPlayer, new EnigmaticDataSyncPacket(data.save()));
+                    PacketDistributor.sendToPlayer(serverPlayer, new EnigmaticDataSyncPacket(data.save(player.registryAccess())));
                 }
             });
         }

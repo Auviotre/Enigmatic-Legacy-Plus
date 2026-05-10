@@ -2,19 +2,18 @@ package auviotre.enigmatic.legacy.contents.item.tools;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseElytraItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.packets.client.ChaosDescendingPacket;
-import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
-import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
-import auviotre.enigmatic.legacy.registries.EnigmaticDamageTypes;
-import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,6 +24,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ArmorItem;
@@ -44,6 +44,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerFlyableFallEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -63,7 +64,7 @@ public class ChaosElytra extends BaseElytraItem {
     public static ModConfigSpec.IntValue descendingCooldown;
 
     public ChaosElytra() {
-        super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC).durability(3248).component(EnigmaticComponents.ELDRITCH, true));
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.EPIC).durability(3248).component(EnigmaticComponents.ELDRITCH, true));
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
 
@@ -139,24 +140,20 @@ public class ChaosElytra extends BaseElytraItem {
             if ((isSelected || itemBySlot.equals(stack)) && EnigmaticHandler.isTheWorthyOne(livingEntity))
                 stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
             else stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.max(0.0F, timer - 0.3F));
+
+            if (livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(this)) {
+                if (livingEntity instanceof Player player && player.level().isClientSide()) handleBoosting(player);
+                int ticks = livingEntity.getFallFlyingTicks();
+                if (ticks > 0 && livingEntity.isFallFlying()) stack.elytraFlightTick(livingEntity, ticks);
+            }
         }
     }
-
-    public boolean canEquip(ItemStack stack, EquipmentSlot slot, LivingEntity entity) {
-        return EnigmaticHandler.isTheWorthyOne(entity) && super.canEquip(stack, slot, entity);
-    }
-
 
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
         public static final Map<LivingEntity, Integer> TICK_MAP = new WeakHashMap<>();
         public static final Map<LivingEntity, Vec3> MOVEMENT_MAP = new WeakHashMap<>();
-
-        private static Vec3 getMovement(LivingEntity entity) {
-            Vec3 vec = MOVEMENT_MAP.get(entity);
-            return vec == null ? Vec3.ZERO : vec;
-        }
 
         @SubscribeEvent
         private static void onTick(PlayerTickEvent.@NotNull Pre event) {
@@ -215,6 +212,8 @@ public class ChaosElytra extends BaseElytraItem {
                     boolean cooldown = player.getCooldowns().isOnCooldown(EnigmaticItems.CHAOS_ELYTRA.get());
                     if (cooldown && !player.hasInfiniteMaterials()) return;
                     player.getCooldowns().addCooldown(EnigmaticItems.CHAOS_ELYTRA.get(), target == null ? descendingCooldown.get() : 10);
+                    CompoundTag data = EnigmaticHandler.getPersistedData(player);
+                    data.putBoolean("ChaoAchievementCheck", true);
                 }
                 if (owner.level() instanceof ServerLevel level) {
                     Vec3 pos = target == null ? owner.position() : target.position().add(0, target.getBbHeight() / 2, 0);
@@ -225,7 +224,6 @@ public class ChaosElytra extends BaseElytraItem {
                     movement = Vec3.ZERO;
                 }
                 double range = 3.5 + movement.length();
-//                SuperpositionHandler.setPersistentBoolean(owner, "ChaoAchievementCheck", true);
                 List<LivingEntity> entities = owner.level().getEntitiesOfClass(LivingEntity.class, owner.getBoundingBox().inflate(range));
                 for (LivingEntity entity : entities) {
                     if (entity == owner) continue;
@@ -240,10 +238,27 @@ public class ChaosElytra extends BaseElytraItem {
                     DamageSource source = EnigmaticDamageTypes.source(entity.level(), EnigmaticDamageTypes.ABYSS, owner);
                     entity.hurt(source, (float) (baseValue * pow));
                 }
-//                SuperpositionHandler.removePersistentTag(owner, "ChaoAchievementCheck");
-//                if (owner instanceof ServerPlayer serverPlayer && SuperpositionHandler.getPersistentInteger(owner, "ChaoExplosionKillCount", 0) >= 10)
-//                    ChaosElytraKillTrigger.INSTANCE.trigger(serverPlayer);
-//                SuperpositionHandler.removePersistentTag(owner, "ChaoExplosionKillCount");
+                if (owner instanceof Player player) {
+                    CompoundTag data = EnigmaticHandler.getPersistedData(player);
+                    data.remove("ChaoAchievementCheck");
+                    if (owner instanceof ServerPlayer serverPlayer && data.getInt("ChaoExplosionKillCount") >= 10)
+                        EnigmaticTriggers.ENIGMATIC_TRIGGER.get().trigger(serverPlayer, 4);
+                    data.remove("ChaoExplosionKillCount");
+
+                }
+            }
+        }
+
+        @SubscribeEvent
+        private static void onDeath(@NotNull LivingDeathEvent event) {
+            Entity attacker = event.getSource().getEntity();
+            if (!(event.getEntity() instanceof Monster) || !(attacker instanceof Player player)) return;
+            if (!getElytra(player).is(EnigmaticItems.CHAOS_ELYTRA)) return;
+            CompoundTag data = EnigmaticHandler.getPersistedData(player);
+            if (data.getBoolean("ChaoAchievementCheck")) {
+                if (event.getEntity().getMaxHealth() < player.getMaxHealth() / 2) return;
+                int count = data.getInt("ChaoExplosionKillCount");
+                data.putInt("ChaoExplosionKillCount", count + 1);
             }
         }
 

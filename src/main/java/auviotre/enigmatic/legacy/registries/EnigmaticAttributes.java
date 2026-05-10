@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.registries;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.attribute.EtheriumShieldAttribute;
+import auviotre.enigmatic.legacy.contents.attribute.LifestealAttribute;
 import auviotre.enigmatic.legacy.contents.attribute.ProjectileDeflectAttribute;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -13,4 +14,5 @@ public class EnigmaticAttributes {
 
     public static final DeferredHolder<Attribute, EtheriumShieldAttribute> ETHERIUM_SHIELD = ATTRIBUTES.register("etherium_shield", EtheriumShieldAttribute::new);
     public static final DeferredHolder<Attribute, ProjectileDeflectAttribute> PROJECTILE_DEFLECT = ATTRIBUTES.register("projectile_deflect", ProjectileDeflectAttribute::new);
+    public static final DeferredHolder<Attribute, LifestealAttribute> LIFESTEAL = ATTRIBUTES.register("lifesteal", LifestealAttribute::new);
 }

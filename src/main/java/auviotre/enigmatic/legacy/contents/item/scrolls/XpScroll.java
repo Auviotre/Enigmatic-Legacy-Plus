@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.scrolls;
 
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -35,7 +36,7 @@ public class XpScroll extends BaseCurioItem {
     public static ModConfigSpec.DoubleValue magneticRange;
 
     public XpScroll() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON).component(EnigmaticComponents.XP_SCROLL_STORED, 0L));
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).component(EnigmaticComponents.XP_SCROLL_STORED, 0L));
     }
 
     public XpScroll(Properties properties) {

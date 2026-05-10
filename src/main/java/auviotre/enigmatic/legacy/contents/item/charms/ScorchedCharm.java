@@ -2,7 +2,9 @@ package auviotre.enigmatic.legacy.contents.item.charms;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
+import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
@@ -46,7 +48,7 @@ public class ScorchedCharm extends CursedCurioItem {
     public static ModConfigSpec.IntValue resistanceProbability;
 
     public ScorchedCharm() {
-        super(defaultSingleProperties().fireResistant().rarity(Rarity.UNCOMMON), true);
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.UNCOMMON), true);
     }
 
     @SubscribeConfig
@@ -67,7 +69,7 @@ public class ScorchedCharm extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.scorchedCharm3");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.scorchedCharm4");
             LocalPlayer player = Minecraft.getInstance().player;
-            if (EnigmaticHandler.isTheBlessedOne(player) && player != null) {
+            if (RedemptionRing.Helper.canUseRelic(player) && player != null) {
                 int value = resistanceProbability.get() * (player.isInLava() ? 2 : 1);
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.scorchedCharm5", ChatFormatting.GOLD, String.format("%d%%", value));
             }
@@ -103,7 +105,7 @@ public class ScorchedCharm extends CursedCurioItem {
                     return;
                 }
                 int percentage = resistanceProbability.get() * (entity.isInLava() ? 2 : 1);
-                if (EnigmaticHandler.isTheBlessedOne(entity) && !event.getSource().is(Tags.DamageTypes.IS_TECHNICAL) && entity.getRandom().nextInt(100) < percentage) {
+                if (RedemptionRing.Helper.canUseRelic(entity) && !event.getSource().is(Tags.DamageTypes.IS_TECHNICAL) && entity.getRandom().nextInt(100) < percentage) {
                     event.setCanceled(true);
                 }
             }

@@ -1,7 +1,9 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
+import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import net.minecraft.client.Minecraft;
@@ -30,14 +32,14 @@ import java.util.List;
 
 public class BlessAmplifier extends BaseCursedItem {
     public BlessAmplifier() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON), true);
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON), true);
     }
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessAmplifier1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessAmplifier2");
-        if (EnigmaticHandler.isTheBlessedOne(Minecraft.getInstance().player)) {
+        if (RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player)) {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessAmplifier3");
         }
@@ -69,7 +71,7 @@ public class BlessAmplifier extends BaseCursedItem {
                     for (Holder<Enchantment> holder : list) {
                         int maxLevel = holder.value().getMaxLevel();
                         if (maxLevel > 1) {
-                            double multiplier = EnigmaticHandler.isTheBlessedOne(player) ? 1.4 : 1;
+                            double multiplier = RedemptionRing.Helper.canUseRelic(player) ? 1.4 : 1;
                             int newLevel = (int) Math.min(maxLevel * multiplier, origin.getLevel(holder) * 1.4 + 0.8);
                             enchantments.set(holder, Math.max(newLevel, origin.getLevel(holder)));
                         } else enchantments.set(holder, origin.getLevel(holder));

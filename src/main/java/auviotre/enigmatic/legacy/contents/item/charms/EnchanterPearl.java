@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class EnchanterPearl extends CursedCurioItem {
     public EnchanterPearl() {
-        super(defaultSingleProperties().rarity(Rarity.RARE).fireResistant());
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).fireResistant());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -48,7 +49,7 @@ public class EnchanterPearl extends CursedCurioItem {
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         if (EnigmaticHandler.canUse(context.entity(), stack))
-            CuriosApi.addSlotModifier(attributes, "charm", getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
+            CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
         return attributes;
     }
 

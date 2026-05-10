@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -14,6 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -91,17 +93,19 @@ public class SpecialLootModifier extends LootModifier {
             }
 
             if (SUSPICIOUS_TABLES.stream().anyMatch(table -> table.equals(context.getQueriedLootTableId()))) {
-                if (context.getRandom().nextFloat() < 0.075F) {
+                if (context.getRandom().nextFloat() < 0.08F) {
                     list.clear();
                     float value = context.getRandom().nextFloat();
-                    if (value < 0.02F) list.add(EnigmaticItems.SPELLSTONE_DEBRIS.toStack());
+                    if (value < 0.05F) list.add(EnigmaticItems.SPELLSTONE_DEBRIS.toStack());
                     else if (value < 0.25F) list.add(EnigmaticItems.EARTH_HEART.toStack());
                     else list.add(EnigmaticItems.EARTH_HEART_FRAGMENT.toStack());
                 }
             }
 
-            if (blockState != null && blockState.is(Blocks.SOUL_SOIL)) {
-                if (context.getRandom().nextFloat() < 0.006F) {
+            if (blockState != null && origin != null && entity.level().dimension().equals(Level.NETHER) && blockState.is(Blocks.SOUL_SOIL)) {
+                boolean flag = entity.level().getBiome(BlockPos.containing(origin)).is(Biomes.SOUL_SAND_VALLEY);
+                if (flag && context.getRandom().nextFloat() < 0.006F) {
+                    list.clear();
                     list.add(EnigmaticItems.ILLUSION_LANTERN.toStack());
                 }
             }

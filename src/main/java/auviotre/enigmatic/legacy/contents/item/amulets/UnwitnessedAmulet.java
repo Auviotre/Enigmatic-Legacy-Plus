@@ -1,9 +1,9 @@
 package auviotre.enigmatic.legacy.contents.item.amulets;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
-import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class UnwitnessedAmulet extends BaseCurioItem {
     public UnwitnessedAmulet() {
-        super(defaultSingleProperties().fireResistant().rarity(Rarity.RARE));
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -39,7 +39,7 @@ public class UnwitnessedAmulet extends BaseCurioItem {
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, InteractionHand hand) {
-        ItemStack stack = EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), EnigmaticAmulet.AmuletColor.getSeededColor(player.getRandom()));
+        ItemStack stack = EnigmaticAmulet.randomColor(player.getRandom());
         stack.set(EnigmaticComponents.AMULET_NAME, player.getGameProfile().getName());
         player.playSound(EnigmaticSounds.CHARGED_ON.get(), 1.0F, 1.0F);
         return InteractionResultHolder.success(stack);

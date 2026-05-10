@@ -72,7 +72,7 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
     }
 
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == 256) this.minecraft.player.closeContainer();
+        if (keyCode == 256 && this.minecraft.player != null) this.minecraft.player.closeContainer();
         return this.name.keyPressed(keyCode, scanCode, modifiers) || this.name.canConsumeInput() || super.keyPressed(keyCode, scanCode, modifiers);
     }
 
@@ -92,17 +92,15 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
     }
 
     private void onNameChanged(String input) {
-        if (!input.isEmpty()) {
-            Slot slot = this.menu.getSlot(0);
-            if (slot.hasItem()) {
-                String s = input;
-                if (!slot.getItem().has(DataComponents.CUSTOM_NAME) && input.equals(slot.getItem().getHoverName().getString())) {
-                    s = "";
-                }
+        Slot slot = this.menu.getSlot(0);
+        if (slot.hasItem()) {
+            String s = input;
+            if (!slot.getItem().has(DataComponents.CUSTOM_NAME) && input.equals(slot.getItem().getHoverName().getString())) {
+                s = "";
+            }
 
-                if (this.menu.setItemName(s)) {
-                    PacketDistributor.sendToServer(new LoreInscriberRenamePacket(s));
-                }
+            if (this.menu.setItemName(s)) {
+                PacketDistributor.sendToServer(new LoreInscriberRenamePacket(s));
             }
         }
     }

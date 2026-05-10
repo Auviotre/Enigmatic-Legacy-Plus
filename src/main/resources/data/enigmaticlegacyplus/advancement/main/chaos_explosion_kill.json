@@ -1,0 +1,34 @@
+{
+    "parent": "enigmaticlegacyplus:main/chaos_elytra",
+    "criteria": {
+        "chaos_kill": {
+            "conditions": {
+                "trigger_id": 4
+            },
+            "trigger": "enigmaticlegacyplus:enigmatic"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.chaos_explosion_kill.desc"
+        },
+        "frame": "challenge",
+        "hidden": true,
+        "icon": {
+            "components": {
+                "enigmaticlegacyplus:eldritch_timer": 1.0
+            },
+            "count": 1,
+            "id": "enigmaticlegacyplus:chaos_elytra"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.chaos_explosion_kill.title"
+        }
+    },
+    "requirements": [
+        [
+            "chaos_kill"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -19,7 +20,7 @@ import java.util.List;
 
 public class CurseTransposer extends EnchantmentTransposer {
     public CurseTransposer() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON).component(EnigmaticComponents.CURSED, true));
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).component(EnigmaticComponents.CURSED, true));
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -18,6 +18,8 @@ import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.PhantomSpawner;
 import net.minecraft.world.level.material.FluidState;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.event.entity.player.PlayerSpawnPhantomsEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -39,30 +41,34 @@ public class MixinPhantomSpawner {
                 for (ServerPlayer player : level.players()) {
                     if (!player.isSpectator() && !player.isCreative()) {
                         BlockPos pos = player.blockPosition();
-                        if (!level.dimensionType().hasSkyLight() || pos.getY() >= level.getSeaLevel() && level.canSeeSky(pos)) {
-                            DifficultyInstance difficulty = level.getCurrentDifficultyAt(pos);
-                            if (difficulty.isHarderThan(random.nextFloat() * 3.0F)) {
-                                ServerStatsCounter stats = player.getStats();
-                                int ticksSinceRest = Mth.clamp(stats.getValue(Stats.CUSTOM.get(Stats.TIME_SINCE_REST)), 1, Integer.MAX_VALUE);
+                        PlayerSpawnPhantomsEvent event = EventHooks.firePlayerSpawnPhantoms(player, level, pos);
+                        boolean isAllow = event.getResult() == PlayerSpawnPhantomsEvent.Result.ALLOW;
+                        if (event.shouldSpawnPhantoms(level, pos)) {
+                            if (!level.dimensionType().hasSkyLight() || pos.getY() >= level.getSeaLevel() && level.canSeeSky(pos)) {
+                                DifficultyInstance difficulty = level.getCurrentDifficultyAt(pos);
+                                if (isAllow && difficulty.isHarderThan(random.nextFloat() * 3.0F)) {
+                                    ServerStatsCounter stats = player.getStats();
+                                    int ticksSinceRest = Mth.clamp(stats.getValue(Stats.CUSTOM.get(Stats.TIME_SINCE_REST)), 1, Integer.MAX_VALUE);
 
-                                if (EnigmaticHandler.isTheWorthyOne(player) && CursedRing.forTheWorthyMode.get() && CursedRing.enableInsomnia.get()) {
-                                    if (random.nextInt(ticksSinceRest) <= 72000) {
-                                        BlockPos blockPos = pos.above(20 + random.nextInt(15)).east(-10 + random.nextInt(21)).south(-10 + random.nextInt(21));
-                                        BlockState blockstate = level.getBlockState(blockPos);
-                                        FluidState fluidstate = level.getFluidState(blockPos);
-                                        if (NaturalSpawner.isValidEmptySpawnBlock(level, blockPos, blockstate, fluidstate, EntityType.PHANTOM)) {
-                                            SpawnGroupData spawnGroupData = null;
-                                            int l = 1 + random.nextInt(difficulty.getDifficulty().getId() + 1);
-                                            for (int i1 = 0; i1 < l; ++i1) {
-                                                Phantom phantom = EntityType.PHANTOM.create(level);
-                                                if (phantom != null) {
-                                                    phantom.moveTo(blockPos, 0.0F, 0.0F);
-                                                    EnigmaticHandler.setCurseBoosted(phantom, true, player);
-                                                    spawnGroupData = phantom.finalizeSpawn(level, difficulty, MobSpawnType.NATURAL, spawnGroupData);
-                                                    level.addFreshEntityWithPassengers(phantom);
+                                    if (EnigmaticHandler.isTheWorthyOne(player) && CursedRing.forTheWorthyMode.get() && CursedRing.enableInsomnia.get()) {
+                                        if (random.nextInt(ticksSinceRest) <= 72000) {
+                                            BlockPos blockPos = pos.above(20 + random.nextInt(15)).east(-10 + random.nextInt(21)).south(-10 + random.nextInt(21));
+                                            BlockState blockstate = level.getBlockState(blockPos);
+                                            FluidState fluidstate = level.getFluidState(blockPos);
+                                            if (NaturalSpawner.isValidEmptySpawnBlock(level, blockPos, blockstate, fluidstate, EntityType.PHANTOM)) {
+                                                SpawnGroupData spawnGroupData = null;
+                                                int l = 1 + random.nextInt(difficulty.getDifficulty().getId() + 1);
+                                                for (int i1 = 0; i1 < l; ++i1) {
+                                                    Phantom phantom = EntityType.PHANTOM.create(level);
+                                                    if (phantom != null) {
+                                                        phantom.moveTo(blockPos, 0.0F, 0.0F);
+                                                        EnigmaticHandler.setCurseBoosted(phantom, true, player);
+                                                        spawnGroupData = phantom.finalizeSpawn(level, difficulty, MobSpawnType.NATURAL, spawnGroupData);
+                                                        level.addFreshEntityWithPassengers(phantom);
+                                                    }
                                                 }
+                                                i += l;
                                             }
-                                            i += l;
                                         }
                                     }
                                 }

@@ -2,10 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.etherium;
 
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
-import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
-import auviotre.enigmatic.legacy.registries.EnigmaticEnchantments;
-import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
-import auviotre.enigmatic.legacy.registries.EnigmaticTags;
+import auviotre.enigmatic.legacy.registries.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -17,6 +14,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -51,13 +50,27 @@ public class EtheriumHammer extends DiggerItem {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammer", ChatFormatting.GOLD, 3, 1);
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumDisable");
+        if (!stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammer", ChatFormatting.GOLD, 3, 1);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumDisable");
+        }
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumDisable2");
         if (Minecraft.getInstance().level != null) {
             var holder = EnigmaticHandler.get(Minecraft.getInstance().level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
-            if (stack.getEnchantmentLevel(holder) > 0) TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammerBuff");
+            if (stack.getEnchantmentLevel(holder) > 0)
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammerBuff");
         }
         if (stack.isEnchanted()) TooltipHandler.line(list);
+    }
+
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (player.isShiftKeyDown()) {
+            stack.set(EnigmaticComponents.BOOLEAN, !stack.getOrDefault(EnigmaticComponents.BOOLEAN, false));
+            player.playSound(stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? EnigmaticSounds.CHARGED_OFF.get() : EnigmaticSounds.CHARGED_ON.get(), 1.0F, 1.0F);
+            return InteractionResultHolder.success(stack);
+        }
+        return super.use(level, player, hand);
     }
 
     public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
@@ -79,7 +92,7 @@ public class EtheriumHammer extends DiggerItem {
                 stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND);
             }
             if (level instanceof ServerLevel server) {
-                server.sendParticles(EnigmaticParticles.BLUE_STAR_DUST.get(), target.getX(), target.getY(0.5), target.getZ(), 4, 0.2, 0.2, 0.2, 0.05);
+                server.sendParticles(EnigmaticParticles.ETHER.get(), target.getX(), target.getY(0.5), target.getZ(), 4, 0.2, 0.2, 0.2, 0.05);
             }
             stack.set(EnigmaticComponents.BOOLEAN, false);
         }
@@ -87,7 +100,8 @@ public class EtheriumHammer extends DiggerItem {
     }
 
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
-        if (miningEntity.isCrouching()) return super.mineBlock(stack, level, state, pos, miningEntity);
+        if (miningEntity.isCrouching() || stack.getOrDefault(EnigmaticComponents.BOOLEAN, false))
+            return super.mineBlock(stack, level, state, pos, miningEntity);
         if (miningEntity instanceof Player player && isCorrectToolForDrops(stack, state) && !level.isClientSide()) {
             BlockHitResult hitResult = Item.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);
             if (hitResult.getType() == HitResult.Type.BLOCK) {

@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class ExplorerMarker extends Entity implements OwnableEntity {
-    protected static final EntityDataAccessor<Optional<UUID>> DATA_OWNER_UUID = SynchedEntityData.defineId(ExplorerMarker .class, EntityDataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Optional<UUID>> DATA_OWNER_UUID = SynchedEntityData.defineId(ExplorerMarker.class, EntityDataSerializers.OPTIONAL_UUID);
     private int lifetime = 0;
 
     public ExplorerMarker(EntityType<?> entityType, Level level) {
@@ -39,7 +39,8 @@ public class ExplorerMarker extends Entity implements OwnableEntity {
             this.lifetime--;
             if (lifetime <= 0) this.discard();
             BlockEntity blockEntity = this.level().getBlockEntity(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ()));
-            if (!(blockEntity instanceof RandomizableContainerBlockEntity entity) || entity.getLootTable() == null) this.discard();
+            if (!(blockEntity instanceof RandomizableContainerBlockEntity entity) || entity.getLootTable() == null)
+                this.discard();
         }
     }
 
@@ -60,11 +61,11 @@ public class ExplorerMarker extends Entity implements OwnableEntity {
         }
     }
 
-    public void setOwnerUUID(@Nullable UUID uuid) {
-        this.entityData.set(DATA_OWNER_UUID, Optional.ofNullable(uuid));
-    }
-
     public @Nullable UUID getOwnerUUID() {
         return this.entityData.get(DATA_OWNER_UUID).orElse(null);
+    }
+
+    public void setOwnerUUID(@Nullable UUID uuid) {
+        this.entityData.set(DATA_OWNER_UUID, Optional.ofNullable(uuid));
     }
 }

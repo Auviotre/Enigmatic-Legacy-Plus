@@ -25,7 +25,12 @@ import java.util.Random;
 public class Quote {
     private static final Random RANDOM = new Random();
     private static final List<Quote> ALL_QUOTES = new ArrayList<>();
-
+    private static final String HEARD_TAG = "HeardQuotes";
+    private static Quote lastQuote = null;
+    private final ResourceLocation soundId;
+    private final String name;
+    private final int id;
+    private Subtitles subtitles;
     public static final Quote NO_PERIL = new Quote("no_peril").addSubtitles(new Subtitles(8.0));
     public static final Quote END_DOORSTEP = new Quote("end_doorstep").addSubtitles(new Subtitles(6.0));
     public static final Quote ONLY_BECAUSE = new Quote("only_because").addSubtitles(new Subtitles(6.0));
@@ -40,7 +45,6 @@ public class Quote {
     public static final Quote IMMORTAL = new Quote("immortal").addSubtitles(new Subtitles(8.5));
     public static final Quote APPALLING_PRESENCE = new Quote("appalling_presence").addSubtitles(new Subtitles(9.5));
     public static final Quote ITS_DESTRUCTION = new Quote("its_destruction").addSubtitles(new Subtitles(9.0));
-
     public static final Quote I_WANDERED = new Quote("i_wandered").addSubtitles(new Subtitles(11.5).add(4.75));
     public static final Quote ANOTHER_DEMIGOD = new Quote("another_demigod").addSubtitles(new Subtitles(14.0).add(5.25));
     public static final Quote ANOTHER_EON = new Quote("another_eon").addSubtitles(new Subtitles(12.0).add(7.5));
@@ -55,23 +59,13 @@ public class Quote {
     public static final Quote WITH_DRAGONS = new Quote("with_dragons").addSubtitles(new Subtitles(32.0).add(9.7).add(14.0).add(21.2));
     public static final Quote TERRIFYING_FORM = new Quote("terrifying_form").addSubtitles(new Subtitles(14.5).add(6.2));
     public static final Quote TOLL_PAID = new Quote("toll_paid").addSubtitles(new Subtitles(11.5).add(7.4));
-
     public static final List<Quote> DEATH_QUOTES = ImmutableList.of(
             NO_PERIL, ONLY_BECAUSE, DEATH_MAY, DEMISE_IS, WE_FALL, YOU_WILL_ENDURE, OBLIVION_REJECTS, SETBACK);
-
     public static final List<Quote> DEATH_QUOTES_ENTITY = ImmutableList.of(
             NO_PERIL, ONLY_BECAUSE, DEATH_MAY, DEMISE_IS, WE_FALL, YOU_WILL_ENDURE, OBLIVION_REJECTS, SETBACK,
             ETERNITY_TO_KEEP, IMMORTAL, VIOLENCE_CALLS);
-
     public static final List<Quote> NARRATOR_INTROS = ImmutableList.of(ANOTHER_DEMIGOD, ANOTHER_EON, PERHAPS_YOU);
     public static final List<Quote> RING_DESTRUCTION = ImmutableList.of(TOLL_PAID, ITS_DESTRUCTION);
-
-    private static Quote lastQuote = null;
-
-    private final ResourceLocation soundId;
-    private final String name;
-    private Subtitles subtitles;
-    private final int id;
 
     public Quote(String name) {
         this.name = name;
@@ -81,38 +75,29 @@ public class Quote {
         ALL_QUOTES.add(this);
     }
 
+    public static Quote getByID(int id) {
+        return ALL_QUOTES.get(id);
+    }
+
+    public static List<Quote> getAllQuotes() {
+        return Collections.unmodifiableList(ALL_QUOTES);
+    }
+
+    public static Quote getRandom(List<Quote> list) {
+        Quote quote;
+
+        do {
+            quote = list.get(RANDOM.nextInt(list.size()));
+        } while (quote == lastQuote);
+
+        return quote;
+    }
+
     public Quote addSubtitles(Subtitles subtitles) {
         Preconditions.checkArgument(this.subtitles == null, "Subtitles already added!");
         subtitles.setQuote(this);
         this.subtitles = subtitles;
         return this;
-    }
-
-    public record PlayOptions(
-            boolean requireUnlocked,
-            boolean playOnce,
-            boolean isDeath,
-            int delayTicks
-    ) {
-        public static PlayOptions defaultPlay() {
-            return new PlayOptions(false, false, false, 1);
-        }
-
-        public PlayOptions once() {
-            return new PlayOptions(requireUnlocked, true, isDeath, delayTicks);
-        }
-
-        public PlayOptions ifUnlocked() {
-            return new PlayOptions(true, playOnce, isDeath, delayTicks);
-        }
-
-        public PlayOptions dead() {
-            return new PlayOptions(requireUnlocked, playOnce, true, delayTicks);
-        }
-
-        public PlayOptions delay(int ticks) {
-            return new PlayOptions(requireUnlocked, playOnce, isDeath, ticks);
-        }
     }
 
     private boolean hasHeard(ServerPlayer player) {
@@ -127,7 +112,6 @@ public class Quote {
         heard.putBoolean(this.name, true);
     }
 
-    private static final String HEARD_TAG = "HeardQuotes";
     private CompoundTag getHeardContainer(ServerPlayer player) {
         CompoundTag data = EnigmaticHandler.getPersistedData(player);
 
@@ -173,21 +157,30 @@ public class Quote {
         return this.name;
     }
 
-    public static Quote getByID(int id) {
-        return ALL_QUOTES.get(id);
-    }
+    public record PlayOptions(
+            boolean requireUnlocked,
+            boolean playOnce,
+            boolean isDeath,
+            int delayTicks
+    ) {
+        public static PlayOptions defaultPlay() {
+            return new PlayOptions(false, false, false, 1);
+        }
 
-    public static List<Quote> getAllQuotes() {
-        return Collections.unmodifiableList(ALL_QUOTES);
-    }
+        public PlayOptions once() {
+            return new PlayOptions(requireUnlocked, true, isDeath, delayTicks);
+        }
 
-    public static Quote getRandom(List<Quote> list) {
-        Quote quote;
+        public PlayOptions ifUnlocked() {
+            return new PlayOptions(true, playOnce, isDeath, delayTicks);
+        }
 
-        do {
-            quote = list.get(RANDOM.nextInt(list.size()));
-        } while (quote == lastQuote);
+        public PlayOptions dead() {
+            return new PlayOptions(requireUnlocked, playOnce, true, delayTicks);
+        }
 
-        return quote;
+        public PlayOptions delay(int ticks) {
+            return new PlayOptions(requireUnlocked, playOnce, isDeath, ticks);
+        }
     }
 }

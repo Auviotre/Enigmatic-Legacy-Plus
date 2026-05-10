@@ -1,0 +1,36 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "B": {
+            "item": "minecraft:ink_sac"
+        },
+        "E": {
+            "item": "minecraft:phantom_membrane"
+        },
+        "I": {
+            "item": "minecraft:feather"
+        },
+        "R": {
+            "item": "enigmaticlegacyplus:recall_potion"
+        },
+        "S": {
+            "item": "minecraft:soul_lantern"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:blank_scroll"
+        },
+        "Y": {
+            "item": "minecraft:ender_eye"
+        }
+    },
+    "pattern": [
+        "SYS",
+        "BXI",
+        "ERE"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:escape_scroll"
+    }
+}

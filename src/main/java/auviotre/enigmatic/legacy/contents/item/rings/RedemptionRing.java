@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.rings;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -14,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -47,9 +49,11 @@ public class RedemptionRing extends BaseCurioItem {
     public static ModConfigSpec.BooleanValue uniqueLegacy;
 
     public RedemptionRing() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC)
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC).fireResistant()
                 .component(EnigmaticComponents.BLESSED, true)
                 .component(EnigmaticComponents.REDEMPTION_LEVEL, 0)
+                .component(EnigmaticComponents.REDEMPTION_THRESHOLD, Long.MAX_VALUE)
+                .component(EnigmaticComponents.REDEMPTION_TIMER, 0L)
         );
     }
 
@@ -120,9 +124,21 @@ public class RedemptionRing extends BaseCurioItem {
 
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
-        if (Helper.getLevel(stack) > 1 && entity.tickCount % regenerationSpeed.get() == 0 && entity.getHealth() < entity.getMaxHealth() * 0.9F) {
+        int level = Helper.getLevel(stack);
+        if (level > 1 && entity.tickCount % regenerationSpeed.get() == 0 && entity.getHealth() < entity.getMaxHealth() * 0.9F) {
             float delta = entity.getMaxHealth() * 0.9F - entity.getHealth();
             entity.heal(Math.max(delta / 20.0F * Helper.getRegenerationModifier(stack), 0.5F));
+        }
+        long threshold = stack.getOrDefault(EnigmaticComponents.REDEMPTION_THRESHOLD, Long.MAX_VALUE);
+        if (entity.tickCount % 20 == 0 && level >= 0 && level < 6 && threshold != Long.MAX_VALUE) {
+            long timer = stack.getOrDefault(EnigmaticComponents.REDEMPTION_TIMER, 0L);
+            timer += 1;
+            if (timer > threshold) {
+                timer = 0L;
+                stack.set(EnigmaticComponents.REDEMPTION_LEVEL, level + 1);
+                stack.set(EnigmaticComponents.REDEMPTION_THRESHOLD, Mth.lfloor(threshold * 1.2));
+            }
+            stack.set(EnigmaticComponents.REDEMPTION_TIMER, timer);
         }
     }
 

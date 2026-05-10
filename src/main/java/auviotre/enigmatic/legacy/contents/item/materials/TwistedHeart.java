@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.materials;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ITaintable;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -11,7 +12,7 @@ import net.minecraft.world.level.Level;
 
 public class TwistedHeart extends BaseCursedItem implements ITaintable {
     public TwistedHeart() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON));
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON));
     }
 
     public boolean canTaint(Player player) {

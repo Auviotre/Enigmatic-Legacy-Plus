@@ -2,6 +2,8 @@ package auviotre.enigmatic.legacy.contents.item.books;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
+import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -10,6 +12,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
@@ -23,7 +26,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -43,7 +45,7 @@ public class TheBless extends TheAcknowledgment {
     public static ModConfigSpec.DoubleValue damageBoostByFire;
 
     public TheBless() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.CURSED, true).component(EnigmaticComponents.BLESSED, true), 6, -1.6F);
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.CURSED, true).component(EnigmaticComponents.BLESSED, true), 6, -1.6F);
     }
 
     @SubscribeConfig
@@ -56,17 +58,18 @@ public class TheBless extends TheAcknowledgment {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+        LocalPlayer player = Minecraft.getInstance().player;
         if (Screen.hasShiftDown()) {
-            if (EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player)) {
+            if (EnigmaticHandler.isTheCursedOne(player)) {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.fourthCurse"));
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.fourthCurseAlteration");
                 TooltipHandler.line(list);
             }
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBless1");
-            if (EnigmaticHandler.isTheBlessedOne(Minecraft.getInstance().player))
+            if (RedemptionRing.Helper.canUseRelic(player))
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBless2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBless3");
-            if (EnigmaticHandler.isTheBlessedOne(Minecraft.getInstance().player))
+            if (RedemptionRing.Helper.canUseRelic(player))
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBless4");
         } else {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBlessLore1");
@@ -91,25 +94,22 @@ public class TheBless extends TheAcknowledgment {
         return super.hurtEnemy(stack, target, attacker);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!EnigmaticHandler.canUse(player, stack)) return InteractionResultHolder.pass(stack);
-        if (hand == InteractionHand.MAIN_HAND) {
-            ItemStack offhandStack = player.getOffhandItem();
-            if (!offhandStack.isEmpty() && (offhandStack.getItem().getUseAnimation(offhandStack) != UseAnim.NONE))
-                return InteractionResultHolder.pass(stack);
-        }
-        return super.use(world, player, hand);
+        if (hand == InteractionHand.MAIN_HAND && !player.getOffhandItem().isEmpty())
+            return InteractionResultHolder.pass(stack);
+        return super.use(level, player, hand);
     }
-
 
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
         @SubscribeEvent
         private static void onTick(PlayerTickEvent.@NotNull Pre event) {
-            if (EnigmaticHandler.hasItem(event.getEntity(), EnigmaticItems.THE_BLESS)) {
-                event.getEntity().clearFire();
+            Player entity = event.getEntity();
+            if (EnigmaticHandler.canUse(entity, EnigmaticItems.THE_BLESS.toStack()) && EnigmaticHandler.hasItem(entity, EnigmaticItems.THE_BLESS)) {
+                entity.clearFire();
             }
         }
 
@@ -118,13 +118,13 @@ public class TheBless extends TheAcknowledgment {
             DamageSource source = event.getSource();
             if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
                 ItemStack stack = attacker.getWeaponItem();
-                if (stack.is(EnigmaticItems.THE_BLESS) && EnigmaticHandler.canUse(attacker, stack) && EnigmaticHandler.isTheBlessedOne(attacker)) {
+                if (stack.is(EnigmaticItems.THE_BLESS) && RedemptionRing.Helper.canUseRelic(attacker)) {
                     event.setAmount(event.getAmount() * (float) (1 + Math.min(1.0F, event.getEntity().getRemainingFireTicks() * 0.01F * damageBoostByFire.get())));
                 }
             }
 
             if (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.CAMPFIRE) || source.is(DamageTypes.HOT_FLOOR)) {
-                if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.hasItem(entity, EnigmaticItems.THE_BLESS)) {
+                if (event.getEntity() instanceof LivingEntity entity && EnigmaticHandler.canUse(entity, EnigmaticItems.THE_BLESS.toStack()) && EnigmaticHandler.hasItem(entity, EnigmaticItems.THE_BLESS)) {
                     event.setCanceled(true);
                 }
             }
@@ -132,7 +132,7 @@ public class TheBless extends TheAcknowledgment {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
-            if (EnigmaticHandler.hasItem(event.getEntity(), EnigmaticItems.THE_BLESS) && EnigmaticHandler.isTheBlessedOne(event.getEntity())) {
+            if (EnigmaticHandler.hasItem(event.getEntity(), EnigmaticItems.THE_BLESS) && RedemptionRing.Helper.canUseRelic(event.getEntity())) {
                 event.getContainer().setPostAttackInvulnerabilityTicks(40);
             }
         }

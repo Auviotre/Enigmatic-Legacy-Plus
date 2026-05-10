@@ -2,9 +2,12 @@ package auviotre.enigmatic.legacy.contents.attachement;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
+
+import java.util.Map;
 
 public class EnigmaticData implements INBTSerializable<CompoundTag> {
     private boolean magnetRingEffect = false;
@@ -18,6 +21,8 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
     private int inBeaconRange = 0;
     private int witherKills = 0;
     private float etherealShield = 0;
+    private long etheriumShieldTick = 0;
+    private Map<String, ItemStack> restoreMap;
 
     public boolean isMagnetRingEnable() {
         return magnetRingEffect;
@@ -99,6 +104,14 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         this.etherealShield = amount;
     }
 
+    public long getEtheriumShieldTick() {
+        return this.etheriumShieldTick;
+    }
+
+    public void setEtheriumShieldTick(long tick) {
+        this.etheriumShieldTick = tick;
+    }
+
     public int getFireImmunityTimer() {
         return fireImmunityTimer;
     }
@@ -132,7 +145,7 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         ++this.timeWithCurses;
     }
 
-    public CompoundTag save() {
+    public CompoundTag save(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
         tag.putBoolean("MagnetRingEffect", this.magnetRingEffect);
         tag.putBoolean("UnlockedNarrator", this.unlockedNarrator);
@@ -144,12 +157,13 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         tag.putInt("InBeaconRangeTick", this.inBeaconRange);
         tag.putInt("WitherKills", this.witherKills);
         tag.putFloat("EtherealShield", this.etherealShield);
+        tag.putLong("EtheriumShieldTick", this.etheriumShieldTick);
         tag.putLong("timeWithCurses", this.timeWithCurses);
         tag.putLong("timeWithoutCurses", this.timeWithoutCurses);
         return tag;
     }
 
-    public void load(@NotNull CompoundTag tag) {
+    public void load(HolderLookup.Provider provider, @NotNull CompoundTag tag) {
         this.magnetRingEffect = tag.getBoolean("MagnetRingEffect");
         this.unlockedNarrator = tag.getBoolean("UnlockedNarrator");
         this.nebulaPower = tag.getBoolean("NebulaPower");
@@ -160,15 +174,16 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         this.inBeaconRange = tag.getInt("InBeaconRangeTick");
         this.witherKills = tag.getInt("WitherKills");
         this.etherealShield = tag.getFloat("EtherealShield");
+        this.etheriumShieldTick = tag.getLong("EtheriumShieldTick");
         this.timeWithCurses = tag.getLong("timeWithCurses");
         this.timeWithoutCurses = tag.getLong("timeWithoutCurses");
     }
 
     public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
-        return save();
+        return save(provider);
     }
 
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
-        load(tag);
+        load(provider, tag);
     }
 }

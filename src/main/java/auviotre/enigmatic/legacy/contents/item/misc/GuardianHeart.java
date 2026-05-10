@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.misc;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -48,7 +49,7 @@ public class GuardianHeart extends BaseCursedItem {
     public static ModConfigSpec.DoubleValue effectiveRange;
 
     public GuardianHeart() {
-        super(defaultSingleProperties().fireResistant().rarity(Rarity.UNCOMMON));
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.UNCOMMON));
     }
 
     @SubscribeConfig
@@ -57,6 +58,32 @@ public class GuardianHeart extends BaseCursedItem {
         effectiveRange = builder.defineInRange("effectiveRange", 24.0, 4.0, 64.0);
         cooldown = builder.defineInRange("cooldown", 200, 100, 600);
         builder.pop(2);
+    }
+
+    public static boolean doesObserveEntity(Player player, LivingEntity entity) {
+        Vec3 view = player.getViewVector(1.0F).normalize();
+        Vec3 delta = new Vec3(entity.getX() - player.getX(), entity.getEyeY() - player.getEyeY(), entity.getZ() - player.getZ());
+        double d0 = delta.length();
+        delta = delta.normalize();
+        double d1 = view.dot(delta);
+
+        return d1 > 1.0D - 0.027D / d0 && player.hasLineOfSight(entity);
+    }
+
+    public @Nullable
+    static <T extends LivingEntity> T getClosestEntity(List<? extends T> entities, Predicate<LivingEntity> predicate, double x, double y, double z) {
+        double d0 = -1.0D;
+        T closest = null;
+        for (T entity : entities) {
+            if (predicate.test(entity)) {
+                double d1 = entity.distanceToSqr(x, y, z);
+                if (closest == null || d1 < d0) {
+                    d0 = d1;
+                    closest = entity;
+                }
+            }
+        }
+        return closest;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -80,32 +107,6 @@ public class GuardianHeart extends BaseCursedItem {
         } else TooltipHandler.holdShift(list);
         TooltipHandler.line(list);
         TooltipHandler.cursedOnly(list, stack);
-    }
-
-    public static boolean doesObserveEntity(Player player, LivingEntity entity) {
-        Vec3 vector3d = player.getViewVector(1.0F).normalize();
-        Vec3 vector3d1 = new Vec3(entity.getX() - player.getX(), entity.getEyeY() - player.getEyeY(), entity.getZ() - player.getZ());
-        double d0 = vector3d1.length();
-        vector3d1 = vector3d1.normalize();
-        double d1 = vector3d.dot(vector3d1);
-
-        return d1 > 1.0D - 0.025D / d0 && player.hasLineOfSight(entity);
-    }
-
-    public @Nullable
-    static <T extends LivingEntity> T getClosestEntity(List<? extends T> entities, Predicate<LivingEntity> predicate, double x, double y, double z) {
-        double d0 = -1.0D;
-        T closest = null;
-        for (T entity : entities) {
-            if (predicate.test(entity)) {
-                double d1 = entity.distanceToSqr(x, y, z);
-                if (closest == null || d1 < d0) {
-                    d0 = d1;
-                    closest = entity;
-                }
-            }
-        }
-        return closest;
     }
 
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
@@ -180,7 +181,6 @@ public class GuardianHeart extends BaseCursedItem {
         private static void onFindTarget(@NotNull LivingChangeTargetEvent event) {
             LivingEntity entity = event.getEntity();
             LivingEntity target = event.getNewAboutToBeSetTarget();
-            if (event.getOriginalAboutToBeSetTarget() != null) return;
             if (EnigmaticHandler.hasItem(target, EnigmaticItems.GUARDIAN_HEART) && entity instanceof Guardian) {
                 if (entity.getLastAttacker() != target && entity.getClass() != ElderGuardian.class)
                     event.setCanceled(true);

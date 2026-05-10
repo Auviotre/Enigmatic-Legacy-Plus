@@ -3,7 +3,6 @@ package auviotre.enigmatic.legacy;
 import auviotre.enigmatic.legacy.client.ClientConfig;
 import auviotre.enigmatic.legacy.client.handlers.QuoteHandler;
 import auviotre.enigmatic.legacy.compat.CompatHandler;
-import auviotre.enigmatic.legacy.contents.item.amulets.EnigmaticAmulet;
 import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.item.rings.DesolationRing;
@@ -23,6 +22,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -45,55 +45,52 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static auviotre.enigmatic.legacy.contents.item.amulets.EnigmaticAmulet.AmuletColor;
-import static auviotre.enigmatic.legacy.contents.item.amulets.EnigmaticAmulet.setColor;
-
 @Mod(EnigmaticLegacy.MODID)
 public class EnigmaticLegacy {
     public static final String MODID = "enigmaticlegacyplus";
     public static final Logger LOGGER = LoggerFactory.getLogger("EnigmaticLegacy");
     public static final CommonProxy PROXY = FMLEnvironment.dist.isClient() ? new ClientProxy() : new CommonProxy();
 
-    public EnigmaticLegacy(IEventBus modEventBus, @NotNull ModContainer container) {
-        EnigmaticItems.ITEMS.register(modEventBus);
-        EnigmaticMenus.MENUS.register(modEventBus);
-        EnigmaticBlocks.BLOCKS.register(modEventBus);
-        EnigmaticSounds.SOUNDS.register(modEventBus);
-        EnigmaticEffects.EFFECTS.register(modEventBus);
-        EnigmaticPotions.POTIONS.register(modEventBus);
-        EnigmaticRecipes.RECIPE_TYPES.register(modEventBus);
-        EnigmaticMemories.MEMORY_TYPE.register(modEventBus);
-        EnigmaticAttributes.ATTRIBUTES.register(modEventBus);
-        EnigmaticEntities.ENTITY_TYPES.register(modEventBus);
-        EnigmaticComponents.COMPONENTS.register(modEventBus);
-        EnigmaticTriggers.TRIGGER_TYPES.register(modEventBus);
-        EnigmaticTabs.CREATIVE_MODE_TABS.register(modEventBus);
-        EnigmaticRecipes.RECIPE_SERIALIZERS.register(modEventBus);
-        EnigmaticParticles.PARTICLE_TYPES.register(modEventBus);
-        EnigmaticAttachments.ATTACHMENT_TYPES.register(modEventBus);
-        EnigmaticBlockEntities.BLOCK_ENTITIES.register(modEventBus);
-        EnigmaticLootModifiers.LOOT_MODIFIERS.register(modEventBus);
-        EnigmaticLootConditions.LOOT_CONDITIONS.register(modEventBus);
-        EnigmaticStructureTypes.STRUCTURE_TYPES.register(modEventBus);
-        EnigmaticStructureTypes.STRUCTURE_PIECE_TYPES.register(modEventBus);
+    public EnigmaticLegacy(IEventBus eventBus, @NotNull ModContainer container) {
+        EnigmaticItems.ITEMS.register(eventBus);
+        EnigmaticMenus.MENUS.register(eventBus);
+        EnigmaticBlocks.BLOCKS.register(eventBus);
+        EnigmaticSounds.SOUNDS.register(eventBus);
+        EnigmaticEffects.EFFECTS.register(eventBus);
+        EnigmaticPotions.POTIONS.register(eventBus);
+        EnigmaticRecipes.RECIPE_TYPES.register(eventBus);
+        EnigmaticMemories.MEMORY_TYPE.register(eventBus);
+        EnigmaticAttributes.ATTRIBUTES.register(eventBus);
+        EnigmaticEntities.ENTITY_TYPES.register(eventBus);
+        EnigmaticComponents.COMPONENTS.register(eventBus);
+        EnigmaticTriggers.TRIGGER_TYPES.register(eventBus);
+        EnigmaticTabs.CREATIVE_MODE_TABS.register(eventBus);
+        EnigmaticRecipes.RECIPE_SERIALIZERS.register(eventBus);
+        EnigmaticParticles.PARTICLE_TYPES.register(eventBus);
+        EnigmaticAttachments.ATTACHMENT_TYPES.register(eventBus);
+        EnigmaticBlockEntities.BLOCK_ENTITIES.register(eventBus);
+        EnigmaticLoots.LOOT_CONDITIONS.register(eventBus);
+        EnigmaticLoots.LOOT_MODIFIERS.register(eventBus);
+        EnigmaticStructureTypes.STRUCTURE_TYPES.register(eventBus);
+        EnigmaticStructureTypes.STRUCTURE_PIECE_TYPES.register(eventBus);
 
         NeoForge.EVENT_BUS.register(this);
-        modEventBus.addListener(this::onCommonSetup);
-        modEventBus.addListener(this::interMod);
-        modEventBus.addListener(this::onPacketSetup);
-        modEventBus.addListener(this::attributeSetup);
-        modEventBus.addListener(this::onLoadComplete);
-        modEventBus.addListener(this::addCreative);
+        eventBus.addListener(this::onCommonSetup);
+        eventBus.addListener(this::interMod);
+        eventBus.addListener(this::onPacketSetup);
+        eventBus.addListener(this::attributeSetup);
+        eventBus.addListener(this::onLoadComplete);
+        eventBus.addListener(this::addCreative);
 
         container.registerConfig(ModConfig.Type.SERVER, ELConfig.SPEC);
         if (FMLEnvironment.dist.isClient()) {
-            modEventBus.addListener(this::onClientSetup);
+            eventBus.addListener(this::onClientSetup);
             NeoForge.EVENT_BUS.register(QuoteHandler.INSTANCE);
             container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
             container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         }
 
-        CompatHandler.getInstance().register(modEventBus);
+        CompatHandler.getInstance().register(eventBus);
     }
 
     public static ResourceLocation location(String path) {
@@ -144,29 +141,31 @@ public class EnigmaticLegacy {
             event.accept(EnigmaticItems.LOOT_GENERATOR.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.accept(EnigmaticItems.COSMIC_SCROLL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         } else if (event.getTab() == EnigmaticTabs.MAIN_TAB.get()) {
-            event.insertAfter(EnigmaticItems.UNWITNESSED_AMULET.toStack(), setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.RED), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.RED), EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.AQUA), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.AQUA), EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.VIOLET), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.VIOLET), EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.MAGENTA), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.MAGENTA), EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.GREEN), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.GREEN), EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.BLACK), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.BLACK), EnigmaticAmulet.setColor(EnigmaticItems.ENIGMATIC_AMULET.toStack(), AmuletColor.BLUE), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticItems.SPELLTUNER.toStack(), EnigmaticBlocks.SPELLSTONE_TABLE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticItems.ASTRAL_FRUIT.toStack(), EnigmaticBlocks.ASTRAL_DUST_SACK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticItems.COSMIC_HEART.toStack(), EnigmaticBlocks.COSMIC_CAKE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertBefore(EnigmaticItems.RAW_ETHERIUM.toStack(), EnigmaticBlocks.ETHERIUM_ORE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticItems.ETHEREAL_FORGING_CHARM.toStack(), EnigmaticBlocks.ETHEREAL_LANTERN.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticItems.ETHERIUM_NUGGET.toStack(), EnigmaticBlocks.ETHERIUM_BLOCK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticBlocks.ETHEREAL_LANTERN.toStack(), EnigmaticBlocks.DIMENSIONAL_ANCHOR.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticItems.GUARDIAN_HEART.toStack(), EnigmaticItems.ENCHANTED_ASTRAL_FRUIT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(EnigmaticItems.ENCHANTED_ASTRAL_FRUIT.toStack(), EnigmaticItems.ENCHANTED_ICHOR_BOTTLE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            tabInsert(event, EnigmaticItems.SPELLTUNER.toStack(), EnigmaticBlocks.SPELLSTONE_TABLE.toStack());
+            tabInsert(event, EnigmaticItems.ASTRAL_FRUIT.toStack(), EnigmaticBlocks.ASTRAL_DUST_SACK.toStack());
+            tabInsert(event, EnigmaticItems.COSMIC_HEART.toStack(), EnigmaticBlocks.COSMIC_CAKE.toStack());
+            tabInsert(event, EnigmaticItems.RAW_ETHERIUM.toStack(), EnigmaticBlocks.ETHERIUM_ORE.toStack(), false);
+            tabInsert(event, EnigmaticItems.ETHERIUM_NUGGET.toStack(), EnigmaticBlocks.ETHERIUM_BLOCK.toStack());
+            tabInsert(event, EnigmaticItems.ETHEREAL_FORGING_CHARM.toStack(), EnigmaticBlocks.ETHEREAL_LANTERN.toStack());
+            tabInsert(event, EnigmaticBlocks.ETHEREAL_LANTERN.toStack(), EnigmaticBlocks.DIMENSIONAL_ANCHOR.toStack());
+        } else if (event.getTab() == EnigmaticTabs.CURSE_TAB.get()) {
         }
+    }
+
+    private void tabInsert(BuildCreativeModeTabContentsEvent event, ItemStack existing, ItemStack newEntry) {
+        tabInsert(event, existing, newEntry, true);
+    }
+
+    private void tabInsert(BuildCreativeModeTabContentsEvent event, ItemStack existing, ItemStack newEntry, boolean isAfter) {
+        if (isAfter) event.insertAfter(existing, newEntry, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+        else event.insertBefore(existing, newEntry, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
     }
 
     private void attributeSetup(final EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> type : event.getTypes()) {
             event.add(type, EnigmaticAttributes.ETHERIUM_SHIELD);
             event.add(type, EnigmaticAttributes.PROJECTILE_DEFLECT);
+            event.add(type, EnigmaticAttributes.LIFESTEAL);
         }
     }
 

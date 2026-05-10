@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.contents.item.potions.RecallPotion;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class TwistedMirror extends BaseCursedItem {
     public TwistedMirror() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON));
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON));
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -2,11 +2,13 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
+import auviotre.enigmatic.legacy.registries.EnigmaticTriggers;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -16,6 +18,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -55,7 +58,7 @@ public class LostEngine extends SpellstoneItem {
     public static ModConfigSpec.DoubleValue vulnerabilityModifier;
 
     public LostEngine() {
-        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFFEF9F4D);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE), 0xFFEF9F4D);
     }
 
     @SubscribeConfig
@@ -98,11 +101,12 @@ public class LostEngine extends SpellstoneItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-        attributes.put(Attributes.GRAVITY, new AttributeModifier(getLocation(this), 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        attributes.put(Attributes.JUMP_STRENGTH, new AttributeModifier(getLocation(this), 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        attributes.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(getLocation(this), 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        attributes.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(getLocation(this), 4, AttributeModifier.Operation.ADD_VALUE));
-        attributes.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(getLocation(this), 0.2, AttributeModifier.Operation.ADD_VALUE));
+        ResourceLocation location = IItemHelper.getLocation(this);
+        attributes.put(Attributes.GRAVITY, new AttributeModifier(location, 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributes.put(Attributes.JUMP_STRENGTH, new AttributeModifier(location, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributes.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(location, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributes.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, 4, AttributeModifier.Operation.ADD_VALUE));
+        attributes.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(location, 0.2, AttributeModifier.Operation.ADD_VALUE));
         return attributes;
     }
 
@@ -190,10 +194,20 @@ public class LostEngine extends SpellstoneItem {
         }
 
         @SubscribeEvent(priority = EventPriority.LOWEST)
-        private static void onDamageLowest(LivingDamageEvent.@NotNull Pre event) {
+        private static void onDamageIncoming(@NotNull LivingIncomingDamageEvent event) {
             LivingEntity victim = event.getEntity();
             if (ISpellstone.get(victim).is(EnigmaticItems.LOST_ENGINE) && event.getSource().is(DamageTypeTags.IS_LIGHTNING)) {
-                event.setNewDamage(event.getNewDamage() * (victim.getRandom().nextInt(4) + 4) + victim.getMaxHealth());
+                event.setAmount(event.getAmount() * (victim.getRandom().nextInt(4) + 4) + victim.getMaxHealth());
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
+            LivingEntity victim = event.getEntity();
+            if (ISpellstone.get(victim).is(EnigmaticItems.LOST_ENGINE) && event.getSource().is(DamageTypeTags.IS_LIGHTNING)) {
+                if (victim instanceof ServerPlayer player) {
+                    EnigmaticTriggers.ENIGMATIC_TRIGGER.get().trigger(player, 1);
+                }
             }
         }
     }

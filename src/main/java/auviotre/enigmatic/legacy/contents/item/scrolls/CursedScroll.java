@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.scrolls;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -39,13 +40,13 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CursedScroll extends CursedCurioItem {
+    private static final float FACTOR = 0.9F;
     public static ModConfigSpec.IntValue damageBoost;
     public static ModConfigSpec.IntValue miningBoost;
     public static ModConfigSpec.IntValue regenBoost;
-    private static final float FACTOR = 0.9F;
 
     public CursedScroll() {
-        super(defaultSingleProperties().rarity(Rarity.RARE));
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE));
     }
 
     @SubscribeConfig
@@ -66,7 +67,8 @@ public class CursedScroll extends CursedCurioItem {
             for (int i = 0; i < curios.getSlots(); i++) {
                 ItemStack stack = curios.getStackInSlot(i);
                 amount.addAndGet(getItemCurseLevel(stack));
-                if (stack.is(EnigmaticItems.VIOLENCE_SCROLL)) amount.addAndGet(ViolenceScroll.AbsorbedEnchants.getCount(stack));
+                if (stack.is(EnigmaticItems.VIOLENCE_SCROLL))
+                    amount.addAndGet(ViolenceScroll.AbsorbedEnchants.getCount(stack));
             }
         });
         ItemStack curio = EnigmaticHandler.getCurio(entity, EnigmaticItems.VIOLENCE_SCROLL);

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.food;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -35,7 +36,7 @@ public class AstralFruit extends BaseItem {
     private final boolean enchanted;
 
     public AstralFruit(boolean enchanted) {
-        super(defaultProperties().rarity(enchanted ? Rarity.EPIC : Rarity.RARE).fireResistant().component(EnigmaticComponents.CURSED, enchanted)
+        super(IItemHelper.properties().rarity(enchanted ? Rarity.EPIC : Rarity.RARE).fireResistant().component(EnigmaticComponents.CURSED, enchanted)
                 .food(enchanted ? ENCHANTED_PROPERTIES : DEFAULT_PROPERTIES));
         this.enchanted = enchanted;
     }
@@ -51,7 +52,7 @@ public class AstralFruit extends BaseItem {
 
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (entity instanceof Player player && this.enchanted) {
-            EnigmaticHandler.unlockSpecialSlot("ring", player, getLocation(this));
+            EnigmaticHandler.unlockSpecialSlot("ring", player, IItemHelper.getLocation(this));
         }
         return super.finishUsingItem(stack, level, entity);
     }

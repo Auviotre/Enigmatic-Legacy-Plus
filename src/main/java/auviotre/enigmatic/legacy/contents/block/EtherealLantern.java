@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.block;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.block.entity.EtherealLanternEntity;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticBlockEntities;
@@ -120,7 +121,7 @@ public class EtherealLantern extends BaseEntityBlock implements SimpleWaterlogge
 
     public static class Item extends BlockItem {
         public Item(Block block) {
-            super(block, new Properties().stacksTo(16).fireResistant());
+            super(block, IItemHelper.properties(16).fireResistant());
         }
 
         @OnlyIn(Dist.CLIENT)

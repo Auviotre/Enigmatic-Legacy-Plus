@@ -8,6 +8,7 @@
     "MixinEnchantmentMenu",
     "MixinEnderEyeItem",
     "MixinEntity",
+    "MixinGiveCommand",
     "MixinItemStack",
     "MixinLivingEntity",
     "MixinMob",
@@ -15,6 +16,7 @@
     "MixinPlayerList",
     "MixinServerPlayer",
     "compat.MixinApothMenu",
+    "compat.MixinItemStackUtil",
     "entity.MixinEnderDragon",
     "entity.MixinGuardian",
     "entity.MixinHoglinAi",
@@ -35,8 +37,8 @@
     "requireAnnotations": true
   },
   "client": [
-    "MixinGuiBookLanding",
     "MixinWorldListEntry",
-    "compat.MixinApothScreen"
+    "compat.MixinApothScreen",
+    "compat.MixinGuiBookLanding"
   ]
 }

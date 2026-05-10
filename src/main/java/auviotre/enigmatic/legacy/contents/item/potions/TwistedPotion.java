@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.potions;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseDrinkableItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -39,8 +40,36 @@ import java.util.List;
 
 public class TwistedPotion extends BaseDrinkableItem {
     public TwistedPotion() {
-        super(defaultSingleProperties().craftRemainder(Items.GLASS_BOTTLE).rarity(Rarity.UNCOMMON)
+        super(IItemHelper.singleProperties().craftRemainder(Items.GLASS_BOTTLE).rarity(Rarity.UNCOMMON)
                 .component(EnigmaticComponents.CURSED, true));
+    }
+
+    private static void teleportToDeathPoint(ServerPlayer player, ParticleOptions particle) {
+        double hOffset = player.getBbWidth() / 6;
+        double yOffset = player.getBbHeight() / 4;
+        if (player.level() instanceof ServerLevel server) {
+            server.playSound(null, player.blockPosition(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 1.0F, 0.8F + player.getRandom().nextFloat() * 0.2F);
+            server.sendParticles(particle, player.getX(), player.getY(0.5), player.getZ(), 48, hOffset, yOffset, hOffset, 0.03);
+        }
+        CompoundTag deathLoc = (CompoundTag) EnigmaticHandler.getPersistedData(player).get("LastDeathLoc");
+        if (deathLoc == null) return;
+
+        ResourceKey<Level> deathDimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(deathLoc.getString("dimension")));
+        ServerLevel destLevel = player.server.getLevel(deathDimension);
+        if (destLevel == null) return;
+        BlockPos respawnPos = new BlockPos(deathLoc.getInt("x"), deathLoc.getInt("y") + 2, deathLoc.getInt("z"));
+        Vec3 vec3 = respawnPos.getBottomCenter();
+        if (!player.level().equals(destLevel))
+            player.changeDimension(new DimensionTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), DimensionTransition.DO_NOTHING));
+        player.teleportTo(vec3.x, vec3.y, vec3.z);
+        vec3 = player.adjustSpawnLocation(destLevel, respawnPos).getBottomCenter();
+        player.teleportTo(vec3.x, vec3.y, vec3.z);
+        player.setHealth(Math.max(1.0F, player.getHealth() * 0.8F));
+
+        if (player.level() instanceof ServerLevel server) {
+            server.playSound(null, player.blockPosition(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 1.0F, 0.8F + player.getRandom().nextFloat() * 0.2F);
+            server.sendParticles(particle, player.getX(), player.getY(0.5), player.getZ(), 48, hOffset, yOffset, hOffset, 0.03);
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -61,33 +90,6 @@ public class TwistedPotion extends BaseDrinkableItem {
         }
     }
 
-    private static void teleportToDeathPoint(ServerPlayer player, ParticleOptions particle) {
-        double hOffset = player.getBbWidth() / 6;
-        double yOffset = player.getBbHeight() / 4;
-        if (player.level() instanceof ServerLevel server) {
-            server.playSound(null, player.blockPosition(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 1.0F, 0.8F + player.getRandom().nextFloat() * 0.2F);
-            server.sendParticles(particle, player.getX(), player.getY(0.5), player.getZ(), 48, hOffset, yOffset, hOffset, 0.03);
-        }
-        CompoundTag deathLoc = (CompoundTag) EnigmaticHandler.getPersistedData(player).get("LastDeathLoc");
-        if (deathLoc == null) return;
-
-        ResourceKey<Level> deathDimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(deathLoc.getString("dimension")));
-        ServerLevel destLevel = player.server.getLevel(deathDimension);
-        if (destLevel == null) return;
-        BlockPos respawnPos = BlockPos.containing(deathLoc.getDouble("x"), deathLoc.getDouble("y"), deathLoc.getDouble("z"));
-        Vec3 vec3 = player.adjustSpawnLocation(destLevel, respawnPos).getBottomCenter();
-
-        if (!player.level().equals(destLevel))
-            player.changeDimension(new DimensionTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), DimensionTransition.DO_NOTHING));
-        player.teleportTo(vec3.x, vec3.y, vec3.z);
-        player.setHealth(Math.max(1.0F, player.getHealth() * 0.8F));
-
-        if (player.level() instanceof ServerLevel server) {
-            server.playSound(null, player.blockPosition(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 1.0F, 0.8F + player.getRandom().nextFloat() * 0.2F);
-            server.sendParticles(particle, player.getX(), player.getY(0.5), player.getZ(), 48, hOffset, yOffset, hOffset, 0.03);
-        }
-    }
-
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
@@ -95,9 +97,10 @@ public class TwistedPotion extends BaseDrinkableItem {
         private static void onLivingDrops(@NotNull LivingDropsEvent event) {
             if (event.getEntity() instanceof ServerPlayer player) {
                 CompoundTag deathLocation = new CompoundTag();
-                deathLocation.putDouble("x", player.getX());
-                deathLocation.putDouble("y", player.getY());
-                deathLocation.putDouble("z", player.getZ());
+                BlockPos pos = player.blockPosition();
+                deathLocation.putInt("x", pos.getX());
+                deathLocation.putInt("y", pos.getY());
+                deathLocation.putInt("z", pos.getZ());
                 deathLocation.putString("dimension", player.level().dimension().location().toString());
                 CompoundTag persistedData = EnigmaticHandler.getPersistedData(player);
                 persistedData.put("LastDeathLoc", deathLocation);

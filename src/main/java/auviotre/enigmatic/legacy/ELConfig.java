@@ -17,10 +17,6 @@ public class ELConfig {
     }
 
     ELConfig(ModConfigSpec.Builder builder) {
-        EnigmaticHandler.dispatchConfig(
-                EnigmaticLegacy.MODID,
-                builder,
-                ModConfig.Type.COMMON
-        );
+        EnigmaticHandler.dispatchConfig(EnigmaticLegacy.MODID, builder, ModConfig.Type.SERVER);
     }
 }

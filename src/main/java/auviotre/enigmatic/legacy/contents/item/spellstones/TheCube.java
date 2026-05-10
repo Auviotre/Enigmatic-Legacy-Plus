@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -70,7 +71,7 @@ public class TheCube extends SpellstoneItem {
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
     public TheCube() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC), -1);
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC), -1);
     }
 
     public static float getDamageLimit(LivingEntity entity) {
@@ -121,17 +122,18 @@ public class TheCube extends SpellstoneItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getCurrentModifiers(LivingEntity entity) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-        attributes.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(getLocation(this), entity.isSprinting() ? 0.3F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributes.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(IItemHelper.getLocation(this), entity.isSprinting() ? 0.3F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return attributes;
     }
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(getLocation(this), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        builder.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(getLocation(this), 0.6, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(getLocation(this), 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        builder.put(Attributes.LUCK, new AttributeModifier(getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
-        builder.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(getLocation(this), 0.35, AttributeModifier.Operation.ADD_VALUE));
+        ResourceLocation location = IItemHelper.getLocation(this);
+        builder.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(location, 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        builder.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(location, 0.6, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(location, 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        builder.put(Attributes.LUCK, new AttributeModifier(location, 1, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(location, 0.35, AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }
 
@@ -222,10 +224,10 @@ public class TheCube extends SpellstoneItem {
         Future<Optional<GlobalPos>> future = this.executor.submit(() -> {
             try {
                 Optional<GlobalPos> location = this.findRandomLocation(player);
-                EnigmaticLegacy.LOGGER.debug("Found random location: " + location);
+                EnigmaticLegacy.LOGGER.debug("Found random location: {}", location);
                 return location;
             } catch (Exception exception) {
-                EnigmaticLegacy.LOGGER.error("Could not find random location for:" + player.getGameProfile().getName());
+                EnigmaticLegacy.LOGGER.error("Could not find random location for: {}", player.getGameProfile().getName());
                 throw exception;
             }
         });

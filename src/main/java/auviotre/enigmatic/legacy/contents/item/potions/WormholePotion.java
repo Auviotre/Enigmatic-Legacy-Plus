@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.potions;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseDrinkableItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -30,7 +31,7 @@ import java.util.UUID;
 
 public class WormholePotion extends BaseDrinkableItem {
     public WormholePotion() {
-        super(defaultSingleProperties().craftRemainder(Items.GLASS_BOTTLE));
+        super(IItemHelper.singleProperties().craftRemainder(Items.GLASS_BOTTLE));
     }
 
     private static void performTeleport(Player player, ServerLevel level, Player target, Set<RelativeMovement> relativeList) {

@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -36,7 +37,7 @@ import java.util.List;
 
 public class MonsterCharm extends BaseCurioItem {
     public MonsterCharm() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON));
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -56,7 +57,7 @@ public class MonsterCharm extends BaseCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(getLocation(this), 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IItemHelper.getLocation(this), 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return builder.build();
     }
 

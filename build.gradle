@@ -1,3 +1,4 @@
+//file:noinspection GroovyAssignabilityCheck
 plugins {
     id 'java-library'
     id 'maven-publish'
@@ -94,39 +95,40 @@ configurations {
 }
 
 dependencies {
+    // info
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
+    implementation "curse.maven:simple-loot-viewer-1237334:7114924"
+    // depend
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
     runtimeOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
 
-//    implementation "curse.maven:just-enough-resources-jer-240630:6174588"
-
-    implementation "vazkii.patchouli:Patchouli:1.21-88-NEOFORGE"
+    implementation "vazkii.patchouli:Patchouli:1.21.1-93-NEOFORGE"
     implementation "curse.maven:appleskin-248787:6616291"
     implementation "curse.maven:l2library-620203:6478950"
     implementation "curse.maven:jade-324717:6738687"
+    // client
+    implementation "curse.maven:enchantment-descriptions-250419:6348560"
+    implementation "curse.maven:bookshelf-228525:7606240"
+    implementation "curse.maven:prickle-1023259:6546240"
 
-//    implementation "curse.maven:enchantment-descriptions-250419:6348560"
-//    implementation "curse.maven:bookshelf-228525:6717571"
-//    implementation "curse.maven:prickle-1023259:6546240"
-//
     implementation "curse.maven:legendary-tooltips-532127:6400660"
     implementation "curse.maven:prism-lib-638111:6372979"
     implementation "curse.maven:iceberg-520110:6423863"
+
+    implementation "curse.maven:sodium-394468:6382651"
+    implementation "curse.maven:irisshaders-455508:6661598"
     // compat
     implementation "curse.maven:thirst-was-taken-679270:7017923"
 
     implementation "curse.maven:placebo-283644:6926281"
     implementation "curse.maven:apothic-attributes-898963:6751650"
     implementation "curse.maven:apothic-enchanting-1063926:6926290"
-
-    implementation "curse.maven:sodium-394468:6382651"
-    implementation "curse.maven:irisshaders-455508:6661598"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

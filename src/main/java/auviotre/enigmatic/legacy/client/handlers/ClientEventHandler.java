@@ -4,6 +4,8 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
+import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumArmor;
+import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumProperties;
 import auviotre.enigmatic.legacy.contents.item.food.ForbiddenFruit;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseElytraItem;
 import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
@@ -50,6 +52,8 @@ import org.jetbrains.annotations.NotNull;
 @Mod(value = EnigmaticLegacy.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = EnigmaticLegacy.MODID, value = Dist.CLIENT)
 public class ClientEventHandler {
+    public static final ResourceLocation ETHEREAL_SHIELD_SPRITE = EnigmaticLegacy.location("hud/ethereal_shield");
+    public static final ResourceLocation ETHEREAL_SHIELD_HIGHLIGHT_SPRITE = EnigmaticLegacy.location("hud/ethereal_shield_highlight");
     public static final ResourceLocation FORBIDDEN_FOOD_FULL_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_full");
     public static final ResourceLocation FORBIDDEN_FOOD_HALF_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_half");
     public static final ResourceLocation FORBIDDEN_FOOD_EMPTY_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_empty");
@@ -217,6 +221,18 @@ public class ClientEventHandler {
             if (Spelltuner.hasTune(player, EnigmaticItems.OCEAN_STONE) || spellstone.is(EnigmaticItems.OCEAN_STONE) || spellstone.is(EnigmaticItems.VOID_PEARL)) {
                 event.setCanceled(true);
             }
+        } else if (event.getName().equals(VanillaGuiLayers.PLAYER_HEALTH) && player != null && EtheriumProperties.hasShield(player)) {
+            if (minecraft.gameMode != null && minecraft.gameMode.canHurtPlayer() && EtheriumArmor.etheriumShieldIcon.get()) {
+                EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
+                long timer = data.getEtheriumShieldTick();
+                int x = guiGraphics.guiWidth() / 2 - 101 + EtheriumArmor.iconOffsetX.get();
+                int y = guiGraphics.guiHeight() - minecraft.gui.rightHeight + EtheriumArmor.iconOffsetY.get();
+                if (timer > 5) y += timer / 2 % 2 == 0 ? 1 : -1;
+                RenderSystem.enableBlend();
+                guiGraphics.blitSprite(ETHEREAL_SHIELD_SPRITE, x, y, 9, 9);
+                if (timer > 0) guiGraphics.blitSprite(ETHEREAL_SHIELD_HIGHLIGHT_SPRITE, x, y, 9, 9);
+                RenderSystem.disableBlend();
+            }
         } else if (event.getName().equals(VanillaGuiLayers.EXPERIENCE_LEVEL) && player != null && spellstone.is(EnigmaticItems.BLAZING_CORE)) {
             if (minecraft.gameMode != null && minecraft.gameMode.hasExperience()) {
                 EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
@@ -247,10 +263,6 @@ public class ClientEventHandler {
                 float barFiller = Mth.lerp(partialTick.getGameTimeDeltaTicks(), lastTimer, timer) / cap;
                 barFiller = (float) Math.pow(barFiller, 2);
                 int k = (int) (barFiller * 183.0F);
-                if (k <= 0) {
-                    event.setCanceled(false);
-                    return;
-                }
                 int x = guiGraphics.guiWidth() / 2 - 91;
                 int y = guiGraphics.guiHeight() - 32 + 3;
                 RenderSystem.enableBlend();
@@ -262,11 +274,9 @@ public class ClientEventHandler {
             if (ForbiddenFruit.isForbiddenCursed(player)) {
                 event.setCanceled(true);
 
-                int width = guiGraphics.guiWidth();
-                int height = guiGraphics.guiHeight();
                 RenderSystem.enableBlend();
-                int left = width / 2 + 91;
-                int top = height - minecraft.gui.rightHeight;
+                int left = guiGraphics.guiWidth() / 2 + 91;
+                int top = guiGraphics.guiHeight() - minecraft.gui.rightHeight;
                 minecraft.gui.rightHeight += 10;
                 FoodData stats = player.getFoodData();
                 int level = stats.getFoodLevel();

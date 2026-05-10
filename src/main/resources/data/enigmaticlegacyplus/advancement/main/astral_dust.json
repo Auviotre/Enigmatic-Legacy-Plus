@@ -1,0 +1,33 @@
+{
+    "parent": "enigmaticlegacyplus:main/ichor_droplet",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:astral_dust"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.astral_dust.desc"
+        },
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:astral_dust"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.astral_dust.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

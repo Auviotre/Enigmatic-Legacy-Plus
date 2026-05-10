@@ -12,7 +12,10 @@
             "item": "minecraft:experience_bottle"
         },
         "G": {
-            "item": "minecraft:gold_nugget"
+            "item": "minecraft:gold_ingot"
+        },
+        "I": {
+            "item": "enigmaticlegacyplus:ichor_droplet"
         },
         "X": {
             "item": "enigmaticlegacyplus:earth_heart"
@@ -22,9 +25,9 @@
         }
     },
     "pattern": [
-        "GXG",
-        "AYB",
-        "GEG"
+        "GEG",
+        "AXB",
+        "YIY"
     ],
     "result": {
         "count": 1,

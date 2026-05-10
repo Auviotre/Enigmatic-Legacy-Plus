@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.charms;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.compat.CompatHandler;
 import auviotre.enigmatic.legacy.compat.thirst.ThirstCompatHandler;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
@@ -57,7 +58,7 @@ public class HellBladeCharm extends BaseCurioItem {
     public static ModConfigSpec.IntValue armorDebuff;
 
     public HellBladeCharm() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON).component(EnigmaticComponents.BOOLEAN, false));
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).component(EnigmaticComponents.BOOLEAN, false));
     }
 
     @SubscribeConfig
@@ -124,11 +125,12 @@ public class HellBladeCharm extends BaseCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> createAttributeMap(LivingEntity entity) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
+        ResourceLocation location = IItemHelper.getLocation(this);
         double armor = -armorDebuff.get() * 0.01;
-        attributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(getLocation(this), getModifier(entity), AttributeModifier.Operation.ADD_VALUE));
+        attributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(location, getModifier(entity), AttributeModifier.Operation.ADD_VALUE));
         attributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(EnigmaticLegacy.location("hell_blade_charm.boost"), attackDamage.get() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-        attributes.put(Attributes.ARMOR, new AttributeModifier(getLocation(this), armor, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        attributes.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(getLocation(this), armor, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributes.put(Attributes.ARMOR, new AttributeModifier(location, armor, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributes.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, armor, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return attributes;
     }
 
@@ -215,7 +217,7 @@ public class HellBladeCharm extends BaseCurioItem {
                     float healthFactor = 1 - player.getHealth() / player.getMaxHealth();
                     healthFactor = healthFactor * healthFactor;
                     if (healthFactor < 0.2F) return;
-                    float damageFactor = Math.min(event.getOriginalDamage(), event.getNewDamage()) / player.getMaxHealth() * 5.0F;
+                    float damageFactor = Math.min(event.getOriginalDamage(), event.getNewDamage()) / player.getMaxHealth() * 8.0F;
                     data.putFloat("HellPoint", point + Math.min(100.0F, healthFactor * damageFactor));
                 }
             }

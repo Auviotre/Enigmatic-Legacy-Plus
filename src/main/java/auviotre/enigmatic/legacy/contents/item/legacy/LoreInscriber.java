@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.legacy;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.gui.LoreInscriberMenu;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -30,7 +31,7 @@ import java.util.Objects;
 
 public class LoreInscriber extends BaseItem {
     public LoreInscriber() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON));
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -122,7 +123,7 @@ public class LoreInscriber extends BaseItem {
 
     public static class Fragment extends BaseItem {
         public Fragment() {
-            super(defaultProperties(16));
+            super(IItemHelper.properties(16));
         }
 
         @OnlyIn(Dist.CLIENT)

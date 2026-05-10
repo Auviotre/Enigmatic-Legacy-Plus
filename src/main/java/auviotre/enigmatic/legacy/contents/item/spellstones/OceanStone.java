@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -60,7 +62,7 @@ public class OceanStone extends SpellstoneItem {
     public static ModConfigSpec.IntValue cooldown;
 
     public OceanStone() {
-        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFF35ACF7);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE), 0xFF35ACF7);
     }
 
     @SubscribeConfig
@@ -98,7 +100,6 @@ public class OceanStone extends SpellstoneItem {
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.oceanStone2");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.oceanStone6");
     }
 
     public int getCooldown() {
@@ -143,9 +144,10 @@ public class OceanStone extends SpellstoneItem {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
         Holder.Reference<Enchantment> holder = EnigmaticHandler.get(entity.level(), Registries.ENCHANTMENT, Enchantments.AQUA_AFFINITY);
         boolean flag = EnchantmentHelper.getEnchantmentLevel(holder, entity) <= 0;
-        map.put(Attributes.GRAVITY, new AttributeModifier(getLocation(this), entity.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()) ? -0.98F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        map.put(Attributes.SUBMERGED_MINING_SPEED, new AttributeModifier(getLocation(this), flag ? 4.0F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(getLocation(this), 1.5F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        ResourceLocation location = IItemHelper.getLocation(this);
+        map.put(Attributes.GRAVITY, new AttributeModifier(location, entity.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()) ? -0.98F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        map.put(Attributes.SUBMERGED_MINING_SPEED, new AttributeModifier(location, flag ? 4.0F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(location, 1.5F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return map;
     }
 

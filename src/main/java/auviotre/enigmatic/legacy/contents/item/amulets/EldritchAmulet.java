@@ -1,12 +1,12 @@
 package auviotre.enigmatic.legacy.contents.item.amulets;
 
-import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
-import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -17,6 +17,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -35,13 +36,10 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.jetbrains.annotations.NotNull;
+import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.HashMap;
@@ -54,7 +52,7 @@ public class EldritchAmulet extends BaseCurioItem {
     public static ModConfigSpec.BooleanValue keepInventory;
 
     public EldritchAmulet() {
-        super(defaultSingleProperties().fireResistant().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true));
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true));
     }
 
     @SubscribeConfig
@@ -133,9 +131,15 @@ public class EldritchAmulet extends BaseCurioItem {
         TooltipHandler.line(list);
         TooltipHandler.worthyOnly(list, stack);
         TooltipHandler.line(list);
-        list.add(Component.translatable("curios.modifiers.charm").withStyle(ChatFormatting.GOLD));
+        TooltipHandler.line(list, "curios.modifiers.amulet", ChatFormatting.GOLD);
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.enchantersPearl1", ChatFormatting.GOLD, 1);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmuletStat1", ChatFormatting.GOLD, attackDamage.getAsInt() + "%");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmuletStat2", ChatFormatting.GOLD, lifeSteal.getAsInt() + "%");
+    }
+
+    public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
+        tooltips.clear();
+        return tooltips;
     }
 
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
@@ -173,19 +177,14 @@ public class EldritchAmulet extends BaseCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getModifiers() {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
-        map.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(getLocation(this), attackDamage.getAsInt() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        map.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IItemHelper.getLocation(this), attackDamage.getAsInt() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        map.put(EnigmaticAttributes.LIFESTEAL, new AttributeModifier(IItemHelper.getLocation(this), lifeSteal.getAsInt() * 0.01, AttributeModifier.Operation.ADD_VALUE));
         return map;
     }
 
-    @Mod(value = EnigmaticLegacy.MODID)
-    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
-    public static class Events {
-        @SubscribeEvent
-        private static void onDamagePost(LivingDamageEvent.@NotNull Post event) {
-            if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && !attacker.level().isClientSide()) {
-                if (EnigmaticHandler.hasCurio(attacker, EnigmaticItems.ELDRITCH_AMULET))
-                    attacker.heal(event.getNewDamage() * 0.01F * lifeSteal.get());
-            }
-        }
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
+        Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
+        CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
+        return attributes;
     }
 }

@@ -17,7 +17,8 @@ public interface EnigmaticTags {
     interface Items {
         TagKey<Item> SCROLLS = register(CuriosApi.MODID, "scroll");
         TagKey<Item> SPELLSTONES = register(CuriosApi.MODID, "spellstone");
-        TagKey<Item> AMULETS = register(CuriosApi.MODID, "amulets");
+        TagKey<Item> AMULETS = register(CuriosApi.MODID, "amulet");
+        TagKey<Item> ENIGMATIC_AMULETS = register("enigmatic_amulets");
         TagKey<Item> THE_CUBE_MATERIAL = register("materials_of_the_cube");
         TagKey<Item> ARMOR_CHECK_EXCLUSION = register("armor_check_exclusions");
         TagKey<Item> BYPASS_FOURTH_CURSE = register("bypass_fourth_curse");

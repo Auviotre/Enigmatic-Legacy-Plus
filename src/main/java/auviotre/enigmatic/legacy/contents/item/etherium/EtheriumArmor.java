@@ -2,17 +2,22 @@ package auviotre.enigmatic.legacy.contents.item.etherium;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
-import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
+import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
+import auviotre.enigmatic.legacy.registries.EnigmaticEnchantments;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
 import com.google.common.base.Suppliers;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -35,6 +40,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -42,10 +48,13 @@ import java.util.function.Supplier;
 
 public class EtheriumArmor extends ArmorItem {
     public static ModConfigSpec.BooleanValue etheriumShieldRenderLayer;
+    public static ModConfigSpec.BooleanValue etheriumShieldIcon;
+    public static ModConfigSpec.IntValue iconOffsetX;
+    public static ModConfigSpec.IntValue iconOffsetY;
     private final Supplier<ItemAttributeModifiers> defaultModifiers;
 
     public EtheriumArmor(Type type) {
-        super(EtheriumProperties.MATERIAL, type, BaseItem.defaultProperties().fireResistant().durability(type.getDurability(132)));
+        super(EtheriumProperties.MATERIAL, type, IItemHelper.properties().fireResistant().durability(type.getDurability(132)));
         this.defaultModifiers = Suppliers.memoize(() -> {
             ArmorMaterial material = EtheriumProperties.MATERIAL.value();
             int i = material.getDefense(type);
@@ -63,13 +72,24 @@ public class EtheriumArmor extends ArmorItem {
     @SubscribeConfig(receiveClient = true)
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         if (type == ModConfig.Type.CLIENT) {
-            EtheriumArmor.etheriumShieldRenderLayer = builder.define("etheriumShieldRenderLayer", true);
+            etheriumShieldRenderLayer = builder.define("etheriumShieldRenderLayer", true);
+            etheriumShieldIcon = builder.define("etheriumShieldIcon", true);
+            builder.push("etheriumShieldIconOffset");
+            iconOffsetX = builder.defineInRange("OffsetX", 0, -1024, 1024);
+            iconOffsetY = builder.defineInRange("OffsetY", 0, -1024, 1024);
+            builder.pop();
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumArmor");
+        if (Minecraft.getInstance().level != null) {
+            var holder = EnigmaticHandler.get(Minecraft.getInstance().level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
+            if (stack.getEnchantmentLevel(holder) > 0)
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumArmorBuff");
+        }
+        if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
     public ItemAttributeModifiers getDefaultAttributeModifiers() {
@@ -85,6 +105,7 @@ public class EtheriumArmor extends ArmorItem {
             if (event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
             if (event.getSource().getDirectEntity() instanceof AbstractHurtingProjectile || event.getSource().getDirectEntity() instanceof AbstractArrow) {
                 if (EtheriumProperties.hasShield(entity)) {
+                    entity.getData(EnigmaticAttachments.ENIGMATIC_DATA).setEtheriumShieldTick(12);
                     event.setCanceled(true);
                     entity.level().playSound(null, entity.blockPosition(), EnigmaticSounds.ETHERIUM_SHIELD_DEFLECT.get(), SoundSource.AMBIENT, 1.0F, 0.9F + entity.getRandom().nextFloat() * 0.1F);
                     return;
@@ -110,15 +131,32 @@ public class EtheriumArmor extends ArmorItem {
             if (event.getNewDamage() > 0 && event.getNewDamage() < Float.MAX_VALUE) {
                 if (event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
                 if (EtheriumProperties.hasShield(entity)) {
+                    entity.getData(EnigmaticAttachments.ENIGMATIC_DATA).setEtheriumShieldTick(12);
                     if (event.getSource().getDirectEntity() instanceof LivingEntity attacker) {
                         Vec3 vec = entity.position().subtract(attacker.position()).normalize();
                         attacker.knockback(0.75F, vec.x, vec.z);
                         entity.level().playSound(null, entity.blockPosition(), EnigmaticSounds.ETHERIUM_SHIELD_DEFLECT.get(), SoundSource.PLAYERS, 1.0F, 0.9F + entity.getRandom().nextFloat() * 0.1F);
                     }
-                    float modifier = (float) (0.9F - 0.5F * Math.sqrt(EtheriumProperties.getShieldThreshold(entity) * 0.01F));
+                    float modifier = (float) (0.9F - 0.4F * Math.sqrt(EtheriumProperties.getShieldThreshold(entity)));
+
+                    int piece = 0, level = 0;
+                    for (ItemStack armor : entity.getArmorSlots()) {
+                        if (armor.getItem() instanceof EtheriumArmor) piece++;
+                        var holder = EnigmaticHandler.get(entity.level(), Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
+                        if (armor.getEnchantmentLevel(holder) > 0) level++;
+                    }
+                    if (piece >= 4 && level > 0) modifier *= 1.0F - 0.05F * level;
                     event.setNewDamage(event.getNewDamage() * modifier);
                 }
             }
+        }
+
+        @SubscribeEvent
+        private static void onTick(EntityTickEvent.@NotNull Pre event) {
+            Entity entity = event.getEntity();
+            long tick = entity.getData(EnigmaticAttachments.ENIGMATIC_DATA).getEtheriumShieldTick();
+            if (tick > 0)
+                entity.getData(EnigmaticAttachments.ENIGMATIC_DATA).setEtheriumShieldTick(Math.max(0, tick - 1));
         }
     }
 }

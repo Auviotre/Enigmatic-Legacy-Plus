@@ -9,13 +9,13 @@
             "item": "minecraft:gold_nugget"
         },
         "X": {
-            "item": "enigmaticlegacyplus:enigmatic_amulet"
+            "tag": "enigmaticlegacyplus:enigmatic_amulets"
         }
     },
     "pattern": [
-        "NGN",
-        "GXG",
-        "NGN"
+        " N ",
+        "NXN",
+        " G "
     ],
     "result": {
         "count": 1,

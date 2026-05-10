@@ -13,6 +13,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.List;
+
 public class EnigmaticComponents {
     public static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, EnigmaticLegacy.MODID);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> BOOLEAN = COMPONENTS.register("general_boolean",
@@ -27,6 +29,10 @@ public class EnigmaticComponents {
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> REDEMPTION_LEVEL = COMPONENTS.register("redemption_level",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Long>> REDEMPTION_TIMER = COMPONENTS.register("redemption_timer",
+            () -> DataComponentType.<Long>builder().persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Long>> REDEMPTION_THRESHOLD = COMPONENTS.register("redemption_threshold",
+            () -> DataComponentType.<Long>builder().persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MINER_POINT = COMPONENTS.register("miner_point",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ForgerGem.ToolInfo>> TOOL_DURABILITY_INFO = COMPONENTS.register("tool_durability_info",
@@ -37,16 +43,18 @@ public class EnigmaticComponents {
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> AMULET_NAME = COMPONENTS.register("amulet_name",
             () -> DataComponentType.<String>builder().persistent(Codec.STRING).networkSynchronized(ByteBufCodecs.STRING_UTF8).build());
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Float>> AMULET_COLOR = COMPONENTS.register("amulet_color",
-            () -> DataComponentType.<Float>builder().persistent(Codec.FLOAT).networkSynchronized(ByteBufCodecs.FLOAT).build());
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> SPELLCORE_POWER = COMPONENTS.register("spellcore_power",
-            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Spelltuner.Context>> SPELLTUNER_CONTEXT = COMPONENTS.register("spelltuner_context",
             () -> DataComponentType.<Spelltuner.Context>builder().persistent(Spelltuner.Context.CODEC).networkSynchronized(Spelltuner.Context.STREAM_CODEC).build());
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<StorageCrystal.StorageInfo>> STORAGE_INFO = COMPONENTS.register("storage_info",
-            () -> DataComponentType.<StorageCrystal.StorageInfo>builder().persistent(StorageCrystal.StorageInfo.CODEC).networkSynchronized(StorageCrystal.StorageInfo.STREAM_CODEC).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<StorageCrystal.Info>> STORAGE_INFO = COMPONENTS.register("storage_info",
+            () -> DataComponentType.<StorageCrystal.Info>builder().persistent(StorageCrystal.Info.CODEC).networkSynchronized(StorageCrystal.Info.STREAM_CODEC).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MALICE_DURABILITY = COMPONENTS.register("malice_durability",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> HUNTER_COUNT = COMPONENTS.register("hunter_count",
+            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<String>>> HUNTER_LIST = COMPONENTS.register("hunter_list",
+            () -> DataComponentType.<List<String>>builder().persistent(Codec.list(Codec.STRING)).networkSynchronized(ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list())).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<String>>> BLACKLIST = COMPONENTS.register("blacklist",
+            () -> DataComponentType.<List<String>>builder().persistent(Codec.list(Codec.STRING)).networkSynchronized(ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list())).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MALICE_MAX_DURABILITY = COMPONENTS.register("malice_max_durability",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> ILLUSION_COUNT = COMPONENTS.register("illusion_count",

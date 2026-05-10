@@ -2,7 +2,7 @@ package auviotre.enigmatic.legacy.contents.loot.conditions;
 
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
-import auviotre.enigmatic.legacy.registries.EnigmaticLootConditions;
+import auviotre.enigmatic.legacy.registries.EnigmaticLoots;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -24,7 +24,7 @@ public record SpellstoneLootCondition(float baseChance, float bonusChance) imple
     }
 
     public @NotNull LootItemConditionType getType() {
-        return EnigmaticLootConditions.SPELLSTONE.get();
+        return EnigmaticLoots.SPELLSTONE.get();
     }
 
     public boolean test(@NotNull LootContext context) {

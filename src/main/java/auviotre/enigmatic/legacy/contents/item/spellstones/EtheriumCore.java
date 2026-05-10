@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
@@ -47,7 +48,7 @@ public class EtheriumCore extends SpellstoneItem {
     public static ModConfigSpec.IntValue damageConversionLimit;
 
     public EtheriumCore() {
-        super(defaultSingleProperties().rarity(Rarity.RARE), 0xE091FFFF);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE), 0xE091FFFF);
     }
 
     @SubscribeConfig
@@ -82,12 +83,13 @@ public class EtheriumCore extends SpellstoneItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(Attributes.ARMOR, new AttributeModifier(getLocation(this), 10, AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(getLocation(this), 8, AttributeModifier.Operation.ADD_VALUE));
+        ResourceLocation location = IItemHelper.getLocation(this);
+        builder.put(Attributes.ARMOR, new AttributeModifier(location, 10, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, 8, AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.ARMOR, new AttributeModifier(EnigmaticLegacy.location("etherium_core_buff"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(EnigmaticLegacy.location("etherium_core_buff"), 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-        builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(getLocation(this), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        builder.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(getLocation(this), 0.01 * etheriumThresholdModifier.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(location, 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        builder.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(location, 0.01 * etheriumThresholdModifier.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         return builder.build();
     }
 

@@ -93,23 +93,19 @@ public abstract class MixinAnvilMenu extends ItemCombinerMenu {
         }
     }
 
-    private int getXp(int experienceLevel) {
-        if (experienceLevel >= 30) {
-            return 112 + (experienceLevel - 30) * 9;
-        } else {
-            return experienceLevel >= 15 ? 37 + (experienceLevel - 15) * 5 : 7 + experienceLevel * 2;
-        }
+    private int getXp(int level) {
+        if (level == 0) return 0;
+        if (level > 30) return 112 + (level - 31) * 9;
+        return level > 15 ? 37 + (level - 16) * 5 : 7 + (level - 1) * 2;
     }
 
-    private int getExpLevel(long experience) {
-        int experienceLevel = 0;
-        int neededForNext;
+    private int getExpLevel(long exp) {
+        int level = 0;
         while (true) {
-            if (experienceLevel >= 30) neededForNext = 112 + (experienceLevel - 30) * 9;
-            else neededForNext = experienceLevel >= 15 ? 37 + (experienceLevel - 15) * 5 : 7 + experienceLevel * 2;
-            if (experience < neededForNext) return experienceLevel;
-            experienceLevel++;
-            experience -= neededForNext;
+            int neededForNext = getXp(level + 1);
+            if (exp < neededForNext) return level;
+            level++;
+            exp -= neededForNext;
         }
     }
 }

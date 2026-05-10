@@ -54,7 +54,8 @@ public class EtheriumSword extends SwordItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumSword", ChatFormatting.GOLD, String.format("%.1f%%", power));
         if (Minecraft.getInstance().level != null) {
             var holder = EnigmaticHandler.get(Minecraft.getInstance().level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
-            if (stack.getEnchantmentLevel(holder) > 0) TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumSwordBuff");
+            if (stack.getEnchantmentLevel(holder) > 0)
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumSwordBuff");
         }
         if (stack.isEnchanted()) TooltipHandler.line(list);
     }

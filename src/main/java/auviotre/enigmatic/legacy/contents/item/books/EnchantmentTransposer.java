@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import net.minecraft.core.Holder;
@@ -28,7 +29,7 @@ import java.util.List;
 
 public class EnchantmentTransposer extends BaseItem {
     public EnchantmentTransposer() {
-        super(defaultSingleProperties());
+        super(IItemHelper.singleProperties());
     }
 
     public EnchantmentTransposer(Properties properties) {

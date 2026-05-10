@@ -39,7 +39,7 @@ public class AddCurseLootModifier extends AddTableLootModifier {
         if (!context.hasParam(LootContextParams.ATTACKING_ENTITY)) return list;
         Entity entity = context.getParam(LootContextParams.ATTACKING_ENTITY);
         if (entity instanceof LivingEntity attacker) {
-            if (EnigmaticHandler.isTheCursedOne(attacker))  {
+            if (EnigmaticHandler.isTheCursedOne(attacker)) {
                 if (!CursedRing.enableSpecialDrops.get()) return list;
             } else if (RedemptionRing.Helper.getLevel(attacker) > 3) {
                 if (!RedemptionRing.enableSpecialDrops.get()) return list;

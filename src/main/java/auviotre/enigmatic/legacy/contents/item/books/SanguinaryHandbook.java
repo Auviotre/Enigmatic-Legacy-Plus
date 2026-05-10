@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.books;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.charms.BerserkEmblem;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.contents.item.scrolls.CursedScroll;
@@ -42,7 +43,7 @@ public class SanguinaryHandbook extends BaseCursedItem {
     public static ModConfigSpec.DoubleValue damageMultiplier;
 
     public SanguinaryHandbook() {
-        super(defaultSingleProperties().rarity(Rarity.RARE));
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE));
     }
 
     @SubscribeConfig

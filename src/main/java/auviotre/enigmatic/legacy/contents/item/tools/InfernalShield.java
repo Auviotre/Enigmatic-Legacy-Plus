@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -32,7 +33,7 @@ import java.util.List;
 
 public class InfernalShield extends BaseCursedItem {
     public InfernalShield() {
-        super(defaultSingleProperties().fireResistant().rarity(Rarity.RARE).durability(Tiers.NETHERITE.getUses()));
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).durability(Tiers.NETHERITE.getUses()));
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
 

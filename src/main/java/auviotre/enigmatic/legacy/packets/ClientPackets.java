@@ -28,7 +28,7 @@ public class ClientPackets {
     public static void handle(final EnigmaticDataSyncPacket packet) {
         Player player = Minecraft.getInstance().player;
         if (player != null) {
-            player.getData(EnigmaticAttachments.ENIGMATIC_DATA).load(packet.dataTag());
+            player.getData(EnigmaticAttachments.ENIGMATIC_DATA).load(player.registryAccess(), packet.dataTag());
         }
     }
 
@@ -113,7 +113,7 @@ public class ClientPackets {
             case "ring" -> EnigmaticItems.IRON_RING.toStack();
             case "scroll" -> EnigmaticItems.BLANK_SCROLL.toStack();
             case "spellstone" -> EnigmaticItems.SPELLCORE.toStack();
-            case "charm" -> EnigmaticItems.ENIGMATIC_AMULET.toStack();
+            case "charm" -> EnigmaticItems.UNWITNESSED_AMULET.toStack();
             default -> ItemStack.EMPTY;
         };
         toasts.addToast(new SlotUnlockedToast(stack, packet.identifier()));

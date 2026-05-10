@@ -3,9 +3,9 @@ package auviotre.enigmatic.legacy.contents.item.materials;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.entity.AbyssalHeartBearer;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ITaintable;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
-import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -39,7 +39,7 @@ public class AbyssalHeart extends BaseCursedItem implements ITaintable {
     public static ModConfigSpec.DoubleValue abyssThreshold;
 
     public AbyssalHeart() {
-        super(BaseItem.defaultSingleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true));
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true));
     }
 
     @SubscribeConfig

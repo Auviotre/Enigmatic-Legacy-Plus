@@ -1,0 +1,139 @@
+{
+    "parent": "enigmaticlegacyplus:main/astral_dust",
+    "criteria": {
+        "brewed_potion1": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_night_vision"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion10": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_harming"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion11": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_poison"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion12": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_regeneration"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion13": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_strength"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion14": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_weakness"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion15": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_luck"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion16": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_slow_falling"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion2": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_invisibility"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion3": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_leaping"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion4": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_fire_resistance"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion5": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_swiftness"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion6": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_slowness"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion7": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_turtle_master"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion8": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_water_breathing"
+            },
+            "trigger": "minecraft:brewed_potion"
+        },
+        "brewed_potion9": {
+            "conditions": {
+                "potion": "enigmaticlegacyplus:ultimate_healing"
+            },
+            "trigger": "minecraft:brewed_potion"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.ultimate_potion.desc"
+        },
+        "icon": {
+            "components": {
+                "minecraft:potion_contents": {
+                    "potion": "enigmaticlegacyplus:ultimate_healing"
+                }
+            },
+            "count": 1,
+            "id": "minecraft:potion"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.ultimate_potion.title"
+        }
+    },
+    "requirements": [
+        [
+            "brewed_potion1",
+            "brewed_potion2",
+            "brewed_potion3",
+            "brewed_potion4",
+            "brewed_potion5",
+            "brewed_potion6",
+            "brewed_potion7",
+            "brewed_potion8",
+            "brewed_potion9",
+            "brewed_potion10",
+            "brewed_potion11",
+            "brewed_potion12",
+            "brewed_potion13",
+            "brewed_potion14",
+            "brewed_potion15",
+            "brewed_potion16"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

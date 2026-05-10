@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
@@ -28,11 +29,11 @@ public class AcknowledgmentNameRenderer {
         this.font = font;
 
         Component customName = EnigmaticItems.THE_ACKNOWLEDGMENT.toStack().getHoverName();
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.player != null) {
-            ItemStack stack = minecraft.player.getOffhandItem();
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            ItemStack stack = player.getOffhandItem();
             if (stack.isEmpty() || !(stack.getItem() instanceof TheAcknowledgment)) {
-                stack = minecraft.player.getMainHandItem();
+                stack = player.getMainHandItem();
             }
             if (!stack.isEmpty() && stack.getItem() instanceof TheAcknowledgment) {
                 customName = stack.getItem().getName(stack);

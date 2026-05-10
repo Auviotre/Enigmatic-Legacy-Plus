@@ -8,7 +8,7 @@
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "chance": 0.3,
+                            "chance": 0.9,
                             "condition": "minecraft:random_chance"
                         }
                     ],
@@ -29,7 +29,7 @@
                         }
                     ],
                     "name": "enigmaticlegacyplus:earth_heart_fragment",
-                    "weight": 10
+                    "weight": 20
                 },
                 {
                     "type": "minecraft:item",
@@ -42,6 +42,49 @@
                     "weight": 5
                 },
                 {
+                    "type": "minecraft:empty",
+                    "weight": 60
+                }
+            ],
+            "rolls": 1.0
+        },
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.75,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:ichor_bottle",
+                    "weight": 20
+                },
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.5,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:forger_gem",
+                    "weight": 10
+                },
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "chance": 0.36,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:void_tome",
+                    "weight": 10
+                },
+                {
                     "type": "minecraft:item",
                     "conditions": [
                         {
@@ -49,55 +92,23 @@
                             "condition": "minecraft:random_chance"
                         }
                     ],
-                    "name": "enigmaticlegacyplus:forger_gem",
-                    "weight": 6
+                    "name": "enigmaticlegacyplus:unholy_grail",
+                    "weight": 10
                 },
                 {
                     "type": "minecraft:item",
                     "conditions": [
                         {
-                            "chance": 0.25,
+                            "chance": 0.32,
                             "condition": "minecraft:random_chance"
                         }
                     ],
-                    "name": "enigmaticlegacyplus:ichor_bottle",
+                    "name": "enigmaticlegacyplus:antique_bag",
                     "weight": 5
                 },
                 {
-                    "type": "minecraft:item",
-                    "conditions": [
-                        {
-                            "chance": 0.25,
-                            "condition": "minecraft:random_chance"
-                        }
-                    ],
-                    "name": "enigmaticlegacyplus:void_tome",
-                    "weight": 4
-                },
-                {
-                    "type": "minecraft:item",
-                    "conditions": [
-                        {
-                            "chance": 0.25,
-                            "condition": "minecraft:random_chance"
-                        }
-                    ],
-                    "name": "enigmaticlegacyplus:unholy_grail",
-                    "weight": 2
-                },
-                {
-                    "type": "minecraft:item",
-                    "conditions": [
-                        {
-                            "chance": 0.25,
-                            "condition": "minecraft:random_chance"
-                        }
-                    ],
-                    "name": "enigmaticlegacyplus:antique_bag"
-                },
-                {
                     "type": "minecraft:empty",
-                    "weight": 60
+                    "weight": 120
                 }
             ],
             "rolls": 1.0

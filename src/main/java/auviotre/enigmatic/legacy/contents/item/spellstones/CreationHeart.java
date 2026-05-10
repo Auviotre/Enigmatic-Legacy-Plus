@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.entity.projectile.UltimateWitherSkull;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
@@ -23,6 +24,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -44,6 +46,7 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -53,8 +56,9 @@ import java.util.Objects;
 
 public class CreationHeart extends SpellstoneItem {
     public static ModConfigSpec.IntValue cooldown;
+
     public CreationHeart() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC).fireResistant(), 0x0);
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC).fireResistant(), 0x3EFFFFFF);
     }
 
     @SubscribeConfig
@@ -91,7 +95,7 @@ public class CreationHeart extends SpellstoneItem {
     }
 
     public void addTuneTooltip(List<Component> list) {
-
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.creationHeart2");
     }
 
     public void curioTick(SlotContext context, ItemStack stack) {
@@ -113,7 +117,7 @@ public class CreationHeart extends SpellstoneItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-        attributes.put(NeoForgeMod.CREATIVE_FLIGHT, new AttributeModifier(getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
+        attributes.put(NeoForgeMod.CREATIVE_FLIGHT, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
         return attributes;
     }
 
@@ -162,13 +166,25 @@ public class CreationHeart extends SpellstoneItem {
             }
         }
 
-        @SubscribeEvent(priority = EventPriority.HIGHEST)
+        @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
         private static void onLivingDeath(@NotNull LivingDeathEvent event) {
             LivingEntity entity = event.getEntity();
             if (ISpellstone.get(entity).is(EnigmaticItems.CREATION_HEART) || EnigmaticHandler.hasItem(entity, EnigmaticItems.CREATION_HEART)) {
                 if (event.getSource().is(Tags.DamageTypes.IS_TECHNICAL)) return;
+                if (!event.isCanceled()) entity.setHealth(1);
                 event.setCanceled(true);
-                entity.setHealth(1);
+            }
+        }
+
+        @SubscribeEvent
+        private static void onApplyPotion(MobEffectEvent.@NotNull Applicable event) {
+            MobEffectInstance instance = event.getEffectInstance();
+            if (instance == null) return;
+            if (instance.getEffect().is(EnigmaticTags.Effects.ALWAYS_APPLY)) return;
+            ItemStack stack = ISpellstone.get(event.getEntity());
+            MobEffectCategory category = instance.getEffect().value().getCategory();
+            if (stack.is(EnigmaticItems.CREATION_HEART) && category.equals(MobEffectCategory.HARMFUL)) {
+                event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
             }
         }
     }

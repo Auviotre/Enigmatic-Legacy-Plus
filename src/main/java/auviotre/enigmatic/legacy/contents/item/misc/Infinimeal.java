@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.misc;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import net.minecraft.core.BlockPos;
@@ -45,7 +46,7 @@ public class Infinimeal extends BaseItem {
     };
 
     public Infinimeal() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON));
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON));
         DispenserBlock.registerBehavior(this, DISPENSE_ITEM_BEHAVIOR);
     }
 

@@ -2,11 +2,14 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
+        "A": {
+            "item": "minecraft:gold_ingot"
+        },
         "N": {
             "item": "minecraft:netherite_ingot"
         },
         "P": {
-            "item": "minecraft:blaze_powder"
+            "item": "enigmaticlegacyplus:infernal_cinder"
         },
         "R": {
             "item": "minecraft:blaze_rod"
@@ -19,7 +22,7 @@
         }
     },
     "pattern": [
-        "NVN",
+        "AVN",
         "PXP",
         " R "
     ],

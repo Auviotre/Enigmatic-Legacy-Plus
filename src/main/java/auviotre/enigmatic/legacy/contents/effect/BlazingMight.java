@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 public class BlazingMight extends MobEffect {
     public BlazingMight() {
         super(MobEffectCategory.BENEFICIAL, 0xEA6363);
-        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, EnigmaticLegacy.location("effect.blazing_might"), 3, AttributeModifier.Operation.ADD_VALUE);
+        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, EnigmaticLegacy.location("effect.blazing_might"), 1.5, AttributeModifier.Operation.ADD_VALUE);
         NeoForge.EVENT_BUS.register(this);
     }
 
@@ -42,7 +42,10 @@ public class BlazingMight extends MobEffect {
         if (victim.hasEffect(EnigmaticEffects.BLAZING_MIGHT) && event.getNewDamage() > 0.0F) {
             MobEffectInstance effect = victim.getEffect(EnigmaticEffects.BLAZING_MIGHT);
             assert effect != null;
+            int i = (effect.getAmplifier() + 1) / 2 - 1;
             victim.removeEffect(EnigmaticEffects.BLAZING_MIGHT);
+            if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.INFERNAL_RING) && i >= 0)
+                victim.addEffect(new MobEffectInstance(EnigmaticEffects.BLAZING_MIGHT, effect.getDuration(), i, true, true));
             if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.BERSERK_EMBLEM)) {
                 event.setNewDamage(Math.max(0.0F, event.getNewDamage() - effect.getAmplifier() * 2.0F - 1.0F));
             }

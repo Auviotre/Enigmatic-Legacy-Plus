@@ -1,13 +1,13 @@
 package auviotre.enigmatic.legacy.contents.item.potions;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseDrinkableItem;
+import auviotre.enigmatic.legacy.handlers.SoulArchive;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -26,7 +26,7 @@ import java.util.List;
 
 public class RecallPotion extends BaseDrinkableItem {
     public RecallPotion() {
-        super(defaultSingleProperties().craftRemainder(Items.GLASS_BOTTLE));
+        super(IItemHelper.singleProperties().craftRemainder(Items.GLASS_BOTTLE));
     }
 
     public static void teleportToRespawnPoint(ServerPlayer player, ParticleOptions particle) {
@@ -37,15 +37,12 @@ public class RecallPotion extends BaseDrinkableItem {
             server.sendParticles(particle, player.getX(), player.getY(0.5), player.getZ(), 48, hOffset, yOffset, hOffset, 0.03);
         }
 
-        ResourceKey<Level> respawnDimension = player.getRespawnDimension();
-        ServerLevel destLevel = player.server.getLevel(respawnDimension);
-        if (destLevel == null) destLevel = player.server.overworld();
-        BlockPos respawnPos = player.getRespawnPosition();
-        if (respawnPos == null) respawnPos = destLevel.getSharedSpawnPos();
-        Vec3 vec3 = player.adjustSpawnLocation(destLevel, respawnPos).getBottomCenter();
-
+        SoulArchive.DimensionalPosition dimPoint = SoulArchive.getRespawnPos(player);
+        ServerLevel destLevel = dimPoint.getWorld();
+        Vec3 vec3 =dimPoint.getBlockPos().getBottomCenter();
         if (!player.level().equals(destLevel))
             player.changeDimension(new DimensionTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), DimensionTransition.DO_NOTHING));
+        vec3 = player.adjustSpawnLocation(destLevel, dimPoint.getBlockPos()).getBottomCenter();
         player.teleportTo(vec3.x, vec3.y, vec3.z);
 
         if (player.level() instanceof ServerLevel server) {

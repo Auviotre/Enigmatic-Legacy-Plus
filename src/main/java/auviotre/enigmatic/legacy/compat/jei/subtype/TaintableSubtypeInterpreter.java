@@ -11,12 +11,12 @@ public class TaintableSubtypeInterpreter implements ISubtypeInterpreter<ItemStac
     public static final TaintableSubtypeInterpreter INSTANCE = new TaintableSubtypeInterpreter();
 
     public @Nullable Boolean getSubtypeData(@NotNull ItemStack ingredient, UidContext context) {
-        return ingredient.getOrDefault(EnigmaticComponents.TAINTABLE, false);
+        return ingredient.getOrDefault(EnigmaticComponents.TAINTABLE, false) && context.equals(UidContext.Recipe);
     }
 
     public String getLegacyStringSubtypeInfo(@NotNull ItemStack ingredient, UidContext context) {
         String description = ingredient.getItem().getDescriptionId();
-        if (ingredient.getOrDefault(EnigmaticComponents.TAINTABLE, false))
+        if (ingredient.getOrDefault(EnigmaticComponents.TAINTABLE, false) && context.equals(UidContext.Recipe))
             return description + ".tainted";
         return description;
     }

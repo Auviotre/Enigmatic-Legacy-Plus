@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -79,7 +80,7 @@ public class ForgottenIce extends SpellstoneItem {
     public static ModConfigSpec.IntValue cooldown;
 
     public ForgottenIce() {
-        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFF80E5FF);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE), 0xFF80E5FF);
     }
 
     @SubscribeConfig

@@ -3,6 +3,7 @@ package auviotre.enigmatic.legacy.contents.item.legacy;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.event.EndPortalActivatedEvent;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.client.Quote;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
@@ -61,16 +62,16 @@ public class EnigmaticEye extends BaseCurioItem {
     public static ModConfigSpec.BooleanValue quoteSubtitles;
     public static ModConfigSpec.IntValue deathQuoteChance;
 
+    public EnigmaticEye() {
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).fireResistant());
+    }
+
     @SubscribeConfig(receiveClient = true)
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         if (type == ModConfig.Type.CLIENT) {
             quoteSubtitles = builder.define("quoteSubtitles", true);
             deathQuoteChance = builder.defineInRange("deathQuoteChance", 60, 0, 100);
         }
-    }
-
-    public EnigmaticEye() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON).fireResistant());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -170,7 +171,7 @@ public class EnigmaticEye extends BaseCurioItem {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         if (this.isDormant(stack)) return attributes;
         if (!(context.entity() instanceof Player)) return attributes;
-        CuriosApi.addSlotModifier(attributes, "charm", getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
+        CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
         return attributes;
     }
 
@@ -236,10 +237,14 @@ public class EnigmaticEye extends BaseCurioItem {
                 data.setWitherKills(witherKills);
 
                 switch (witherKills) {
-                    case 1: Quote.BREATHES_RELIEVED.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(140));
-                    case 2: Quote.APPALLING_PRESENCE.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(140));
-                    case 3: Quote.TERRIFYING_FORM.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(140));
-                    case 5: Quote.WHETHER_IT_IS.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(140));
+                    case 1:
+                        Quote.BREATHES_RELIEVED.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(140));
+                    case 2:
+                        Quote.APPALLING_PRESENCE.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(140));
+                    case 3:
+                        Quote.TERRIFYING_FORM.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(140));
+                    case 5:
+                        Quote.WHETHER_IT_IS.play(serverPlayer, Quote.PlayOptions.defaultPlay().ifUnlocked().delay(140));
                 }
             }
         }

@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.books;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -24,7 +25,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -45,7 +45,7 @@ public class TheTwist extends TheAcknowledgment {
     public static ModConfigSpec.IntValue knockbackModifier;
 
     public TheTwist() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.CURSED, true), 8, -1.8F);
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC).component(EnigmaticComponents.CURSED, true), 8, -1.8F);
     }
 
     @SubscribeConfig
@@ -59,7 +59,7 @@ public class TheTwist extends TheAcknowledgment {
     public static Multimap<Holder<Attribute>, AttributeModifier> getKnockbackModifier() {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         double modifier = 0.01 * knockbackModifier.getAsInt();
-        builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(getLocation(EnigmaticItems.THE_TWIST.get()), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(IItemHelper.getLocation(EnigmaticItems.THE_TWIST.get()), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return builder.build();
     }
 
@@ -84,11 +84,8 @@ public class TheTwist extends TheAcknowledgment {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!EnigmaticHandler.canUse(player, stack)) return InteractionResultHolder.pass(stack);
-        if (hand == InteractionHand.MAIN_HAND) {
-            ItemStack offhandStack = player.getOffhandItem();
-            if (!offhandStack.isEmpty() && (offhandStack.getItem().getUseAnimation(offhandStack) != UseAnim.NONE))
-                return InteractionResultHolder.pass(stack);
-        }
+        if (hand == InteractionHand.MAIN_HAND && !player.getOffhandItem().isEmpty())
+            return InteractionResultHolder.pass(stack);
         return super.use(world, player, hand);
     }
 

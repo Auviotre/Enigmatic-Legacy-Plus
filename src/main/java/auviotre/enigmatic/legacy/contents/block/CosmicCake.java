@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.block;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.registries.EnigmaticBlocks;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
 import net.minecraft.core.BlockPos;
@@ -95,7 +96,7 @@ public class CosmicCake extends CakeBlock {
 
     public static class Item extends BlockItem {
         public Item(Block block) {
-            super(block, new Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
+            super(block, IItemHelper.singleProperties().fireResistant().rarity(Rarity.UNCOMMON));
         }
     }
 

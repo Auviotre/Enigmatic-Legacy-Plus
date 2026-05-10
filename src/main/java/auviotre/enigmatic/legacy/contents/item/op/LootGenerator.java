@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.op;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -36,7 +37,7 @@ public class LootGenerator extends BaseItem {
     public List<ResourceKey<LootTable>> lootList = new ArrayList<>();
 
     public LootGenerator() {
-        super(BaseItem.defaultSingleProperties().rarity(Rarity.EPIC).durability(BuiltInLootTables.all().size() * 2));
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC).durability(BuiltInLootTables.all().size() * 2));
         Set<ResourceKey<LootTable>> all = BuiltInLootTables.all();
         List<ResourceKey<LootTable>> list = all.stream().sorted().toList();
         for (ResourceKey<LootTable> key : list) {

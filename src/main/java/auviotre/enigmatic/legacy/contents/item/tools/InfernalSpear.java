@@ -1,12 +1,14 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.effect.BlazingMight;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticTriggers;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.gui.screens.Screen;
@@ -15,6 +17,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
@@ -48,7 +51,7 @@ import java.util.List;
 
 public class InfernalSpear extends BaseItem {
     public InfernalSpear() {
-        super(defaultSingleProperties().fireResistant().durability(Tiers.NETHERITE.getUses())
+        super(IItemHelper.singleProperties().fireResistant().durability(Tiers.NETHERITE.getUses())
                 .component(DataComponents.TOOL, SwordItem.createToolProperties())
                 .attributes(ItemAttributeModifiers.builder()
                         .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, 5, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
@@ -56,6 +59,15 @@ public class InfernalSpear extends BaseItem {
                         .add(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(AttributeUtil.BASE_ENTITY_REACH_ID, 1.8, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
                         .build())
         );
+    }
+
+    public static Multimap<Holder<Attribute>, AttributeModifier> getBoost() {
+        ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(EnigmaticLegacy.location("infernal_spear_ult"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        builder.put(Attributes.ARMOR, new AttributeModifier(EnigmaticLegacy.location("infernal_spear_ult"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(EnigmaticLegacy.location("infernal_spear_ult"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(EnigmaticLegacy.location("infernal_spear_ult"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        return builder.build();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -66,15 +78,6 @@ public class InfernalSpear extends BaseItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalSpear2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalSpear3");
         } else TooltipHandler.holdShift(list);
-    }
-
-    public static Multimap<Holder<Attribute>, AttributeModifier> getBoost() {
-        ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(EnigmaticLegacy.location("infernal_spear_ult"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        builder.put(Attributes.ARMOR, new AttributeModifier(EnigmaticLegacy.location("infernal_spear_ult"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(EnigmaticLegacy.location("infernal_spear_ult"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(EnigmaticLegacy.location("infernal_spear_ult"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        return builder.build();
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
@@ -93,9 +96,15 @@ public class InfernalSpear extends BaseItem {
             }
             for (LivingEntity entity : entities) player.attack(entity);
             player.getAttributes().removeAttributeModifiers(getBoost());
+            int i = (effect.getAmplifier() + 1) / 2 - 1;
             player.removeEffect(EnigmaticEffects.BLAZING_MIGHT);
+            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.INFERNAL_RING) && i >= 0)
+                player.addEffect(new MobEffectInstance(EnigmaticEffects.BLAZING_MIGHT, effect.getDuration(), i, true, true));
             player.swing(hand, true);
             stack.hurtAndBreak(5, player, InteractionHand.MAIN_HAND.equals(hand) ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+            if (player instanceof ServerPlayer serverPlayer) {
+                EnigmaticTriggers.ENIGMATIC_TRIGGER.get().trigger(serverPlayer, 3);
+            }
             return InteractionResultHolder.consume(stack);
         }
         return super.use(level, player, hand);

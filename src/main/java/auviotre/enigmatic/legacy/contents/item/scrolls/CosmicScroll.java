@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.scrolls;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -45,7 +46,7 @@ import java.util.List;
 
 public class CosmicScroll extends BaseCurioItem {
     public CosmicScroll() {
-        super(defaultSingleProperties().rarity(Rarity.EPIC));
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -82,9 +83,10 @@ public class CosmicScroll extends BaseCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-        CuriosApi.addSlotModifier(attributes, "scroll", getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
-        attributes.put(Attributes.LUCK, new AttributeModifier(getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE));
-        attributes.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(getLocation(this), 0.2, AttributeModifier.Operation.ADD_VALUE));
+        ResourceLocation location = IItemHelper.getLocation(this);
+        CuriosApi.addSlotModifier(attributes, "scroll", location, 1.0, AttributeModifier.Operation.ADD_VALUE);
+        attributes.put(Attributes.LUCK, new AttributeModifier(location, 1.0, AttributeModifier.Operation.ADD_VALUE));
+        attributes.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(location, 0.2, AttributeModifier.Operation.ADD_VALUE));
         return attributes;
     }
 
@@ -126,7 +128,7 @@ public class CosmicScroll extends BaseCurioItem {
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
             DamageSource source = event.getSource();
-            if (source.getEntity() instanceof LivingEntity entity) {
+            if (source.getEntity() instanceof Player entity) {
                 ItemStack curio = EnigmaticHandler.getCurio(entity, EnigmaticItems.COSMIC_SCROLL);
                 if (!curio.isEmpty() && !EnigmaticHandler.hasCurio(event.getEntity(), EnigmaticItems.COSMIC_SCROLL)) {
                     event.setAmount(event.getAmount() + event.getOriginalAmount());

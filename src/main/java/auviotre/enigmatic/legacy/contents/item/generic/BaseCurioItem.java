@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.generic;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
@@ -8,7 +9,7 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 public class BaseCurioItem extends BaseItem implements ICurioItem {
 
     public BaseCurioItem() {
-        super(defaultSingleProperties());
+        super(IItemHelper.singleProperties());
     }
 
     public BaseCurioItem(Properties properties) {

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.misc;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
@@ -32,7 +33,7 @@ import java.util.List;
 
 public class BlessStone extends BaseCursedItem {
     public BlessStone() {
-        super(defaultSingleProperties().rarity(Rarity.RARE).fireResistant(), true);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).fireResistant(), true);
     }
 
     @OnlyIn(Dist.CLIENT)

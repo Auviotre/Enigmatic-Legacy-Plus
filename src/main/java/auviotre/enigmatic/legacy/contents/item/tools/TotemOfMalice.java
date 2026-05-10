@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.tools;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -43,7 +44,7 @@ public class TotemOfMalice extends BaseCurioItem {
     public static ModConfigSpec.IntValue specialDamageResistance;
 
     public TotemOfMalice() {
-        super(defaultSingleProperties().rarity(Rarity.RARE).fireResistant().component(EnigmaticComponents.CURSED, true)
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).fireResistant().component(EnigmaticComponents.CURSED, true)
                 .component(EnigmaticComponents.MALICE_DURABILITY, 0).component(EnigmaticComponents.MALICE_MAX_DURABILITY, 8));
     }
 

@@ -2,9 +2,12 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.entity.projectile.SoulFlameBall;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
+import auviotre.enigmatic.legacy.contents.item.scrolls.SurvivorScroll;
+import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticDamageTypes;
@@ -55,7 +58,7 @@ public class IllusionLantern extends SpellstoneItem {
     public static ModConfigSpec.IntValue cooldown;
 
     public IllusionLantern() {
-        super(defaultSingleProperties().rarity(Rarity.RARE).component(EnigmaticComponents.ILLUSION_COUNT, 0), 0xE86DD5DE);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).component(EnigmaticComponents.ILLUSION_COUNT, 0), 0xE86DD5DE);
     }
 
     @SubscribeConfig
@@ -80,7 +83,7 @@ public class IllusionLantern extends SpellstoneItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.illusionLantern1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.illusionLantern2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.illusionLantern3");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.illusionLantern4");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.illusionLantern4", ChatFormatting.GOLD, String.format("%d%%", bypassDamageResistance.get()));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.illusionLantern5");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.illusionLantern6");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.illusionLantern7");
@@ -90,7 +93,7 @@ public class IllusionLantern extends SpellstoneItem {
 
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
-//        TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart6", ChatFormatting.GOLD, String.format("%.0f%%", resistance));
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.illusionLantern4", ChatFormatting.GOLD, String.format("%d%%", bypassDamageResistance.get() / 2));
     }
 
     public int getCooldown() {
@@ -111,9 +114,7 @@ public class IllusionLantern extends SpellstoneItem {
             if (entity.tickCount % 32 == 0 && !entity.hasInfiniteMaterials()) {
                 Level level = entity.level();
                 BlockPos blockPos = entity.blockPosition();
-                boolean seeSky = level.canSeeSkyFromBelowWater(blockPos);
-                int rawBrightness = level.getLightEngine().getRawBrightness(blockPos, 15);
-                if (seeSky && rawBrightness > 12) {
+                if (SurvivorScroll.getBrightness(level, blockPos) > 12) {
                     entity.hurt(EnigmaticDamageTypes.source(level, EnigmaticDamageTypes.EVIL_CURSE, entity), entity.getMaxHealth() / 8.0F);
                 }
                 if (entity.getRandom().nextBoolean()) return;
@@ -185,6 +186,10 @@ public class IllusionLantern extends SpellstoneItem {
                     event.setAmount((float) (event.getAmount() * ILVulnerabilityModifier.get()));
                 if (source.is(EnigmaticTags.DamageTypes.ILLUSION_LANTERN_RESISTANT_TO)) {
                     event.setAmount(event.getAmount() * (1 - bypassDamageResistance.get() * 0.01F));
+                }
+            } else if (Spelltuner.hasTune(entity, EnigmaticItems.ILLUSION_LANTERN)) {
+                if (source.is(EnigmaticTags.DamageTypes.ILLUSION_LANTERN_RESISTANT_TO)) {
+                    event.setAmount(event.getAmount() * (1 - bypassDamageResistance.get() * 0.005F));
                 }
             }
             if (source.getDirectEntity() instanceof SoulFlameBall) {

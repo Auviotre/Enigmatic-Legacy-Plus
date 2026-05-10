@@ -43,8 +43,8 @@ public class ELEntityLoot extends EntityLootSubProvider {
         this.add(EnigmaticEntities.ICHOR_SPRITE.get(),
                 LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(EnigmaticItems.SACRED_CRYSTAL)
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.1F, 0.04F))
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.35F, 0.1F))
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 3.0F))))
                 ).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(EnigmaticItems.ICHOR_DROPLET)
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
@@ -166,7 +166,7 @@ public class ELEntityLoot extends EntityLootSubProvider {
         this.add(EntityType.PIGLIN_BRUTE, EnigmaticLootTables.Entities.PIGLIN_BRUTE,
                 LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(Items.NETHERITE_SCRAP)
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.2F, 0.04F)))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.21F, 0.05F)))
                 )
         );
         this.add(EntityType.RAVAGER, EnigmaticLootTables.Entities.RAVAGER,
@@ -232,7 +232,7 @@ public class ELEntityLoot extends EntityLootSubProvider {
                         .add(LootItem.lootTableItem(Items.GHAST_TEAR)
                                 .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.2F, 0.05F)))
                         .add(LootItem.lootTableItem(Items.NETHERITE_SCRAP)
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.07F, 0.04F)))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.09F, 0.04F)))
                 )
         );
         this.add(EntityType.ZOMBIE, EnigmaticLootTables.Entities.ZOMBIE,

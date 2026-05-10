@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.misc;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import net.minecraft.network.chat.Component;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class CursedStone extends BaseCursedItem {
     public CursedStone() {
-        super(defaultSingleProperties().rarity(Rarity.RARE).fireResistant());
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).fireResistant());
     }
 
     @OnlyIn(Dist.CLIENT)

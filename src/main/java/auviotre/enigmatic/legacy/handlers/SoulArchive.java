@@ -16,6 +16,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
@@ -67,6 +68,15 @@ public class SoulArchive {
         PacketDistributor.sendToPlayer(player, new SoulCompassUpdatePacket(noValid, pos));
         SoulCompass.Events.LAST_SOUL_COMPASS_UPDATE.put(player, player.tickCount);
         return optional;
+    }
+
+    public static DimensionalPosition getRespawnPos(ServerPlayer player) {
+        ResourceKey<Level> respawnDimension = player.getRespawnDimension();
+        ServerLevel destLevel = player.server.getLevel(respawnDimension);
+        if (destLevel == null) destLevel = player.server.overworld();
+        BlockPos respawnPos = player.getRespawnPosition();
+        if (respawnPos == null) respawnPos = destLevel.getSharedSpawnPos();
+        return new SoulArchive.DimensionalPosition(respawnPos.getX() + 0.5, respawnPos.getY() + 1.5, respawnPos.getZ() + 0.5, destLevel);
     }
 
     public Optional<Tuple<UUID, BlockPos>> findNearest(Player player, BlockPos pos) {
@@ -189,13 +199,17 @@ public class SoulArchive {
         public double posX;
         public double posY;
         public double posZ;
-        public Level world;
+        public ServerLevel world;
 
-        public DimensionalPosition(double x, double y, double z, Level world) {
+        public DimensionalPosition(double x, double y, double z, ServerLevel world) {
             this.posX = x;
             this.posY = y;
             this.posZ = z;
             this.world = world;
+        }
+
+        public BlockPos getBlockPos() {
+            return BlockPos.containing(posX, posY, posZ);
         }
 
         public double getPosX() {
@@ -210,7 +224,7 @@ public class SoulArchive {
             return this.posZ;
         }
 
-        public Level getWorld() {
+        public ServerLevel getWorld() {
             return this.world;
         }
     }

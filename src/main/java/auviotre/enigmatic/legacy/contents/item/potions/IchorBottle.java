@@ -1,8 +1,10 @@
 package auviotre.enigmatic.legacy.contents.item.potions;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseDrinkableItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -28,7 +30,8 @@ public class IchorBottle extends BaseDrinkableItem {
     private final boolean enchanted;
 
     public IchorBottle(boolean enchanted) {
-        super(defaultSingleProperties().craftRemainder(Items.GLASS_BOTTLE).food(FOOD_PROPERTIES).rarity(Rarity.RARE));
+        super(IItemHelper.singleProperties().craftRemainder(Items.GLASS_BOTTLE).food(FOOD_PROPERTIES).rarity(Rarity.RARE)
+                .component(EnigmaticComponents.CURSED, enchanted).component(EnigmaticComponents.BLESSED, enchanted));
         this.enchanted = enchanted;
     }
 
@@ -37,12 +40,14 @@ public class IchorBottle extends BaseDrinkableItem {
         if (this.enchanted) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.ichorBottle1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.ichorBottle2");
+            TooltipHandler.line(list);
+            TooltipHandler.cursedOnly(list, stack);
         }
     }
 
     public void onConsumed(Level level, Player player, ItemStack stack) {
         if (this.enchanted) {
-            EnigmaticHandler.unlockSpecialSlot("charm", player, getLocation(this));
+            EnigmaticHandler.unlockSpecialSlot("charm", player, IItemHelper.getLocation(this));
         }
         player.eat(level, stack);
     }

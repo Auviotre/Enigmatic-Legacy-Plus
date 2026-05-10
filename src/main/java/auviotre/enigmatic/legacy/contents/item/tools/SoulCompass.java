@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -47,7 +48,7 @@ public class SoulCompass extends BaseCursedItem {
     private BlockPos nearestCrystal;
 
     public SoulCompass() {
-        super(defaultSingleProperties().rarity(Rarity.UNCOMMON).fireResistant());
+        super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).fireResistant());
     }
 
     @OnlyIn(Dist.CLIENT)

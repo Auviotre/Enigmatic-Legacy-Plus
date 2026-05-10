@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.client.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.client.particles.IchorParticle;
 import auviotre.enigmatic.legacy.client.particles.StarDustParticle;
@@ -16,6 +17,7 @@ import auviotre.enigmatic.legacy.client.screen.SpellstoneTableScreen;
 import auviotre.enigmatic.legacy.client.screen.button.EnderChestInventoryButton;
 import auviotre.enigmatic.legacy.client.screen.button.MagnetRingInventoryButton;
 import auviotre.enigmatic.legacy.contents.item.charms.HellBladeCharm;
+import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.contents.item.spellstones.IllusionLantern;
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
 import auviotre.enigmatic.legacy.contents.item.tools.TotemOfMalice;
@@ -25,11 +27,13 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.particle.EndRodParticle;
 import net.minecraft.client.particle.SpellParticle;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -58,6 +62,9 @@ public class ClientSetupHandler {
         event.register(EnigmaticItems.HELL_BLADE_CHARM, new HellBladeCharm.Decorator());
         event.register(EnigmaticItems.TOTEM_OF_MALICE, new TotemOfMalice.Decorator());
         event.register(EnigmaticItems.ILLUSION_LANTERN, new IllusionLantern.Decorator());
+        for (ItemLike item : IItemHelper.UNKNOWN_ITEMS) {
+            event.register(item, new BaseItem.UnknownDecorator());
+        }
     }
 
 
@@ -79,6 +86,7 @@ public class ClientSetupHandler {
         event.registerSpriteSet(EnigmaticParticles.ICHOR.get(), IchorParticle.Provider::new);
         event.registerSpriteSet(EnigmaticParticles.ICHOR_CURSE.get(), SpellParticle.Provider::new);
         event.registerSpriteSet(EnigmaticParticles.VIOLENCE_CURSE.get(), SpellParticle.Provider::new);
+        event.registerSpriteSet(EnigmaticParticles.ETHER.get(), EndRodParticle.Provider::new);
         event.registerSpriteSet(EnigmaticParticles.BLUE_STAR_DUST.get(), StarDustParticle.Provider::new);
         event.registerSpriteSet(EnigmaticParticles.RED_STAR_DUST.get(), StarDustParticle.Provider::new);
         event.registerSpriteSet(EnigmaticParticles.PURPLE_STAR_DUST.get(), StarDustParticle.Provider::new);

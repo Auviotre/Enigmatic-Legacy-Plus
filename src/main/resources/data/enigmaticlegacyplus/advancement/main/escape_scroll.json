@@ -1,0 +1,29 @@
+{
+    "parent": "enigmaticlegacyplus:main/recall_potion",
+    "criteria": {
+        "trigger_escape_scroll": {
+            "conditions": {
+                "trigger_id": 5
+            },
+            "trigger": "enigmaticlegacyplus:enigmatic"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.escape_scroll.desc"
+        },
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:escape_scroll"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.escape_scroll.title"
+        }
+    },
+    "requirements": [
+        [
+            "trigger_escape_scroll"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

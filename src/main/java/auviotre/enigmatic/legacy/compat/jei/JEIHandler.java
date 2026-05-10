@@ -5,7 +5,6 @@ import auviotre.enigmatic.legacy.client.screen.SpellstoneTableScreen;
 import auviotre.enigmatic.legacy.compat.jei.category.SpellstoneCraftingCategory;
 import auviotre.enigmatic.legacy.compat.jei.category.TaintingCategory;
 import auviotre.enigmatic.legacy.compat.jei.extension.CursedRecipeExtension;
-import auviotre.enigmatic.legacy.compat.jei.subtype.AmuletSubtypeInterpreter;
 import auviotre.enigmatic.legacy.compat.jei.subtype.TaintableSubtypeInterpreter;
 import auviotre.enigmatic.legacy.contents.crafting.CursedShapedRecipe;
 import auviotre.enigmatic.legacy.contents.crafting.SpellstoneTableRecipe;
@@ -48,11 +47,10 @@ public class JEIHandler implements IModPlugin {
     }
 
     public void registerItemSubtypes(@NotNull ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(EnigmaticItems.EARTH_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
+        // registration.registerSubtypeInterpreter(EnigmaticItems.EARTH_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
         registration.registerSubtypeInterpreter(EnigmaticItems.TWISTED_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
         registration.registerSubtypeInterpreter(EnigmaticItems.PURE_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
         registration.registerSubtypeInterpreter(EnigmaticItems.ABYSSAL_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
-        registration.registerSubtypeInterpreter(EnigmaticItems.ENIGMATIC_AMULET.get(), AmuletSubtypeInterpreter.INSTANCE);
     }
 
     public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {

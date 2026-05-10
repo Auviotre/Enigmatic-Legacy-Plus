@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.scrolls;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -34,7 +35,7 @@ public class AvariceScroll extends CursedCurioItem {
     public static ModConfigSpec.IntValue emeraldChance;
 
     public AvariceScroll() {
-        super(defaultSingleProperties().rarity(Rarity.RARE).fireResistant());
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).fireResistant());
     }
 
     @SubscribeConfig

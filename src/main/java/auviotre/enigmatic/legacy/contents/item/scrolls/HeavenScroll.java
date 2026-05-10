@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.scrolls;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -35,7 +36,7 @@ import java.util.List;
 
 public class HeavenScroll extends BaseCurioItem {
     public HeavenScroll() {
-        super(defaultSingleProperties().rarity(Rarity.RARE));
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -80,7 +81,7 @@ public class HeavenScroll extends BaseCurioItem {
 
     protected Multimap<Holder<Attribute>, AttributeModifier> getModifiers() {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
-        map.put(NeoForgeMod.CREATIVE_FLIGHT, new AttributeModifier(getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
+        map.put(NeoForgeMod.CREATIVE_FLIGHT, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
         return map;
     }
 

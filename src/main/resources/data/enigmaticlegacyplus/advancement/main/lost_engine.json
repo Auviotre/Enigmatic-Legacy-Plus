@@ -1,0 +1,31 @@
+{
+    "parent": "enigmaticlegacyplus:main/discover_spellstone",
+    "criteria": {
+        "hit_by_lightning": {
+            "conditions": {
+                "trigger_id": 1
+            },
+            "trigger": "enigmaticlegacyplus:enigmatic"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.lost_engine.desc"
+        },
+        "frame": "goal",
+        "hidden": true,
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:lost_engine"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.lost_engine.title"
+        }
+    },
+    "requirements": [
+        [
+            "hit_by_lightning"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

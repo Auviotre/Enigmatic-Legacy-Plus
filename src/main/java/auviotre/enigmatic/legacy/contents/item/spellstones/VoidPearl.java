@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -53,7 +54,7 @@ public class VoidPearl extends SpellstoneItem {
     public static ModConfigSpec.IntValue undeadProbability;
 
     public VoidPearl() {
-        super(defaultSingleProperties().rarity(Rarity.RARE), 0xFF333333);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE), 0xFF333333);
     }
 
     @SubscribeConfig

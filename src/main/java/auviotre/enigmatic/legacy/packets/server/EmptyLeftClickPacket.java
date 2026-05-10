@@ -26,13 +26,13 @@ public record EmptyLeftClickPacket(boolean clicked) implements CustomPacketPaylo
             context.enqueueWork(() -> {
                 final Player player = context.player();
                 float base = (float) (0.5F * player.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                float damage = 1.0F + (float)player.getAttributeValue(Attributes.SWEEPING_DAMAGE_RATIO) * base;
+                float damage = 1.0F + (float) player.getAttributeValue(Attributes.SWEEPING_DAMAGE_RATIO) * base;
                 double delX = -Mth.sin(player.getYRot() * (float) Math.PI / 180F);
                 double delY = Mth.cos(player.getYRot() * (float) Math.PI / 180F);
                 DamageSource source = player.damageSources().playerAttack(player);
 
                 if (player.level() instanceof ServerLevel server) {
-                    for(LivingEntity target : player.level().getEntitiesOfClass(LivingEntity.class, player.getWeaponItem().getSweepHitBox(player, player))) {
+                    for (LivingEntity target : player.level().getEntitiesOfClass(LivingEntity.class, player.getWeaponItem().getSweepHitBox(player, player))) {
                         double entityReachSq = Mth.square(player.entityInteractionRange());
                         if (target != player && !player.isAlliedTo(target) && (!(target instanceof ArmorStand) || !((ArmorStand) target).isMarker()) && player.distanceToSqr(target) < entityReachSq) {
                             target.knockback(0.4, -delX, -delY);

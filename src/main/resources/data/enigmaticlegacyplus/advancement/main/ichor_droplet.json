@@ -1,0 +1,33 @@
+{
+    "parent": "enigmaticlegacyplus:main/infernal_cinder",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:ichor_droplet"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.ichor_droplet.desc"
+        },
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:ichor_droplet"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.ichor_droplet.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

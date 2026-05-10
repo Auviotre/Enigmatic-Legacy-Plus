@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.books;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -30,7 +31,7 @@ public class HunterGuidebook extends BaseItem {
     public static ModConfigSpec.DoubleValue effectiveRange;
 
     public HunterGuidebook() {
-        super(defaultSingleProperties());
+        super(IItemHelper.singleProperties());
     }
 
     @SubscribeConfig
