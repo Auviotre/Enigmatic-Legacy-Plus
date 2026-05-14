@@ -9,28 +9,22 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Optional;
 
 public interface ISpellstone {
 
     static ItemStack get(LivingEntity entity) {
-        AtomicReference<ItemStack> ret = new AtomicReference<>(ItemStack.EMPTY);
-        CuriosApi.getCuriosInventory(entity).ifPresent(handler -> {
-            IItemHandlerModifiable curios = handler.getEquippedCurios();
-            for (int id = 0; id < curios.getSlots(); id++) {
-                ItemStack stackInSlot = curios.getStackInSlot(id);
-                if (stackInSlot.isEmpty()) continue;
-                if (stackInSlot.getItem() instanceof ISpellstone) {
-                    ret.set(stackInSlot);
-                    break;
-                }
-            }
-        });
-        return ret.get();
+        Optional<ICuriosItemHandler> curios = CuriosApi.getCuriosInventory(entity);
+        if (curios.isPresent()) {
+            Optional<SlotResult> firstCurio = curios.get().findFirstCurio(stack -> !stack.isEmpty() && stack.getItem() instanceof ISpellstone, "enigmaticlegacy:spellstone");
+            if (firstCurio.isPresent()) return firstCurio.get().stack();
+        }
+        return ItemStack.EMPTY;
     }
 
     int getCooldown();
