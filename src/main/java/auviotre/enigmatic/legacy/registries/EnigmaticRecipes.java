@@ -17,9 +17,5 @@ public class EnigmaticRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<SpellstoneTableRecipe>> SPELLSTONE_TABLE = RECIPE_SERIALIZERS.register("spellstone_table", SpellstoneTableRecipe.Serializer::new);
 
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, EnigmaticLegacy.MODID);
-    public static final DeferredHolder<RecipeType<?>, RecipeType<SpellstoneTableRecipe>> SPELLSTONE_CRAFTING = RECIPE_TYPES.register("spellstone_crafting", () -> new RecipeType<>() {
-        public String toString() {
-            return EnigmaticLegacy.MODID + ":spellstone_crafting";
-        }
-    });
+    public static final DeferredHolder<RecipeType<?>, RecipeType<SpellstoneTableRecipe>> SPELLSTONE_CRAFTING = RECIPE_TYPES.register("spellstone_crafting", () -> RecipeType.simple(EnigmaticLegacy.location("spellstone_crafting")));
 }

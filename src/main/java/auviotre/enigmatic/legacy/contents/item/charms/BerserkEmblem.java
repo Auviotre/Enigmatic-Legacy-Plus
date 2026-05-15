@@ -75,10 +75,10 @@ public class BerserkEmblem extends CursedCurioItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (Screen.hasShiftDown()) {
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm1", ChatFormatting.GOLD, String.format("%.1f%%", attackDamage.get()));
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm2", ChatFormatting.GOLD, String.format("%.1f%%", attackSpeed.get()));
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm3", ChatFormatting.GOLD, String.format("%.1f%%", movementSpeed.get()));
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm4", ChatFormatting.GOLD, String.format("%.1f%%", damageResistance.get()));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm1", ChatFormatting.GOLD, attackDamage.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm2", ChatFormatting.GOLD, attackSpeed.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm3", ChatFormatting.GOLD, movementSpeed.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm4", ChatFormatting.GOLD, damageResistance.get() + "%");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm5");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm6");
@@ -87,7 +87,7 @@ public class BerserkEmblem extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm9");
         } else TooltipHandler.holdShift(list);
         LocalPlayer player = Minecraft.getInstance().player;
-        if (EnigmaticHandler.getCurio(player, this) == stack) {
+        if (player != null && ItemStack.isSameItemSameComponents(stack, EnigmaticHandler.getCurio(player, this))) {
             float missingPool = getMissingHealthPool(player);
             int percentage = (int) (missingPool * 100F);
             TooltipHandler.line(list);

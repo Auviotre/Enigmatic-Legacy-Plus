@@ -15,11 +15,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -84,11 +87,22 @@ public class ViolenceScroll extends BaseCurioItem {
         builder.pop(2);
     }
 
+    @Override
+    public String getDescriptionId() {
+        return super.getDescriptionId();
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         int count = AbsorbedEnchants.getCount(stack);
-        if (Screen.hasShiftDown()) {
+        if (Screen.hasAltDown()) {
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScrollList");
+            for (String enchantment : AbsorbedEnchants.getEnchantments(stack)) {
+                MutableComponent component = Component.translatable(Util.makeDescriptionId("enchantment", ResourceLocation.parse(enchantment)));
+                list.add(CommonComponents.space().append(component).withStyle(ChatFormatting.DARK_RED));
+            }
+        } else if (Screen.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScroll1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScroll2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScroll3");
@@ -112,6 +126,7 @@ public class ViolenceScroll extends BaseCurioItem {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScrollCount", ChatFormatting.GOLD, count);
             TooltipHandler.line(list);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScrollAlt");
             TooltipHandler.holdShift(list);
         }
         TooltipHandler.line(list);
@@ -236,6 +251,11 @@ public class ViolenceScroll extends BaseCurioItem {
         @Contract("_, _ -> new")
         public static @NotNull AbsorbedEnchants of(int count, List<String> enchantments) {
             return new AbsorbedEnchants(count, enchantments);
+        }
+
+        public static List<String> getEnchantments(ItemStack stack) {
+            AbsorbedEnchants enchants = stack.getOrDefault(EnigmaticComponents.ABSORBED_ENCHANTMENTS, EMPTY);
+            return enchants.enchantments;
         }
 
         public static int getCount(ItemStack stack) {

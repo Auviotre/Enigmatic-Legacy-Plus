@@ -65,7 +65,7 @@ public class EnigmaticEnchantments {
         HolderGetter<Item> itemGetter = context.lookup(Registries.ITEM);
         register(context, SLAYER, Enchantment.enchantment(
                                 Enchantment.definition(
-                                        itemGetter.getOrThrow(ItemTags.SHARP_WEAPON_ENCHANTABLE), itemGetter.getOrThrow(ItemTags.SWORD_ENCHANTABLE),
+                                        itemGetter.getOrThrow(ItemTags.WEAPON_ENCHANTABLE), itemGetter.getOrThrow(ItemTags.SWORD_ENCHANTABLE),
                                         5, 5, Enchantment.dynamicCost(5, 8), Enchantment.dynamicCost(25, 8), 2, EquipmentSlotGroup.MAINHAND
                                 )
                         ).exclusiveWith(enchantmentGetter.getOrThrow(EnchantmentTags.DAMAGE_EXCLUSIVE))

@@ -15,7 +15,6 @@ public class EnigmaticSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> ACCELERATE = register("misc.accelerate");
     public static final DeferredHolder<SoundEvent, SoundEvent> DEFLECT = register("misc.deflect");
     public static final DeferredHolder<SoundEvent, SoundEvent> SWORD_HIT_REJECT = register("misc.sword_hit_reject");
-    public static final DeferredHolder<SoundEvent, SoundEvent> EAT_REVERSE = register("misc.uneat");
     public static final DeferredHolder<SoundEvent, SoundEvent> ETHERIUM_SHIELD_DEFLECT = register("misc.etherium_shield.deflect");
 
     // Items and Blocks

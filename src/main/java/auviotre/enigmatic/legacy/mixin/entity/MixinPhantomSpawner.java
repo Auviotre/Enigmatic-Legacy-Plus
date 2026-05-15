@@ -21,12 +21,14 @@ import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.entity.player.PlayerSpawnPhantomsEvent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PhantomSpawner.class)
 public class MixinPhantomSpawner {
+    @Unique
     private int ticksUntilSpawn = 0;
 
     @Inject(at = @At("RETURN"), method = "tick", cancellable = true)

@@ -66,7 +66,7 @@ public class ClientEventHandler {
         ItemStack stack = event.getItemStack();
         if (!stack.isEmpty()) {
             if (EnigmaticHandler.isCursedItem(stack)) {
-                if (EnigmaticHandler.isBlessedItem(stack)) {
+                if (EnigmaticHandler.isTheBlessedOne(Minecraft.getInstance().player) && EnigmaticHandler.isBlessedItem(stack)) {
                     event.setBackground(0xF01a0a07);
                     event.setBorderStart(0xF0FFA400);
                     event.setBorderEnd(0x80D07540);
