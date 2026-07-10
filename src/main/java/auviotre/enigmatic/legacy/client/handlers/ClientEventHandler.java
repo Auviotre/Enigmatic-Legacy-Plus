@@ -128,6 +128,8 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     private static void onClientTick(ClientTickEvent.Pre event) {
+        if (Minecraft.getInstance().getConnection() == null) return;
+
         LocalPlayer player = Minecraft.getInstance().player;
         if (!ISpellstone.get(player).isEmpty() && KeyHandler.SPELLSTONE.get().consumeClick())
             PacketDistributor.sendToServer(new SpellstoneKeyPacket());
