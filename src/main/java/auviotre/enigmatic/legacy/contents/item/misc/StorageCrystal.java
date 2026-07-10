@@ -52,7 +52,7 @@ public class StorageCrystal extends BaseItem implements IPermanentCrystal {
         player.experienceLevel = 0;
         player.experienceProgress = 0;
         List<ItemStack> list = new ArrayList<>();
-        for (ItemEntity drop : drops) if (!drop.getItem().isEmpty()) list.add(drop.getItem());
+        for (ItemEntity drop : drops) if (!drop.getItem().isEmpty()) list.add(drop.getItem().copy());
         if (soulCrystal.isEmpty()) soulCrystal = EnigmaticItems.STORAGE_CRYSTAL.toStack();
         Info storageInfo = Info.of(soulCrystal, experience, list);
         stack.set(EnigmaticComponents.STORAGE_INFO, storageInfo);

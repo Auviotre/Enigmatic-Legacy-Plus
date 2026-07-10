@@ -10,6 +10,7 @@
 **Fixes:**
 - Fixed a bug where **The Cube** might cause the server to forcibly shut down.
 - Fixed the Night Vision effect of the **Charm of Treasure Hunter** not working properly.
+- Fixed some minor issues.
 
 ### Release 1.0.0 [2026/05/10]
 **Features:**
