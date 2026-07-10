@@ -17,6 +17,7 @@
     "MixinServerPlayer",
     "compat.MixinApothMenu",
     "compat.MixinItemStackUtil",
+    "compat.MixinThirstBarRenderer",
     "entity.MixinEnderDragon",
     "entity.MixinGuardian",
     "entity.MixinHoglinAi",
@@ -37,6 +38,7 @@
     "requireAnnotations": true
   },
   "client": [
+    "MixinItemRenderer",
     "MixinWorldListEntry",
     "compat.MixinApothScreen",
     "compat.MixinGuiBookLanding"

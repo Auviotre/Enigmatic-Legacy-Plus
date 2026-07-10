@@ -5,6 +5,7 @@ import auviotre.enigmatic.legacy.contents.item.generic.BaseDrinkableItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
+import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -24,8 +25,8 @@ public class IchorBottle extends BaseDrinkableItem {
     public static final FoodProperties FOOD_PROPERTIES = new FoodProperties.Builder()
             .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 1200, 4), 1.0F)
             .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 600, 2), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 2), 1.0F)
             .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 3200), 1.0F)
+            .effect(() -> new MobEffectInstance(EnigmaticEffects.PURE_RESISTANCE, 1200, 2), 1.0F)
             .alwaysEdible().build();
     private final boolean enchanted;
 

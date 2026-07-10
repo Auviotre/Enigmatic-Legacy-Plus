@@ -94,6 +94,7 @@ public class SanguinaryHandbook extends BaseCursedItem {
 
         @SubscribeEvent
         private static void onDamageIncoming(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             Entity entity = event.getSource().getEntity();
             if (entity instanceof LivingEntity attacker) {
                 if (attacker instanceof OwnableEntity pet && !(attacker instanceof TamableAnimal tamable && !tamable.isTame())) {
@@ -104,8 +105,9 @@ public class SanguinaryHandbook extends BaseCursedItem {
                         double damageMultiplier = SanguinaryHandbook.damageMultiplier.get();
                         if (EnigmaticHandler.hasCurio(owner, EnigmaticItems.BERSERK_EMBLEM))
                             damageMultiplier += 0.5F * (BerserkEmblem.getMissingHealthPool(owner) * BerserkEmblem.attackDamage.get());
-                        if (EnigmaticHandler.hasCurio(owner, EnigmaticItems.CURSED_SCROLL))
+                        if (EnigmaticHandler.hasCurio(owner, EnigmaticItems.CURSED_SCROLL)) {
                             damageMultiplier += 0.75F * (CursedScroll.getCurseAmount(owner) * CursedScroll.damageBoost.get() * 0.01F);
+                        }
                         MobEffectInstance effect = owner.getEffect(EnigmaticEffects.BLAZING_MIGHT);
                         if (effect != null && effect.getAmplifier() > 2)
                             damageMultiplier += 2 * effect.getAmplifier();

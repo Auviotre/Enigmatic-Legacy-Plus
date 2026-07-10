@@ -184,6 +184,7 @@ public class AngelBlessing extends SpellstoneItem {
     public static class Events {
         @SubscribeEvent
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.ANGEL_BLESSING)) {
                 if (event.getSource().is(EnigmaticTags.DamageTypes.ANGEL_BLESSING_IMMUNE_TO))
                     event.setCanceled(true);
@@ -192,6 +193,7 @@ public class AngelBlessing extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.ANGEL_BLESSING)) {
                 DamageSource source = event.getSource();
                 if (source.is(EnigmaticTags.DamageTypes.ANGEL_BLESSING_VULNERABLE_TO)) {

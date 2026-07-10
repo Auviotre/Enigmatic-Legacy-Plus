@@ -208,7 +208,7 @@ public class PermanentItemEntity extends Entity {
         if (restoreMap != null) {
             for (String key : restoreMap.keySet()) {
                 ItemStack item = restoreMap.get(key);
-                mapTag.put(key, item.save(this.registryAccess()));
+                if (!item.isEmpty()) mapTag.put(key, item.save(this.registryAccess()));
             }
         }
         compound.put("restoreMap", mapTag);

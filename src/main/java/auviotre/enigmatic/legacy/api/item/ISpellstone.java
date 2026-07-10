@@ -1,6 +1,8 @@
 package auviotre.enigmatic.legacy.api.item;
 
+import auviotre.enigmatic.legacy.contents.item.scrolls.CosmicScroll;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -34,14 +36,18 @@ public interface ISpellstone {
         int cooldown = getCooldown();
         if (cooldown > 0 && !cooldowns.isOnCooldown(stack.getItem())) {
             cooldown = player.hasInfiniteMaterials() ? Math.min(15, cooldown) : cooldown;
-            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.COSMIC_SCROLL)) cooldown = (int) (cooldown * 0.4F);
+            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.COSMIC_SCROLL)) cooldown = (int) (cooldown * (1.0F - CosmicScroll.spellstoneCooldown.get() * 0.01F));
             else if (EnigmaticHandler.hasCurio(player, EnigmaticItems.SPELLTUNER)) cooldown = (int) (cooldown * 0.9F);
-            int finalCooldown = cooldown;
-            BuiltInRegistries.ITEM.forEach(item -> {
-                if (item.getDefaultInstance().is(EnigmaticTags.Items.SPELLSTONES)) {
-                    cooldowns.addCooldown(item, finalCooldown);
-                }
-            });
+            player.getData(EnigmaticAttachments.ENIGMATIC_DATA.get()).setSpellstoneCooldown(cooldown);
+            addCooldown(player, cooldown);
         }
+    }
+
+    static void addCooldown(@NotNull ServerPlayer player, int cooldown) {
+        BuiltInRegistries.ITEM.forEach(item -> {
+            if (item.getDefaultInstance().is(EnigmaticTags.Items.SPELLSTONES)) {
+                player.getCooldowns().addCooldown(item, cooldown);
+            }
+        });
     }
 }

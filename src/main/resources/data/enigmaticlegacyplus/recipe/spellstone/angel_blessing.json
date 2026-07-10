@@ -3,7 +3,7 @@
     "debris_count": 8,
     "ingredients": [
         {
-            "item": "minecraft:dragon_breath"
+            "item": "enigmaticlegacyplus:starlight_particle"
         },
         {
             "item": "minecraft:phantom_membrane"
@@ -21,7 +21,7 @@
             "item": "minecraft:phantom_membrane"
         },
         {
-            "item": "minecraft:dragon_breath"
+            "item": "enigmaticlegacyplus:starlight_particle"
         }
     ],
     "result": {

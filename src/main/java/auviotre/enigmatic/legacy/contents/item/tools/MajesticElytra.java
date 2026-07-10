@@ -86,8 +86,8 @@ public class MajesticElytra extends BaseElytraItem {
 
     public boolean flyingBoost(@NotNull Player player) {
         if (player.isFallFlying()) {
-            Vec3 lookAngle = player.getLookAngle().scale(0.85F);
-            Vec3 movement = player.getDeltaMovement().scale(0.5F);
+            Vec3 lookAngle = player.getLookAngle().scale(0.64F);
+            Vec3 movement = player.getDeltaMovement().scale(0.48F);
             player.setDeltaMovement(movement.add(lookAngle));
             return true;
         }
@@ -139,6 +139,7 @@ public class MajesticElytra extends BaseElytraItem {
     public static class Events {
         @SubscribeEvent
         private static void onHurt(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity entity = event.getEntity();
             if (!getElytra(entity).is(EnigmaticItems.MAJESTIC_ELYTRA)) return;
             DamageSource source = event.getSource();

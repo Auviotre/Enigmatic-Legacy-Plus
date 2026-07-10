@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "I": {
+            "item": "enigmaticlegacyplus:etherium_ingot"
+        },
+        "N": {
+            "item": "enigmaticlegacyplus:etherium_nugget"
+        },
+        "S": {
+            "item": "enigmaticlegacyplus:starlight_particle"
+        }
+    },
+    "pattern": [
+        "SSS",
+        "NIN",
+        "SSS"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:starlight_ingot"
+    }
+}

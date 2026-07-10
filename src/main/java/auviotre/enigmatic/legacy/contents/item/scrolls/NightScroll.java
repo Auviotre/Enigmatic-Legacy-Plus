@@ -155,6 +155,7 @@ public class NightScroll extends CursedCurioItem {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             if (EnigmaticHandler.hasCurio(event.getEntity(), EnigmaticItems.NIGHT_SCROLL)) {
                 event.setNewDamage(event.getNewDamage() * (1 - 0.01F * damageResistance.get() * getDarkModifier(event.getEntity())));
             }

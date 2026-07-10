@@ -150,7 +150,7 @@ public class EldritchAmulet extends BaseCurioItem {
             if (timer < 1.0F) stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
         }
         if (entity.tickCount % 5 == 0 && !entity.level().isClientSide()) {
-            List<LivingEntity> entities = EnigmaticHandler.getObservedEntities(entity, entity.level(), 3, 128, false);
+            List<LivingEntity> entities = EnigmaticHandler.getObservedEntities(entity, entity.level(), 2.1F, 64, false);
             for (LivingEntity target : entities) {
                 if (EnigmaticHandler.hasCurio(target, this)) continue;
                 target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 1));

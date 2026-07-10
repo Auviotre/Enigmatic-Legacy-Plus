@@ -6,6 +6,7 @@ import auviotre.enigmatic.legacy.contents.entity.misc.ExplorerMarker;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -16,16 +17,17 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.RandomizableContainer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.vehicle.ContainerEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.config.ModConfig;
@@ -48,19 +50,22 @@ public class ExplorerScroll extends BaseCurioItem {
 
     public static void trigger(Level level, ServerPlayer player) {
         if (player.getCooldowns().isOnCooldown(EnigmaticItems.EXPLORER_SCROLL.get())) return;
-        player.playNotifySound(SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
-        player.getCooldowns().addCooldown(EnigmaticItems.EXPLORER_SCROLL.get(), cooldown.get());
+        player.playNotifySound(EnigmaticSounds.SCROLL_TRIGGER.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+        player.getCooldowns().addCooldown(EnigmaticItems.EXPLORER_SCROLL.get(), player.hasInfiniteMaterials() ? 20 : cooldown.get());
         BlockPos blockPos = player.blockPosition();
         int d = distance.get();
         Iterable<BlockPos> iterable = BlockPos.betweenClosed(blockPos.offset(d, d, d), blockPos.offset(-d, -d, -d));
         for (BlockPos pos : iterable) {
-            if (level.getBlockEntity(pos) instanceof RandomizableContainerBlockEntity blockEntity) {
-                if (blockEntity.getLootTable() != null) {
+            if (level.getBlockEntity(pos) instanceof RandomizableContainer container) {
+                if (container.getLootTable() != null) {
                     ExplorerMarker explorerMarker = new ExplorerMarker(level, pos, player);
                     level.addFreshEntity(explorerMarker);
                 }
             }
         }
+        List<Entity> entities = level.getEntitiesOfClass(Entity.class, player.getBoundingBox().inflate(d),
+                entity -> entity instanceof ContainerEntity container && container.getLootTable() != null);
+        for (Entity entity : entities) entity.setGlowingTag(true);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -80,7 +85,7 @@ public class ExplorerScroll extends BaseCurioItem {
         ResourceLocation location = IItemHelper.getLocation(this);
         builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(location, 0.08, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         builder.put(Attributes.MOVEMENT_EFFICIENCY, new AttributeModifier(location, 0.2, AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.SNEAKING_SPEED, new AttributeModifier(location, 0.16, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.SNEAKING_SPEED, new AttributeModifier(location, 0.12, AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.SAFE_FALL_DISTANCE, new AttributeModifier(location, 1.2, AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }

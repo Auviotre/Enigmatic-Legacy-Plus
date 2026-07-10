@@ -1,0 +1,16 @@
+{
+    "type": "enigmaticlegacyplus:shapeless_no_remain",
+    "category": "misc",
+    "ingredients": [
+        {
+            "item": "enigmaticlegacyplus:forbidden_fruit"
+        },
+        {
+            "item": "minecraft:honey_bottle"
+        }
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:forbidden_juice"
+    }
+}

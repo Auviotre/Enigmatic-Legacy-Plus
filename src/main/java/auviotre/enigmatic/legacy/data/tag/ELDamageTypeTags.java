@@ -26,7 +26,7 @@ public class ELDamageTypeTags extends DamageTypeTagsProvider {
         this.tag(DamageTypeTags.BYPASSES_EFFECTS).add(EVIL_CURSE, ABYSS);
         this.tag(DamageTypeTags.BYPASSES_SHIELD).add(EVIL_CURSE, ABYSS);
         this.tag(DamageTypeTags.BYPASSES_INVULNERABILITY).add(ABYSS);
-        this.tag(DamageTypeTags.BYPASSES_COOLDOWN).add(EVIL_CURSE);
+        this.tag(DamageTypeTags.BYPASSES_COOLDOWN).add(EVIL_CURSE, DARKNESS);
         this.tag(DamageTypeTags.WITHER_IMMUNE_TO).add(DARKNESS);
         this.tag(DamageTypeTags.NO_IMPACT).add(ABYSS, EVIL_CURSE);
         this.tag(DamageTypeTags.NO_KNOCKBACK).add(ABYSS, EVIL_CURSE);

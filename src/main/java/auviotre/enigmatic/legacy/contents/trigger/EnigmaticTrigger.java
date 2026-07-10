@@ -17,7 +17,8 @@ public class EnigmaticTrigger extends SimpleCriterionTrigger<EnigmaticTrigger.Tr
      * 2. Antique Bag Fully Filled
      * 3. Use Infernal Spear
      * 4. Killing with Arrogance of Chaos
-     * 4. Use Escape Scroll
+     * 5. Use Escape Scroll
+     * 6. Destroy Cursed Ring with stone
      */
     public void trigger(ServerPlayer player, int triggerID) {
         this.trigger(player, instance -> instance.test(triggerID));

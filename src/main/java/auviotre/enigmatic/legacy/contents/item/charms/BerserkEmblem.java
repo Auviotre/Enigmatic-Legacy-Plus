@@ -120,6 +120,7 @@ public class BerserkEmblem extends CursedCurioItem {
     public static class Events {
         @SubscribeEvent
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             Entity entity = event.getSource().getEntity();
             if (entity instanceof LivingEntity attacker && EnigmaticHandler.hasCurio(attacker, EnigmaticItems.BERSERK_EMBLEM)) {
                 float boost = getMissingHealthPool(attacker) * (float) attackDamage.getAsDouble();
@@ -130,6 +131,7 @@ public class BerserkEmblem extends CursedCurioItem {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.BERSERK_EMBLEM)) {
                 float resistance = getMissingHealthPool(victim) * (float) damageResistance.getAsDouble();

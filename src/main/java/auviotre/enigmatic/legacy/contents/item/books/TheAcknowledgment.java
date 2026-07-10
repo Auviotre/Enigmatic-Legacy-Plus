@@ -1,8 +1,8 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IBagContent;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
-import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
@@ -26,7 +27,7 @@ import vazkii.patchouli.common.item.PatchouliDataComponents;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class TheAcknowledgment extends BaseItem {
+public class TheAcknowledgment extends Item implements IBagContent {
     private static final ResourceLocation BOOK_ID = EnigmaticLegacy.location("the_acknowledgment");
 
     protected TheAcknowledgment(@NotNull Properties properties, float attackDamage, float attackSpeed) {
@@ -57,6 +58,13 @@ public class TheAcknowledgment extends BaseItem {
             TooltipHandler.holdShift(list);
         }
         TooltipHandler.line(list);
+    }
+
+    public List<Component> getTooltipInBag(List<Component> list) {
+        TooltipHandler.line(list);
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBagSlot");
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.theAcknowledgmentBag", ChatFormatting.GOLD, "8%");
+        return list;
     }
 
     public @Nonnull InteractionResultHolder<ItemStack> use(Level world, @NotNull Player player, InteractionHand hand) {

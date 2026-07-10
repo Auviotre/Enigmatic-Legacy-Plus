@@ -168,6 +168,7 @@ public class HellBladeCharm extends BaseCurioItem {
     public static class Events {
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.HELL_BLADE_CHARM)) {
                 float modifier = Mth.sqrt(getModifier(victim) * 0.01F) + 1;
@@ -177,6 +178,7 @@ public class HellBladeCharm extends BaseCurioItem {
 
         @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void onDamageLowest(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             Entity entity = event.getSource().getEntity();
             if (entity instanceof LivingEntity attacker && EnigmaticHandler.hasCurio(attacker, EnigmaticItems.HELL_BLADE_CHARM)) {

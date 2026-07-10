@@ -9,6 +9,7 @@ import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import com.google.common.collect.ImmutableMultimap;
@@ -48,7 +49,7 @@ public class EtheriumCore extends SpellstoneItem {
     public static ModConfigSpec.IntValue damageConversionLimit;
 
     public EtheriumCore() {
-        super(IItemHelper.singleProperties().rarity(Rarity.RARE), 0xE091FFFF);
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).component(EnigmaticComponents.BOOLEAN, false), 0xE091FFFF);
     }
 
     @SubscribeConfig
@@ -60,21 +61,27 @@ public class EtheriumCore extends SpellstoneItem {
         builder.pop(2);
     }
 
+    public Component getName(@NotNull ItemStack stack) {
+        return stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? Component.translatable("item.enigmaticlegacyplus.etherium_core_active") : Component.translatable("item.enigmaticlegacyplus.etherium_core");
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
+        boolean boost = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
         if (Screen.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkill");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkillAbsent");
+            if (boost) TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCoreSkill");
+            else TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkillAbsent");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneCooldown", ChatFormatting.GOLD, String.format("%.01f", 0.05F * getCooldown()));
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstonePassive");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore1", ChatFormatting.GOLD, "+10", "+8");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore1", ChatFormatting.GOLD, boost ? "+12" : "+10", boost ? "+10" : "+8");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore1", ChatFormatting.GOLD, "+20%", "+40%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore2", ChatFormatting.GOLD, "+50%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore3", ChatFormatting.GOLD, etheriumThresholdModifier.get() + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore4", ChatFormatting.GOLD, damageConversion.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore2", ChatFormatting.GOLD,  boost ? "+80%" : "+50%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore3", ChatFormatting.GOLD, String.format("%d%%", (int) ((boost ? 1.25 : 1) * etheriumThresholdModifier.get())));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore4", ChatFormatting.GOLD, ((boost ? 10 : 0) + damageConversion.get()) + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore5");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore6");
         } else TooltipHandler.line(list, "tooltip.enigmaticlegacy.holdShift");
@@ -83,13 +90,14 @@ public class EtheriumCore extends SpellstoneItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
+        boolean boost = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
         ResourceLocation location = IItemHelper.getLocation(this);
-        builder.put(Attributes.ARMOR, new AttributeModifier(location, 10, AttributeModifier.Operation.ADD_VALUE));
-        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, 8, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.ARMOR, new AttributeModifier(location, boost ? 12 : 10, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, boost ? 10 : 8, AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.ARMOR, new AttributeModifier(EnigmaticLegacy.location("etherium_core_buff"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(EnigmaticLegacy.location("etherium_core_buff"), 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-        builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(location, 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        builder.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(location, 0.01 * etheriumThresholdModifier.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(location, boost ? 0.8 : 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        builder.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(location,  (boost ? 0.0125F : 0.01F) * etheriumThresholdModifier.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         return builder.build();
     }
 
@@ -112,6 +120,7 @@ public class EtheriumCore extends SpellstoneItem {
     public static class Events {
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (Spelltuner.hasTune(victim, EnigmaticItems.ETHERIUM_CORE)) {
                 if (victim instanceof Player player) {
@@ -127,7 +136,8 @@ public class EtheriumCore extends SpellstoneItem {
                 }
                 if (victim instanceof Player player) {
                     CompoundTag data = EnigmaticHandler.getPersistedData(player);
-                    float counterattack = Math.min(event.getAmount() * damageConversion.get() * 0.01F + data.getFloat(TAG_ID), damageConversionLimit.get());
+                    float ratio = ((ISpellstone.get(victim).getOrDefault(EnigmaticComponents.BOOLEAN, false) ? 10 : 0) + damageConversion.get());
+                    float counterattack = Math.min(event.getAmount() * ratio * 0.01F + data.getFloat(TAG_ID), damageConversionLimit.get());
                     data.putFloat(TAG_ID, counterattack);
                 }
             }

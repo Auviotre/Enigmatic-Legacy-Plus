@@ -138,6 +138,7 @@ public class GolemHeart extends SpellstoneItem {
     public static class Events {
         @SubscribeEvent
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.GOLEM_HEART)) {
                 if (event.getSource().is(EnigmaticTags.DamageTypes.GOLEM_HEART_IMMUNE_TO))
                     event.setCanceled(true);
@@ -146,6 +147,7 @@ public class GolemHeart extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.GOLEM_HEART)) {
                 DamageSource source = event.getSource();
                 if (EnigmaticHandler.hasNoArmor(event.getEntity()) && source.is(DamageTypeTags.IS_EXPLOSION)) {

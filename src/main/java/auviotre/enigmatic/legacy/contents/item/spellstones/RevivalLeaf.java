@@ -235,6 +235,7 @@ public class RevivalLeaf extends SpellstoneItem {
     public static class Events {
         @SubscribeEvent
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity entity = event.getEntity();
             DamageSource source = event.getSource();
             if (!ISpellstone.get(entity).is(EnigmaticItems.REVIVAL_LEAF) || event.isCanceled()) return;
@@ -243,6 +244,7 @@ public class RevivalLeaf extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (ISpellstone.get(victim).is(EnigmaticItems.REVIVAL_LEAF)) {
                 if (event.getSource().is(DamageTypeTags.IS_FIRE))

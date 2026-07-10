@@ -156,6 +156,7 @@ public class OceanStone extends SpellstoneItem {
     public static class Events {
         @SubscribeEvent
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.OCEAN_STONE)) {
                 if (event.getSource().is(DamageTypes.DROWN)) event.setCanceled(true);
             }
@@ -163,6 +164,7 @@ public class OceanStone extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.OCEAN_STONE)) {
                 Entity entity = event.getSource().getEntity();
                 if (entity == null) return;

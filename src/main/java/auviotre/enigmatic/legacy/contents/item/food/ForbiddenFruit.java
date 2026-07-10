@@ -87,7 +87,7 @@ public class ForbiddenFruit extends BaseItem {
         private static void onEffectApply(MobEffectEvent.@NotNull Applicable event) {
             if (isForbiddenCursed(event.getEntity())) {
                 MobEffectInstance effect = event.getEffectInstance();
-                if (effect != null && effect.is(MobEffects.HUNGER)) {
+                if (effect != null && (effect.is(MobEffects.HUNGER) || effect.is(MobEffects.CONFUSION))) {
                     event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
                 }
             }

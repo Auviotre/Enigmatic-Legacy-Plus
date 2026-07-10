@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "enigmaticlegacyplus:astral_dust"
+        },
+        "B": {
+            "item": "minecraft:beacon"
+        },
+        "P": {
+            "item": "enigmaticlegacyplus:starlight_particle"
+        },
+        "S": {
+            "item": "enigmaticlegacyplus:starlight_ingot"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:quartz_ring"
+        }
+    },
+    "pattern": [
+        "PPP",
+        "AXA",
+        "SBS"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:starlight_ring"
+    }
+}

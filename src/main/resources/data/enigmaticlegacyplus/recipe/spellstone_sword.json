@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+        "A": {
+            "item": "minecraft:amethyst_shard"
+        },
+        "D": {
+            "item": "enigmaticlegacyplus:spellstone_debris"
+        },
+        "S": {
+            "item": "minecraft:stick"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:spellcore"
+        }
+    },
+    "pattern": [
+        "ADA",
+        "DXD",
+        " S "
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:spellstone_sword"
+    }
+}

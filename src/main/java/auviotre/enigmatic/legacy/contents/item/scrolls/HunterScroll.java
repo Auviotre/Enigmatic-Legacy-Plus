@@ -100,6 +100,7 @@ public class HunterScroll extends BaseCurioItem {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (event.getSource().is(DamageTypeTags.BYPASSES_ARMOR)) return;
             if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.HUNTER_SCROLL)) {

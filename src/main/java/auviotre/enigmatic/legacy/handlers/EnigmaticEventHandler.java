@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.event.LivingCurseBoostEvent;
+import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.entity.goal.LeapAttackGoal;
 import auviotre.enigmatic.legacy.contents.entity.goal.SkeletonMeleeAttackGoal;
@@ -14,7 +15,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -76,6 +76,10 @@ public class EnigmaticEventHandler {
     private static void onTick(EntityTickEvent.@NotNull Pre event) {
         Entity entity = event.getEntity();
         if (!entity.isAlive() || entity.level().isClientSide()) return;
+        if (entity instanceof ServerPlayer player) {
+            EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA.get());
+            data.setSpellstoneCooldown(Math.max(0, data.getSpellstoneCooldown() - 1));
+        }
         if (entity instanceof WitherSkeleton skeleton && EnigmaticHandler.isCurseBoosted(skeleton)) {
             LivingEntity target = skeleton.getTarget();
             if (target != null) {
@@ -108,6 +112,7 @@ public class EnigmaticEventHandler {
     private static void onClone(PlayerEvent.@NotNull Clone event) {
         if (event.getEntity() instanceof ServerPlayer player && event.getOriginal() instanceof ServerPlayer original) {
             EnigmaticData data = original.getData(EnigmaticAttachments.ENIGMATIC_DATA);
+            data.setSpellstoneCooldown(0);
             data.setNebulaPower(false);
             data.setFireImmunityTimer(0);
             data.setEtheriumShieldTick(0);
@@ -242,14 +247,15 @@ public class EnigmaticEventHandler {
 
     private static void addModifier(@NotNull LivingEntity entity, Holder<Attribute> attribute, AttributeModifier modifier) {
         AttributeInstance instance = entity.getAttribute(attribute);
-        if (instance != null) instance.addPermanentModifier(modifier);
+        if (instance != null) instance.addOrReplacePermanentModifier(modifier);
     }
 
     @SubscribeEvent
     private static void onEntityJoinWorld(@NotNull EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            CompoundTag tag = player.getData(EnigmaticAttachments.ENIGMATIC_DATA).save(player.registryAccess());
-            PacketDistributor.sendToPlayer(player, new EnigmaticDataSyncPacket(tag));
+            EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
+            PacketDistributor.sendToPlayer(player, new EnigmaticDataSyncPacket(data.save(player.registryAccess())));
+            if (data.getSpellstoneCooldown() > 0) ISpellstone.addCooldown(player, data.getSpellstoneCooldown());
         }
         if (!CursedRing.forTheWorthyMode.get()) return;
         Entity entity = event.getEntity();
@@ -284,6 +290,7 @@ public class EnigmaticEventHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+        if (event.getAmount() >= Float.MAX_VALUE) return;
         LivingEntity victim = event.getEntity();
         if (event.getSource().getDirectEntity() instanceof Monster attacker && attacker.isAlive() && EnigmaticHandler.isCurseBoosted(attacker)) {
             boolean flag = attacker.fallDistance > 0.0F && !attacker.onGround() && !attacker.onClimbable() && !attacker.isInWater() && !attacker.hasEffect(MobEffects.BLINDNESS) && !attacker.isPassenger();

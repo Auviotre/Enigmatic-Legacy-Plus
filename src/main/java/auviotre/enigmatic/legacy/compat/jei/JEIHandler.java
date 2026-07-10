@@ -20,6 +20,7 @@ import mezz.jei.api.recipe.vanilla.IJeiBrewingRecipe;
 import mezz.jei.api.recipe.vanilla.IVanillaRecipeFactory;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -79,7 +80,12 @@ public class JEIHandler implements IModPlugin {
         IVanillaRecipeFactory factory = registration.getVanillaRecipeFactory();
         RecipeManager manager = getLevel().getRecipeManager();
         List<RecipeHolder<SpellstoneTableRecipe>> holders = manager.getAllRecipesFor(EnigmaticRecipes.SPELLSTONE_CRAFTING.get());
+        RecipeHolder<SpellstoneTableRecipe> fragmentation = new RecipeHolder<>(
+                EnigmaticLegacy.location("spellstone_fragmentation"),
+                new SpellstoneTableRecipe(EnigmaticItems.SPELLSTONE_DEBRIS.toStack(4), 0, NonNullList.create(), false)
+        );
         registration.addRecipes(EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, holders);
+        registration.addRecipes(EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, List.of(fragmentation));
 
         Ingredient cursed_ring = Ingredient.of(EnigmaticItems.CURSED_RING);
         Ingredient two_ring = Ingredient.of(EnigmaticItems.CURSED_RING, EnigmaticItems.REDEMPTION_RING);
@@ -99,8 +105,10 @@ public class JEIHandler implements IModPlugin {
         addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_LEGGINGS.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
         addRepairData(recipes, factory, EnigmaticItems.ETHERIUM_BOOTS.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
         addRepairData(recipes, factory, EnigmaticItems.MAJESTIC_ELYTRA.toStack(), Ingredient.of(EnigmaticItems.ETHERIUM_INGOT));
+        addRepairData(recipes, factory, EnigmaticItems.INFERNAL_SPEAR.toStack(), Ingredient.of(Items.NETHERITE_SCRAP));
         addRepairData(recipes, factory, EnigmaticItems.INFERNAL_SHIELD.toStack(), Ingredient.of(Blocks.OBSIDIAN.asItem()));
         addRepairData(recipes, factory, EnigmaticItems.ENDER_SLAYER.toStack(), Ingredient.of(Blocks.OBSIDIAN.asItem()));
+        addRepairData(recipes, factory, EnigmaticItems.SPELLSTONE_SWORD.toStack(), Ingredient.of(EnigmaticItems.SPELLSTONE_DEBRIS));
         addCustomData(recipes, factory);
         registration.addRecipes(RecipeTypes.ANVIL, recipes);
 
@@ -124,6 +132,14 @@ public class JEIHandler implements IModPlugin {
                 Items.OMINOUS_BOTTLE.getDefaultInstance(),
                 EnigmaticItems.ICHOR_CURSE_BOTTLE.toStack(),
                 EnigmaticLegacy.location("ominous_bottle.to.ichor_curse_bottle")
+        ));
+        stack = EnigmaticItems.PURE_HEART.toStack();
+        stack.set(EnigmaticComponents.TAINTABLE, true);
+        brewingRecipes.add(factory.createBrewingRecipe(
+                List.of(stack),
+                Items.HONEY_BOTTLE.getDefaultInstance(),
+                EnigmaticItems.BLESS_POTION.toStack(),
+                EnigmaticLegacy.location("honey_bottle.to.bless_bottle")
         ));
         registration.addRecipes(RecipeTypes.BREWING, brewingRecipes);
     }

@@ -19,8 +19,12 @@ public class EnigmaticBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(EnigmaticLegacy.MODID);
 
     public static final DeferredBlock<SpellstoneTable> SPELLSTONE_TABLE = registerBlock("spellstone_table", SpellstoneTable::new, Rarity.UNCOMMON);
+    public static final DeferredBlock<InfernalCinderSack> INFERNAL_CINDER_SACK = registerBlock("infernal_cinder_sack", InfernalCinderSack::new, Rarity.COMMON);
+    public static final DeferredBlock<AstralGlass> ASTRAL_GLASS = registerBlock("astral_glass", AstralGlass::new, Rarity.COMMON);
+    public static final DeferredBlock<AstralGlassPane> ASTRAL_GLASS_PANE = registerBlock("astral_glass_pane", AstralGlassPane::new, Rarity.COMMON);
     public static final DeferredBlock<EtheriumOre> ETHERIUM_ORE = registerFireResistanceBlock("etherium_ore", EtheriumOre::new);
     public static final DeferredBlock<Block> ETHERIUM_BLOCK = registerFireResistanceBlock("etherium_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERITE_BLOCK).mapColor(MapColor.COLOR_LIGHT_BLUE).lightLevel(state -> 10)));
+    public static final DeferredBlock<Block> STARLIGHT_BLOCK = registerFireResistanceBlock("starlight_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERITE_BLOCK).mapColor(MapColor.TERRACOTTA_WHITE).lightLevel(state -> 12)));
     public static final DeferredBlock<EtherealLantern> ETHEREAL_LANTERN = registerBlock("ethereal_lantern", EtherealLantern::new, EtherealLantern.Item::new);
     public static final DeferredBlock<AstralDustSack> ASTRAL_DUST_SACK = registerBlock("astral_dust_sack", AstralDustSack::new, Rarity.COMMON);
     public static final DeferredBlock<DimensionalAnchor> DIMENSIONAL_ANCHOR = registerFireResistanceBlock("dimensional_anchor", DimensionalAnchor::new);

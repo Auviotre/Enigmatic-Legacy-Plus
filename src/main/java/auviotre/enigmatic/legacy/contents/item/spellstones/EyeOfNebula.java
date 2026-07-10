@@ -149,6 +149,7 @@ public class EyeOfNebula extends SpellstoneItem {
     public static class Events {
         @SubscribeEvent
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (ISpellstone.get(victim).is(EnigmaticItems.EYE_OF_NEBULA)) {
                 if (victim.getRandom().nextFloat() < 0.01F * dodgeProbability.get() && !event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
@@ -175,6 +176,7 @@ public class EyeOfNebula extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (ISpellstone.get(victim).is(EnigmaticItems.EYE_OF_NEBULA)) {
                 if (event.getSource().is(Tags.DamageTypes.IS_MAGIC))

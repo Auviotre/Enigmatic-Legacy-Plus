@@ -6,12 +6,23 @@
       "0": {
         "block_light": 14,
         "sky_light": 9
-
+      },
+      "1": {
+        "block_light": 15,
+        "sky_light": 10
       }
     }
   },
   "textures": {
     "layer0": "enigmaticlegacyplus:item/etherium_frame",
     "layer1": "enigmaticlegacyplus:item/etherium_core"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "active": 1.0
+      },
+      "model": "enigmaticlegacyplus:item/etherium_core_active"
+    }
+  ]
 }

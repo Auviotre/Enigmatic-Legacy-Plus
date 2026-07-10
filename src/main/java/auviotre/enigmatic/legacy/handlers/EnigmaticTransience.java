@@ -15,7 +15,7 @@ public class EnigmaticTransience {
         if (!directory.exists() || !directory.isDirectory())
             throw new IllegalArgumentException("Directory " + directory + " does not exist or is not a folder!");
 
-        File file = new File(directory, "enigmatic_transience.json");
+        File file = new File(directory, "data/enigmatic_transience.json");
         if (!file.exists() || !file.isFile()) return new EnigmaticTransience();
         FileReader reader = null;
 
@@ -25,7 +25,7 @@ public class EnigmaticTransience {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         } catch (JsonSyntaxException ex) {
-            EnigmaticLegacy.LOGGER.warn("Failed to read " + file + ", will regenerate...");
+            EnigmaticLegacy.LOGGER.warn("Failed to read {}, will regenerate...", file);
             close(reader);
 
             EnigmaticTransience transience = new EnigmaticTransience();
@@ -63,7 +63,7 @@ public class EnigmaticTransience {
     public void write(File directory) {
         if (!directory.exists() || !directory.isDirectory())
             throw new IllegalArgumentException("Directory " + directory + " does not exist or is not a folder!");
-        try (FileWriter writer = new FileWriter(new File(directory, "enigmatic_transience.json"))) {
+        try (FileWriter writer = new FileWriter(new File(directory, "data/enigmatic_transience.json"))) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(this, writer);
         } catch (Exception exception) {

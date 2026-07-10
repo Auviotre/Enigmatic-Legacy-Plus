@@ -1,10 +1,12 @@
 {
     "values": [
+        "#enigmaticlegacyplus:enchantable/eternal_binding",
         "enigmaticlegacyplus:the_acknowledgment",
         "enigmaticlegacyplus:the_twist",
         "enigmaticlegacyplus:the_bless",
         "enigmaticlegacyplus:the_infinitum",
-        "enigmaticlegacyplus:infernal_shield",
-        "#enigmaticlegacyplus:enchantable/eternal_binding"
+        "enigmaticlegacyplus:spellstone_sword",
+        "enigmaticlegacyplus:infernal_cinder",
+        "enigmaticlegacyplus:infernal_shield"
     ]
 }

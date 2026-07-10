@@ -16,7 +16,7 @@ public class EnigmaticPlacedFeatures {
 
     public static void bootstrap(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> features = context.lookup(Registries.CONFIGURED_FEATURE);
-        register(context, features, ETHERIUM_ORE_PLACED, EnigmaticConfiguredFeatures.ETHERIUM_ORE, List.of(CountPlacement.of(2), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BiomeFilter.biome()));
+        register(context, features, ETHERIUM_ORE_PLACED, EnigmaticConfiguredFeatures.ETHERIUM_ORE, List.of(CountPlacement.of(3), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BiomeFilter.biome()));
     }
 
     private static ResourceKey<PlacedFeature> createKey(String name) {

@@ -119,7 +119,7 @@ public class InfernalSpear extends BaseItem {
     }
 
     public boolean isValidRepairItem(ItemStack stack, ItemStack repairCandidate) {
-        return super.isValidRepairItem(stack, repairCandidate) || repairCandidate.is(Items.NETHERITE_INGOT);
+        return super.isValidRepairItem(stack, repairCandidate) || repairCandidate.is(Items.NETHERITE_SCRAP);
     }
 
     public int getEnchantmentValue(ItemStack stack) {
@@ -131,6 +131,7 @@ public class InfernalSpear extends BaseItem {
     public static class Events {
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (event.getSource().getEntity() instanceof LivingEntity attacker && event.getSource().is(DamageTypeTags.IS_PLAYER_ATTACK)) {
                 if (!attacker.getWeaponItem().is(EnigmaticItems.INFERNAL_SPEAR)) return;

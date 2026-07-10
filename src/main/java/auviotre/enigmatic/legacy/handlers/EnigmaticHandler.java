@@ -95,6 +95,7 @@ public interface EnigmaticHandler {
     List<Holder<MobEffect>> DEBUFF_LIST = new ArrayList<>();
 
     static boolean canUse(LivingEntity entity, ItemStack stack) {
+        if (stack.is(EnigmaticItems.CURSED_RING) || stack.is(EnigmaticItems.REDEMPTION_RING)) return true;
         if (isEldritchItem(stack)) return isTheWorthyOne(entity) && CursedRing.uniqueLegacy.get();
         if (isCursedItem(stack)) {
             if (isTheCursedOne(entity) && CursedRing.uniqueLegacy.get()) return true;
@@ -104,7 +105,7 @@ public interface EnigmaticHandler {
     }
 
     static boolean isTheCursedOne(LivingEntity entity) {
-        return hasCurio(entity, EnigmaticItems.CURSED_RING) || entity instanceof Player player && getPersistedData(player).getBoolean("SevenCursesBearing");
+        return !getCurio(entity, EnigmaticItems.CURSED_RING).isEmpty() || entity instanceof Player player && getPersistedData(player).getBoolean("SevenCursesBearing");
     }
 
     static boolean isCursedItem(@NotNull ItemStack stack) {
@@ -119,7 +120,7 @@ public interface EnigmaticHandler {
     }
 
     static boolean isTheBlessedOne(LivingEntity entity) {
-        return hasCurio(entity, EnigmaticItems.REDEMPTION_RING) || entity instanceof Player player && getPersistedData(player).getBoolean("RedemptionBearing");
+        return !getCurio(entity, EnigmaticItems.REDEMPTION_RING).isEmpty() || entity instanceof Player player && getPersistedData(player).getBoolean("RedemptionBearing");
     }
 
     static boolean isTheWorthyOne(LivingEntity entity) {
@@ -423,13 +424,14 @@ public interface EnigmaticHandler {
         Vec3 target = from.position().add(0.0F, from.getBbHeight() / 2.0F, 0.0F);
         List<LivingEntity> entities = new ArrayList<>();
 
-        for (int distance = 1; distance < maxDist; ++distance) {
-            target = target.add(from.getLookAngle().scale(distance)).add(0.0, 0.5, 0.0);
-            List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(target.x - range, target.y - range, target.z - range, target.x + range, target.y + range, target.z + range));
-            list.removeIf(entity -> !entity.isAlive() || entity == from || !from.canAttack(entity));
+        for (double distance = 0.4; distance < maxDist; distance += 0.8) {
+            target = target.add(from.getLookAngle().scale(distance));
+            AABB box = new AABB(target.x - range, target.y - range, target.z - range, target.x + range, target.y + range, target.z + range);
+            List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, box, entity -> entity.isAlive() && from.canAttack(entity) && !entities.contains(entity));
             entities.addAll(list);
             if (stopWhenFound && !entities.isEmpty()) break;
         }
+        entities.removeIf(entity -> !from.hasLineOfSight(entity) || entity == from);
         return entities;
     }
 

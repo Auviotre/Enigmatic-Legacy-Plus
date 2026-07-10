@@ -39,7 +39,7 @@ public class RecallPotion extends BaseDrinkableItem {
 
         SoulArchive.DimensionalPosition dimPoint = SoulArchive.getRespawnPos(player);
         ServerLevel destLevel = dimPoint.getWorld();
-        Vec3 vec3 =dimPoint.getBlockPos().getBottomCenter();
+        Vec3 vec3 = dimPoint.getBlockPos().getBottomCenter();
         if (!player.level().equals(destLevel))
             player.changeDimension(new DimensionTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), DimensionTransition.DO_NOTHING));
         vec3 = player.adjustSpawnLocation(destLevel, dimPoint.getBlockPos()).getBottomCenter();

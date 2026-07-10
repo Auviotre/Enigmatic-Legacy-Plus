@@ -1,0 +1,460 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_post"
+      },
+      "when": {
+        "colorful": true
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_post_0"
+      },
+      "when": {
+        "colorful": false,
+        "style": 0
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_post_1"
+      },
+      "when": {
+        "colorful": false,
+        "style": 1
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_post_2"
+      },
+      "when": {
+        "colorful": false,
+        "style": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_post_3"
+      },
+      "when": {
+        "colorful": false,
+        "style": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side"
+      },
+      "when": {
+        "colorful": true,
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_0"
+      },
+      "when": {
+        "colorful": false,
+        "north": "true",
+        "style": 0
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_1"
+      },
+      "when": {
+        "colorful": false,
+        "north": "true",
+        "style": 1
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_2"
+      },
+      "when": {
+        "colorful": false,
+        "north": "true",
+        "style": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_3"
+      },
+      "when": {
+        "colorful": false,
+        "north": "true",
+        "style": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side",
+        "y": 90
+      },
+      "when": {
+        "colorful": true,
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_0",
+        "y": 90
+      },
+      "when": {
+        "colorful": false,
+        "east": "true",
+        "style": 0
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_1",
+        "y": 90
+      },
+      "when": {
+        "colorful": false,
+        "east": "true",
+        "style": 1
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_2",
+        "y": 90
+      },
+      "when": {
+        "colorful": false,
+        "east": "true",
+        "style": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_3",
+        "y": 90
+      },
+      "when": {
+        "colorful": false,
+        "east": "true",
+        "style": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_alt"
+      },
+      "when": {
+        "colorful": true,
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_alt_0"
+      },
+      "when": {
+        "colorful": false,
+        "south": "true",
+        "style": 0
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_alt_1"
+      },
+      "when": {
+        "colorful": false,
+        "south": "true",
+        "style": 1
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_alt_2"
+      },
+      "when": {
+        "colorful": false,
+        "south": "true",
+        "style": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_alt_3"
+      },
+      "when": {
+        "colorful": false,
+        "south": "true",
+        "style": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_alt",
+        "y": 90
+      },
+      "when": {
+        "colorful": true,
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_alt_0",
+        "y": 90
+      },
+      "when": {
+        "colorful": false,
+        "west": "true",
+        "style": 0
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_alt_1",
+        "y": 90
+      },
+      "when": {
+        "colorful": false,
+        "west": "true",
+        "style": 1
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_alt_2",
+        "y": 90
+      },
+      "when": {
+        "colorful": false,
+        "west": "true",
+        "style": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_side_alt_3",
+        "y": 90
+      },
+      "when": {
+        "colorful": false,
+        "west": "true",
+        "style": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside"
+      },
+      "when": {
+        "colorful": true,
+        "north": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_0"
+      },
+      "when": {
+        "colorful": false,
+        "north": "false",
+        "style": 0
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_1"
+      },
+      "when": {
+        "colorful": false,
+        "north": "false",
+        "style": 1
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_2"
+      },
+      "when": {
+        "colorful": false,
+        "north": "false",
+        "style": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_3"
+      },
+      "when": {
+        "colorful": false,
+        "north": "false",
+        "style": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_alt"
+      },
+      "when": {
+        "colorful": true,
+        "east": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_alt_0"
+      },
+      "when": {
+        "colorful": false,
+        "east": "false",
+        "style": 0
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_alt_1"
+      },
+      "when": {
+        "colorful": false,
+        "east": "false",
+        "style": 1
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_alt_2"
+      },
+      "when": {
+        "colorful": false,
+        "east": "false",
+        "style": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_alt_3"
+      },
+      "when": {
+        "colorful": false,
+        "east": "false",
+        "style": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_alt",
+        "y": 90
+      },
+      "when": {
+        "colorful": true,
+        "south": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_alt_0",
+        "y": 90
+      },
+      "when": {
+        "colorful": false,
+        "south": "false",
+        "style": 0
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_alt_1",
+        "y": 90
+      },
+      "when": {
+        "colorful": false,
+        "south": "false",
+        "style": 1
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_alt_2",
+        "y": 90
+      },
+      "when": {
+        "colorful": false,
+        "south": "false",
+        "style": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_alt_3",
+        "y": 90
+      },
+      "when": {
+        "colorful": false,
+        "south": "false",
+        "style": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside",
+        "y": 270
+      },
+      "when": {
+        "colorful": true,
+        "west": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_0",
+        "y": 270
+      },
+      "when": {
+        "colorful": false,
+        "west": "false",
+        "style": 0
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_1",
+        "y": 270
+      },
+      "when": {
+        "colorful": false,
+        "west": "false",
+        "style": 1
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_2",
+        "y": 270
+      },
+      "when": {
+        "colorful": false,
+        "west": "false",
+        "style": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "enigmaticlegacyplus:block/astral_glass_pane_noside_3",
+        "y": 270
+      },
+      "when": {
+        "colorful": false,
+        "west": "false",
+        "style": 3
+      }
+    }
+  ]
+}

@@ -193,6 +193,7 @@ public class ForgottenIce extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity entity = event.getEntity();
             DamageSource source = event.getSource();
             if (!ISpellstone.get(entity).is(EnigmaticItems.FORGOTTEN_ICE) || event.isCanceled()) return;
@@ -204,6 +205,7 @@ public class ForgottenIce extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (ISpellstone.get(victim).is(EnigmaticItems.FORGOTTEN_ICE)) {
                 if (event.getSource().is(DamageTypeTags.IS_FIRE))
@@ -224,11 +226,11 @@ public class ForgottenIce extends SpellstoneItem {
                 if (ISpellstone.get(victim).is(EnigmaticItems.FORGOTTEN_ICE) && attacker.canFreeze()) {
                     if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.MOB_ATTACK_NO_AGGRO) || source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
                         attacker.hurt(EnigmaticDamageTypes.source(victim.level(), DamageTypes.FREEZE, victim), (float) damageFeedback.getAsDouble() / 2);
-                        attacker.setTicksFrozen(attacker.getTicksFrozen() + attacker.getTicksRequiredToFreeze() / 2);
+                        attacker.setTicksFrozen(attacker.getTicksFrozen() + 35);
                     }
                 }
                 if (ISpellstone.get(attacker).is(EnigmaticItems.FORGOTTEN_ICE) && victim.canFreeze()) {
-                    victim.setTicksFrozen(victim.getTicksFrozen() + victim.getTicksRequiredToFreeze());
+                    victim.setTicksFrozen(victim.getTicksFrozen() + 50);
                 }
             }
         }

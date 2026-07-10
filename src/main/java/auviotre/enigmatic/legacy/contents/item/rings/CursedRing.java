@@ -280,8 +280,21 @@ public class CursedRing extends CursedCurioItem {
     }
 
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
-        context.entity().getAttributes().removeAttributeModifiers(this.getArmorModifiers());
+        LivingEntity entity = context.entity();
+        entity.getAttributes().removeAttributeModifiers(this.getArmorModifiers());
         EnigmaticHandler.setCurrentWorldCursed(false);
+        CuriosApi.getCuriosInventory(entity).ifPresent(handler -> {
+            IItemHandlerModifiable curios = handler.getEquippedCurios();
+            for (int i = 0; i < handler.getSlots(); ++i) {
+                ItemStack stackInSlot = curios.getStackInSlot(i);
+                if (EnigmaticHandler.isCursedItem(stackInSlot)) {
+                    PermanentItemEntity itemEntity = new PermanentItemEntity(entity.level(), entity.getRandomX(4), entity.getRandomY(), entity.getRandomZ(4), stackInSlot);
+                    itemEntity.setGlowingTag(true);
+                    entity.level().addFreshEntity(itemEntity);
+                    curios.setStackInSlot(i, ItemStack.EMPTY);
+                }
+            }
+        });
         super.onUnequip(context, newStack, stack);
     }
 
@@ -447,7 +460,8 @@ public class CursedRing extends CursedCurioItem {
         @SubscribeEvent
         private static void onTicked(EntityTickEvent.@NotNull Post event) {
             if (event.getEntity() instanceof Player player && player.isAlive() && EnigmaticHandler.isTheCursedOne(player)) {
-                if (player.isOnFire()) player.setRemainingFireTicks(player.getRemainingFireTicks() + 2);
+                if (player.isOnFire() && eternalBurning.get())
+                    player.setRemainingFireTicks(player.getRemainingFireTicks() + 2);
                 if (!canSleepWithCurse(player) && player.isSleeping()) {
                     if (player.getSleepTimer() == 8 && player instanceof ServerPlayer)
                         player.sendSystemMessage(Component.translatable("message.enigmaticlegacy.cursed_sleep").withStyle(ChatFormatting.RED));
@@ -494,12 +508,11 @@ public class CursedRing extends CursedCurioItem {
                 if (event.getSource().getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheCursedOne(entity)) {
                     if (!entity.getWeaponItem().is(EnigmaticTags.Items.BYPASS_FOURTH_CURSE)) {
                         float debuff = 1.0F;
-                        if (entity.getWeaponItem().is(EnigmaticItems.THE_ACKNOWLEDGMENT) || AntiqueBag.hasBook(EnigmaticItems.THE_ACKNOWLEDGMENT.toStack(), entity))
-                            debuff -= 0.2F;
-                        if (AntiqueBag.hasBook(EnigmaticItems.THE_INFINITUM.toStack(), entity))
-                            debuff -= 0.25F;
+                        if (entity.getWeaponItem().is(EnigmaticItems.THE_ACKNOWLEDGMENT)) debuff -= 0.2F;
+                        else if (AntiqueBag.hasBook(EnigmaticItems.THE_ACKNOWLEDGMENT.toStack(), entity)) debuff -= 0.08F;
+                        if (AntiqueBag.hasBook(EnigmaticItems.THE_INFINITUM.toStack(), entity)) debuff -= 0.24F;
                         float modifier = 1.0F - 0.01F * monsterDamageDebuff.get() * debuff;
-                        event.setAmount(event.getAmount() * modifier);
+                        event.setAmount(event.getAmount() * Math.max(1.0F, modifier));
                     }
                 }
             }
@@ -523,6 +536,7 @@ public class CursedRing extends CursedCurioItem {
         @SubscribeEvent(priority = EventPriority.LOW)
         private static void onPlayerJoin(PlayerEvent.@NotNull PlayerLoggedInEvent event) {
             if (!(event.getEntity() instanceof ServerPlayer player)) return;
+            if (Float.isNaN(player.getHealth())) player.setHealth(player.getMaxHealth());
 
             if (SoulCrystal.isPermanentlyDead(player)) {
                 PacketDistributor.sendToPlayer(player, new PermanentDeathPacket());
@@ -624,6 +638,7 @@ public class CursedRing extends CursedCurioItem {
                             EnigmaticHandler.destroyCurio(player, EnigmaticItems.CURSED_RING);
                             player.level().playSound(null, player.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 1.0F, 0.5F);
                             EnigmaticHandler.getPersistedData(player).putBoolean("DestroyedCursedRing", true);
+                            EnigmaticTriggers.ENIGMATIC_TRIGGER.get().trigger(player, 6);
                             return;
                         }
                     }
@@ -633,7 +648,7 @@ public class CursedRing extends CursedCurioItem {
                     event.addOverride(stack -> stack != null && stack.is(EnigmaticItems.CURSED_RING), ICurio.DropRule.DESTROY);
                     player.level().playSound(null, player.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 1.0F, 0.5F);
                     EnigmaticHandler.getPersistedData(player).putBoolean("DestroyedCursedRing", true);
-                    CuriosApi.getCuriosInventory(player).ifPresent((handler) -> {
+                    CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
                         IItemHandlerModifiable curios = handler.getEquippedCurios();
                         for (int i = 0; i < handler.getSlots(); ++i) {
                             ItemStack stackInSlot = curios.getStackInSlot(i);

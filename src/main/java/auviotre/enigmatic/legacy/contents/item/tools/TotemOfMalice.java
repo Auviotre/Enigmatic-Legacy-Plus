@@ -167,6 +167,7 @@ public class TotemOfMalice extends BaseCurioItem {
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
             LivingEntity victim = event.getEntity();
             Entity entity = event.getSource().getEntity();
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             if (!(entity instanceof LivingEntity attacker)) return;
             if (EnigmaticHandler.hasItem(victim, EnigmaticItems.TOTEM_OF_MALICE) || EnigmaticHandler.hasCurio(victim, EnigmaticItems.TOTEM_OF_MALICE)) {
                 if (attacker.getType().is(EntityTypeTags.ILLAGER)) {

@@ -33,10 +33,11 @@ public class ELItemTags extends ItemTagsProvider {
                 THE_INFINITUM.get(), VOID_TOME.get()
         );
         this.tag(ItemTags.LECTERN_BOOKS).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get());
-        this.tag(ItemTags.VANISHING_ENCHANTABLE).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get(), INFERNAL_SHIELD.get());
-        this.tag(ItemTags.DURABILITY_ENCHANTABLE).add(INFERNAL_SHIELD.get(), ETHERIUM_HAMMER.get(), DRAGON_BREATH_BOW.get(), MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
+        this.tag(ItemTags.VANISHING_ENCHANTABLE).addTag(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE)
+                .add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get(), SPELLSTONE_SWORD.get(), INFERNAL_CINDER.get(), INFERNAL_SHIELD.get());
+        this.tag(ItemTags.DURABILITY_ENCHANTABLE).add(SPELLSTONE_SWORD.get(), INFERNAL_CINDER.get(), INFERNAL_SHIELD.get(), ETHERIUM_HAMMER.get(), DRAGON_BREATH_BOW.get(), MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
         this.tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
-        this.tag(ItemTags.SWORDS).add(EXECUTION_AXE.get(), ENDER_SLAYER.get(), ETHERIUM_SWORD.get());
+        this.tag(ItemTags.SWORDS).add(EXECUTION_AXE.get(), ENDER_SLAYER.get(), ETHERIUM_SWORD.get(), SPELLSTONE_SWORD.get());
         this.tag(ItemTags.HOES).add(ETHERIUM_SCYTHE.get());
         this.tag(ItemTags.BOW_ENCHANTABLE).add(DRAGON_BREATH_BOW.get());
         this.tag(ItemTags.SWORD_ENCHANTABLE).add(THE_INFINITUM.get());
@@ -50,11 +51,10 @@ public class ELItemTags extends ItemTagsProvider {
         this.tag(ItemTags.LEG_ARMOR).add(ETHERIUM_LEGGINGS.get());
         this.tag(ItemTags.FOOT_ARMOR).add(ETHERIUM_BOOTS.get());
         this.tag(ItemTags.COMPASSES).add(SOUL_COMPASS.get());
-        this.tag(ItemTags.VANISHING_ENCHANTABLE).addTag(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE);
 
         this.tag(Tags.Items.RAW_MATERIALS).add(RAW_ETHERIUM.get());
-        this.tag(Tags.Items.INGOTS).add(ETHERIUM_INGOT.get(), EVIL_INGOT.get());
-        this.tag(Tags.Items.NUGGETS).add(ETHERIUM_NUGGET.get());
+        this.tag(Tags.Items.INGOTS).add(ETHERIUM_INGOT.get(), STARLIGHT_INGOT.get(), EVIL_INGOT.get());
+        this.tag(Tags.Items.NUGGETS).add(ETHERIUM_NUGGET.get(), STARLIGHT_PARTICLE.get());
         this.tag(Tags.Items.TOOLS_SHIELD).add(INFERNAL_SHIELD.get());
         this.tag(Tags.Items.RODS).add(ENDER_ROD.get());
         this.tag(Tags.Items.TOOLS_BOW).add(DRAGON_BREATH_BOW.get());
@@ -63,11 +63,12 @@ public class ELItemTags extends ItemTagsProvider {
         this.tag(Tags.Items.FERTILIZERS).add(INFINIMEAL.get());
         this.tag(Tags.Items.GEMS).add(SACRED_CRYSTAL.get());
         this.tag(Tags.Items.DUSTS).add(INFERNAL_CINDER.get(), ASTRAL_DUST.get());
-        this.tag(Tags.Items.POTION_BOTTLE).add(RECALL_POTION.get(), WORMHOLE_POTION.get());
-        this.tag(Tags.Items.DRINKS_MAGIC).add(RECALL_POTION.get(), WORMHOLE_POTION.get(), ICHOR_BOTTLE.get(), ENCHANTED_ICHOR_BOTTLE.get(), REDEMPTION_POTION.get(), ICHOR_CURSE_BOTTLE.get());
-        this.tag(Tags.Items.FOODS_FRUIT).add(FORBIDDEN_FRUIT.get(), ASTRAL_FRUIT.get(), ENCHANTED_ASTRAL_FRUIT.get());
+        this.tag(Tags.Items.POTION_BOTTLE).add(RECALL_POTION.get(), WORMHOLE_POTION.get(), BLESS_POTION.get());
+        this.tag(Tags.Items.DRINKS_MAGIC).add(RECALL_POTION.get(), WORMHOLE_POTION.get(), BLESS_POTION.get(), ICHOR_BOTTLE.get(), ENCHANTED_ICHOR_BOTTLE.get(), REDEMPTION_POTION.get(), ICHOR_CURSE_BOTTLE.get());
+        this.tag(Tags.Items.FOODS_FRUIT).add(ASTRAL_FRUIT.get(), ENCHANTED_ASTRAL_FRUIT.get());
         this.tag(Tags.Items.FOODS_VEGETABLE).add(ICHOROOT.get());
         this.tag(Tags.Items.FOODS_EDIBLE_WHEN_PLACED).add(EnigmaticBlocks.COSMIC_CAKE.asItem());
+        this.tag(Tags.Items.BUCKETS).add(STARLIGHT_BUCKET.get());
 
         this.tag(EnigmaticTags.Items.ARMOR_CHECK_EXCLUSION).add(Items.ELYTRA, MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
         this.tag(EnigmaticTags.Items.BYPASS_FOURTH_CURSE).add(THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get());
@@ -122,7 +123,7 @@ public class ELItemTags extends ItemTagsProvider {
 
         this.tag(CuriosTags.RING).add(
                 IRON_RING.get(), GOLDEN_RING.get(), MINER_RING.get(), MAGNET_RING.get(), DISLOCATION_RING.get(), INFERNAL_RING.get(),
-                QUARTZ_RING.get(), ENDER_RING.get(), EARTH_PROMISE.get(), CURSED_RING.get(), REDEMPTION_RING.get(), DESOLATION_RING.get()
+                QUARTZ_RING.get(), ENDER_RING.get(), STARLIGHT_RING.get(), EARTH_PROMISE.get(), CURSED_RING.get(), REDEMPTION_RING.get(), DESOLATION_RING.get()
         );
         this.tag(CuriosTags.CHARM).add(
                 MINING_CHARM.get(), MONSTER_CHARM.get(),

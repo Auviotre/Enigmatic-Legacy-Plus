@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/template_glass_pane_side_alt",
+  "render_type": "translucent",
+  "textures": {
+    "edge": "enigmaticlegacyplus:block/astral_glass_pane_top",
+    "pane": "enigmaticlegacyplus:block/astral_glass_2"
+  }
+}

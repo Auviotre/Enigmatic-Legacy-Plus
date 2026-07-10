@@ -5,7 +5,9 @@ import auviotre.enigmatic.legacy.compat.jei.EnigmaticRecipeTypes;
 import auviotre.enigmatic.legacy.compat.jei.JEIHandler;
 import auviotre.enigmatic.legacy.contents.crafting.SpellstoneTableRecipe;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -17,11 +19,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<SpellstoneTableRecipe>> {
@@ -75,14 +79,32 @@ public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<
 
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull RecipeHolder<SpellstoneTableRecipe> holder, IFocusGroup focuses) {
         SpellstoneTableRecipe recipe = holder.value();
-        builder.addInputSlot(5, 32).addItemStack(EnigmaticItems.SPELLSTONE_DEBRIS.toStack(recipe.getCount()));
-        builder.addInputSlot(111, 32);
-        builder.addInputSlot(58, 32).addItemStack(EnigmaticItems.SPELLCORE.toStack());
+        IRecipeSlotBuilder slot = builder.addInputSlot(5, 32);
+        IRecipeSlotBuilder spell = builder.addInputSlot(111, 32);
+        IRecipeSlotBuilder core = builder.addInputSlot(58, 32);
         NonNullList<Ingredient> ingredients = recipe.getIngredients();
-        for (int i = 0; i < ingredients.size(); i++) {
+        for (int i = 0; i < 7; i++) {
             Pair<Integer, Integer> pair = OFFSETS.get(i);
-            builder.addInputSlot(pair.getA(), pair.getB()).addIngredients(ingredients.get(i));
+            if (i < ingredients.size()) {
+                Ingredient ingredient = ingredients.get(i);
+                if (recipe.isAllDifferent()) {
+                    List<ItemStack> items = List.of(ingredient.getItems());
+                    List<ItemStack> list = new ArrayList<>(items);
+                    for (int j = 0; j < items.size(); j++) {
+                        list.set(j, items.get((j + i) % items.size()));
+                    }
+                    builder.addInputSlot(pair.getA(), pair.getB()).addItemStacks(list);
+                } else builder.addInputSlot(pair.getA(), pair.getB()).addIngredients(ingredient);
+            } else builder.addInputSlot(pair.getA(), pair.getB());
         }
+        if (holder.id().equals(EnigmaticLegacy.location("spellstone_fragmentation"))) {
+            spell.addIngredients(Ingredient.of(EnigmaticTags.Items.SPELLSTONES));
+            builder.addOutputSlot(58, 59).addItemStack(EnigmaticItems.SPELLSTONE_DEBRIS.toStack(4));
+            return;
+        }
+
+        if (recipe.getCount() > 0) slot.addItemStack(EnigmaticItems.SPELLSTONE_DEBRIS.toStack(recipe.getCount()));
+        core.addItemStack(EnigmaticItems.SPELLCORE.toStack());
         builder.addOutputSlot(58, 59).addItemStack(recipe.getResultItem(JEIHandler.getLevel().registryAccess()));
     }
 }

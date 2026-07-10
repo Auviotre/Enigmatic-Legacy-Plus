@@ -3,6 +3,7 @@ package auviotre.enigmatic.legacy.handlers;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.capability.AntiqueBagCapability;
 import auviotre.enigmatic.legacy.contents.command.CurseTimeCommand;
+import auviotre.enigmatic.legacy.contents.world.StarlightSpawner;
 import auviotre.enigmatic.legacy.registries.EnigmaticCapability;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticPotions;
@@ -26,6 +27,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RegisterRecipeBookCategoriesEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
+import net.neoforged.neoforge.event.level.ModifyCustomSpawnersEvent;
 import net.neoforged.neoforge.event.village.WandererTradesEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,6 +56,11 @@ public class EnigmaticSetupHandler {
     }
 
     @SubscribeEvent
+    private static void onCustomSpawnersRegistry(@NotNull ModifyCustomSpawnersEvent event) {
+        event.addCustomSpawner(new StarlightSpawner(event.getLevel()));
+    }
+
+    @SubscribeEvent
     private static void onCommandRegistry(@NotNull RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
         CurseTimeCommand.register(dispatcher);
@@ -74,6 +81,7 @@ public class EnigmaticSetupHandler {
         builder.addMix(Potions.AWKWARD, EnigmaticItems.EARTH_HEART_FRAGMENT.get(), Potions.LUCK);
         builder.addRecipe(Ingredient.of(EnigmaticItems.RECALL_POTION), Ingredient.of(EnigmaticItems.TWISTED_HEART), EnigmaticItems.TWISTED_POTION.toStack());
         builder.addRecipe(Ingredient.of(Items.OMINOUS_BOTTLE), Ingredient.of(EnigmaticItems.ICHOR_DROPLET), EnigmaticItems.ICHOR_CURSE_BOTTLE.toStack());
+        builder.addRecipe(Ingredient.of(Items.HONEY_BOTTLE), Ingredient.of(EnigmaticItems.PURE_HEART), EnigmaticItems.BLESS_POTION.toStack());
         // Ultimate Potions
         builder.addMix(Potions.LONG_NIGHT_VISION, EnigmaticItems.ICHOR_DROPLET.get(), EnigmaticPotions.ULTIMATE_NIGHT_VISION);
         builder.addMix(Potions.LONG_INVISIBILITY, EnigmaticItems.ICHOR_DROPLET.get(), EnigmaticPotions.ULTIMATE_INVISIBILITY);

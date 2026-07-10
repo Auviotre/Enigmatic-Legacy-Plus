@@ -22,7 +22,6 @@ public class ExplorerMarkerModel extends Model {
         this.main = root.getChild("main");
     }
 
-
     public static LayerDefinition createLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
@@ -30,7 +29,6 @@ public class ExplorerMarkerModel extends Model {
 
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
-
 
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
         this.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);

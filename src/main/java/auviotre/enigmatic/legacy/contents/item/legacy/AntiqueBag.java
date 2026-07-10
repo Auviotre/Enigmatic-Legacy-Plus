@@ -10,15 +10,22 @@ import auviotre.enigmatic.legacy.contents.item.books.TheTwist;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticCapability;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -33,8 +40,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -56,7 +63,7 @@ public class AntiqueBag extends BaseItem {
     }
 
     public static boolean isBook(ItemStack stack) {
-        return extraBookList.get().contains(IItemHelper.getLocation(stack.getItem()).toString()) || stack.is(ItemTags.BOOKSHELF_BOOKS);
+        return stack.is(ItemTags.BOOKSHELF_BOOKS) || extraBookList.get().contains(IItemHelper.getLocation(stack.getItem()).toString());
     }
 
     public static ItemStack getBook(ItemStack stack, LivingEntity entity) {
@@ -95,11 +102,12 @@ public class AntiqueBag extends BaseItem {
     public static class Events {
         @SubscribeEvent
         private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             DamageSource source = event.getSource();
             if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
                 if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES)) {
                     if (AntiqueBag.hasBook(EnigmaticItems.THE_TWIST.toStack(), attacker) && EnigmaticHandler.canUse(attacker, EnigmaticItems.THE_TWIST.toStack())) {
-                        event.setAmount(event.getAmount() * (1 + 0.001F * TheTwist.specialDamageBoost.get() / 30));
+                        event.setAmount(event.getAmount() * (1 + 0.001F * TheTwist.specialDamageBoost.get() / 3));
                     }
                     if (AntiqueBag.hasBook(EnigmaticItems.THE_INFINITUM.toStack(), attacker) && EnigmaticHandler.isTheWorthyOne(attacker)) {
                         event.setAmount(event.getAmount() * (1 + 0.001F * TheInfinitum.specialDamageBoost.get()));
@@ -109,13 +117,20 @@ public class AntiqueBag extends BaseItem {
         }
 
         @SubscribeEvent
-        private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
-            DamageSource source = event.getSource();
-            if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-                if (AntiqueBag.hasBook(EnigmaticItems.THE_INFINITUM.toStack(), attacker) && EnigmaticHandler.isTheWorthyOne(attacker)) {
-                    attacker.heal(event.getNewDamage() * 0.01F * TheInfinitum.lifeSteal.get());
-                }
+        private static void onDamaged(EntityTickEvent.@NotNull Pre event) {
+            if (event.getEntity() instanceof LivingEntity entity && !entity.level().isClientSide() && EnigmaticHandler.isTheWorthyOne(entity)) {
+                if (AntiqueBag.hasBook(EnigmaticItems.THE_INFINITUM.toStack(), entity))
+                    entity.getAttributes().addTransientAttributeModifiers(getModifier());
+                else if (!entity.getWeaponItem().is(EnigmaticItems.THE_INFINITUM))
+                    entity.getAttributes().removeAttributeModifiers(getModifier());
             }
+        }
+
+        private static Multimap<Holder<Attribute>, AttributeModifier> getModifier() {
+            ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
+            ResourceLocation location = IItemHelper.getLocation(EnigmaticItems.THE_INFINITUM.get());
+            builder.put(EnigmaticAttributes.LIFESTEAL, new AttributeModifier(location, 0.01 * TheInfinitum.lifeSteal.getAsInt(), AttributeModifier.Operation.ADD_VALUE));
+            return builder.build();
         }
     }
 }

@@ -133,6 +133,7 @@ public class EnigmaticLegacy {
         registrar.playToClient(TheCubeRevivePacket.TYPE, TheCubeRevivePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(SlotUnlockToastPacket.TYPE, SlotUnlockToastPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(PlayQuotePacket.TYPE, PlayQuotePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(SpellstoneSwordPacket.TYPE, SpellstoneSwordPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -141,13 +142,16 @@ public class EnigmaticLegacy {
             event.accept(EnigmaticItems.LOOT_GENERATOR.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.accept(EnigmaticItems.COSMIC_SCROLL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         } else if (event.getTab() == EnigmaticTabs.MAIN_TAB.get()) {
-            tabInsert(event, EnigmaticItems.SPELLTUNER.toStack(), EnigmaticBlocks.SPELLSTONE_TABLE.toStack());
-            tabInsert(event, EnigmaticItems.ASTRAL_FRUIT.toStack(), EnigmaticBlocks.ASTRAL_DUST_SACK.toStack());
+            tabInsert(event, EnigmaticItems.SPELLSTONE_SWORD.toStack(), EnigmaticBlocks.SPELLSTONE_TABLE.toStack());
+            tabInsert(event, EnigmaticItems.INFERNAL_CINDER.toStack(), EnigmaticBlocks.INFERNAL_CINDER_SACK.toStack());
+            tabInsert(event, EnigmaticItems.ASTRAL_DUST.toStack(), EnigmaticBlocks.ASTRAL_DUST_SACK.toStack());
+            tabInsert(event, EnigmaticBlocks.ASTRAL_DUST_SACK.toStack(), EnigmaticBlocks.ASTRAL_GLASS.toStack());
             tabInsert(event, EnigmaticItems.COSMIC_HEART.toStack(), EnigmaticBlocks.COSMIC_CAKE.toStack());
             tabInsert(event, EnigmaticItems.RAW_ETHERIUM.toStack(), EnigmaticBlocks.ETHERIUM_ORE.toStack(), false);
             tabInsert(event, EnigmaticItems.ETHERIUM_NUGGET.toStack(), EnigmaticBlocks.ETHERIUM_BLOCK.toStack());
             tabInsert(event, EnigmaticItems.ETHEREAL_FORGING_CHARM.toStack(), EnigmaticBlocks.ETHEREAL_LANTERN.toStack());
             tabInsert(event, EnigmaticBlocks.ETHEREAL_LANTERN.toStack(), EnigmaticBlocks.DIMENSIONAL_ANCHOR.toStack());
+            tabInsert(event, EnigmaticItems.STARLIGHT_INGOT.toStack(), EnigmaticBlocks.STARLIGHT_BLOCK.toStack());
         } else if (event.getTab() == EnigmaticTabs.CURSE_TAB.get()) {
         }
     }

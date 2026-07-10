@@ -15,11 +15,14 @@ public class EnigmaticSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> ACCELERATE = register("misc.accelerate");
     public static final DeferredHolder<SoundEvent, SoundEvent> DEFLECT = register("misc.deflect");
     public static final DeferredHolder<SoundEvent, SoundEvent> SWORD_HIT_REJECT = register("misc.sword_hit_reject");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCROLL_TRIGGER = register("misc.scroll.trigger");
     public static final DeferredHolder<SoundEvent, SoundEvent> ETHERIUM_SHIELD_DEFLECT = register("misc.etherium_shield.deflect");
 
     // Items and Blocks
     public static final DeferredHolder<SoundEvent, SoundEvent> ARMOR_EQUIP_ETHERIUM = register("item.armor.equip_etherium");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VOID_STONE_DEVOUR = register("item.void_stone.devour");
     public static final DeferredHolder<SoundEvent, SoundEvent> COSMIC_CAKE_RESTORE = register("block.cosmic_cake.restore");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTRAL_GLASS_CHANGE = register("block.astral_glass.change");
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(EnigmaticLegacy.location(name)));

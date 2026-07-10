@@ -94,10 +94,10 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntityE
     }
 
     @Inject(method = "canStandOnFluid", at = @At("RETURN"), cancellable = true)
-    public void canStandOnFluidMix(FluidState fluidState, @NotNull CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValue() && EnigmaticHandler.hasCurio(this.self(), EnigmaticItems.SCORCHED_CHARM)) {
+    public void canStandOnFluidMix(FluidState fluidState, @NotNull CallbackInfoReturnable<Boolean> info) {
+        if (!info.getReturnValue() && EnigmaticHandler.hasCurio(this.self(), EnigmaticItems.SCORCHED_CHARM)) {
             if (this.self().isCrouching()) return;
-            cir.setReturnValue(fluidState.is(FluidTags.LAVA));
+            info.setReturnValue(fluidState.is(FluidTags.LAVA));
         }
     }
 

@@ -125,6 +125,7 @@ public class LivingOde extends BaseItem {
 
         @SubscribeEvent
         private static void onDamageIncoming(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             Entity entity = event.getSource().getEntity();
             if (entity instanceof LivingEntity attacker && !attacker.level().isClientSide()) {
                 if (attacker.getWeaponItem().is(EnigmaticItems.ODE_TO_LIVING)) {

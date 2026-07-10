@@ -32,6 +32,8 @@ import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class IchorCurse extends MobEffect {
     private static final ResourceLocation EFFECT_ID = EnigmaticLegacy.location("ichor_curse_boost");
 
@@ -70,7 +72,7 @@ public class IchorCurse extends MobEffect {
         if (event.getEntity().hasEffect(EnigmaticEffects.ICHOR_CURSE)) {
             MobEffectInstance instance = event.getEffectInstance();
             MobEffectInstance old = event.getOldEffectInstance();
-            if (old != null && instance.is(EnigmaticEffects.ICHOR_CORROSION)) {
+            if (old != null && instance.is(EnigmaticEffects.ICHOR_CURSE)) {
                 if (instance.getDuration() < old.getDuration()) instance.duration = old.getDuration();
                 int amplifier = instance.getAmplifier();
                 instance.amplifier = Math.max(Math.min(4, 1 + amplifier + old.getAmplifier()), amplifier);
@@ -84,13 +86,14 @@ public class IchorCurse extends MobEffect {
         if (event.getSource().getEntity() instanceof LivingEntity attacker) {
             if (!attacker.hasEffect(EnigmaticEffects.ICHOR_CURSE) || event.getEntity().getType().is(Tags.EntityTypes.BOSSES))
                 return;
+            int amplifier = Objects.requireNonNull(attacker.getEffect(EnigmaticEffects.ICHOR_CURSE)).getAmplifier();
             if (event.getEntity() instanceof Monster monster && monster.getTarget() == attacker && monster.level() instanceof ServerLevel level) {
                 if (!monster.level().dimension().equals(Level.NETHER)) return;
                 if (monster.getSpawnType() == null || !monster.getSpawnType().equals(MobSpawnType.NATURAL)) return;
                 IchorPermeation data = monster.getData(EnigmaticAttachments.ICHOR_PERMEATION);
                 if (!data.isInfected() && monster.hasLineOfSight(attacker)) {
                     data.setInfected(true);
-                    for (int i = 0; i < monster.getRandom().nextInt(1, 3); i++) {
+                    for (int i = 0; i < monster.getRandom().nextInt(1, 3 + amplifier / 2); i++) {
                         IchorSprite sprite = EnigmaticEntities.ICHOR_SPRITE.get().create(level);
                         if (sprite != null) {
                             sprite.setPos(monster.getEyePosition());
@@ -101,7 +104,7 @@ public class IchorCurse extends MobEffect {
                     }
                     monster.getAttributes().addTransientAttributeModifiers(ImmutableMultimap.of(Attributes.MAX_HEALTH, new AttributeModifier(EFFECT_ID, 0.6, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)));
                     event.setCanceled(true);
-                    monster.setHealth(monster.getMaxHealth() * 0.75F);
+                    monster.setHealth(monster.getMaxHealth() * (0.75F + 0.05F * amplifier));
                     attacker.knockback(0.2F, Mth.sin((float) Math.toRadians(monster.getYRot())), -Mth.cos((float) Math.toRadians(monster.getYRot())));
                     monster.addEffect(new MobEffectInstance(EnigmaticEffects.PURE_RESISTANCE, 200, 3));
                 }

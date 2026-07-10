@@ -65,12 +65,15 @@ public class TheBless extends TheAcknowledgment {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.fourthCurseAlteration");
                 TooltipHandler.line(list);
             }
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.inInventory", ChatFormatting.GOLD);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBless4");
+            if (RedemptionRing.Helper.canUseRelic(player))
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBless5");
+            TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBless1");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBless2");
             if (RedemptionRing.Helper.canUseRelic(player))
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBless2");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBless3");
-            if (RedemptionRing.Helper.canUseRelic(player))
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBless4");
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBless3");
         } else {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBlessLore1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theBlessLore2");
@@ -79,6 +82,10 @@ public class TheBless extends TheAcknowledgment {
         }
         TooltipHandler.line(list);
         TooltipHandler.cursedOnly(list, stack);
+    }
+
+    public List<Component> getTooltipInBag(List<Component> list) {
+        return list;
     }
 
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
@@ -115,6 +122,7 @@ public class TheBless extends TheAcknowledgment {
 
         @SubscribeEvent
         private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             DamageSource source = event.getSource();
             if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
                 ItemStack stack = attacker.getWeaponItem();
@@ -132,6 +140,7 @@ public class TheBless extends TheAcknowledgment {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             if (EnigmaticHandler.hasItem(event.getEntity(), EnigmaticItems.THE_BLESS) && RedemptionRing.Helper.canUseRelic(event.getEntity())) {
                 event.getContainer().setPostAttackInvulnerabilityTicks(40);
             }

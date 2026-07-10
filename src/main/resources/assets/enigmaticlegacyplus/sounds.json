@@ -35,6 +35,15 @@
       }
     ]
   },
+  "misc.scroll.trigger": {
+    "subtitle": "subtitle.enigmaticlegacy.misc.scroll.trigger",
+    "sounds": [
+      {
+        "name": "entity.experience_orb.pickup",
+        "type": "event"
+      }
+    ]
+  },
   "misc.deflect": {
     "subtitle": "subtitle.enigmaticlegacy.misc.deflect",
     "sounds": [
@@ -70,6 +79,15 @@
       }
     ]
   },
+  "item.void_stone.devour": {
+    "subtitle": "subtitle.enigmaticlegacy.item.void_stone.devour",
+    "sounds": [
+      {
+        "name": "entity.player.teleport",
+        "type": "event"
+      }
+    ]
+  },
   "block.cosmic_cake.restore": {
     "subtitle": "subtitle.enigmaticlegacy.cosmic_cake.restore",
     "sounds": [
@@ -82,6 +100,15 @@
       }, {
         "name": "enigmaticlegacyplus:misc/uneat3",
         "stream": false
+      }
+    ]
+  },
+  "block.astral_glass.change": {
+    "subtitle": "subtitle.enigmaticlegacy.block.astral_glass.change",
+    "sounds": [
+      {
+        "name": "item.axe.wax_off",
+        "type": "event"
       }
     ]
   },

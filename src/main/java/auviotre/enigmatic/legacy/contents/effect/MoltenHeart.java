@@ -23,6 +23,7 @@ public class MoltenHeart extends MobEffect {
 
     @SubscribeEvent
     public void onEntityHurt(@NotNull LivingIncomingDamageEvent event) {
+        if (event.getAmount() >= Float.MAX_VALUE) return;
         if (event.getEntity().hasEffect(EnigmaticEffects.MOLTEN_HEART)) {
             if (event.getSource().is(DamageTypeTags.IS_FIRE)) {
                 event.setCanceled(true);

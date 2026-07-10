@@ -160,6 +160,7 @@ public class CreationHeart extends SpellstoneItem {
     public static class Events {
         @SubscribeEvent
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.CREATION_HEART)) {
                 if (event.getSource().is(EnigmaticTags.DamageTypes.CREATION_HEART_IMMUNE_TO))
                     event.setCanceled(true);

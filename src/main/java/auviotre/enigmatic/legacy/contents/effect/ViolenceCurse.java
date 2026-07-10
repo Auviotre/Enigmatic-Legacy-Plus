@@ -54,6 +54,7 @@ public class ViolenceCurse extends MobEffect {
 
     @SubscribeEvent
     public void onDamage(LivingDamageEvent.@NotNull Pre event) {
+        if (event.getNewDamage() >= Float.MAX_VALUE) return;
         MobEffectInstance effect = event.getEntity().getEffect(EnigmaticEffects.VIOLENCE_CURSE);
         if (effect != null) event.setNewDamage(event.getNewDamage() * (1.01F + 0.01F * effect.getAmplifier()));
     }

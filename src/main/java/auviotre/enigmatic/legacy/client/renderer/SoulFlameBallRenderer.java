@@ -21,7 +21,6 @@ public class SoulFlameBallRenderer extends EntityRenderer<SoulFlameBall> {
         return 15;
     }
 
-
     public void render(SoulFlameBall entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         if (entity.tickCount >= 2 || !(this.entityRenderDispatcher.camera.getEntity().distanceToSqr(entity) < (double) 12.25F)) {
             poseStack.pushPose();

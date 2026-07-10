@@ -110,6 +110,7 @@ public class EarthPromise extends CursedCurioItem {
     public static class Events {
         @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (victim instanceof Player player && !player.getCooldowns().isOnCooldown(EnigmaticItems.EARTH_PROMISE.get())) {
                 if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.EARTH_PROMISE)) {

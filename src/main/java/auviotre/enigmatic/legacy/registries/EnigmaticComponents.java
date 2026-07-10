@@ -2,8 +2,10 @@ package auviotre.enigmatic.legacy.registries;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.charms.ForgerGem;
+import auviotre.enigmatic.legacy.contents.item.legacy.VoidStone;
 import auviotre.enigmatic.legacy.contents.item.misc.StorageCrystal;
 import auviotre.enigmatic.legacy.contents.item.scrolls.ViolenceScroll;
+import auviotre.enigmatic.legacy.contents.item.spellstones.other.SpellstoneSword;
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.GlobalPos;
@@ -19,6 +21,8 @@ public class EnigmaticComponents {
     public static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, EnigmaticLegacy.MODID);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> BOOLEAN = COMPONENTS.register("general_boolean",
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> INT = COMPONENTS.register("general_int",
+            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> CURSED = COMPONENTS.register("cursed",
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
@@ -43,6 +47,10 @@ public class EnigmaticComponents {
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> AMULET_NAME = COMPONENTS.register("amulet_name",
             () -> DataComponentType.<String>builder().persistent(Codec.STRING).networkSynchronized(ByteBufCodecs.STRING_UTF8).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<SpellstoneSword.Resonance>> SPELL_RESONANCE = COMPONENTS.register("spell_resonance",
+            () -> DataComponentType.<SpellstoneSword.Resonance>builder().persistent(SpellstoneSword.Resonance.CODEC).networkSynchronized(SpellstoneSword.Resonance.STREAM_CODEC).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> SPELL_LEVEL = COMPONENTS.register("spell_level",
+            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Spelltuner.Context>> SPELLTUNER_CONTEXT = COMPONENTS.register("spelltuner_context",
             () -> DataComponentType.<Spelltuner.Context>builder().persistent(Spelltuner.Context.CODEC).networkSynchronized(Spelltuner.Context.STREAM_CODEC).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<StorageCrystal.Info>> STORAGE_INFO = COMPONENTS.register("storage_info",
@@ -59,6 +67,8 @@ public class EnigmaticComponents {
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> ILLUSION_COUNT = COMPONENTS.register("illusion_count",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> CONTENT = COMPONENTS.register("content",
+            () -> DataComponentType.<String>builder().persistent(Codec.STRING).networkSynchronized(ByteBufCodecs.STRING_UTF8).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> XP_SCROLL_ACTIVE = COMPONENTS.register("xp_active",
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> XP_SCROLL_MODE = COMPONENTS.register("xp_mode",
@@ -81,10 +91,10 @@ public class EnigmaticComponents {
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> NO_DROP = COMPONENTS.register("no_drop",
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> REVIVE_COOLDOWN = COMPONENTS.register("revive_cooldown",
-            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> DORMANT = COMPONENTS.register("dormant",
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> ACTIVATION_ANIMATION = COMPONENTS.register("activation_animation",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<VoidStone.TempStorage>> TEMPORARY_STORAGE = COMPONENTS.register("temporary_storage",
+            () -> DataComponentType.<VoidStone.TempStorage>builder().persistent(VoidStone.TempStorage.CODEC).networkSynchronized(VoidStone.TempStorage.STREAM_CODEC).build());
 }

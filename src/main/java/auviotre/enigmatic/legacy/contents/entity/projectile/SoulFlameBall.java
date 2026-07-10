@@ -38,7 +38,7 @@ public class SoulFlameBall extends Projectile {
         this.setNoGravity(true);
     }
 
-    public SoulFlameBall(Level world, LivingEntity owner, LivingEntity target) {
+    public SoulFlameBall(Level world, LivingEntity owner, @Nullable LivingEntity target) {
         this(EnigmaticEntities.SOUL_FLAME_BALL.get(), world);
         this.setPos(owner.position().add(0, owner.getBbHeight() * 0.4F, 0));
         this.setOwner(owner);
@@ -50,7 +50,7 @@ public class SoulFlameBall extends Projectile {
 
     public void checkTarget() {
         Entity owner = this.getOwner();
-        if (owner == null || this.tickCount < 10) return;
+        if (owner == null || this.tickCount < 4) return;
         List<LivingEntity> entities = level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(16.0), entity -> entity.isAlive() && entity instanceof Targeting);
         for (LivingEntity entity : entities) {
             LivingEntity target = ((Targeting) entity).getTarget();
@@ -118,7 +118,7 @@ public class SoulFlameBall extends Projectile {
             Entity target = hitResult.getEntity();
             if (target == this.getOwner()) return;
             int level = target.getPersistentData().getInt("IllusionSoulLevel");
-            float damage = Math.min(2.0F + level * 0.8F, owner.getMaxHealth() * 0.75F);
+            float damage = Math.min(4.0F + level * 0.4F, owner.getMaxHealth() * 0.64F);
             target.hurt(EnigmaticDamageTypes.source(level(), DamageTypes.MAGIC, this, this.getOwner()), damage);
             target.getPersistentData().putInt("IllusionSoulLevel", level + 1);
             Vec3 mv = this.getDeltaMovement().scale(0.5);

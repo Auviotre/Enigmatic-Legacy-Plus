@@ -11,7 +11,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -56,7 +55,7 @@ public class XpScroll extends BaseCurioItem {
             if (stack.getOrDefault(EnigmaticComponents.XP_SCROLL_MODE, false))
                 stack.set(EnigmaticComponents.XP_SCROLL_MODE, false);
             else stack.set(EnigmaticComponents.XP_SCROLL_MODE, true);
-            level.playSound(null, player.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 0.8F + (random.nextFloat() * 0.2F));
+            level.playSound(null, player.blockPosition(), EnigmaticSounds.SCROLL_TRIGGER.get(), SoundSource.PLAYERS, 1.0F, 0.8F + (random.nextFloat() * 0.2F));
         } else {
             if (stack.getOrDefault(EnigmaticComponents.XP_SCROLL_ACTIVE, false)) {
                 stack.set(EnigmaticComponents.XP_SCROLL_ACTIVE, false);

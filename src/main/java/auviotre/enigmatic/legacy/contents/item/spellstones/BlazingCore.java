@@ -128,6 +128,7 @@ public class BlazingCore extends SpellstoneItem {
     public static class Events {
         @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity entity = event.getEntity();
             if (!ISpellstone.get(entity).is(EnigmaticItems.BLAZING_CORE) || event.isCanceled()) return;
             if (!event.getSource().is(DamageTypes.LAVA) && event.getSource().is(DamageTypeTags.IS_FIRE)) {
@@ -155,6 +156,7 @@ public class BlazingCore extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.BLAZING_CORE)) {
                 Entity entity = event.getSource().getEntity();
                 if (entity == null) return;

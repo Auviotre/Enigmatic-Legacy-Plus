@@ -135,7 +135,11 @@ public class ViolenceScroll extends BaseCurioItem {
 
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
-        if (!EnigmaticHandler.isTheWorthyOne(entity)) return;
+        if (!EnigmaticHandler.isTheWorthyOne(entity)) {
+            if (!entity.hasEffect(EnigmaticEffects.ABYSS_CORRUPTION) && !entity.hasInfiniteMaterials())
+                entity.addEffect(new MobEffectInstance(EnigmaticEffects.ABYSS_CORRUPTION, 100, 2));
+            return;
+        }
         entity.getAttributes().addTransientAttributeModifiers(this.createAttributeMap(entity, stack));
         if (entity instanceof Player) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
@@ -182,6 +186,10 @@ public class ViolenceScroll extends BaseCurioItem {
             leftover.keySet().removeIf(enchantment -> enchantment.is(EnchantmentTags.CURSE));
             AbsorbedEnchants.addCurse(stack, curses.keySet());
             EnchantmentHelper.setEnchantments(stack, leftover.toImmutable());
+        }
+        if (entity instanceof LivingEntity living && !EnigmaticHandler.isTheWorthyOne(living)) {
+            if (!living.hasEffect(EnigmaticEffects.ABYSS_CORRUPTION) && !living.hasInfiniteMaterials())
+                living.addEffect(new MobEffectInstance(EnigmaticEffects.ABYSS_CORRUPTION, 100, 2));
         }
     }
 

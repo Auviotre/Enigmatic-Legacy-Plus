@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+      "name": "ENIGMATICLEGACYPLUS_SPELLSTONE_SWORD",
+      "constructor": "(ZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+      "parameters": {
+        "class": "auviotre/enigmatic/legacy/ELEnumExtensions",
+        "field": "SPELLSTONE_SWORD"
+      }
+    }
+  ]
+}

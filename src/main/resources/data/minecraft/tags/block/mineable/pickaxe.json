@@ -2,8 +2,10 @@
     "values": [
         "enigmaticlegacyplus:dimensional_anchor",
         "enigmaticlegacyplus:spellstone_table",
+        "enigmaticlegacyplus:astral_glass",
         "enigmaticlegacyplus:etherium_ore",
         "enigmaticlegacyplus:etherium_block",
-        "enigmaticlegacyplus:ethereal_lantern"
+        "enigmaticlegacyplus:ethereal_lantern",
+        "enigmaticlegacyplus:starlight_block"
     ]
 }

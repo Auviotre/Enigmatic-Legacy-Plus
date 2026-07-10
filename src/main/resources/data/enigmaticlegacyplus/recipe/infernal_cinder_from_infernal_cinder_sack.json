@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "category": "misc",
+    "group": "infernal_cinder",
+    "ingredients": [
+        {
+            "item": "enigmaticlegacyplus:infernal_cinder_sack"
+        }
+    ],
+    "result": {
+        "count": 9,
+        "id": "enigmaticlegacyplus:infernal_cinder"
+    }
+}

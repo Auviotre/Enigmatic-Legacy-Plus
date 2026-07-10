@@ -66,7 +66,7 @@ public class EtheriumSword extends SwordItem {
         if (stack.getEnchantmentLevel(holder) > 0) {
             if (hand == InteractionHand.MAIN_HAND) {
                 ItemStack offhandStack = player.getOffhandItem();
-                if (!offhandStack.isEmpty() && offhandStack.getItem().getUseAnimation(offhandStack) == UseAnim.BLOCK)
+                if (!offhandStack.isEmpty() && offhandStack.getItem().getUseAnimation(offhandStack) != UseAnim.NONE)
                     return InteractionResultHolder.pass(stack);
             }
             player.startUsingItem(hand);
@@ -88,6 +88,7 @@ public class EtheriumSword extends SwordItem {
     public static class Events {
         @SubscribeEvent
         private static void onAttacked(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity entity = event.getEntity();
             double threshold = EtheriumProperties.getShieldThreshold(entity);
             if (event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;

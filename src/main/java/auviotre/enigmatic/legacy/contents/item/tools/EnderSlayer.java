@@ -87,6 +87,7 @@ public class EnderSlayer extends SwordItem {
     public static class Events {
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && event.getSource().is(DamageTypeTags.IS_PLAYER_ATTACK)) {
                 if (attacker.getWeaponItem().is(EnigmaticItems.ENDER_SLAYER) && EnigmaticHandler.canUse(attacker, attacker.getWeaponItem())) {
                     if (event.getEntity() instanceof ServerPlayer player) {

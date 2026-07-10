@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -71,6 +72,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             MemoryModuleType.ANGRY_AT
     );
     private static final EntityDataAccessor<Integer> DATA_ID_ATTACK_TARGET = SynchedEntityData.defineId(IchorSprite.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_ATTACK_TIMER = SynchedEntityData.defineId(IchorSprite.class, EntityDataSerializers.INT);
     @Nullable
     private LivingEntity clientSideCachedAttackTarget;
     private int clientAnimationTime;
@@ -89,6 +91,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ID_ATTACK_TARGET, 0);
+        builder.define(DATA_ATTACK_TIMER, 0);
     }
 
     protected PathNavigation createNavigation(Level level) {
@@ -113,22 +116,24 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
 
     public void aiStep() {
         if (this.isAlive()) {
+            int attackTimer = this.getAttackTimer();
             if (this.level().isClientSide) {
                 this.clientAnimationTime0 = this.clientAnimationTime;
                 if (this.hasActiveAttackTarget()) {
-                    if (this.clientAnimationTime < 30) ++this.clientAnimationTime;
+                    if (this.clientAnimationTime < 30) this.clientAnimationTime += this.random.nextInt(3, 6);
                     LivingEntity target = this.getActiveAttackTarget();
                     if (target != null) {
                         this.getLookControl().setLookAt(target, 90.0F, 90.0F);
                         this.getLookControl().tick();
                     }
                 } else if (this.getBrain().isActive(Activity.IDLE) && !this.getMainHandItem().isEmpty()) {
-                    if (this.clientAnimationTime < 30) ++this.clientAnimationTime;
+                    if (this.clientAnimationTime < 30) this.clientAnimationTime += 2;
                 } else this.clientAnimationTime = Math.max(0, this.clientAnimationTime - 10);
                 if (this.tickCount % 4 == 0) {
                     this.level().addParticle(EnigmaticParticles.ICHOR.get(), this.getRandomX(0.5), this.getY() + this.getRandom().nextFloat(), this.getRandomZ(0.5), 0.01, 0.01, 0.01);
                 }
             }
+            this.setAttackTimer(Math.min(64, attackTimer + 1));
             if ((this.getOwner() == null || !this.getOwner().isAlive()) && !this.level().isClientSide) {
                 if (this.level() instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1, 0, 0, 0, 0);
@@ -159,6 +164,21 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
 
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() == getOwner()) return false;
+        if (this.getAttackTimer() >= 60 && source.getEntity() != null) {
+            int time = 0;
+            while (time++ < 10) {
+                Vec3 pos = new Vec3(getOffset(random, 1.6F), getOffset(random, 0.6F), getOffset(random, 1.6F));
+                if (this.level().noCollision(this, this.getBoundingBox().move(pos))) {
+                    if (this.level() instanceof ServerLevel server) {
+                        server.sendParticles(EnigmaticParticles.ICHOR.get(), this.getX(), this.getY(), this.getZ(), 16, 0, 0, 0, 0.1);
+                        server.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 8, 0, 0, 0, 0);
+                    }
+                    this.teleportTo(this.getX() + pos.x, this.getY() + pos.y, this.getZ() + pos.z);
+                    this.setAttackTimer(0);
+                    return false;
+                }
+            }
+        }
         return super.hurt(source, amount * 0.5F);
     }
 
@@ -175,6 +195,10 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             this.level().broadcastEntityEvent(this, (byte) 60);
             this.remove(RemovalReason.KILLED);
         }
+    }
+
+    protected boolean canRide(Entity vehicle) {
+        return false;
     }
 
     protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
@@ -236,12 +260,19 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
         if (DATA_ID_ATTACK_TARGET.equals(key)) {
             this.clientSideCachedAttackTarget = null;
         }
-
     }
 
     public float getAttackAnimationScale(float partialTick) {
         float time = Mth.lerp(partialTick, this.clientAnimationTime0, this.clientAnimationTime);
-        return Math.min(1.0F, time / 25.0F);
+        return Math.min(1.0F, time / 27.0F);
+    }
+
+    public int getAttackTimer() {
+        return this.entityData.get(DATA_ATTACK_TIMER);
+    }
+
+    public void setAttackTimer(int timer) {
+        this.entityData.set(DATA_ATTACK_TIMER, timer);
     }
 
     public boolean hasActiveAttackTarget() {
@@ -256,6 +287,10 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             return InteractionResult.sidedSuccess(player.level().isClientSide());
         }
         return super.mobInteract(player, hand);
+    }
+
+    private static float getOffset(RandomSource random, float range) {
+        return  (random.nextFloat() * 2 - 1.0F) * range;
     }
 
     private static class FollowOwner extends Behavior<IchorSprite> {
@@ -338,12 +373,13 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
 
     private static class BeamAttack extends Behavior<IchorSprite> {
         private int attackTime = 0;
+        private int randomMoveTime = 0;
 
         public BeamAttack() {
             super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), 1200);
         }
 
-        private static LivingEntity getAttackTarget(LivingEntity entity) {
+        private static @Nullable LivingEntity getAttackTarget(LivingEntity entity) {
             return entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
         }
 
@@ -357,42 +393,66 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             return target != null && entity.isAlive() && entity.distanceToSqr(target) < BEAM_RANGE * BEAM_RANGE;
         }
 
-        protected void start(ServerLevel level, IchorSprite entity, long gameTime) {
-            this.attackTime = -10;
-            LivingEntity target = getAttackTarget(entity);
+        protected void start(ServerLevel level, IchorSprite sprite, long gameTime) {
+            this.attackTime = -16;
+            LivingEntity target = getAttackTarget(sprite);
             if (target != null)
-                entity.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new EntityTracker(target, true));
-            entity.hasImpulse = true;
+                sprite.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new EntityTracker(target, true));
+            sprite.hasImpulse = true;
         }
 
         protected void stop(ServerLevel level, IchorSprite sprite, long gameTime) {
             sprite.setActiveAttackTarget(0);
             sprite.setTarget(null);
+            sprite.hasImpulse = true;
         }
 
         protected void tick(ServerLevel level, IchorSprite sprite, long gameTime) {
             LivingEntity target = getAttackTarget(sprite);
             if (target != null) {
+                RandomSource random = sprite.getRandom();
                 sprite.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new EntityTracker(target, true));
                 if (!sprite.hasLineOfSight(target)) {
                     this.doStop(level, sprite, gameTime);
                 } else {
-                    this.attackTime++;
-                    if (this.attackTime == 0) {
+                    int nextTimer = this.attackTime;
+                    int attackTimer = sprite.getAttackTimer();
+                    if (attackTimer > this.attackTime && this.attackTime > 0) {
+                        nextTimer = (attackTimer + this.attackTime * 2) / 3;
+                    }
+                    nextTimer += 1 + sprite.random.nextInt(2);
+                    if (nextTimer > 0 && nextTimer < 64) {
                         sprite.setActiveAttackTarget(target.getId());
-                    } else if (this.attackTime >= 30) {
+                    } else if (nextTimer >= 64) {
                         float f = 1.0F;
+                        MobEffectInstance effect = target.getEffect(EnigmaticEffects.ICHOR_CORROSION);
+                        if (effect != null) f += (effect.getAmplifier() + 1) * 0.4F;
                         if (sprite.level().getDifficulty() == Difficulty.HARD) f += 2.0F;
                         if (EnigmaticHandler.isTheCursedOne(target)) f *= 1.6F;
                         PacketDistributor.sendToPlayersNear(level, null, sprite.getX(), sprite.getY(), sprite.getZ(), 16,
                                 new IchorSpriteBeamPacket(sprite.getEyePosition(), target.position().add(0, target.getBbHeight() * 0.5, 0)));
                         if (target.hurt(sprite.damageSources().indirectMagic(sprite, sprite), f)) {
-                            target.addEffect(new MobEffectInstance(EnigmaticEffects.ICHOR_CORROSION, 600), sprite);
+                            if (effect != null && random.nextBoolean()) {
+                                target.addEffect(new MobEffectInstance(EnigmaticEffects.ICHOR_CORROSION, 600, effect.getAmplifier() + 1), sprite);
+                            } else {
+                                target.addEffect(new MobEffectInstance(EnigmaticEffects.ICHOR_CORROSION, 600), sprite);
+                            }
                         }
-                        this.attackTime = 0;
+                        nextTimer = 0;
+                        sprite.setAttackTimer(0);
                         sprite.doHurtTarget(target);
                         this.doStop(level, sprite, gameTime);
                     }
+                    this.attackTime = nextTimer;
+                }
+                randomMoveTime += random.nextInt(9);
+                if (randomMoveTime > 100) {
+                    randomMoveTime = 0;
+                    BlockPos blockPos = sprite.blockPosition();
+                    Vec3 pos = sprite.position().add(getOffset(random, 0.75F), getOffset(random, 0.36F), getOffset(random, 0.75F));
+                    BlockPos containing = BlockPos.containing(pos);
+                    if (!blockPos.equals(containing) && containing.distToCenterSqr(target.position()) < BEAM_RANGE - 1 && sprite.level().getBlockState(containing).isAir())
+                        sprite.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(containing, 1.0F, 1));
                 }
             }
         }

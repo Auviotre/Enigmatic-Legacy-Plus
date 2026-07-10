@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "building",
+    "key": {
+        "S": {
+            "item": "enigmaticlegacyplus:astral_glass"
+        }
+    },
+    "pattern": [
+        "SS",
+        "SS"
+    ],
+    "result": {
+        "count": 16,
+        "id": "enigmaticlegacyplus:astral_glass_pane"
+    }
+}

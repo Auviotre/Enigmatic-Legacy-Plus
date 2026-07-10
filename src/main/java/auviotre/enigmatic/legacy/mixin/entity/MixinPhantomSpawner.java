@@ -41,14 +41,14 @@ public class MixinPhantomSpawner {
                 if (level.getSkyDarken() < 5 && level.dimensionType().hasSkyLight()) return;
                 int i = 0;
                 for (ServerPlayer player : level.players()) {
-                    if (!player.isSpectator() && !player.isCreative()) {
+                    if (!player.isSpectator()) {
                         BlockPos pos = player.blockPosition();
                         PlayerSpawnPhantomsEvent event = EventHooks.firePlayerSpawnPhantoms(player, level, pos);
                         boolean isAllow = event.getResult() == PlayerSpawnPhantomsEvent.Result.ALLOW;
                         if (event.shouldSpawnPhantoms(level, pos)) {
                             if (!level.dimensionType().hasSkyLight() || pos.getY() >= level.getSeaLevel() && level.canSeeSky(pos)) {
                                 DifficultyInstance difficulty = level.getCurrentDifficultyAt(pos);
-                                if (isAllow && difficulty.isHarderThan(random.nextFloat() * 3.0F)) {
+                                if (isAllow || difficulty.isHarderThan(random.nextFloat() * 2.0F)) {
                                     ServerStatsCounter stats = player.getStats();
                                     int ticksSinceRest = Mth.clamp(stats.getValue(Stats.CUSTOM.get(Stats.TIME_SINCE_REST)), 1, Integer.MAX_VALUE);
 

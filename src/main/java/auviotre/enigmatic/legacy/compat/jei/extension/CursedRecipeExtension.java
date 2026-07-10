@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CursedRecipeExtension implements ICraftingCategoryExtension<CursedShapedRecipe> {
-
     public void setRecipe(@NotNull RecipeHolder<CursedShapedRecipe> recipeHolder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses) {
         CursedShapedRecipe recipe = recipeHolder.value();
         List<List<ItemStack>> inputs = new ArrayList<>();

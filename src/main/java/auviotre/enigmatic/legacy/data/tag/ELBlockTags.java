@@ -24,14 +24,17 @@ public class ELBlockTags extends BlockTagsProvider {
                 EnigmaticBlocks.DIMENSIONAL_ANCHOR.get(),
                 EnigmaticBlocks.SPELLSTONE_TABLE.get(),
                 EnigmaticBlocks.ETHERIUM_ORE.get(),
-                EnigmaticBlocks.ETHERIUM_BLOCK.get()
+                EnigmaticBlocks.ETHERIUM_BLOCK.get(),
+                EnigmaticBlocks.STARLIGHT_BLOCK.get()
         );
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
                 EnigmaticBlocks.DIMENSIONAL_ANCHOR.get(),
                 EnigmaticBlocks.SPELLSTONE_TABLE.get(),
+                EnigmaticBlocks.ASTRAL_GLASS.get(),
                 EnigmaticBlocks.ETHERIUM_ORE.get(),
                 EnigmaticBlocks.ETHERIUM_BLOCK.get(),
-                EnigmaticBlocks.ETHEREAL_LANTERN.get()
+                EnigmaticBlocks.ETHEREAL_LANTERN.get(),
+                EnigmaticBlocks.STARLIGHT_BLOCK.get()
         );
         this.tag(BlockTags.DRAGON_IMMUNE).add(
                 EnigmaticBlocks.DIMENSIONAL_ANCHOR.get()
@@ -44,7 +47,15 @@ public class ELBlockTags extends BlockTagsProvider {
         );
         this.tag(Tags.Blocks.STORAGE_BLOCKS).add(
                 EnigmaticBlocks.ASTRAL_DUST_SACK.get(),
-                EnigmaticBlocks.ETHERIUM_BLOCK.get()
+                EnigmaticBlocks.INFERNAL_CINDER_SACK.get(),
+                EnigmaticBlocks.ETHERIUM_BLOCK.get(),
+                EnigmaticBlocks.STARLIGHT_BLOCK.get()
+        );
+        this.tag(Tags.Blocks.GLASS_BLOCKS).add(
+                EnigmaticBlocks.ASTRAL_GLASS.get()
+        );
+        this.tag(Tags.Blocks.GLASS_PANES).add(
+                EnigmaticBlocks.ASTRAL_GLASS_PANE.get()
         );
         this.tag(EnigmaticTags.Blocks.ALL_MINEABLE)
                 .addTag(BlockTags.MINEABLE_WITH_PICKAXE)

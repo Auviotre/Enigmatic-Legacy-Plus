@@ -57,6 +57,7 @@ public class AnimalGuidebook extends BaseItem {
 
         @SubscribeEvent
         private static void onDamageIncoming(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             Entity entity = event.getSource().getEntity();
             if (entity instanceof LivingEntity attacker && EnigmaticHandler.hasItem(attacker, EnigmaticItems.ANIMAL_GUIDEBOOK)) {
                 if (event.getEntity() instanceof Animal animal) {

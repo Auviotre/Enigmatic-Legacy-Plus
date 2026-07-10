@@ -64,7 +64,7 @@ public class MiningCharm extends BaseCurioItem {
     }
 
     public void curioTick(SlotContext context, ItemStack stack) {
-        if (context.entity() instanceof Player player && player.tickCount % 19 == 0) {
+        if (context.entity() instanceof Player player && stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) && player.tickCount % 19 == 0) {
             if (player.getY() < 50 && !player.level().dimension().equals(Level.NETHER)
                     && !player.level().dimension().equals(Level.END)
                     && !player.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value())

@@ -17,6 +17,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -81,6 +82,13 @@ public class TheTwist extends TheAcknowledgment {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    public List<Component> getTooltipInBag(List<Component> list) {
+        TooltipHandler.line(list);
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBagSlot");
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.theTwistBag1", ChatFormatting.GOLD, String.format("%d%%", specialDamageBoost.get() / 30));
+        return list;
+    }
+
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!EnigmaticHandler.canUse(player, stack)) return InteractionResultHolder.pass(stack);
@@ -104,7 +112,8 @@ public class TheTwist extends TheAcknowledgment {
 
         @SubscribeEvent
         private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
-            if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES)) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
+            if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES) || event.getEntity().getType().equals(EntityType.PLAYER)) {
                 DamageSource source = event.getSource();
                 if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
                     ItemStack stack = attacker.getWeaponItem();

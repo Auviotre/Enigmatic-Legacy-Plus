@@ -10,6 +10,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -19,6 +20,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -37,6 +39,10 @@ import java.util.List;
 public class InfernalRing extends BaseCurioItem {
     public static ModConfigSpec.IntValue resistance;
 
+    public InfernalRing() {
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.UNCOMMON));
+    }
+
     @SubscribeConfig
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.translation("item.enigmaticlegacyplus.infernal_ring").push("else.infernalRing");
@@ -50,7 +56,10 @@ public class InfernalRing extends BaseCurioItem {
         if (Screen.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalRing1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalRing2");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalRing3", ChatFormatting.GOLD, resistance.get() + "%");
+            int value = resistance.get();
+            if (EnigmaticHandler.hasCurio(Minecraft.getInstance().player, EnigmaticItems.HELL_BLADE_CHARM))
+                value = Math.min(99, value / 3 * 4);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalRing3", ChatFormatting.GOLD, value + "%");
         } else TooltipHandler.holdShift(list);
     }
 
@@ -66,11 +75,15 @@ public class InfernalRing extends BaseCurioItem {
     public static class Events {
         @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             float damage = event.getNewDamage();
             if (damage <= victim.getAbsorptionAmount() || damage <= 0) return;
             if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.INFERNAL_RING) && victim.getMaxHealth() == victim.getHealth()) {
-                event.setNewDamage(damage * (1 - 0.01F * resistance.get()));
+                int value = resistance.get();
+                if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.HELL_BLADE_CHARM))
+                    value = Math.min(99, value / 3 * 4);
+                event.setNewDamage(damage * (1 - 0.01F * value));
             }
         }
     }

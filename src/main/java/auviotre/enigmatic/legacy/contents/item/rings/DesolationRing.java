@@ -7,9 +7,11 @@ import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
+import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Enemy;
@@ -27,8 +29,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +44,7 @@ import java.util.WeakHashMap;
 
 public class DesolationRing extends BaseCurioItem {
     public static ModConfigSpec.IntValue effectiveRange;
+    public static ModConfigSpec.IntValue cooldown;
 
     public DesolationRing() {
         super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.EPIC).component(EnigmaticComponents.ELDRITCH, true));
@@ -49,6 +54,7 @@ public class DesolationRing extends BaseCurioItem {
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.translation("item.enigmaticlegacyplus.desolation_ring").push("abyssItems.desolationRing");
         effectiveRange = builder.defineInRange("effectiveRange", 64, 1, 128);
+        cooldown = builder.defineInRange("cooldown", 240, 20, 1200);
         builder.pop(2);
     }
 
@@ -59,6 +65,8 @@ public class DesolationRing extends BaseCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing3");
+            TooltipHandler.line(list);
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing4");
         } else TooltipHandler.holdShift(list);
         TooltipHandler.line(list);
         TooltipHandler.worthyOnly(list, stack);
@@ -66,7 +74,11 @@ public class DesolationRing extends BaseCurioItem {
 
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
-        if (!EnigmaticHandler.isTheWorthyOne(entity)) return;
+        if (!EnigmaticHandler.isTheWorthyOne(entity)) {
+            if (!entity.hasEffect(EnigmaticEffects.ABYSS_CORRUPTION) && !entity.hasInfiniteMaterials())
+                entity.addEffect(new MobEffectInstance(EnigmaticEffects.ABYSS_CORRUPTION, 100, 2));
+            return;
+        }
         if (entity instanceof Player) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
             if (timer < 1.0F) stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
@@ -79,6 +91,10 @@ public class DesolationRing extends BaseCurioItem {
             if (isSelected && EnigmaticHandler.isTheWorthyOne(livingEntity))
                 stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
             else stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.max(0.0F, timer - 0.3F));
+        }
+        if (entity instanceof LivingEntity living && !EnigmaticHandler.isTheWorthyOne(living)) {
+            if (!living.hasEffect(EnigmaticEffects.ABYSS_CORRUPTION) && !living.hasInfiniteMaterials())
+                living.addEffect(new MobEffectInstance(EnigmaticEffects.ABYSS_CORRUPTION, 100, 2));
         }
     }
 
@@ -132,6 +148,38 @@ public class DesolationRing extends BaseCurioItem {
             if (event.isRecentlyHit() && event.getSource().getEntity() != null && event.getSource().getEntity() instanceof LivingEntity attacker) {
                 if (EnigmaticHandler.hasCurio(attacker, EnigmaticItems.DESOLATION_RING)) {
                     event.getDrops().clear();
+                }
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        private static void onLivingDrops(@NotNull LivingDeathEvent event) {
+            LivingEntity entity = event.getEntity();
+            if (entity instanceof Player player && player.getCooldowns().isOnCooldown(EnigmaticItems.DESOLATION_RING.get()))
+                return;
+            if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.DESOLATION_RING) && !event.getSource().is(Tags.DamageTypes.IS_TECHNICAL)) {
+                List<Mob> list = entity.level().getEntitiesOfClass(Mob.class, entity.getBoundingBox().inflate((double) effectiveRange.get() / 16), victim -> {
+                    if (victim.getLastAttacker() == victim) return false;
+                    if (victim.getTarget() == entity) return false;
+                    if (victim instanceof OwnableEntity ownable && ownable.getOwner() == entity) return false;
+                    if (!entity.canAttack(victim)) return false;
+                    return victim.isAlive() && victim != entity;
+                });
+                if (list.isEmpty()) return;
+                boolean flag = false;
+                float health = 0;
+                for (Mob mob : list) {
+                    health = mob.getHealth();
+                    if (mob.hurt(event.getSource(), Float.MAX_VALUE)) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag) {
+                    if (entity instanceof Player player)
+                        player.getCooldowns().addCooldown(EnigmaticItems.DESOLATION_RING.get(), cooldown.get());
+                    entity.setHealth(Math.max(health * 2, entity.getHealth() + 1));
+                    event.setCanceled(true);
                 }
             }
         }

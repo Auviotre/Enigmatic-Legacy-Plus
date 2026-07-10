@@ -1,0 +1,79 @@
+{
+  "variants": {
+    "colorful=true,facing=east": {
+      "model": "enigmaticlegacyplus:block/astral_glass",
+      "y": 270
+    },
+    "colorful=true,facing=north": {
+      "model": "enigmaticlegacyplus:block/astral_glass",
+      "y": 180
+    },
+    "colorful=true,facing=south": {
+      "model": "enigmaticlegacyplus:block/astral_glass"
+    },
+    "colorful=true,facing=west": {
+      "model": "enigmaticlegacyplus:block/astral_glass",
+      "y": 90
+    },
+    "colorful=false,style=0,facing=east": {
+      "model": "enigmaticlegacyplus:block/astral_glass_0",
+      "y": 270
+    },
+    "colorful=false,style=0,facing=north": {
+      "model": "enigmaticlegacyplus:block/astral_glass_0",
+      "y": 180
+    },
+    "colorful=false,style=0,facing=south": {
+      "model": "enigmaticlegacyplus:block/astral_glass_0"
+    },
+    "colorful=false,style=0,facing=west": {
+      "model": "enigmaticlegacyplus:block/astral_glass_0",
+      "y": 90
+    },
+    "colorful=false,style=1,facing=east": {
+      "model": "enigmaticlegacyplus:block/astral_glass_1",
+      "y": 270
+    },
+    "colorful=false,style=1,facing=north": {
+      "model": "enigmaticlegacyplus:block/astral_glass_1",
+      "y": 180
+    },
+    "colorful=false,style=1,facing=south": {
+      "model": "enigmaticlegacyplus:block/astral_glass_1"
+    },
+    "colorful=false,style=1,facing=west": {
+      "model": "enigmaticlegacyplus:block/astral_glass_1",
+      "y": 90
+    },
+    "colorful=false,style=2,facing=east": {
+      "model": "enigmaticlegacyplus:block/astral_glass_2",
+      "y": 270
+    },
+    "colorful=false,style=2,facing=north": {
+      "model": "enigmaticlegacyplus:block/astral_glass_2",
+      "y": 180
+    },
+    "colorful=false,style=2,facing=south": {
+      "model": "enigmaticlegacyplus:block/astral_glass_2"
+    },
+    "colorful=false,style=2,facing=west": {
+      "model": "enigmaticlegacyplus:block/astral_glass_2",
+      "y": 90
+    },
+    "colorful=false,style=3,facing=east": {
+      "model": "enigmaticlegacyplus:block/astral_glass_3",
+      "y": 270
+    },
+    "colorful=false,style=3,facing=north": {
+      "model": "enigmaticlegacyplus:block/astral_glass_3",
+      "y": 180
+    },
+    "colorful=false,style=3,facing=south": {
+      "model": "enigmaticlegacyplus:block/astral_glass_3"
+    },
+    "colorful=false,style=3,facing=west": {
+      "model": "enigmaticlegacyplus:block/astral_glass_3",
+      "y": 90
+    }
+  }
+}

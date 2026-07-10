@@ -38,7 +38,7 @@ public class BaseItem extends Item {
 
             @OnlyIn(Dist.CLIENT)
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-                list.add(Component.literal("Coming soon...").withStyle(ChatFormatting.DARK_GRAY));
+                list.add(Component.literal("Coming soon...").withStyle(ChatFormatting.GRAY));
             }
 
             public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {

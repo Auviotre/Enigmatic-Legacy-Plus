@@ -60,6 +60,6 @@ public class TwistedMirror extends BaseCursedItem {
     }
 
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 20;
+        return 18;
     }
 }

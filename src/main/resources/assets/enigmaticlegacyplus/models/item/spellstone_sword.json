@@ -1,3 +1,110 @@
 {
-  "parent": "minecraft:item/handheld"
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "enigmaticlegacyplus:item/spellstone_sword"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "enigmaticlegacyplus:form": 0.1
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/golem_heart"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:form": 0.2
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/blazing_core"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:form": 0.3
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/ocean_stone"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:form": 0.4
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/forgotten_ice"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:form": 0.5
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/revival_leaf"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:form": 0.6
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/angel_blessing"
+    },
+    {
+      "predicate": {
+        "pulling" : 0.3,
+        "enigmaticlegacyplus:form": 0.6
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/angel_blessing_pulling_0"
+    },
+    {
+      "predicate": {
+        "pulling" : 0.6,
+        "enigmaticlegacyplus:form": 0.6
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/angel_blessing_pulling_1"
+    },
+    {
+      "predicate": {
+        "pulling" : 0.9,
+        "enigmaticlegacyplus:form": 0.6
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/angel_blessing_pulling_2"
+    },
+    {
+      "predicate": {
+        "charged" : 1.0,
+        "enigmaticlegacyplus:form": 0.6
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/angel_blessing_charged"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:form": 0.7
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/lost_engine"
+    },
+    {
+      "predicate": {
+        "out" : 1.0,
+        "enigmaticlegacyplus:form": 0.7
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/lost_engine_out"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:form": 0.8
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/illusion_lantern"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:form": 0.9
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/eye_of_nebula"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:form": 1.0
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/void_pearl"
+    },
+    {
+      "predicate": {
+        "blocking": 1,
+        "enigmaticlegacyplus:form": 1.0
+      },
+      "model": "enigmaticlegacyplus:item/spellstone_sword/void_pearl_blocking"
+    }
+  ]
 }

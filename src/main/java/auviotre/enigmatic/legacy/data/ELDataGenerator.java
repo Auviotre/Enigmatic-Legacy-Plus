@@ -42,6 +42,7 @@ public class ELDataGenerator {
         generator.addProvider(includeServer, new ELDamageTypeTags(output, lookupProvider, helper));
         generator.addProvider(includeServer, new ELBiomeTags(output, lookupProvider, helper));
         generator.addProvider(includeServer, new ELEffectTags(output, lookupProvider, helper));
+        generator.addProvider(includeServer, new ELDataMaps(output, lookupProvider));
         generator.addProvider(includeServer, new ELRecipeProvider(output, lookupProvider));
         generator.addProvider(includeServer, new ELAdvancementProvider(output, lookupProvider, helper));
         generator.addProvider(includeServer, new LootTableProvider(output, Collections.emptySet(), List.of(

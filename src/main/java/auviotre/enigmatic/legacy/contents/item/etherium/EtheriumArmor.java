@@ -101,6 +101,7 @@ public class EtheriumArmor extends ArmorItem {
     public static class Events {
         @SubscribeEvent(priority = EventPriority.HIGH)
         private static void onAttacked(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity entity = event.getEntity();
             if (event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
             if (event.getSource().getDirectEntity() instanceof AbstractHurtingProjectile || event.getSource().getDirectEntity() instanceof AbstractArrow) {

@@ -31,6 +31,12 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .define('X', EnigmaticItems.SPELLCORE)
                 .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
                 .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, EnigmaticItems.SPELLSTONE_SWORD)
+                .pattern("ADA").pattern("DXD").pattern(" S ")
+                .define('D', EnigmaticItems.SPELLSTONE_DEBRIS).define('S', Items.STICK)
+                .define('X', EnigmaticItems.SPELLCORE).define('A', Items.AMETHYST_SHARD)
+                .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
+                .save(output);
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, EnigmaticBlocks.SPELLSTONE_TABLE)
                 .pattern(" X ").pattern("AIA").pattern("SSS")
                 .define('I', EnigmaticItems.ICHOR_DROPLET).define('A', Items.ENDER_PEARL)
@@ -127,6 +133,17 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
         nineBlockStorageRecipes(
                 output,
                 RecipeCategory.MISC,
+                EnigmaticItems.STARLIGHT_INGOT,
+                RecipeCategory.BUILDING_BLOCKS,
+                EnigmaticBlocks.STARLIGHT_BLOCK,
+                EnigmaticLegacy.MODID + ":starlight_block",
+                null,
+                EnigmaticLegacy.MODID + ":starlight_ingot_from_starlight_block",
+                "starlight_block"
+        );
+        nineBlockStorageRecipes(
+                output,
+                RecipeCategory.MISC,
                 EnigmaticItems.ASTRAL_DUST,
                 RecipeCategory.BUILDING_BLOCKS,
                 EnigmaticBlocks.ASTRAL_DUST_SACK,
@@ -135,6 +152,32 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 EnigmaticLegacy.MODID + ":astral_dust_from_astral_dust_sack",
                 "astral_dust"
         );
+        nineBlockStorageRecipes(
+                output,
+                RecipeCategory.MISC,
+                EnigmaticItems.INFERNAL_CINDER,
+                RecipeCategory.BUILDING_BLOCKS,
+                EnigmaticBlocks.INFERNAL_CINDER_SACK,
+                EnigmaticLegacy.MODID + ":infernal_cinder_sack",
+                null,
+                EnigmaticLegacy.MODID + ":infernal_cinder_from_infernal_cinder_sack",
+                "infernal_cinder"
+        );
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(EnigmaticBlocks.ASTRAL_DUST_SACK), RecipeCategory.BUILDING_BLOCKS,
+                EnigmaticBlocks.ASTRAL_GLASS.toStack(4), 0.4F, 200)
+                .unlockedBy("has_item", has(EnigmaticBlocks.ASTRAL_DUST_SACK))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, EnigmaticBlocks.ASTRAL_GLASS_PANE, 16)
+                .pattern("SS").pattern("SS")
+                .define('S', EnigmaticBlocks.ASTRAL_GLASS)
+                .unlockedBy("has_item", has(EnigmaticBlocks.ASTRAL_GLASS))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EnigmaticItems.STARLIGHT_INGOT)
+                .pattern("SSS").pattern("NIN").pattern("SSS")
+                .define('S', EnigmaticItems.STARLIGHT_PARTICLE)
+                .define('N', EnigmaticItems.ETHERIUM_NUGGET).define('I', EnigmaticItems.ETHERIUM_INGOT)
+                .unlockedBy("has_item", has(EnigmaticItems.STARLIGHT_PARTICLE))
+                .save(output);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EnigmaticItems.BLANK_SCROLL)
                 .pattern("SP ").pattern(" P ").pattern(" PS")
@@ -391,14 +434,33 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .define('B', Items.DRAGON_BREATH).define('V', EnigmaticItems.EYE_OF_NEBULA)
                 .unlockedBy("has_item", has(Items.ELYTRA))
                 .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, EnigmaticItems.STARLIGHT_BUCKET)
+                .pattern("   ").pattern("PAP").pattern(" I ")
+                .define('P', EnigmaticItems.STARLIGHT_PARTICLE)
+                .define('I', EnigmaticItems.STARLIGHT_INGOT).define('A', EnigmaticItems.ASTRAL_DUST)
+                .unlockedBy("has_item", has(EnigmaticItems.STARLIGHT_INGOT))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EnigmaticItems.STARLIGHT_RING)
+                .pattern("PPP").pattern("AXA").pattern("SBS")
+                .define('B', Blocks.BEACON).define('S', EnigmaticItems.STARLIGHT_INGOT)
+                .define('A', EnigmaticItems.ASTRAL_DUST).define('X', EnigmaticItems.QUARTZ_RING)
+                .define('P', EnigmaticItems.STARLIGHT_PARTICLE)
+                .unlockedBy("has_item", has(EnigmaticItems.STARLIGHT_INGOT))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EnigmaticItems.STARLIGHT_PEARL)
+                .pattern("PAP").pattern("SXS").pattern("PAP")
+                .define('S', EnigmaticItems.STARLIGHT_INGOT).define('A', EnigmaticItems.ASTRAL_DUST)
+                .define('X', Items.ENDER_PEARL).define('P', EnigmaticItems.STARLIGHT_PARTICLE)
+                .unlockedBy("has_item", has(EnigmaticItems.STARLIGHT_INGOT))
+                .save(output);
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EnigmaticItems.ASCENSION_AMULET)
                 .pattern("ADA").pattern("EXE").pattern("BVB")
                 .define('A', Items.AMETHYST_SHARD).define('D', EnigmaticItems.ASTRAL_DUST)
-                .define('E', EnigmaticItems.ETHERIUM_INGOT).define('X', EnigmaticTags.Items.ENIGMATIC_AMULETS)
+                .define('E', EnigmaticItems.STARLIGHT_INGOT).define('X', EnigmaticTags.Items.ENIGMATIC_AMULETS)
                 .define('B', Items.DRAGON_BREATH).define('V', EnigmaticItems.COSMIC_HEART)
                 .unlockedBy("has_item", has(EnigmaticItems.COSMIC_HEART))
                 .save(output);
-
 
         CursedShapedRecipe.Builder.shaped(RecipeCategory.MISC, EnigmaticItems.TWISTED_HEART)
                 .pattern(" T ").pattern("BXB").pattern("RER")
@@ -640,13 +702,13 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
                 .save(output);
         SpellstoneTableRecipe.Builder.spell(EnigmaticItems.ANGEL_BLESSING, 8)
-                .requires(Items.DRAGON_BREATH)
+                .requires(EnigmaticItems.STARLIGHT_PARTICLE)
                 .requires(Items.PHANTOM_MEMBRANE)
                 .requires(Blocks.GLOWSTONE)
                 .requires(EnigmaticItems.QUARTZ_RING)
                 .requires(Blocks.GLOWSTONE)
                 .requires(Items.PHANTOM_MEMBRANE)
-                .requires(Items.DRAGON_BREATH)
+                .requires(EnigmaticItems.STARLIGHT_PARTICLE)
                 .unlockedBy("has_item", has(EnigmaticItems.SPELLCORE))
                 .save(output);
         SpellstoneTableRecipe.Builder.spell(EnigmaticItems.ILLUSION_LANTERN, 10)
@@ -703,9 +765,14 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EnigmaticItems.COSMIC_SCROLL)
                 .pattern("DAD").pattern("IXI").pattern("DCD")
                 .define('D', EnigmaticItems.ASTRAL_DUST).define('A', Items.ENCHANTED_GOLDEN_APPLE)
-                .define('X', EnigmaticItems.DARKEST_SCROLL).define('I', EnigmaticItems.ETHERIUM_INGOT)
+                .define('X', EnigmaticItems.DARKEST_SCROLL).define('I', EnigmaticItems.STARLIGHT_INGOT)
                 .define('C', EnigmaticItems.COSMIC_HEART)
                 .unlockedBy("has_scroll", has(EnigmaticItems.COSMIC_SCROLL))
+                .save(output);
+
+        ShapelessNoRemainRecipe.Builder.shapeless(RecipeCategory.MISC, EnigmaticItems.FORBIDDEN_JUICE)
+                .requires(EnigmaticItems.FORBIDDEN_FRUIT).requires(Items.HONEY_BOTTLE)
+                .unlockedBy("has_item", has(EnigmaticItems.FORBIDDEN_FRUIT))
                 .save(output);
     }
 }

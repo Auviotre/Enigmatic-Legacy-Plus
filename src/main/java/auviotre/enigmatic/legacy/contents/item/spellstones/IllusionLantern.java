@@ -178,6 +178,7 @@ public class IllusionLantern extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onDamageIncoming(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity entity = event.getEntity();
             DamageSource source = event.getSource();
             if (source.is(Tags.DamageTypes.IS_TECHNICAL)) return;
@@ -199,6 +200,7 @@ public class IllusionLantern extends SpellstoneItem {
 
         @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity entity = event.getEntity();
             if (event.getSource().is(EnigmaticTags.DamageTypes.ILLUSION_LANTERN_RESISTANT_TO)) return;
             if (ISpellstone.get(entity).is(EnigmaticItems.ILLUSION_LANTERN)) {

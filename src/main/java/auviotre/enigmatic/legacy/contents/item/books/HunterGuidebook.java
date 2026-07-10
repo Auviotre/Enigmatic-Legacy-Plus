@@ -53,6 +53,7 @@ public class HunterGuidebook extends BaseItem {
     public static class Events {
         @SubscribeEvent
         private static void onDamageIncoming(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             Entity attacker = event.getSource().getEntity();
             LivingEntity victim = event.getEntity();
             if (victim instanceof OwnableEntity ownable) {

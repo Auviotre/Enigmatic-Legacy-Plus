@@ -221,7 +221,7 @@ public class ClientEventHandler {
             if (Spelltuner.hasTune(player, EnigmaticItems.OCEAN_STONE) || spellstone.is(EnigmaticItems.OCEAN_STONE) || spellstone.is(EnigmaticItems.VOID_PEARL)) {
                 event.setCanceled(true);
             }
-        } else if (event.getName().equals(VanillaGuiLayers.PLAYER_HEALTH) && player != null && EtheriumProperties.hasShield(player)) {
+        } else if (event.getName().equals(VanillaGuiLayers.PLAYER_HEALTH) && player != null && (EtheriumProperties.hasShield(player) || player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getEtherealShield() > 0)) {
             if (minecraft.gameMode != null && minecraft.gameMode.canHurtPlayer() && EtheriumArmor.etheriumShieldIcon.get()) {
                 EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
                 long timer = data.getEtheriumShieldTick();

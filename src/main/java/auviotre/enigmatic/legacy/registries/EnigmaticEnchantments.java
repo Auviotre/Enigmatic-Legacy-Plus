@@ -197,7 +197,7 @@ public class EnigmaticEnchantments {
             event.addOverride(stack -> {
                         Holder<Enchantment> holder = event.getEntity().registryAccess().holderOrThrow(ETERNAL_BINDING_CURSE);
                         return stack.is(EnigmaticItems.CURSED_RING) || stack.is(EnigmaticItems.REDEMPTION_RING) || stack.is(EnigmaticTags.Items.AMULETS)
-                                || EnigmaticHandler.isEldritchItem(stack) || EnchantmentHelper.getTagEnchantmentLevel(holder, stack) > 0;
+                                || EnchantmentHelper.getTagEnchantmentLevel(holder, stack) > 0;
                     }, ICurio.DropRule.ALWAYS_KEEP
             );
             if (event.getEntity() instanceof Player player) {
@@ -223,6 +223,7 @@ public class EnigmaticEnchantments {
 
         @SubscribeEvent
         private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             int level;
             if (event.getSource().getEntity() instanceof LivingEntity attacker) {
                 var ethereal = EnigmaticHandler.get(attacker.level(), Registries.ENCHANTMENT, ETHERIC_RESONANCE);
@@ -252,7 +253,7 @@ public class EnigmaticEnchantments {
                     attacker.hurt(EnigmaticDamageTypes.source(attacker.level(), EnigmaticDamageTypes.NEMESIS_CURSE, event.getEntity()), damage * 0.35F);
                 }
             }
-
+            if (!entity.isAlive()) return;
             var sorrow = EnigmaticHandler.get(entity.level(), Registries.ENCHANTMENT, SORROW_CURSE);
             if (EnchantmentHelper.getEnchantmentLevel(sorrow, entity) > 0 && entity.getRandom().nextFloat() < 10.12F) {
                 float severity = damage > 4 ? damage / 4 : 1;

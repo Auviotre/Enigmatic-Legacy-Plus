@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "enigmaticlegacyplus:item/spellstone_sword/forgotten_ice"
+  }
+}

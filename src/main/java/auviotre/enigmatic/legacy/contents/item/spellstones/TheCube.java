@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
@@ -51,6 +52,8 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -69,13 +72,23 @@ public class TheCube extends SpellstoneItem {
     private static final List<ResourceKey<Level>> WORLDS = ImmutableList.of(Level.OVERWORLD, Level.NETHER, Level.END);
     private static final Map<ServerPlayer, Future<Optional<GlobalPos>>> LOCATION_CACHE = new WeakHashMap<>();
     private final ExecutorService executor = Executors.newCachedThreadPool();
+    public static ModConfigSpec.BooleanValue autoTrigger;
+    public static ModConfigSpec.DoubleValue damageLimit;
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.the_cube").push("spellstone.theCube");
+        damageLimit = builder.defineInRange("damageLimit", 100.0, 0, 1000.0);
+        autoTrigger = builder.define("autoTrigger", true);
+        builder.pop(2);
+    }
 
     public TheCube() {
         super(IItemHelper.singleProperties().rarity(Rarity.EPIC), -1);
     }
 
     public static float getDamageLimit(LivingEntity entity) {
-        return EnigmaticHandler.isTheCursedOne(entity) ? 150.0F : 100.0F;
+        return (float) ((EnigmaticHandler.isTheCursedOne(entity) ? 1.5F : 1.0F) * damageLimit.get());
     }
 
     public static void clearLocationCache() {
@@ -105,7 +118,6 @@ public class TheCube extends SpellstoneItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCube11");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCube12");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCube13");
-
         } else TooltipHandler.line(list, "tooltip.enigmaticlegacy.holdShift");
         this.addKeyText(list);
     }
@@ -182,9 +194,9 @@ public class TheCube extends SpellstoneItem {
         if (LOCATION_CACHE.containsKey(player)) {
             try {
                 var future = LOCATION_CACHE.get(player);
-                Optional<GlobalPos> optional = LOCATION_CACHE.get(player).get();
-                if (future.isDone() && optional.isPresent()) {
-                    location = optional.get();
+                if (future.isDone()) {
+                    Optional<GlobalPos> optional = future.get();
+                    if (optional.isPresent()) location = optional.get();
                 } else future.cancel(true);
 
                 LOCATION_CACHE.remove(player);
@@ -289,11 +301,12 @@ public class TheCube extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (ISpellstone.get(victim).is(EnigmaticItems.THE_CUBE)) {
                 if (event.getSource().is(EnigmaticTags.DamageTypes.THE_CUBE_IMMUNE_TO)) event.setCanceled(true);
             }
-            if (event.getSource().getDirectEntity() instanceof LivingEntity attacker) {
+            if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && attacker.isAlive()) {
                 if (ISpellstone.get(victim).is(EnigmaticItems.THE_CUBE)) {
                     RandomSource random = victim.getRandom();
                     if (event.getAmount() <= getDamageLimit(victim) && random.nextFloat() <= 0.35F) {
@@ -313,6 +326,7 @@ public class TheCube extends SpellstoneItem {
         @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void onFinalDamage(LivingDamageEvent.@NotNull Pre event) {
             LivingEntity victim = event.getEntity();
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             if (!ISpellstone.get(victim).is(EnigmaticItems.THE_CUBE)) return;
             if (event.getSource().getEntity() != null) {
                 if (event.getNewDamage() > getDamageLimit(victim)) {
@@ -347,7 +361,7 @@ public class TheCube extends SpellstoneItem {
                         event.setCanceled(true);
                         player.setHealth(player.getMaxHealth() * 0.3F);
                         ItemStack cube = EnigmaticHandler.getCurio(player, EnigmaticItems.THE_CUBE);
-                        EnigmaticItems.THE_CUBE.get().triggerActiveAbility(level, player, cube);
+                        if (autoTrigger.get()) EnigmaticItems.THE_CUBE.get().triggerActiveAbility(level, player, cube);
 
                         player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 1200, 2));
                         player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 1));

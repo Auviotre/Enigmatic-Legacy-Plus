@@ -98,6 +98,7 @@ public class ScorchedCharm extends CursedCurioItem {
     public static class Events {
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity entity = event.getEntity();
             if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.SCORCHED_CHARM)) {
                 if (event.getSource().is(DamageTypeTags.IS_FIRE)) {

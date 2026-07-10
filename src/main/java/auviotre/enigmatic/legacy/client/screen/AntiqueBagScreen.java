@@ -1,16 +1,19 @@
 package auviotre.enigmatic.legacy.client.screen;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.item.IBagContent;
 import auviotre.enigmatic.legacy.contents.gui.AntiqueBagContainerMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class AntiqueBagScreen extends AbstractContainerScreen<AntiqueBagContainerMenu> {
@@ -21,14 +24,16 @@ public class AntiqueBagScreen extends AbstractContainerScreen<AntiqueBagContaine
         super(menu, inventory, component);
     }
 
-    protected void init() {
-        super.init();
-    }
-
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(graphics, mouseX, mouseY, partialTicks);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.renderTooltip(graphics, mouseX, mouseY);
+    }
+
+    protected List<Component> getTooltipFromContainerItem(ItemStack stack) {
+        List<Component> list = super.getTooltipFromContainerItem(stack);
+        if (stack.getItem() instanceof IBagContent content) return content.getTooltipInBag(list);
+        return list;
     }
 
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {

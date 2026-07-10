@@ -37,18 +37,19 @@ public class BlazingMight extends MobEffect {
     }
 
     @SubscribeEvent
-    public void onEntityHurt(LivingDamageEvent.@NotNull Pre event) {
+    public void onEntityDamage(LivingDamageEvent.@NotNull Pre event) {
         LivingEntity victim = event.getEntity();
+        if (event.getNewDamage() >= Float.MAX_VALUE) return;
         if (victim.hasEffect(EnigmaticEffects.BLAZING_MIGHT) && event.getNewDamage() > 0.0F) {
             MobEffectInstance effect = victim.getEffect(EnigmaticEffects.BLAZING_MIGHT);
             assert effect != null;
+            if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.BERSERK_EMBLEM)) {
+                event.setNewDamage(Math.max(0.0F, event.getNewDamage() - effect.getAmplifier() * 2.0F - 1.0F));
+            }
             int i = (effect.getAmplifier() + 1) / 2 - 1;
             victim.removeEffect(EnigmaticEffects.BLAZING_MIGHT);
             if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.INFERNAL_RING) && i >= 0)
                 victim.addEffect(new MobEffectInstance(EnigmaticEffects.BLAZING_MIGHT, effect.getDuration(), i, true, true));
-            if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.BERSERK_EMBLEM)) {
-                event.setNewDamage(Math.max(0.0F, event.getNewDamage() - effect.getAmplifier() * 2.0F - 1.0F));
-            }
         }
     }
 }

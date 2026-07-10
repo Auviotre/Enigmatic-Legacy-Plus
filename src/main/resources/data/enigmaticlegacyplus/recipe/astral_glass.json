@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:smelting",
+    "category": "blocks",
+    "cookingtime": 200,
+    "experience": 0.4,
+    "ingredient": {
+        "item": "enigmaticlegacyplus:astral_dust_sack"
+    },
+    "result": {
+        "count": 4,
+        "id": "enigmaticlegacyplus:astral_glass"
+    }
+}

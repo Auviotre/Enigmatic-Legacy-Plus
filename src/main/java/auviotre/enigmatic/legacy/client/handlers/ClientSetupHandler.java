@@ -5,9 +5,11 @@ import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.client.particles.IchorParticle;
 import auviotre.enigmatic.legacy.client.particles.StarDustParticle;
+import auviotre.enigmatic.legacy.client.particles.StarlightParticle;
 import auviotre.enigmatic.legacy.client.renderer.*;
 import auviotre.enigmatic.legacy.client.renderer.layer.EnigmaticElytraLayer;
 import auviotre.enigmatic.legacy.client.renderer.layer.EtheriumShieldLayer;
+import auviotre.enigmatic.legacy.client.renderer.model.EngineHookModel;
 import auviotre.enigmatic.legacy.client.renderer.model.ExplorerMarkerModel;
 import auviotre.enigmatic.legacy.client.renderer.model.IchorSpriteModel;
 import auviotre.enigmatic.legacy.client.renderer.model.SpellstoneModel;
@@ -19,6 +21,7 @@ import auviotre.enigmatic.legacy.client.screen.button.MagnetRingInventoryButton;
 import auviotre.enigmatic.legacy.contents.item.charms.HellBladeCharm;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.contents.item.spellstones.IllusionLantern;
+import auviotre.enigmatic.legacy.contents.item.spellstones.other.SpellstoneSword;
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
 import auviotre.enigmatic.legacy.contents.item.tools.TotemOfMalice;
 import auviotre.enigmatic.legacy.registries.*;
@@ -40,6 +43,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.client.ICuriosScreen;
 
@@ -62,11 +66,10 @@ public class ClientSetupHandler {
         event.register(EnigmaticItems.HELL_BLADE_CHARM, new HellBladeCharm.Decorator());
         event.register(EnigmaticItems.TOTEM_OF_MALICE, new TotemOfMalice.Decorator());
         event.register(EnigmaticItems.ILLUSION_LANTERN, new IllusionLantern.Decorator());
-        for (ItemLike item : IItemHelper.UNKNOWN_ITEMS) {
-            event.register(item, new BaseItem.UnknownDecorator());
-        }
+        event.register(EnigmaticItems.SPELLSTONE_SWORD, new SpellstoneSword.Decorator());
+        for (ItemLike item : IItemHelper.UNKNOWN_ITEMS) event.register(item, new BaseItem.UnknownDecorator());
+        event.register(EnigmaticBlocks.STARLIGHT_BLOCK, new BaseItem.WIPDecorator());
     }
-
 
     @SubscribeEvent
     private static void registerItemColor(RegisterColorHandlersEvent.@NotNull Item event) {
@@ -87,6 +90,7 @@ public class ClientSetupHandler {
         event.registerSpriteSet(EnigmaticParticles.ICHOR_CURSE.get(), SpellParticle.Provider::new);
         event.registerSpriteSet(EnigmaticParticles.VIOLENCE_CURSE.get(), SpellParticle.Provider::new);
         event.registerSpriteSet(EnigmaticParticles.ETHER.get(), EndRodParticle.Provider::new);
+        event.registerSpriteSet(EnigmaticParticles.STARLIGHT.get(), StarlightParticle.Provider::new);
         event.registerSpriteSet(EnigmaticParticles.BLUE_STAR_DUST.get(), StarDustParticle.Provider::new);
         event.registerSpriteSet(EnigmaticParticles.RED_STAR_DUST.get(), StarDustParticle.Provider::new);
         event.registerSpriteSet(EnigmaticParticles.PURPLE_STAR_DUST.get(), StarDustParticle.Provider::new);
@@ -102,6 +106,9 @@ public class ClientSetupHandler {
         event.registerEntityRenderer(EnigmaticEntities.SOUL_FLAME_BALL.get(), SoulFlameBallRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.ULTIMATE_WITHER_SKULL.get(), UltimateWitherSkullRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.EXPLORER_MARKER.get(), ExplorerMarkerRender::new);
+        event.registerEntityRenderer(EnigmaticEntities.STARLIGHT_METEOR.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(EnigmaticEntities.ENGINE_HOOK.get(), EngineHookRenderer::new);
+        event.registerEntityRenderer(EnigmaticEntities.ANGEL_BEAM.get(), AngelBeamRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.PIGLIN_WANDERER.get(), context -> new PiglinWandererRender(context, ModelLayers.PIGLIN_BRUTE, ModelLayers.PIGLIN_BRUTE_INNER_ARMOR, ModelLayers.PIGLIN_BRUTE_OUTER_ARMOR));
         event.registerBlockEntityRenderer(EnigmaticBlockEntities.DIMENSIONAL_ANCHOR_ENTITY.get(), DimensionalAnchorRender::new);
         event.registerBlockEntityRenderer(EnigmaticBlockEntities.SPELLSTONE_TABLE_ENTITY.get(), SpellstoneTableRender::new);
@@ -111,6 +118,7 @@ public class ClientSetupHandler {
     private static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(SpellstoneModel.LAYER, SpellstoneModel::createLayer);
         event.registerLayerDefinition(ExplorerMarkerModel.LAYER, ExplorerMarkerModel::createLayer);
+        event.registerLayerDefinition(EngineHookModel.LAYER, EngineHookModel::createLayer);
         event.registerLayerDefinition(IchorSpriteModel.LAYER, IchorSpriteModel::createBodyLayer);
     }
 
@@ -119,6 +127,11 @@ public class ClientSetupHandler {
         event.register(KeyHandler.SPELLSTONE.get());
         event.register(KeyHandler.SCROLL.get());
         event.register(KeyHandler.ENDER_RING.get());
+    }
+
+    @SubscribeEvent
+    private static void registerClientExtensions(@NotNull RegisterClientExtensionsEvent event) {
+        event.registerItem(new SpellstoneSword.ClientExtension(), EnigmaticItems.SPELLSTONE_SWORD);
     }
 
     @SubscribeEvent

@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -72,7 +73,7 @@ public class ChaosElytra extends BaseElytraItem {
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.translation("item.enigmaticlegacyplus.chaos_elytra").push("abyssItems.chaosElytra");
         specialDamageResistance = builder.defineInRange("specialDamageResistance", 80, 0, 100);
-        flyingSpeedModifier = builder.defineInRange("flyingSpeedModifier", 1.2, 0, 10);
+        flyingSpeedModifier = builder.defineInRange("flyingSpeedModifier", 0.8, 0.5, 5);
         descendingPowerModifier = builder.defineInRange("descendingPowerModifier", 1.6, 1, 10);
         descendingCooldown = builder.defineInRange("descendingCooldown", 500, 200, 1200);
         builder.pop(2);
@@ -101,7 +102,7 @@ public class ChaosElytra extends BaseElytraItem {
     protected boolean flyingBoost(@NotNull Player player) {
         if (player.isFallFlying()) {
             Vec3 lookAngle = player.getLookAngle().scale(flyingSpeedModifier.get());
-            Vec3 movement = player.getDeltaMovement().scale(0.54F);
+            Vec3 movement = player.getDeltaMovement().scale(0.5F);
             player.setDeltaMovement(movement.add(lookAngle));
             return true;
         }
@@ -122,7 +123,11 @@ public class ChaosElytra extends BaseElytraItem {
 
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
-        if (!EnigmaticHandler.isTheWorthyOne(entity)) return;
+        if (!EnigmaticHandler.isTheWorthyOne(entity)) {
+            if (!entity.hasEffect(EnigmaticEffects.ABYSS_CORRUPTION) && !entity.hasInfiniteMaterials())
+                entity.addEffect(new MobEffectInstance(EnigmaticEffects.ABYSS_CORRUPTION, 100, 2));
+            return;
+        }
         if (entity instanceof Player) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
             if (timer < 1.0F) stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
@@ -146,6 +151,10 @@ public class ChaosElytra extends BaseElytraItem {
                 int ticks = livingEntity.getFallFlyingTicks();
                 if (ticks > 0 && livingEntity.isFallFlying()) stack.elytraFlightTick(livingEntity, ticks);
             }
+        }
+        if (entity instanceof LivingEntity living && !EnigmaticHandler.isTheWorthyOne(living)) {
+            if (!living.hasEffect(EnigmaticEffects.ABYSS_CORRUPTION) && !living.hasInfiniteMaterials())
+                living.addEffect(new MobEffectInstance(EnigmaticEffects.ABYSS_CORRUPTION, 100, 2));
         }
     }
 
@@ -223,7 +232,7 @@ public class ChaosElytra extends BaseElytraItem {
                 if (movement == null) {
                     movement = Vec3.ZERO;
                 }
-                double range = 3.5 + movement.length();
+                double range = 3.75 + movement.length();
                 List<LivingEntity> entities = owner.level().getEntitiesOfClass(LivingEntity.class, owner.getBoundingBox().inflate(range));
                 for (LivingEntity entity : entities) {
                     if (entity == owner) continue;
@@ -285,6 +294,7 @@ public class ChaosElytra extends BaseElytraItem {
 
         @SubscribeEvent
         private static void onHurt(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity entity = event.getEntity();
             if (!EnigmaticHandler.isTheWorthyOne(entity)) return;
             if (!getElytra(entity).is(EnigmaticItems.CHAOS_ELYTRA)) return;

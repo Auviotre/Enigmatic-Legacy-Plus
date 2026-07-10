@@ -34,7 +34,7 @@ public class VoidTome extends BaseItem {
     }
 
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemStack = player.getItemInHand(hand);
+        ItemStack stack = player.getItemInHand(hand);
         if (world.isClientSide) {
             float width = player.getBbWidth() * 1.25F;
             for (int i = 0; i < 24; i++) {
@@ -45,11 +45,11 @@ public class VoidTome extends BaseItem {
                 player.level().playLocalSound(player.blockPosition(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 1.0F, 1.0F, true);
             }
         }
+        stack.consume(1, player);
         player.hurt(player.damageSources().fellOutOfWorld(), player.getHealth() * 0.3F);
         player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0, false, true));
         player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 400, 0, false, true));
         player.awardStat(Stats.ITEM_USED.get(this));
-        if (!player.getAbilities().instabuild) itemStack.shrink(1);
-        return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
+        return InteractionResultHolder.sidedSuccess(stack, world.isClientSide());
     }
 }

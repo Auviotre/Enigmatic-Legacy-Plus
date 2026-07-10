@@ -50,17 +50,6 @@ public class SurvivorScroll extends BaseCurioItem {
         builder.pop(2);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
-        TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll1");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll2");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll3");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll4");
-        } else TooltipHandler.holdShift(list);
-    }
-
     public static int getBrightness(Level level, BlockPos blockPos) {
         float timeOfDay = level.getTimeOfDay(0.0F);
         boolean hasSkyLight = level.dimensionType().hasSkyLight();
@@ -73,6 +62,17 @@ public class SurvivorScroll extends BaseCurioItem {
             return Math.max(blockLight, skyLight);
         }
         return blockLight;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
+        TooltipHandler.line(list);
+        if (Screen.hasShiftDown()) {
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll1");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll2");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll3");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll4");
+        } else TooltipHandler.holdShift(list);
     }
 
     public void curioTick(SlotContext context, ItemStack stack) {

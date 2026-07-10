@@ -1,7 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.op;
 
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
-import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
@@ -12,12 +11,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
@@ -26,11 +25,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
 
 import java.util.List;
 
-public class TheJudgement extends BaseItem {
-    public static final double ATTACK_RADIUS = 64D;
+public class TheJudgement extends Item {
+    public static final double ATTACK_RADIUS = 64.0;
 
     public TheJudgement() {
         super(IItemHelper.singleProperties().rarity(Rarity.EPIC).attributes(IItemHelper.createAttributes(Float.POSITIVE_INFINITY - 1, 28F)));
@@ -52,18 +53,21 @@ public class TheJudgement extends BaseItem {
     }
 
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (target.level().isClientSide()) return false;
+        if (attacker.level().isClientSide()) return false;
         boolean player = attacker instanceof Player;
         AABB box = target.getBoundingBox().inflate(ATTACK_RADIUS);
-        DamageSource source = player ? target.level().damageSources().playerAttack((Player) attacker) : target.level().damageSources().mobAttack(attacker);
-        List<? extends LivingEntity> targets = target.level().getEntitiesOfClass(LivingEntity.class, box, entity -> entity != attacker && entity != target && entity.distanceToSqr(target) < ATTACK_RADIUS * ATTACK_RADIUS);
-        targets.forEach(entity -> entity.hurt(source, Integer.MAX_VALUE));
+        List<LivingEntity> targets = target.level().getEntitiesOfClass(LivingEntity.class, box, entity -> entity != attacker && entity != target && entity.distanceToSqr(target) < ATTACK_RADIUS * ATTACK_RADIUS);
+        targets.forEach(LivingEntity::kill);
 
         if (this.noDrops(stack)) {
-            List<? extends Entity> drops = target.level().getEntitiesOfClass(Entity.class, box, entity -> (entity instanceof ItemEntity || entity instanceof ExperienceOrb) && entity.distanceToSqr(target) < ATTACK_RADIUS * ATTACK_RADIUS);
-            drops.forEach(drop -> drop.hurt(source, Integer.MAX_VALUE));
+            List<Entity> drops = target.level().getEntitiesOfClass(Entity.class, box, entity -> (entity instanceof ItemEntity || entity instanceof ExperienceOrb) && entity.distanceToSqr(target) < ATTACK_RADIUS * ATTACK_RADIUS);
+            drops.forEach(Entity::kill);
         }
-        return super.hurtEnemy(stack, target, attacker);
+        return false;
+    }
+
+    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+        return ItemAbilities.DEFAULT_SWORD_ACTIONS.contains(itemAbility);
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {

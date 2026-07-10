@@ -56,7 +56,7 @@ public class InfernalShield extends BaseCursedItem {
     }
 
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (isSelected) entity.clearFire();
+        if (entity instanceof LivingEntity living && living.isHolding(this)) entity.clearFire();
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
@@ -97,6 +97,7 @@ public class InfernalShield extends BaseCursedItem {
     public static class Events {
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (event.getSource().getEntity() != null) {
                 if (victim.getUseItem().getItem() instanceof InfernalShield) {

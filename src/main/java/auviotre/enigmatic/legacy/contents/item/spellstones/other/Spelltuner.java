@@ -195,6 +195,7 @@ public class Spelltuner extends BaseCurioItem {
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
             LivingEntity entity = event.getEntity();
             DamageSource source = event.getSource();
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             if (event.isCanceled()) return;
             if (!source.is(DamageTypes.LAVA) && source.type().effects().equals(DamageEffects.BURNING)) {
                 if (hasTune(entity, EnigmaticItems.BLAZING_CORE)) event.setCanceled(true);
@@ -215,6 +216,7 @@ public class Spelltuner extends BaseCurioItem {
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
             LivingEntity victim = event.getEntity();
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             if (hasTune(victim, EnigmaticItems.EYE_OF_NEBULA)) {
                 if (event.getSource().is(Tags.DamageTypes.IS_MAGIC))
                     event.setNewDamage(event.getNewDamage() * (1.0F - 0.005F * (5 + EyeOfNebula.magicResistance.get())));

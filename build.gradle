@@ -126,9 +126,14 @@ dependencies {
     // compat
     implementation "curse.maven:thirst-was-taken-679270:7017923"
 
+    implementation "curse.maven:sophisticated-backpacks-422301:8084526"
+    implementation "curse.maven:sophisticated-core-618298:8084486"
+
     implementation "curse.maven:placebo-283644:6926281"
     implementation "curse.maven:apothic-attributes-898963:6751650"
     implementation "curse.maven:apothic-enchanting-1063926:6926290"
+
+    implementation "curse.maven:mob-battle-mod-268746:8065542"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

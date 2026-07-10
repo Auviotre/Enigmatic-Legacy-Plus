@@ -120,6 +120,7 @@ public class LostEngine extends SpellstoneItem {
     public static class Events {
         @SubscribeEvent
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.LOST_ENGINE)) {
                 if (event.getSource().is(EnigmaticTags.DamageTypes.LOST_ENGINE_IMMUNE_TO))
                     event.setCanceled(true);
@@ -128,6 +129,7 @@ public class LostEngine extends SpellstoneItem {
 
         @SubscribeEvent
         private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.LOST_ENGINE)) {
                 DamageSource source = event.getSource();
                 if (source.is(Tags.DamageTypes.IS_MAGIC)) {
@@ -195,6 +197,7 @@ public class LostEngine extends SpellstoneItem {
 
         @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void onDamageIncoming(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (ISpellstone.get(victim).is(EnigmaticItems.LOST_ENGINE) && event.getSource().is(DamageTypeTags.IS_LIGHTNING)) {
                 event.setAmount(event.getAmount() * (victim.getRandom().nextInt(4) + 4) + victim.getMaxHealth());

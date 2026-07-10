@@ -12,5 +12,13 @@
   },
   "textures": {
     "layer0": "enigmaticlegacyplus:item/ethereal_forging_charm"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "active": 1.0
+      },
+      "model": "enigmaticlegacyplus:item/ethereal_forging_charm_active"
+    }
+  ]
 }

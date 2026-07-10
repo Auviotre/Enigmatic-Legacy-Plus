@@ -5,6 +5,7 @@ import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
+import auviotre.enigmatic.legacy.contents.item.scrolls.SurvivorScroll;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticDamageTypes;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
@@ -111,7 +112,7 @@ public class VoidPearl extends SpellstoneItem {
             entities.removeIf(victim -> victim instanceof OwnableEntity ownable && entity == ownable.getOwner());
             entities.remove(entity);
             for (LivingEntity victim : entities) {
-                if (victim.level().getMaxLocalRawBrightness(victim.blockPosition(), 0) < 3 || victim instanceof FlyingMob) {
+                if (SurvivorScroll.getBrightness(victim.level(), victim.blockPosition()) < 6 || victim instanceof FlyingMob) {
                     if (!(entity instanceof Player player) || !(victim instanceof Player vPlayer) || player.canHarmPlayer(vPlayer)) {
                         if (victim.hurt(EnigmaticDamageTypes.source(victim.level(), EnigmaticDamageTypes.DARKNESS, entity), (float) (darknessDamage.getAsInt() + entity.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.5F))) {
                             entity.level().playSound(null, victim.blockPosition(), SoundEvents.PHANTOM_BITE, SoundSource.PLAYERS, 1.0F, 0.3F + entity.getRandom().nextFloat() * 0.4F);
@@ -138,6 +139,7 @@ public class VoidPearl extends SpellstoneItem {
     public static class Events {
         @SubscribeEvent
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getAmount() >= Float.MAX_VALUE) return;
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.VOID_PEARL)) {
                 if (event.getSource().is(DamageTypes.DROWN) || event.getSource().is(DamageTypes.IN_WALL))
                     event.setCanceled(true);

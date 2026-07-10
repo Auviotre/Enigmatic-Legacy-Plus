@@ -47,7 +47,7 @@ public class SoulArchive {
 
     public SoulArchive(File saveFolder) {
         Preconditions.checkArgument(saveFolder.exists() && saveFolder.isDirectory(), "File " + saveFolder + " does not exist or is not a folder!");
-        this.saveFile = new File(saveFolder, "soul_archive.json");
+        this.saveFile = new File(saveFolder, "data/soul_archive.json");
     }
 
     public static SoulArchive getInstance() {
