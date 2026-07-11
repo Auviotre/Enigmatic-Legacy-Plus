@@ -579,7 +579,7 @@
   "tooltip.enigmaticlegacy.fabulousScroll4": "§5within the range of an active §6Beacon§5.",
 
   "tooltip.enigmaticlegacy.animalGuidebook1": "§5- Your attacks can't deal damage to animals.",
-  "tooltip.enigmaticlegacy.animalGuidebook2": "§5- §6Hoglins§5 around you are rendered passive.",
+  "tooltip.enigmaticlegacy.animalGuidebook2": "§5- §6Hobgoblins§5 around you are rendered passive.",
 
   "tooltip.enigmaticlegacy.hunterGuidebook1": "§5- All damage your pets receive within §6%1$s§6 blocks",
   "tooltip.enigmaticlegacy.hunterGuidebook2": "§5  from you is redirected upon you.",
@@ -911,7 +911,7 @@
   "tooltip.enigmaticlegacy.cursedRingBless4": "§5- §6+%1$s§d Enchanting Power§5 in §6Enchanting Table§5.",
   "tooltip.enigmaticlegacy.cursedRingBless5": "§5- Unique drops from some creatures.",
   "tooltip.enigmaticlegacy.cursedRingBless6": "§5- Functionality of §6Ring of Ender§5.",
-  "tooltip.enigmaticlegacy.cursedRingBless7": "§5§m- You can create and use unique relics.",
+  "tooltip.enigmaticlegacy.cursedRingBless7": "§5- You can create and use unique relics.",
   "tooltip.enigmaticlegacy.cursedRingLore1": "§5Once forged by antediluvian god, it beckons",
   "tooltip.enigmaticlegacy.cursedRingLore2": "§5mortals and higher beings alike with promise",
   "tooltip.enigmaticlegacy.cursedRingLore3": "§5of untold riches and immeasurable might...",
@@ -1030,8 +1030,8 @@
   "tooltip.enigmaticlegacy.canUndone": "§4This cannot be undone.",
 
   "tooltip.enigmaticlegacy.totemofMalice1": "§6When in the inventory or curio slot:",
-  "tooltip.enigmaticlegacy.totemofMalice2": "§5Increase damage to §dIllagers§5 by §6%1$s.",
-  "tooltip.enigmaticlegacy.totemofMalice3": "§5Reduce damage from §dIllagers§5 by §6%1$s.",
+  "tooltip.enigmaticlegacy.totemofMalice2": "§5Increase damage to§d Illagers§5 by §6%1$s.",
+  "tooltip.enigmaticlegacy.totemofMalice3": "§5Reduce damage from§d Illagers§5 by §6%1$s.",
   "tooltip.enigmaticlegacy.totemofMalice4": "§5Can avoid death when held or equipped.",
   "tooltip.enigmaticlegacy.totemofMalice5": "§5Causing damage to the surroundings when triggered.",
   "tooltip.enigmaticlegacy.totemofMalice4_alt": "§5§mCan avoid death when held or equipped.",
@@ -1045,7 +1045,7 @@
   "tooltip.enigmaticlegacy.enderSlayer6": "§5colossal damage to §6Endermen§5, and all drops",
   "tooltip.enigmaticlegacy.enderSlayer7": "§5from them are transformed into experience.",
   "tooltip.enigmaticlegacy.enderSlayer8": "§5Temporarily disables teleportation abilities of",
-  "tooltip.enigmaticlegacy.enderSlayer9": "§5§6Shulkers§5 and §6Endermen§5.",
+  "tooltip.enigmaticlegacy.enderSlayer9": "§6Shulkers§5 and §6Endermen§5.",
   "tooltip.enigmaticlegacy.enderSlayer10": "§5Temporarily disables active ability of §6Eye of",
   "tooltip.enigmaticlegacy.enderSlayer11": "§6Nebula§5, §6Non-Euclidean Cube§5 and ability to use",
   "tooltip.enigmaticlegacy.enderSlayer12": "§5§6Ender Pearls§5, §6Potions of Recall§5 and §6Twisted",
