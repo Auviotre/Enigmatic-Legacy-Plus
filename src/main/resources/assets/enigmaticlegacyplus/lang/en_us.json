@@ -142,6 +142,7 @@
   "attribute.name.etherium_shield": "Etherium Shield Threshold",
   "attribute.name.projectile_deflect": "Deflect Chance",
   "attribute.name.lifesteal": "Lifesteal",
+  "attribute.name.magic_protection": "Magic Protection",
 
   "key.enderRing": "Ring of Ender",
   "key.spellstoneAbility": "Spellstone Active Ability",
@@ -512,8 +513,6 @@
   "tooltip.enigmaticlegacy.minerRing3": "§dright-clicking§5 with fuel on the ring.",
   "tooltip.enigmaticlegacy.minerRing4": "§5Automatically smelt dropped items during mining.",
   "tooltip.enigmaticlegacy.minerRing5": "§5Hold§6 Shift§5 to smelt nearby dropped items.",
-
-  "tooltip.enigmaticlegacy.quartzRingAttribute": "Magic Damage Received",
 
   "tooltip.enigmaticlegacy.enderRing1": "§5Allows you to remotely access your",
   "tooltip.enigmaticlegacy.enderRing2": "§6Ender Chest§5, via inventory or keybind.",

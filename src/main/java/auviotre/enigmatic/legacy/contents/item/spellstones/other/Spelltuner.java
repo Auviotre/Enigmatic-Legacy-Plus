@@ -7,10 +7,7 @@ import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.contents.item.spellstones.*;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
-import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
-import auviotre.enigmatic.legacy.registries.EnigmaticDamageTypes;
-import auviotre.enigmatic.legacy.registries.EnigmaticItems;
-import auviotre.enigmatic.legacy.registries.EnigmaticTags;
+import auviotre.enigmatic.legacy.registries.*;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.serialization.Codec;
@@ -138,13 +135,21 @@ public class Spelltuner extends BaseCurioItem {
         super.onUnequip(context, newStack, stack);
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         builder.put(Attributes.LUCK, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
         Context context = stack.get(EnigmaticComponents.SPELLTUNER_CONTEXT);
-        if (context != null && context.spellstone().is(EnigmaticItems.CREATION_HEART)) {
+        if (context == null) return builder.build();
+
+        ItemStack contextSpellstone = context.spellstone();
+
+        if (contextSpellstone.is(EnigmaticItems.CREATION_HEART)) {
             builder.put(NeoForgeMod.CREATIVE_FLIGHT, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
+        } else if (contextSpellstone.is(EnigmaticItems.EYE_OF_NEBULA)) {
+            builder.put(EnigmaticAttributes.MAGIC_PROTECTION, new AttributeModifier(IItemHelper.getLocation(this), 1 - EyeOfNebula.magicResistance.get(), AttributeModifier.Operation.ADD_VALUE));
         }
+
         return builder.build();
     }
 
@@ -210,16 +215,6 @@ public class Spelltuner extends BaseCurioItem {
         private static void onCriticalHit(@NotNull CriticalHitEvent event) {
             if (hasTune(event.getEntity(), EnigmaticItems.LOST_ENGINE)) {
                 event.setDamageMultiplier(event.getDamageMultiplier() + 0.3F);
-            }
-        }
-
-        @SubscribeEvent
-        private static void onDamage(LivingDamageEvent.@NotNull Pre event) {
-            LivingEntity victim = event.getEntity();
-            if (event.getNewDamage() >= Float.MAX_VALUE) return;
-            if (hasTune(victim, EnigmaticItems.EYE_OF_NEBULA)) {
-                if (event.getSource().is(Tags.DamageTypes.IS_MAGIC))
-                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.005F * (5 + EyeOfNebula.magicResistance.get())));
             }
         }
 
