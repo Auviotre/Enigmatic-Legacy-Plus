@@ -8,11 +8,16 @@ import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -21,6 +26,8 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -38,13 +45,14 @@ import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
+import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.Collections;
 import java.util.List;
 
 public class EyeOfNebula extends SpellstoneItem {
     public static ModConfigSpec.IntValue magicBoost;
-    public static ModConfigSpec.IntValue magicResistance;
+    public static ModConfigSpec.DoubleValue magicResistance;
     public static ModConfigSpec.IntValue dodgeProbability;
     public static ModConfigSpec.IntValue attackEmpower;
     public static ModConfigSpec.DoubleValue vulnerabilityModifier;
@@ -58,7 +66,7 @@ public class EyeOfNebula extends SpellstoneItem {
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.translation("item.enigmaticlegacyplus.eye_of_nebula").push("spellstone.eyeOfNebula");
         magicBoost = builder.defineInRange("magicBoost", 40, 0, 100);
-        magicResistance = builder.defineInRange("magicResistance", 65, 0, 100);
+        magicResistance = builder.defineInRange("magicResistance", 0.65, 0, 1);
         dodgeProbability = builder.defineInRange("dodgeProbability", 15, 0, 100);
         attackEmpower = builder.defineInRange("attackEmpower", 150, 0, 1000);
         vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
@@ -99,7 +107,7 @@ public class EyeOfNebula extends SpellstoneItem {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstonePassive");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula1", ChatFormatting.GOLD, magicBoost.get() + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula2", ChatFormatting.GOLD, magicResistance.get() + "%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula2", ChatFormatting.GOLD, String.format("%.0f", magicResistance.get() * 100) + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula3", ChatFormatting.GOLD, dodgeProbability.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula4");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula5", ChatFormatting.GOLD, attackEmpower.get() + "%");
@@ -111,7 +119,20 @@ public class EyeOfNebula extends SpellstoneItem {
 
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula2", ChatFormatting.GOLD, (magicResistance.get() + 5) / 2 + "%");
+        double tuneResistance = (1 - magicResistance.get()) * 100;
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula2", ChatFormatting.GOLD, String.format("%.0f", tuneResistance) + "%");
+    }
+
+    @Override
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
+        ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
+        builder.put(EnigmaticAttributes.MAGIC_PROTECTION, new AttributeModifier(IItemHelper.getLocation(this), magicResistance.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
+        return builder.build();
+    }
+
+    @Override
+    public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
+        return List.of();
     }
 
     public int getCooldown() {
@@ -179,8 +200,6 @@ public class EyeOfNebula extends SpellstoneItem {
             if (event.getNewDamage() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
             if (ISpellstone.get(victim).is(EnigmaticItems.EYE_OF_NEBULA)) {
-                if (event.getSource().is(Tags.DamageTypes.IS_MAGIC))
-                    event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * magicResistance.get()));
                 if (victim.isInWater())
                     event.setNewDamage(event.getNewDamage() * (float) vulnerabilityModifier.getAsDouble());
             }

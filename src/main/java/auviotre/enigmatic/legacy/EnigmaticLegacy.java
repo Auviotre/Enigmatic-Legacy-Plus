@@ -170,6 +170,7 @@ public class EnigmaticLegacy {
             event.add(type, EnigmaticAttributes.ETHERIUM_SHIELD);
             event.add(type, EnigmaticAttributes.PROJECTILE_DEFLECT);
             event.add(type, EnigmaticAttributes.LIFESTEAL);
+            event.add(type, EnigmaticAttributes.MAGIC_PROTECTION);
         }
     }
 
