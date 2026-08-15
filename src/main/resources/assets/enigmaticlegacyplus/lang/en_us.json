@@ -116,6 +116,9 @@
   "advancement.enigmaticlegacy.the_bless.title": "The Light of Grace",
   "advancement.enigmaticlegacy.the_bless.desc": "Create The Bless using Sacred Crystal",
 
+  "advancement.enigmaticlegacy.false_justice.title": "Chaos Extraction",
+  "advancement.enigmaticlegacy.false_justice.desc": "Craft False Justice and show the gods your power",
+
   "advancement.enigmaticlegacy.redemption_ring.title": "The Fate Reverses",
   "advancement.enigmaticlegacy.redemption_ring.desc": "Break the Ring of Seven Curses to obtain redemption",
 
@@ -280,6 +283,7 @@
   "item.enigmaticlegacyplus.extradimensional_eye": "Extradimensional Eye",
   "item.enigmaticlegacyplus.eye_of_nebula": "Eye of the Nebula",
   "item.enigmaticlegacyplus.fabulous_scroll": "Grace of the Creator",
+  "item.enigmaticlegacyplus.false_justice": "False Justice",
   "item.enigmaticlegacyplus.forbidden_fruit": "The Forbidden Fruit",
   "item.enigmaticlegacyplus.forbidden_juice": "The Forbidden Juice",
   "item.enigmaticlegacyplus.forger_gem": "The Forger's Gem",
@@ -1030,6 +1034,17 @@
   "tooltip.enigmaticlegacy.cursedStone4": "§5will be permanently destroyed, along with",
   "tooltip.enigmaticlegacy.cursedStone5": "§5one of your §6Soul Crystals§5.",
   "tooltip.enigmaticlegacy.canUndone": "§4This cannot be undone.",
+
+  "tooltip.enigmaticlegacyplus.falseJustice1": "§dWarped §6Fourth Curse:",
+  "tooltip.enigmaticlegacyplus.falseJustice2": "§5- All damage you deal becomes §dTrue Damage§5",
+  "tooltip.enigmaticlegacyplus.falseJustice3": "§dWarped §6Third Curse:",
+  "tooltip.enigmaticlegacyplus.falseJustice4": "§5- All damage taken becomes §dTrue Damage§5",
+  "tooltip.enigmaticlegacyplus.falseJustice5": "§5- When carried in your inventory:",
+  "tooltip.enigmaticlegacyplus.falseJustice6": "§5- §dThe above effects still apply",
+  
+  "tooltip.enigmaticlegacyplus.falseJusticeLore1": "§5In the chaos where all fades into nothingness",
+  "tooltip.enigmaticlegacyplus.falseJusticeLore2": "§5show §kthe gods§5 the extent of §kyour power",
+
 
   "tooltip.enigmaticlegacy.totemofMalice1": "§6When in the inventory or curio slot:",
   "tooltip.enigmaticlegacy.totemofMalice2": "§5Increase damage to§d Illagers§5 by §6%1$s.",

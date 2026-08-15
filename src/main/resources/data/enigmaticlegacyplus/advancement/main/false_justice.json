@@ -1,0 +1,34 @@
+{
+    "parent": "enigmaticlegacyplus:main/the_bless",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:false_justice"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.false_justice.desc"
+        },
+        "frame": "challenge",
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:false_justice"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.false_justice.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

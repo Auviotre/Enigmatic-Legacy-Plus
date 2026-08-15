@@ -156,6 +156,7 @@ public class EnigmaticItems {
     public static final DeferredItem<BerserkEmblem> BERSERK_EMBLEM = registerWithCTab("berserk_emblem", BerserkEmblem::new);
     public static final DeferredItem<SanguinaryHandbook> SANGUINARY_HANDBOOK = registerWithCTab("sanguinary_handbook", SanguinaryHandbook::new);
     public static final DeferredItem<CursedStone> CURSED_STONE = registerWithCTab("cursed_stone", CursedStone::new);
+    public static final DeferredItem<FalseJustice> FALSE_JUSTICE = registerWithCTab("false_justice", FalseJustice::new);
     public static final DeferredItem<SoulCompass> SOUL_COMPASS = registerWithCTab("soul_compass", SoulCompass::new);
     public static final DeferredItem<Item> EVIL_ESSENCE = registerWithCTab("evil_essence", EvilEssence::new);
     public static final DeferredItem<Item> EVIL_INGOT = registerWithCTab("evil_ingot", () -> new BaseCursedItem(IItemHelper.properties().rarity(Rarity.UNCOMMON)));

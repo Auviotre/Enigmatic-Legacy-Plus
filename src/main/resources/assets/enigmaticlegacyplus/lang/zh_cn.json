@@ -116,6 +116,9 @@
   "advancement.enigmaticlegacy.the_bless.title": "恩惠之光",
   "advancement.enigmaticlegacy.the_bless.desc": "使用神圣灵晶制作恩惠之典",
 
+  "advancement.enigmaticlegacy.false_justice.title": "混沌提取",
+  "advancement.enigmaticlegacy.false_justice.desc": "制作虚伪审判  向神明展示你的力量",
+
   "advancement.enigmaticlegacy.redemption_ring.title": "扭转命运",
   "advancement.enigmaticlegacy.redemption_ring.desc": "碎裂七咒之戒  获得救赎",
 
@@ -280,6 +283,7 @@
   "item.enigmaticlegacyplus.extradimensional_eye": "超维之眼",
   "item.enigmaticlegacyplus.eye_of_nebula": "星云之眼",
   "item.enigmaticlegacyplus.fabulous_scroll": "创造者的恩赐",
+  "item.enigmaticlegacyplus.false_justice": "虚伪审判",
   "item.enigmaticlegacyplus.forbidden_fruit": "禁忌之果",
   "item.enigmaticlegacyplus.forbidden_juice": "禁忌果汁",
   "item.enigmaticlegacyplus.forger_gem": "锻造者的宝石",
@@ -1030,6 +1034,16 @@
   "tooltip.enigmaticlegacy.cursedStone4": "§5与你的任一§6灵魂水晶",
   "tooltip.enigmaticlegacy.cursedStone5": "§5将会被一同永久摧毁",
   "tooltip.enigmaticlegacy.canUndone": "§4此操作无法撤销",
+
+  "tooltip.enigmaticlegacyplus.falseJustice1": "§d扭曲§6第四诅咒：",
+  "tooltip.enigmaticlegacyplus.falseJustice2": "§5- 你造成的伤害全部转为§d真实伤害",
+  "tooltip.enigmaticlegacyplus.falseJustice3": "§d扭曲§6第三诅咒：",
+  "tooltip.enigmaticlegacyplus.falseJustice4": "§5- 你受到的伤害全部转为§d真实伤害",
+  "tooltip.enigmaticlegacyplus.falseJustice5": "§6当携带在物品栏中：",
+  "tooltip.enigmaticlegacyplus.falseJustice6": "§5- §d上述效果仍然生效",
+
+  "tooltip.enigmaticlegacyplus.falseJusticeLore1": "§5在一切归于虚无的混沌中",
+  "tooltip.enigmaticlegacyplus.falseJusticeLore2": "§5以此来向§kthe gods§5展示§kyour power",
 
   "tooltip.enigmaticlegacy.totemofMalice1": "§6当在物品栏或饰品栏内时：",
   "tooltip.enigmaticlegacy.totemofMalice2": "§5对§d灾厄村民§5增加 §6%1$s §5伤害",

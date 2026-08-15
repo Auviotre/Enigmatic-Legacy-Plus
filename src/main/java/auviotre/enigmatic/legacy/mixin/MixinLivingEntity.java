@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.mixin;
 
+import auviotre.enigmatic.legacy.api.damage.FalseJusticeDamage;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.scrolls.CursedScroll;
 import auviotre.enigmatic.legacy.contents.item.spellstones.ForgottenIce;
@@ -41,7 +42,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
-@Mixin(LivingEntity.class)
+@Mixin(value = LivingEntity.class, priority = 3000)
 public abstract class MixinLivingEntity extends Entity implements ILivingEntityExtension {
     @Shadow
     protected ItemStack useItem;
@@ -67,6 +68,19 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntityE
 
     @Shadow
     public abstract float getMaxHealth();
+
+    @Inject(method = "hurt", at = @At("HEAD"))
+    private void falseJustice$hurtHead(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (amount >= Float.MAX_VALUE) return;
+        LivingEntity self = this.self();
+        LivingEntity attacker = source.getEntity() instanceof LivingEntity living ? living : null;
+        if (attacker == null) return;
+
+        ItemStack stack = EnigmaticHandler.getItem(self, EnigmaticItems.FALSE_JUSTICE);
+        if (!stack.isEmpty() && EnigmaticHandler.canUse(self, stack)) {
+            FalseJusticeDamage.from(source).falseJustice$setBypassAll(true);
+        }
+    }
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void tickMix(CallbackInfo info) {

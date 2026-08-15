@@ -1,0 +1,30 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "item": "minecraft:ghast_tear"
+        },
+        "B": {
+            "item": "enigmaticlegacyplus:void_stone"
+        },
+        "C": {
+            "item": "enigmaticlegacyplus:evil_essence"
+        },
+        "D": {
+            "item": "enigmaticlegacyplus:the_bless"
+        },
+        "E": {
+            "item": "enigmaticlegacyplus:twisted_heart"
+        }
+    },
+    "pattern": [
+        "CAC",
+        "EDE",
+        "CBC"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:false_justice"
+    }
+}

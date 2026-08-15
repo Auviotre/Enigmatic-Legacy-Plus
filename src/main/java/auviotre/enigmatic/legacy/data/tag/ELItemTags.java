@@ -30,9 +30,10 @@ public class ELItemTags extends ItemTagsProvider {
                 ENCHANTMENT_TRANSPOSER.get(), CURSE_TRANSPOSER.get(),
                 BLESS_AMPLIFIER.get(), THE_ACKNOWLEDGMENT.get(),
                 THE_TWIST.get(), THE_BLESS.get(),
-                THE_INFINITUM.get(), VOID_TOME.get()
+                THE_INFINITUM.get(), VOID_TOME.get(),
+                FALSE_JUSTICE.get()
         );
-        this.tag(ItemTags.LECTERN_BOOKS).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get());
+        this.tag(ItemTags.LECTERN_BOOKS).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get(), FALSE_JUSTICE.get());
         this.tag(ItemTags.VANISHING_ENCHANTABLE).addTag(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE)
                 .add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get(), SPELLSTONE_SWORD.get(), INFERNAL_CINDER.get(), INFERNAL_SHIELD.get());
         this.tag(ItemTags.DURABILITY_ENCHANTABLE).add(SPELLSTONE_SWORD.get(), INFERNAL_CINDER.get(), INFERNAL_SHIELD.get(), ETHERIUM_HAMMER.get(), DRAGON_BREATH_BOW.get(), MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
@@ -71,7 +72,7 @@ public class ELItemTags extends ItemTagsProvider {
         this.tag(Tags.Items.BUCKETS).add(STARLIGHT_BUCKET.get());
 
         this.tag(EnigmaticTags.Items.ARMOR_CHECK_EXCLUSION).add(Items.ELYTRA, MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
-        this.tag(EnigmaticTags.Items.BYPASS_FOURTH_CURSE).add(THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get());
+        this.tag(EnigmaticTags.Items.BYPASS_FOURTH_CURSE).add(THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get(), FALSE_JUSTICE.get());
         this.tag(EnigmaticTags.Items.SPELLSTONES).addTag(EnigmaticTags.Items.THE_CUBE_MATERIAL)
                 .add(ETHERIUM_CORE.get(), THE_CUBE.get(), CREATION_HEART.get());
         this.tag(EnigmaticTags.Items.THE_CUBE_MATERIAL).add(
