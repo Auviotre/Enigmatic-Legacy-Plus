@@ -1,0 +1,37 @@
+{
+  "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "predicate": {
+        "enigmaticlegacyplus:eldritch_open": 0
+      },
+      "model": "enigmaticlegacyplus:item/annihilating_sword_0"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:eldritch_open": 0.5
+      },
+      "model": "enigmaticlegacyplus:item/annihilating_sword_1"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:eldritch_open": 1
+      },
+      "model": "enigmaticlegacyplus:item/annihilating_sword_2"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:eldritch_open": 1,
+        "blocking": 1
+      },
+      "model": "enigmaticlegacyplus:item/annihilating_sword_blocking"
+    },
+    {
+      "predicate": {
+        "enigmaticlegacyplus:eldritch_open": 1,
+        "charging": 1
+      },
+      "model": "enigmaticlegacyplus:item/annihilating_sword_charging"
+    }
+  ]
+}

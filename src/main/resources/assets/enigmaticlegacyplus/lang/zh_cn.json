@@ -50,6 +50,9 @@
   "advancement.enigmaticlegacy.infernal_spear.title": "灼热打击",
   "advancement.enigmaticlegacy.infernal_spear.desc": "发动狱烈刺矛的穿刺",
 
+  "advancement.enigmaticlegacy.execution_axe.title": "骇人报复",
+  "advancement.enigmaticlegacy.execution_axe.desc": "用行刑者之斧砍下敌人的头颅",
+
   "advancement.enigmaticlegacy.ichor_droplet.title": "金血",
   "advancement.enigmaticlegacy.ichor_droplet.desc": "发现灵液滴",
 
@@ -83,6 +86,12 @@
   "advancement.enigmaticlegacy.twisted_mirror.title": "扭曲之美",
   "advancement.enigmaticlegacy.twisted_mirror.desc": "制作扭曲魔镜",
 
+  "advancement.enigmaticlegacy.infernal_shield.title": "有本事刺穿它啊！",
+  "advancement.enigmaticlegacy.infernal_shield.desc": "锻造赤炎之盾，一个终极防御工具",
+
+  "advancement.enigmaticlegacy.astral_fruit.title": "绝妙的果子",
+  "advancement.enigmaticlegacy.astral_fruit.desc": "在末地城的宝藏中找到天体果实并食用它",
+
   "advancement.enigmaticlegacy.the_twist.title": "命运倒转",
   "advancement.enigmaticlegacy.the_twist.desc": "击杀凋灵并使用邪恶精髓制作倒转之启",
 
@@ -97,6 +106,12 @@
 
   "advancement.enigmaticlegacy.desolation_ring.title": "现实者鄙",
   "advancement.enigmaticlegacy.desolation_ring.desc": "铸造荒芜之负  并将其背负",
+
+  "advancement.enigmaticlegacy.dimness_charm.title": "临渊之曈",
+  "advancement.enigmaticlegacy.dimness_charm.desc": "铸造黯淡之证  得到深渊的认可",
+
+  "advancement.enigmaticlegacy.violence_scroll.title": "残虐天性",
+  "advancement.enigmaticlegacy.violence_scroll.desc": "感受内心最为狂热的愿景  其名为暴戾",
 
   "advancement.enigmaticlegacy.chaos_elytra.title": "傲睨众生",
   "advancement.enigmaticlegacy.chaos_elytra.desc": "带上混沌之傲  于星穹俯视众生",
@@ -118,6 +133,9 @@
 
   "advancement.enigmaticlegacy.redemption_ring.title": "扭转命运",
   "advancement.enigmaticlegacy.redemption_ring.desc": "碎裂七咒之戒  获得救赎",
+
+  "advancement.enigmaticlegacy.forbidden_fruit.title": "原初罪行",
+  "advancement.enigmaticlegacy.forbidden_fruit.desc": "吃下禁忌之果  摆脱饥饿的诅咒",
 
   "advancement.enigmaticlegacy.unholy_grail.title": "不听老人言",
   "advancement.enigmaticlegacy.unholy_grail.desc": "饮用不洁圣杯",
@@ -182,6 +200,8 @@
   "effect.enigmaticlegacyplus.abyss_corruption.desc": "强力的负面效果，会随着死亡蔓延。",
   "effect.enigmaticlegacyplus.blazing_might": "烈焰巨力",
   "effect.enigmaticlegacyplus.blazing_might.desc": "在受到任意伤害后会移除该效果。",
+  "effect.enigmaticlegacyplus.blood_chalice": "血盏",
+  "effect.enigmaticlegacyplus.blood_chalice.desc": "根据效果剩余时间提供伤害提升",
   "effect.enigmaticlegacyplus.ichor_corrosion": "灵液腐蚀",
   "effect.enigmaticlegacyplus.ichor_corrosion.desc": "腐蚀你的防御同时增加你收到的伤害。",
   "effect.enigmaticlegacyplus.ichor_curse": "赎罪之咒",
@@ -220,6 +240,7 @@
   "item.enigmaticlegacyplus.abyssal_heart": "深渊之心",
   "item.enigmaticlegacyplus.angel_blessing": "天使之祝",
   "item.enigmaticlegacyplus.animal_guidebook": "兽友指南",
+  "item.enigmaticlegacyplus.annihilating_sword": "寂灭之决",
   "item.enigmaticlegacyplus.antique_bag": "古旧书袋",
   "item.enigmaticlegacyplus.ascension_amulet": "飞升护符",
   "item.enigmaticlegacyplus.astral_dust": "星尘",
@@ -242,6 +263,7 @@
   "item.enigmaticlegacyplus.cursed_xp_scroll": "无知诅咒卷轴",
   "item.enigmaticlegacyplus.darkest_scroll": "至暗卷轴",
   "item.enigmaticlegacyplus.desolation_ring": "荒芜之负",
+  "item.enigmaticlegacyplus.dimness_charm": "黯淡之证",
   "item.enigmaticlegacyplus.dislocation_ring": "转位之戒",
   "item.enigmaticlegacyplus.divine_fruit_pie": "盘装神谕灵果派",
   "item.enigmaticlegacyplus.dragon_breath_bow": "龙息弓",
@@ -261,6 +283,7 @@
   "item.enigmaticlegacyplus.enigmatic_eye_dormant": "休眠之眼",
   "item.enigmaticlegacyplus.escape_scroll": "死后召回卷轴",
   "item.enigmaticlegacyplus.ethereal_forging_charm": "飘渺锻符",
+  "item.enigmaticlegacyplus.ethereal_forging_charm_active": "星光锻符",
   "item.enigmaticlegacyplus.etherium_boots": "以太靴子",
   "item.enigmaticlegacyplus.etherium_chestplate": "以太胸甲",
   "item.enigmaticlegacyplus.etherium_core": "以太核心",
@@ -282,6 +305,7 @@
   "item.enigmaticlegacyplus.fabulous_scroll": "创造者的恩赐",
   "item.enigmaticlegacyplus.forbidden_fruit": "禁忌之果",
   "item.enigmaticlegacyplus.forbidden_juice": "禁忌果汁",
+  "item.enigmaticlegacyplus.forger_crystal": "无暇锻造之石",
   "item.enigmaticlegacyplus.forger_gem": "锻造者的宝石",
   "item.enigmaticlegacyplus.forgotten_ice": "忘却冰晶",
   "item.enigmaticlegacyplus.golden_ring": "精美戒指",
@@ -302,6 +326,7 @@
   "item.enigmaticlegacyplus.infernal_shield": "烈焰之傲壁垒",
   "item.enigmaticlegacyplus.infernal_spear": "狱烈刺矛",
   "item.enigmaticlegacyplus.infinimeal": "狂野生长精华",
+  "item.enigmaticlegacyplus.insignia": "迷人徽章",
   "item.enigmaticlegacyplus.iron_ring": "铁戒指",
   "item.enigmaticlegacyplus.loot_generator": "战利品一体化盒",
   "item.enigmaticlegacyplus.lore_fragment": "空白设计片段",
@@ -318,11 +343,14 @@
   "item.enigmaticlegacyplus.ode_to_living": "生灵颂词",
   "item.enigmaticlegacyplus.pure_heart": "纯净之心",
   "item.enigmaticlegacyplus.quartz_ring": "魔法石英戒指",
+  "item.enigmaticlegacyplus.quote_player": "呓语播放器",
   "item.enigmaticlegacyplus.raw_etherium": "以太粗矿",
   "item.enigmaticlegacyplus.recall_potion": "召回药水",
+  "item.enigmaticlegacyplus.redemption_amulet": "明耀护符",
   "item.enigmaticlegacyplus.redemption_potion": "救赎药水",
   "item.enigmaticlegacyplus.redemption_ring": "救赎之戒",
   "item.enigmaticlegacyplus.revival_leaf": "复苏之叶",
+  "item.enigmaticlegacyplus.sacred_chalice": "伪圣晶杯",
   "item.enigmaticlegacyplus.sacred_crystal": "神圣灵晶",
   "item.enigmaticlegacyplus.sanguinary_handbook": "血腥狩猎手册",
   "item.enigmaticlegacyplus.scorched_charm": "阳灼护符",
@@ -470,10 +498,9 @@
   "tooltip.enigmaticlegacy.enigmaticAmulet3": "§5而时间会将这些弥留记忆的痕迹",
   "tooltip.enigmaticlegacy.enigmaticAmulet4": "§5一点一点洗刷干净……",
   "tooltip.enigmaticlegacy.enigmaticAmuletShift1": "§5当你装备该物品后死亡",
-  "tooltip.enigmaticlegacy.enigmaticAmuletShift2": "§5它会召唤§6超维容器",
-  "tooltip.enigmaticlegacy.enigmaticAmuletShift3": "§5来保存你的物品",
-  "tooltip.enigmaticlegacy.enigmaticAmuletShift4": "§d灵魂水晶§5和§d经验",
-  "tooltip.enigmaticlegacy.enigmaticAmuletShift5": "§5靠近容器即可找回丢失的东西",
+  "tooltip.enigmaticlegacy.enigmaticAmuletShift2": "§6它会召唤超维容器§5来保存",
+  "tooltip.enigmaticlegacy.enigmaticAmuletShift3": "§5你的物品§d灵魂水晶§5和§d经验",
+  "tooltip.enigmaticlegacy.enigmaticAmuletShift4": "§5靠近容器即可找回丢失的东西",
   "tooltip.enigmaticlegacy.enigmaticAmuletInscription": "§5其上刻蚀着一个名字：§4%1$s",
   "tooltip.enigmaticlegacy.enigmaticAmuletModifierRED": "§6+%1$s §d攻击伤害",
   "tooltip.enigmaticlegacy.enigmaticAmuletModifierAQUA": "§6+%1$s §d冲刺速度",
@@ -534,6 +561,12 @@
 
   "tooltip.enigmaticlegacy.monsterCharmAttribute": "对亡灵生物伤害",
   "tooltip.enigmaticlegacy.monsterCharm": "§5击杀怪物掉落双倍经验",
+
+  "tooltip.enigmaticlegacy.insignia1": "§5在§6铁砧§5重命名以改变你的名字",
+  "tooltip.enigmaticlegacy.insignia2": "§5允许你看见自己的名字",
+  "tooltip.enigmaticlegacy.insignia3": "§5按住§6 Shift 并右击§5以切换模式",
+  "tooltip.enigmaticlegacy.insigniaTagDisplay": "§d仅自己可见：%1$s",
+  "tooltip.enigmaticlegacy.insigniaName": "§d当前蚀刻的名字：%1$s",
 
   "tooltip.enigmaticlegacy.suvivalScroll1": "§5在较高亮度下缓慢恢复生命",
   "tooltip.enigmaticlegacy.suvivalScroll2": "§5当生命值较低时：",
@@ -617,9 +650,9 @@
   "tooltip.enigmaticlegacy.extradimensionalEyePos": "§d 坐标: §5[§6%1$s§5, §6%2$s§5, §6%3$s§5]",
   "tooltip.enigmaticlegacy.extradimensionalEyeDimension": "§d 维度: §6%s",
 
-  "tooltip.enigmaticlegacy.forgerGem1" : "§5减半锻造所需经验",
-  "tooltip.enigmaticlegacy.forgerGem2" : "§5并使你的铁砧更耐用",
-  "tooltip.enigmaticlegacy.forgerGem3" : "§5同时使锻造结果更耐用",
+  "tooltip.enigmaticlegacy.forgerGem1": "§5减半锻造所需经验",
+  "tooltip.enigmaticlegacy.forgerGem2": "§5并使你的铁砧更耐用",
+  "tooltip.enigmaticlegacy.forgerGem3": "§5同时使锻造结果更耐用",
 
   "tooltip.enigmaticlegacy.infinimeal1": "§5作用类似于无限§6骨粉",
   "tooltip.enigmaticlegacy.infinimeal2": "§5可以作用于§6仙人掌§5、",
@@ -665,7 +698,9 @@
   "tooltip.enigmaticlegacy.etheriumDisable": "§5按住 §6Shift§5 以禁用此效果",
   "tooltip.enigmaticlegacy.etheriumDisable2": "§5按下 §6Shift+右键 §5以开关效果",
   "tooltip.enigmaticlegacy.etherealLantern": "§5向周围玩家提供临时护盾",
-  "tooltip.enigmaticlegacy.etherealForgingCharm": "§5极大减缓携带物品的耐久消耗",
+  "tooltip.enigmaticlegacy.etherealForgingCharm1": "§5极大减缓携带物品的耐久消耗",
+  "tooltip.enigmaticlegacy.etherealForgingCharm2": "§5并改善锻造结果的属性",
+  "tooltip.enigmaticlegacy.etherealForgingCharm3": "§5进一步提升该物品效果",
   "tooltip.enigmaticlegacy.etherealForgingCharmBuff": "§d强化：§5提高减少的概率",
 
   "tooltip.enigmaticlegacy.majesticElytra1": "§5滑翔时按住跳跃键以",
@@ -863,7 +898,9 @@
 
   "tooltip.enigmaticlegacy.unholyGrail": "§5最好别用它来喝水...",
 
-  "tooltip.enigmaticlegacy.voidTome" : "§5使用以获得 §6+1 §d奥秘卷轴栏位",
+  "tooltip.enigmaticlegacy.voidTomeUse": "§5使用以获得 §6+1 §d奥秘卷轴栏位",
+  "tooltip.enigmaticlegacy.voidTome1": "§5- 受到§d穿透型§5伤害减少 §6%1$s",
+  "tooltip.enigmaticlegacy.voidTome2": "§5- 有 §6%1$s§5 概率免疫受到的伤害",
 
   "tooltip.enigmaticlegacy.antiqueBag1": "§5类似于§d末影箱§5的容器",
   "tooltip.enigmaticlegacy.antiqueBag2": "§5放入其中的书将会视",
@@ -958,6 +995,7 @@
   "tooltip.enigmaticlegacy.firstCurseAlteration": "§5- §d使§6第一诅咒§d的影响减少 %1$s",
   "tooltip.enigmaticlegacy.secondCurseAlteration1": "§5- §d可驯服动物将对你保持中立",
   "tooltip.enigmaticlegacy.secondCurseAlteration2": "§5- §d中立生物将对你保持中立",
+  "tooltip.enigmaticlegacy.thirdCurseAlteration": "§5- §d使§6第三诅咒§d的影响减少 %1$s",
   "tooltip.enigmaticlegacy.fourthCurseAlteration": "§5- §d总能造成全额的伤害",
   "tooltip.enigmaticlegacy.fourthCurseAlteration2": "§5- §d使§6第四诅咒§d的影响减少 %1$s",
 
@@ -1068,11 +1106,28 @@
   "tooltip.enigmaticlegacy.blessAmplifier2": "§5会将目标物品的附魔升级",
   "tooltip.enigmaticlegacy.blessAmplifier3": "§5能够一定程度上突破等级上限",
 
+  "tooltip.enigmaticlegacy.sacredChalice1": "§5可消耗 §650%§5 生命上限的生命值填满晶杯",
+  "tooltip.enigmaticlegacy.sacredChalice2": "§5同时消耗周围生物的血量提升后续效果",
+  "tooltip.enigmaticlegacy.sacredChalice3": "§5使用后回复所有生命值",
+  "tooltip.enigmaticlegacy.sacredChalice4": "§5并获得§d纯化抗性§5和§d血盏§5效果",
+  "tooltip.enigmaticlegacy.sacredChalice4Alt": "§5并获得强大的§d纯化抗性§5和§d血盏§5效果",
+
+  "tooltip.enigmaticlegacy.forgerCrystal1": "§5锻造时§d不会损坏§5铁砧",
+  "tooltip.enigmaticlegacy.forgerCrystal2": "§5减半锻造所需经验",
+  "tooltip.enigmaticlegacy.forgerCrystal3": "§5可使用无损的相同工具打造§d不可破坏",
+  "tooltip.enigmaticlegacy.forgerCrystal4": "§5不可破坏的工具可被视作§d不死图腾§5使用",
+
   "tooltip.enigmaticlegacy.scorchedCharm1": "§5使佩戴者免疫火焰伤害",
   "tooltip.enigmaticlegacy.scorchedCharm2": "§5并能够行走在岩浆上",
-  "tooltip.enigmaticlegacy.scorchedCharm3": "§5接触岩浆时获得自然恢复效果",
-  "tooltip.enigmaticlegacy.scorchedCharm4": "§5攻击着火目标时触发生命汲取",
+  "tooltip.enigmaticlegacy.scorchedCharm3": "§5接触岩浆时获得§d自然恢复§5效果",
+  "tooltip.enigmaticlegacy.scorchedCharm4": "§5攻击着火目标时触发§d生命汲取",
   "tooltip.enigmaticlegacy.scorchedCharm5": "§6%1$s §5概率抵挡攻击伤害",
+
+  "tooltip.enigmaticlegacy.redemptionAmulet1": "§5攻击蓄力条将会提供减伤效果",
+  "tooltip.enigmaticlegacy.redemptionAmulet2": "§5不会受到来自§d未攻击目标§5的伤害",
+  "tooltip.enigmaticlegacy.redemptionAmuletStat1": "§6+%1$s §d幸运",
+  "tooltip.enigmaticlegacy.redemptionAmuletStat2": "§6+%1$s §d伤害减免",
+  "tooltip.enigmaticlegacy.redemptionAmuletStat3": "§6+%1$s §d盔甲韧性",
 
   "tooltip.enigmaticlegacy.earthPromise1": "§5当受到当前生命值§6 %1$s §5以上的伤害时",
   "tooltip.enigmaticlegacy.earthPromise2": "§5挡下此次攻击并进入§6 %1$s §5秒冷却",
@@ -1118,6 +1173,7 @@
   "tooltip.enigmaticlegacy.abyssalHeart2": "§5未曾有如此存在凝视此世",
   "tooltip.enigmaticlegacy.abyssalHeart3": "§5世界因其视线而战栗",
   "tooltip.enigmaticlegacy.abyssalHeart4": "§5它是活物，它在注视着你",
+  "tooltip.enigmaticlegacy.abyssBoost": "§l§d深渊强化：",
 
   "tooltip.enigmaticlegacy.theInfinitumLore": "§5当你凝视深渊的时候，深渊也在……凝视你。",
   "tooltip.enigmaticlegacy.theInfinitum1": "§6+%1$s §d击退",
@@ -1128,6 +1184,8 @@
   "tooltip.enigmaticlegacy.theInfinitum6": "§5免疫致命伤害",
   "tooltip.enigmaticlegacy.theInfinitumBag1": "§5- §d使§6第四诅咒§d的影响减少§6 %1$s",
   "tooltip.enigmaticlegacy.theInfinitumBag2": "§5- §6+%1$s §d生命汲取",
+  "tooltip.enigmaticlegacy.theInfinitumBoost1": "§5- §d根据目标拥有的§6负面效果§d的",
+  "tooltip.enigmaticlegacy.theInfinitumBoost2": "§d  数量与等级附加§6额外伤害",
 
   "tooltip.enigmaticlegacy.eldritchAmulet1": "§5当装备时死亡将保留你的物品栏",
   "tooltip.enigmaticlegacy.eldritchAmulet2": "§5但§6经验§5与§6灵魂水晶§5仍会失去",
@@ -1136,11 +1194,16 @@
   "tooltip.enigmaticlegacy.eldritchAmulet5": "§d缓慢§5与§d虚弱§5效果的折磨",
   "tooltip.enigmaticlegacy.eldritchAmuletStat1": "§6+%1$s §d攻击伤害",
   "tooltip.enigmaticlegacy.eldritchAmuletStat2": "§6+%1$s §d生命窃取",
+  "tooltip.enigmaticlegacy.eldritchAmuletBoost": "§5- §d对血量低于自己的生物造成的伤害增加 §6%1$s",
+
+  "tooltip.enigmaticlegacy.dimnessCharm1": "§5减少§d深渊物品§5所需的七咒时间占比阈值",
+  "tooltip.enigmaticlegacy.dimnessCharm2": "§5为其他所有§d深渊物品§5提供§d深渊强化",
 
   "tooltip.enigmaticlegacy.desolationRing1": "§5击杀生物将不再掉落物品",
   "tooltip.enigmaticlegacy.desolationRing2": "§6中立生物§5将不会生成在周围",
   "tooltip.enigmaticlegacy.desolationRing3": "§6敌对生物§5将不会以你为目标",
   "tooltip.enigmaticlegacy.desolationRing4": "§5周围的未激怒生物会替你死亡",
+  "tooltip.enigmaticlegacy.desolationRingBoost": "§5- §d对于未激怒生物的首次攻击附加§6处决§d效果",
 
   "tooltip.enigmaticlegacy.violenceScrollLore1": "§5这是一个不可直面的诅咒存在",
   "tooltip.enigmaticlegacy.violenceScrollLore2": "§5无论那些诅咒带来的是幸运、痛苦还是贫困",
@@ -1156,10 +1219,24 @@
   "tooltip.enigmaticlegacy.violenceScroll5": "§5- §6%1$s §d攻击速度",
   "tooltip.enigmaticlegacy.violenceScroll6": "§5- §6%1$s §d实体范围",
   "tooltip.enigmaticlegacy.violenceScroll7": "§5- §6%1$s §d击退抗性",
+  "tooltip.enigmaticlegacy.violenceScrollBoost": "§5- §d攻击后获得一定的§6伤害免疫",
 
   "tooltip.enigmaticlegacy.chaosElytra1": "§5减少 §6%1$s §5来自背后的伤害",
   "tooltip.enigmaticlegacy.chaosElytra2": "§5加速垂直冲向地面时会产生范围伤害",
   "tooltip.enigmaticlegacy.chaosElytra3": "§5空中冲刺也可以撞击目标",
+  "tooltip.enigmaticlegacy.chaosElytraBoost": "§5- §d提升该饰品的各方面能力",
+
+  "tooltip.enigmaticlegacy.annihilatingSword1": "§5攻击目标时累积§d寂灭值",
+  "tooltip.enigmaticlegacy.annihilatingSword2": "§5累积量由§d造成伤害§5与§d目标生命值§5决定",
+  "tooltip.enigmaticlegacy.annihilatingSword3": "§5寂灭值累积到一定时有概率造成§d大量§5伤害",
+  "tooltip.enigmaticlegacy.annihilatingSword4": "§5另一只手为空时：",
+  "tooltip.enigmaticlegacy.annihilatingSword5Main": "§5- 造成的伤害 §6%1$s",
+  "tooltip.enigmaticlegacy.annihilatingSword6Main": "§5- 可以右键消耗§d充能§5蓄力造成更多伤害",
+  "tooltip.enigmaticlegacy.annihilatingSword5Off": "§5- 可以进行§d格挡",
+  "tooltip.enigmaticlegacy.annihilatingSword6Off": "§5- 并在时机恰当时获得§d充能",
+  "tooltip.enigmaticlegacy.annihilatingSword7": "§5当前充能等级：§6%1$s",
+  "tooltip.enigmaticlegacy.annihilatingSword8": "§5- §d充能§5增伤倍率 §6%1$s",
+  "tooltip.enigmaticlegacy.annihilatingSwordBoost": "§5- §d",
 
   "tooltip.enigmaticlegacy.cosmicScroll1": "§5你对未被选召的玩家造成的§d伤害 §6+%1$s§5",
   "tooltip.enigmaticlegacy.cosmicScroll2": "§5而且你的近战伤害可以点燃他们",
@@ -1188,6 +1265,11 @@
   "tooltip.enigmaticlegacy.lootGenerator7": "§5并输出到 §6latest.log§5 文件内。",
   "tooltip.enigmaticlegacy.lootGenerator8": "§5对箱子的侧面按会",
   "tooltip.enigmaticlegacy.lootGenerator9": "§5清空箱子内容物。",
+
+  "tooltip.enigmaticlegacy.quotePlayer1": "§5按住 §6右键§5 播放音频",
+  "tooltip.enigmaticlegacy.quotePlayer2": "§5按住 §6Shift+右键§5 循环播放",
+  "tooltip.enigmaticlegacy.quotePlayer3": "",
+  "tooltip.enigmaticlegacy.quotePlayerSelection": "§d当前播放: §6%1$s",
 
   "message.enigmaticlegacy.networking.failed": "神秘遗物通信失败",
   "message.enigmaticlegacy.command.getcursetime": "%1$s已经承受了 %2$s 游戏刻的七咒，或者说占自来到世界以来 %3$s 的时间",
@@ -1315,6 +1397,8 @@
   "enigmaticlegacyplus.configuration.abyssThreshold.tooltip": "启用深渊物品所需要的时间占比",
   "enigmaticlegacyplus.configuration.forTheWorthy": "怪物强化",
   "enigmaticlegacyplus.configuration.forTheWorthy.tooltip": "加强 The Worthy 玩家所遇到怪物的能力",
+  "enigmaticlegacyplus.configuration.immediatelyCurseBoost": "默认诅咒强化",
+  "enigmaticlegacyplus.configuration.immediatelyCurseBoost.tooltip": "生物生成时是否无视条件获得诅咒强化",
   "enigmaticlegacyplus.configuration.giveStarterGear": "给予初始物品",
   "enigmaticlegacyplus.configuration.giveStarterGear.tooltip": "若启用，模组将在首次登录时给予初始物品",
   "enigmaticlegacyplus.configuration.neutralWhiteList": "中立激怒白名单",
@@ -1412,6 +1496,8 @@
   "enigmaticlegacyplus.configuration.OffsetYCreative": "磁力按钮Y轴偏移",
   "enigmaticlegacyplus.configuration.quoteSubtitles": "展示莫测之眼的引言",
   "enigmaticlegacyplus.configuration.deathQuoteChance": "死亡触发引言的概率",
+  "enigmaticlegacyplus.configuration.specialVisualEffects": "特殊视觉效果",
+  "enigmaticlegacyplus.configuration.specialVisualEffects.tooltip": "部分深渊物品的视觉效果",
 
   "quote.no_peril_1": "倘若过程中没有曲折艰辛，那也就无法成就最终的荣耀",
   "quote.end_doorstep_1": "终末之地的门户已经打开…只差迈出最后一步了",

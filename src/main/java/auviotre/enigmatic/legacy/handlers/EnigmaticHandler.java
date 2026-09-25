@@ -5,6 +5,7 @@ import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.event.LivingCurseBoostEvent;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.effect.BlazingMight;
+import auviotre.enigmatic.legacy.contents.item.charms.DimnessCharm;
 import auviotre.enigmatic.legacy.contents.item.legacy.AntiqueBag;
 import auviotre.enigmatic.legacy.contents.item.materials.AbyssalHeart;
 import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
@@ -96,6 +97,7 @@ public interface EnigmaticHandler {
 
     static boolean canUse(LivingEntity entity, ItemStack stack) {
         if (stack.is(EnigmaticItems.CURSED_RING) || stack.is(EnigmaticItems.REDEMPTION_RING)) return true;
+        if (stack.is(EnigmaticItems.DIMNESS_CHARM)) return DimnessCharm.canEquip(entity);
         if (isEldritchItem(stack)) return isTheWorthyOne(entity) && CursedRing.uniqueLegacy.get();
         if (isCursedItem(stack)) {
             if (isTheCursedOne(entity) && CursedRing.uniqueLegacy.get()) return true;
@@ -124,11 +126,17 @@ public interface EnigmaticHandler {
     }
 
     static boolean isTheWorthyOne(LivingEntity entity) {
-        return isTheCursedOne(entity) && getSufferingFraction(entity) >= AbyssalHeart.abyssThreshold.get();
+        double threshold = AbyssalHeart.abyssThreshold.get();
+        if (!getCurio(entity, EnigmaticItems.DIMNESS_CHARM).isEmpty()) threshold = 2 * threshold - 1;
+        return isTheCursedOne(entity) && getSufferingFraction(entity) >= Math.clamp(threshold, 0.05, 0.999);
     }
 
     static boolean isEldritchItem(@NotNull ItemStack stack) {
         return !stack.isEmpty() && stack.has(EnigmaticComponents.ELDRITCH) && stack.getOrDefault(EnigmaticComponents.ELDRITCH, false);
+    }
+
+    static boolean isAbyssBoosted(LivingEntity entity) {
+        return hasCurio(entity, EnigmaticItems.DIMNESS_CHARM);
     }
 
     static boolean isTheOne(LivingEntity entity) {

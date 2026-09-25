@@ -138,17 +138,17 @@ public class XpScroll extends BaseCurioItem {
                 player.giveExperiencePoints(-take);
                 long stored = stack.getOrDefault(EnigmaticComponents.XP_SCROLL_STORED, 0L);
                 stored += take;
-                stack.set(EnigmaticComponents.XP_SCROLL_STORED, stored);
+                stack.set(EnigmaticComponents.XP_SCROLL_STORED, Math.clamp(stored, 0, Long.MAX_VALUE));
             }
         } else {
             long stored = stack.getOrDefault(EnigmaticComponents.XP_SCROLL_STORED, 0L);
             int needed = forNextLevel / 3;
             if (stored >= needed) {
-                stack.set(EnigmaticComponents.XP_SCROLL_STORED, stored - needed);
+                stack.set(EnigmaticComponents.XP_SCROLL_STORED, Math.clamp(stored - needed, 0, Long.MAX_VALUE));
                 player.giveExperiencePoints(needed);
             } else if (stored > 0) {
                 int take = (int) Math.max(1, stored / 2);
-                stack.set(EnigmaticComponents.XP_SCROLL_STORED, stored - take);
+                stack.set(EnigmaticComponents.XP_SCROLL_STORED, Math.clamp(stored - take, 0, Long.MAX_VALUE));
                 player.giveExperiencePoints(take);
             }
         }

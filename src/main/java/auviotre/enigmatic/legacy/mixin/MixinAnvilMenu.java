@@ -36,7 +36,7 @@ public abstract class MixinAnvilMenu extends ItemCombinerMenu {
 
     @Inject(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/AnvilMenu;broadcastChanges()V"))
     public void createResultMix(CallbackInfo ci) {
-        if (EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_GEM)) {
+        if (EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_GEM) || EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_CRYSTAL)) {
             int xp = 0;
             for (int i = 1; i < this.cost.get(); i++) xp += getXp(i);
             this.cost.set(Math.max(1, getExpLevel(xp / 2)));
@@ -45,7 +45,9 @@ public abstract class MixinAnvilMenu extends ItemCombinerMenu {
 
     @Inject(method = "createResult", at = @At("TAIL"))
     public void createResultLast(CallbackInfo ci) {
-        if (EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_GEM) && EnigmaticHandler.isTheOne(player)) {
+        if (EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_CRYSTAL)) {
+
+        } else if (EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_GEM) && EnigmaticHandler.isTheOne(player)) {
             ItemStack result = this.resultSlots.getItem(0);
             if (!result.isEmpty() && result.has(DataComponents.MAX_DAMAGE)) {
                 Integer i = result.get(DataComponents.MAX_DAMAGE);
@@ -66,9 +68,11 @@ public abstract class MixinAnvilMenu extends ItemCombinerMenu {
             }
         }
 
-        if (EnigmaticHandler.hasCurio(player, EnigmaticItems.ETHEREAL_FORGING_CHARM)) {
+        ItemStack curio = EnigmaticHandler.getCurio(player, EnigmaticItems.ETHEREAL_FORGING_CHARM);
+        if (!curio.isEmpty()) {
             ItemStack result = this.resultSlots.getItem(0);
             if (!result.isEmpty() && !result.getOrDefault(EnigmaticComponents.ETHEREAL_FORGED, false)) {
+                boolean active = curio.getOrDefault(EnigmaticComponents.BOOLEAN, false);
                 if (result.has(DataComponents.ATTRIBUTE_MODIFIERS)) {
                     ItemAttributeModifiers attributes = result.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
@@ -76,12 +80,12 @@ public abstract class MixinAnvilMenu extends ItemCombinerMenu {
                     for (ItemAttributeModifiers.Entry entry : modifiers) {
                         Holder<Attribute> attribute = entry.attribute();
                         AttributeModifier modifier = entry.modifier();
-                        AttributeModifier.Operation operation = modifier.operation();
                         if (attribute == Attributes.ATTACK_DAMAGE) {
-                            double amount = modifier.amount();
-                            if (operation.id() == 0 && amount > 0) amount += 1;
-                            if (operation.id() != 0 && amount > 0) amount += 0.05;
-                            modifier = new AttributeModifier(modifier.id(), amount, operation);
+                            modifier = modify(modifier, active ? 1.0 : 0.5, active ? 0.08 : 0.05);
+                        } else if (attribute == Attributes.ARMOR) {
+                            modifier = modify(modifier, active ? 1.0 : 0.5, active ? 0.08 : 0.05);
+                        } else if (attribute == Attributes.ARMOR_TOUGHNESS) {
+                            modifier = modify(modifier, active ? 0.1 : 0.05, active ? 0.16 : 0.1);
                         }
                         builder.add(attribute, modifier, entry.slot());
                     }
@@ -91,6 +95,15 @@ public abstract class MixinAnvilMenu extends ItemCombinerMenu {
                 }
             }
         }
+    }
+
+    private AttributeModifier modify(AttributeModifier modifier, double add, double mul) {
+        double amount = modifier.amount();
+        AttributeModifier.Operation operation = modifier.operation();
+        if (operation.id() == 0 && amount > 0) amount += 0.5;
+        if (operation.id() != 0 && amount > 0) amount += 0.05;
+        modifier = new AttributeModifier(modifier.id(), amount, operation);
+        return modifier;
     }
 
     private int getXp(int level) {

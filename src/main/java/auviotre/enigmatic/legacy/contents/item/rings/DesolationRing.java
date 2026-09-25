@@ -6,11 +6,14 @@ import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.packets.client.ChaosDescendingPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -30,11 +33,9 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
-import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
+import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -67,6 +68,11 @@ public class DesolationRing extends BaseCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing3");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing4");
+            if (EnigmaticHandler.isAbyssBoosted(Minecraft.getInstance().player)) {
+                TooltipHandler.line(list);
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.abyssBoost");
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRingBoost");
+            }
         } else TooltipHandler.holdShift(list);
         TooltipHandler.line(list);
         TooltipHandler.worthyOnly(list, stack);
@@ -98,6 +104,9 @@ public class DesolationRing extends BaseCurioItem {
         }
     }
 
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return oldStack.getItem() != newStack.getItem();
+    }
 
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
@@ -113,8 +122,7 @@ public class DesolationRing extends BaseCurioItem {
             }
             if (event.getEntity() instanceof ItemEntity itemEntity) {
                 if (BOXES.values().stream().anyMatch(itemEntity.getBoundingBox()::intersects)) {
-                    itemEntity.tick();
-                    itemEntity.tick();
+                    itemEntity.age += 2;
                 }
             }
         }
@@ -180,6 +188,22 @@ public class DesolationRing extends BaseCurioItem {
                         player.getCooldowns().addCooldown(EnigmaticItems.DESOLATION_RING.get(), cooldown.get());
                     entity.setHealth(Math.max(health * 2, entity.getHealth() + 1));
                     event.setCanceled(true);
+                }
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.HIGHEST)
+        private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
+            if (event.getSource().getEntity() instanceof LivingEntity attacker && event.getEntity() instanceof Mob entity) {
+                if (EnigmaticHandler.isAbyssBoosted(attacker) && EnigmaticHandler.hasCurio(attacker, EnigmaticItems.DESOLATION_RING)) {
+                    if (entity.getTarget() == null && entity.getLastHurtByMob() == null && !entity.getPersistentData().getBoolean("DesolationExecution")) {
+                        entity.getPersistentData().putBoolean("DesolationExecution", true);
+                        entity.setHealth(Math.max(1.0F, entity.getHealth() - entity.getMaxHealth() * 0.2F));
+                        entity.addEffect(new MobEffectInstance(EnigmaticEffects.ABYSS_CORRUPTION, 400, 1));
+                        if (attacker.level() instanceof ServerLevel level)
+                            PacketDistributor.sendToPlayersNear(level, null, entity.getX(), entity.getY(), entity.getZ(), 24, new ChaosDescendingPacket(entity.position(), true));
+                        event.setAmount(event.getAmount() + entity.getMaxHealth() * 0.3F);
+                    }
                 }
             }
         }

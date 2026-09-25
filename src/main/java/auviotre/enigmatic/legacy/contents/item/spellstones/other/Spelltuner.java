@@ -130,6 +130,9 @@ public class Spelltuner extends BaseCurioItem {
                 entity.heal(Math.max(0.4F, entity.getMaxHealth() / 125.0F));
             }
         }
+        if (hasTune(entity, EnigmaticItems.OCEAN_STONE) && entity.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value())) {
+            entity.setAirSupply(entity.getMaxAirSupply());
+        }
     }
 
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {

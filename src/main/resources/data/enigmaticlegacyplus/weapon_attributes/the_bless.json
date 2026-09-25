@@ -1,0 +1,10 @@
+{
+  "parent": "bettercombat:mace",
+  "attributes": {
+    "attacks": [
+      { "swing_sound": { "id": "bettercombat:axe_slash" } },
+      { "swing_sound": { "id": "bettercombat:axe_slash" } },
+      { "swing_sound": { "id": "minecraft:block.respawn_anchor.charge" } }
+    ]
+  }
+}

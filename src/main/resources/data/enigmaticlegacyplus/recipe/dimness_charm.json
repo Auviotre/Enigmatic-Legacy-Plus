@@ -1,0 +1,33 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "E": {
+            "item": "enigmaticlegacyplus:evil_essence"
+        },
+        "I": {
+            "item": "minecraft:iron_ingot"
+        },
+        "N": {
+            "item": "minecraft:netherite_ingot"
+        },
+        "T": {
+            "item": "enigmaticlegacyplus:twisted_heart"
+        },
+        "V": {
+            "item": "enigmaticlegacyplus:enigmatic_eye"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:abyssal_heart"
+        }
+    },
+    "pattern": [
+        "NTN",
+        "IXI",
+        "EVE"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:dimness_charm"
+    }
+}

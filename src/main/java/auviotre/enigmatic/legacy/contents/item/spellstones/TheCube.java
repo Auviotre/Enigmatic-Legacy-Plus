@@ -71,9 +71,13 @@ import java.util.concurrent.Future;
 public class TheCube extends SpellstoneItem {
     private static final List<ResourceKey<Level>> WORLDS = ImmutableList.of(Level.OVERWORLD, Level.NETHER, Level.END);
     private static final Map<ServerPlayer, Future<Optional<GlobalPos>>> LOCATION_CACHE = new WeakHashMap<>();
-    private final ExecutorService executor = Executors.newCachedThreadPool();
     public static ModConfigSpec.BooleanValue autoTrigger;
     public static ModConfigSpec.DoubleValue damageLimit;
+    private final ExecutorService executor = Executors.newCachedThreadPool();
+
+    public TheCube() {
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC), -1);
+    }
 
     @SubscribeConfig
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
@@ -81,10 +85,6 @@ public class TheCube extends SpellstoneItem {
         damageLimit = builder.defineInRange("damageLimit", 100.0, 0, 1000.0);
         autoTrigger = builder.define("autoTrigger", true);
         builder.pop(2);
-    }
-
-    public TheCube() {
-        super(IItemHelper.singleProperties().rarity(Rarity.EPIC), -1);
     }
 
     public static float getDamageLimit(LivingEntity entity) {

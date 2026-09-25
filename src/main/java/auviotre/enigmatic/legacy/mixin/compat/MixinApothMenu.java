@@ -30,7 +30,6 @@ import java.util.List;
 @Pseudo
 @Mixin(targets = "dev.shadowsoffire.apothic_enchanting.table.ApothEnchantmentMenu")
 public abstract class MixinApothMenu extends EnchantmentMenu {
-
     @Shadow
     protected EnchantmentTableStats stats;
 

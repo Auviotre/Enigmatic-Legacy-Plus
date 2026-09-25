@@ -31,7 +31,7 @@ public class AbyssCorruption extends MobEffect {
 
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         entity.hurt(EnigmaticDamageTypes.source(entity.level(), EnigmaticDamageTypes.ABYSS), 2.0F * (float) Math.pow(2, (double) amplifier / 2));
-        entity.invulnerableTime = 0;
+//        entity.invulnerableTime = 1;
         return true;
     }
 

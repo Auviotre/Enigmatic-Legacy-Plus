@@ -80,7 +80,7 @@ public class EtheriumCore extends SpellstoneItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstonePassive");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore1", ChatFormatting.GOLD, boost ? "+12" : "+10", boost ? "+10" : "+8");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore1", ChatFormatting.GOLD, "+20%", "+40%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore2", ChatFormatting.GOLD,  boost ? "+80%" : "+50%");
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore2", ChatFormatting.GOLD, boost ? "+80%" : "+50%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore3", ChatFormatting.GOLD, String.format("%d%%", (int) ((boost ? 1.25 : 1) * etheriumThresholdModifier.get())));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore4", ChatFormatting.GOLD, ((boost ? 10 : 0) + damageConversion.get()) + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore5");
@@ -98,7 +98,7 @@ public class EtheriumCore extends SpellstoneItem {
         builder.put(Attributes.ARMOR, new AttributeModifier(EnigmaticLegacy.location("etherium_core_buff"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(EnigmaticLegacy.location("etherium_core_buff"), 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(location, boost ? 0.8 : 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        builder.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(location,  (boost ? 0.0125F : 0.01F) * etheriumThresholdModifier.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        builder.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(location, (boost ? 0.0125F : 0.01F) * etheriumThresholdModifier.get(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         return builder.build();
     }
 

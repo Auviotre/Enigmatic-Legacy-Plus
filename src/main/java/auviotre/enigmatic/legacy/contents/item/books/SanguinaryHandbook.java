@@ -76,7 +76,7 @@ public class SanguinaryHandbook extends BaseCursedItem {
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
         @SubscribeEvent
-        private static void onFindTarget(EntityTickEvent.@NotNull Pre event) {
+        private static void onTick(EntityTickEvent.@NotNull Pre event) {
             if (event.getEntity() instanceof LivingEntity entity) {
                 if (entity instanceof OwnableEntity pet && !(entity instanceof TamableAnimal tamable && !tamable.isTame())) {
                     LivingEntity owner = pet.getOwner();

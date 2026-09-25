@@ -1,0 +1,29 @@
+{
+    "parent": "enigmaticlegacyplus:main/root",
+    "criteria": {
+        "consume_fruit": {
+            "conditions": {
+                "trigger_id": 9
+            },
+            "trigger": "enigmaticlegacyplus:enigmatic"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.forbidden_fruit.desc"
+        },
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:forbidden_fruit"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.forbidden_fruit.title"
+        }
+    },
+    "requirements": [
+        [
+            "consume_fruit"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

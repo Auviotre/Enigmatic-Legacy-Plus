@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.mixin;
 
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEnchantments;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticPotions;
@@ -37,9 +38,10 @@ public abstract class MixinItemStack implements DataComponentHolder {
     public void breakMix(int amount, ServerLevel level, @Nullable LivingEntity user, Consumer<Item> consumer, CallbackInfo info) {
         ItemStack curio = EnigmaticHandler.getCurio(user, EnigmaticItems.ETHEREAL_FORGING_CHARM);
         if (!curio.isEmpty() && user != null) {
-            double prob = 0.05;
+            boolean active = curio.getOrDefault(EnigmaticComponents.BOOLEAN, false);
+            double prob = active ? 0.1 : 0.16;
             var holder = EnigmaticHandler.get(user.level(), Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
-            if (curio.getEnchantmentLevel(holder) > 0) prob = 0.03;
+            if (curio.getEnchantmentLevel(holder) > 0) prob *= 0.6;
             if (user.getRandom().nextFloat() > prob) info.cancel();
         }
     }

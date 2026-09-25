@@ -40,15 +40,17 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ScorchedCharm extends CursedCurioItem {
     public static ModConfigSpec.IntValue lavaHealAmount;
     public static ModConfigSpec.IntValue lifestealModifier;
     public static ModConfigSpec.IntValue resistanceProbability;
+    public static final List<LivingEntity> EQUIP_LIST = new ArrayList<>();
 
     public ScorchedCharm() {
-        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.UNCOMMON), true);
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE), true);
     }
 
     @SubscribeConfig
@@ -78,10 +80,11 @@ public class ScorchedCharm extends CursedCurioItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
-        LivingEntity entity = slotContext.entity();
+    public void curioTick(SlotContext context, ItemStack stack) {
+        LivingEntity entity = context.entity();
         if (entity.isOnFire()) entity.clearFire();
         if (entity.isInLava()) {
+            EQUIP_LIST.add(entity);
             if (entity.tickCount % 20 == 0) entity.heal((float) lavaHealAmount.get());
             if (entity instanceof Player player && !player.isAffectedByFluids()) return;
             CollisionContext collisionContext = CollisionContext.of(entity);
@@ -90,7 +93,11 @@ public class ScorchedCharm extends CursedCurioItem {
             } else {
                 entity.setDeltaMovement(entity.getDeltaMovement().add(0.0, entity.isCrouching() ? -0.01 : 0.07, 0.0));
             }
-        }
+        } else EQUIP_LIST.remove(context.entity());
+    }
+
+    public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
+        EQUIP_LIST.remove(context.entity());
     }
 
     @Mod(value = EnigmaticLegacy.MODID)

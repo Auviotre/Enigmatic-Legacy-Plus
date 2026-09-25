@@ -32,6 +32,7 @@ public class EnigmaticEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<StarlightMeteor>> STARLIGHT_METEOR = register("starlight_meteor", EntityType.Builder.of(StarlightMeteor::new, MobCategory.MISC).sized(0.4F, 0.4F).eyeHeight(0.1F).clientTrackingRange(64).updateInterval(20).fireImmune());
     public static final DeferredHolder<EntityType<?>, EntityType<ThrownIchorSpear>> THROWN_ICHOR_SPEAR = register("ichor_spear", EntityType.Builder.<ThrownIchorSpear>of(ThrownIchorSpear::new, MobCategory.MISC).sized(0.35F, 0.35F).clientTrackingRange(4).setUpdateInterval(20));
     public static final DeferredHolder<EntityType<?>, EntityType<UltimateWitherSkull>> ULTIMATE_WITHER_SKULL = register("ultimate_wither_skull", EntityType.Builder.<UltimateWitherSkull>of(UltimateWitherSkull::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(64));
+    public static final DeferredHolder<EntityType<?>, EntityType<AbyssProjectile>> ABYSS_PROJECTILE = register("abyss_projectile", EntityType.Builder.<AbyssProjectile>of(AbyssProjectile::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(64).updateInterval(1).fireImmune());
 
     public static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> register(String name, EntityType.Builder<T> builder) {
         return ENTITY_TYPES.register(name, () -> builder.build(EnigmaticLegacy.MODID + ":" + name));

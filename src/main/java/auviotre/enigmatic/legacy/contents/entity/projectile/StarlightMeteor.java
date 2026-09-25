@@ -35,7 +35,7 @@ public class StarlightMeteor extends ThrowableItemProjectile {
     public void handleEntityEvent(byte id) {
         if (id == 3) {
             double d0 = 0.2;
-            for(int i = 0; i < 6; ++i) {
+            for (int i = 0; i < 6; ++i) {
                 this.level().addParticle(EnigmaticParticles.BLUE_STAR_DUST.get(), this.getX(), this.getY(), this.getZ(), (this.random.nextFloat() - 0.5F) * d0, (this.random.nextFloat() - 0.5F) * d0, (this.random.nextFloat() - 0.5F) * d0);
                 this.level().addParticle(ParticleTypes.END_ROD, this.getX(), this.getY(), this.getZ(), (this.random.nextFloat() - 0.5F) * d0, (this.random.nextFloat() - 0.5F) * d0, (this.random.nextFloat() - 0.5F) * d0);
             }

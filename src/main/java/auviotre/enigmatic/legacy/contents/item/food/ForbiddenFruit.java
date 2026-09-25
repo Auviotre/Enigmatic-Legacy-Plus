@@ -6,9 +6,11 @@ import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
+import auviotre.enigmatic.legacy.registries.EnigmaticTriggers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -70,6 +72,7 @@ public class ForbiddenFruit extends BaseItem {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         EnigmaticData data = entity.getData(EnigmaticAttachments.ENIGMATIC_DATA);
         data.setForbiddenCursed(true);
+        if (entity instanceof ServerPlayer serverPlayer) EnigmaticTriggers.ENIGMATIC_TRIGGER.get().trigger(serverPlayer, 9);
         return super.finishUsingItem(stack, level, entity);
     }
 

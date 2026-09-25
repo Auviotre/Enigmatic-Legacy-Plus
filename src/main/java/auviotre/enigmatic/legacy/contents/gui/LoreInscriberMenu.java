@@ -88,12 +88,7 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
     public void slotsChanged(Container container) {
         super.slotsChanged(container);
         if (container == this.loreSlot) this.createResult();
-    }    private final Container loreSlot = new SimpleContainer(1) {
-        public void setChanged() {
-            super.setChanged();
-            LoreInscriberMenu.this.slotsChanged(this);
-        }
-    };
+    }
 
     public boolean createResult() {
         ItemStack input = this.loreSlot.getItem(0);
@@ -117,7 +112,12 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
             this.broadcastChanges();
             return !output.isEmpty();
         }
-    }
+    }    private final Container loreSlot = new SimpleContainer(1) {
+        public void setChanged() {
+            super.setChanged();
+            LoreInscriberMenu.this.slotsChanged(this);
+        }
+    };
 
     public boolean setItemName(String name) {
         this.unParsedInputField = name;

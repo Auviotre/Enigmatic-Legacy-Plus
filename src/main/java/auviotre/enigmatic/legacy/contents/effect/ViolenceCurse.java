@@ -23,6 +23,7 @@ public class ViolenceCurse extends MobEffect {
     public ViolenceCurse() {
         super(MobEffectCategory.NEUTRAL, 0x392E4D);
         ResourceLocation location = EnigmaticLegacy.location("effect.violence_curse");
+        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, location, 0.5, AttributeModifier.Operation.ADD_VALUE);
         this.addAttributeModifier(Attributes.ATTACK_SPEED, location, 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         NeoForge.EVENT_BUS.register(this);
     }

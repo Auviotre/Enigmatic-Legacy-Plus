@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "E": {
+            "item": "minecraft:emerald"
+        },
+        "G": {
+            "item": "minecraft:gold_ingot"
+        },
+        "N": {
+            "item": "minecraft:name_tag"
+        },
+        "P": {
+            "item": "minecraft:prismarine_crystals"
+        },
+        "R": {
+            "item": "minecraft:ender_eye"
+        }
+    },
+    "pattern": [
+        " R ",
+        "GEG",
+        "PNP"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:insignia"
+    }
+}

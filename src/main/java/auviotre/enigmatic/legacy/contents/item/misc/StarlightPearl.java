@@ -29,7 +29,7 @@ public class StarlightPearl extends Item {
     public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction action, Player player) {
         if (action != ClickAction.PRIMARY && slot.mayPlace(stack) && slot.mayPickup(player) && slot.hasItem()) {
             ItemStack other = slot.getItem();
-            if (other.is(EnigmaticItems.ETHERIUM_CORE)) {
+            if (other.is(EnigmaticItems.ETHERIUM_CORE) || other.is(EnigmaticItems.ETHEREAL_FORGING_CHARM)) {
                 boolean boost = other.getOrDefault(EnigmaticComponents.BOOLEAN, false);
                 if (!boost) {
                     other.set(EnigmaticComponents.BOOLEAN, true);

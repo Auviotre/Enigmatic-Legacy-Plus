@@ -1,0 +1,27 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "E": {
+            "item": "minecraft:gold_ingot"
+        },
+        "P": {
+            "item": "minecraft:totem_of_undying"
+        },
+        "Q": {
+            "item": "enigmaticlegacyplus:sacred_crystal"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:forger_gem"
+        }
+    },
+    "pattern": [
+        " Q ",
+        "QXQ",
+        "EPE"
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:forger_crystal"
+    }
+}

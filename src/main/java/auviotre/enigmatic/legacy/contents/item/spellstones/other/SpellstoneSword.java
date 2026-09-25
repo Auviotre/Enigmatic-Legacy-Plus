@@ -150,7 +150,7 @@ public class SpellstoneSword extends Item {
                 angelBeam.setOwner(shooter);
             }
             if (level.isClientSide()) {
-                Vec3 pos = new Vec3(shooter.getX(),  shooter.getY(0.5), shooter.getZ());
+                Vec3 pos = new Vec3(shooter.getX(), shooter.getY(0.5), shooter.getZ());
                 for (double j = 0; j < 48; j++) {
                     Vec3 forward = shooter.getLookAngle().scale(0.8).add(random.nextFloat() * 0.8F - 0.4F, random.nextFloat() * 0.4F - 0.2F, random.nextFloat() * 0.8F - 0.4F).scale(0.6);
                     level.addParticle(ParticleTypes.END_ROD, pos.x, pos.y, pos.z, forward.x, forward.y, forward.z);
@@ -365,15 +365,15 @@ public class SpellstoneSword extends Item {
                     if (stack.getOrDefault(INT, 0) > 0) return ItemUtils.startUsingInstantly(level, player, hand);
                     break;
                 case 3:
-                    if (player.isInWaterRainOrBubble() || stack.getOrDefault(INT, 0) > 7) return ItemUtils.startUsingInstantly(level, player, hand);
+                    if (player.isInWaterRainOrBubble() || stack.getOrDefault(INT, 0) > 7)
+                        return ItemUtils.startUsingInstantly(level, player, hand);
                     break;
                 case 6, 8:
                     i = stack.getOrDefault(INT, 0);
-                    if (i > 0)  {
+                    if (i > 0) {
                         if (form == 6) shoot(level, player, stack);
                         if (form == 8) soulFire(level, player, stack, hand);
-                    }
-                    else player.startUsingItem(hand);
+                    } else player.startUsingItem(hand);
                     return InteractionResultHolder.consume(stack);
                 case 7:
                     return handleHook(level, player, stack, hand);
@@ -443,6 +443,7 @@ public class SpellstoneSword extends Item {
                             return EnigmaticItems.THE_JUDGEMENT.toStack();
                         stack.set(DataComponents.RARITY, Rarity.EPIC);
                         stack.set(EnigmaticComponents.SPELL_RESONANCE, Resonance.of(itemInHand.copy()));
+                        stack.set(EnigmaticComponents.INT, 0);
                     }
             }
         }
@@ -453,9 +454,10 @@ public class SpellstoneSword extends Item {
         InteractionHand hand = user.getUsedItemHand();
         int tick = stack.getUseDuration(user) - remainingDuration;
         if (hand == InteractionHand.MAIN_HAND && stack.is(this)) {
+            if (user.getOffhandItem().is(EnigmaticItems.SPELLCORE)) return;
             int energy = stack.getOrDefault(INT, 0);
             int sLevel = stack.getOrDefault(SPELL_LEVEL, 0);
-            if (isResonatingWith(stack, EnigmaticItems.BLAZING_CORE)) {
+            if (isResonatingWith(stack, EnigmaticItems.BLAZING_CORE) && energy > 0) {
                 if (level instanceof ServerLevel serverLevel)
                     PacketDistributor.sendToPlayersNear(serverLevel, null, user.getX(), user.getY(), user.getZ(), 32, new SpellstoneSwordPacket(user.getEyePosition(), user.getLookAngle(), 22));
                 if (user.tickCount % 5 == 0) {
@@ -473,19 +475,23 @@ public class SpellstoneSword extends Item {
             } else if (isResonatingWith(stack, EnigmaticItems.OCEAN_STONE) && tick == 20 - sLevel) {
                 user.playSound(EnigmaticSounds.CHARGED_ON.get(), 1.0F, 0.9F + 0.1F * user.getRandom().nextFloat());
             } else if (isResonatingWith(stack, EnigmaticItems.ANGEL_BLESSING)) {
-                if (tick == 12) level.playSound(null, user.blockPosition(), EnigmaticSounds.CHARGED_ON.get(), SoundSource.PLAYERS, 0.6F, 0.4F);
-                else if (tick == 24) level.playSound(null, user.blockPosition(), EnigmaticSounds.CHARGED_ON.get(), SoundSource.PLAYERS, 0.6F, 0.8F);
+                if (tick == 12)
+                    level.playSound(null, user.blockPosition(), EnigmaticSounds.CHARGED_ON.get(), SoundSource.PLAYERS, 0.6F, 0.4F);
+                else if (tick == 24)
+                    level.playSound(null, user.blockPosition(), EnigmaticSounds.CHARGED_ON.get(), SoundSource.PLAYERS, 0.6F, 0.8F);
             } else if (isResonatingWith(stack, EnigmaticItems.LOST_ENGINE)) {
                 UUID uuid = user.getData(EnigmaticAttachments.ENIGMATIC_DATA).getEngineHook();
                 if (uuid == null) {
                     user.getData(EnigmaticAttachments.ENIGMATIC_DATA).setEngineHook(null);
                     return;
                 }
-                if (user.tickCount % 3 == 0) user.playSound(SoundEvents.CHAIN_PLACE, 0.8F, 0.9F + 0.3F * user.getRandom().nextFloat());
+                if (user.tickCount % 3 == 0)
+                    user.playSound(SoundEvents.CHAIN_PLACE, 0.8F, 0.9F + 0.3F * user.getRandom().nextFloat());
                 if (level instanceof ServerLevel server && server.getEntity(uuid) instanceof EngineHook hook) {
                     if (hook.getCurrentState() == EngineHook.State.HOOKED_IN_BLOCK) hook.pull();
                     else hook.drag();
-                    if (stack.getOrDefault(SPELL_LEVEL, 0) > 4) stack.set(INT, Math.min(getMaxEnergy(stack), energy + 1));
+                    if (stack.getOrDefault(SPELL_LEVEL, 0) > 4)
+                        stack.set(INT, Math.min(getMaxEnergy(stack), energy + 1));
                 }
             } else if (isResonatingWith(stack, EnigmaticItems.EYE_OF_NEBULA) && tick == 32) {
                 user.playSound(EnigmaticSounds.CHARGED_ON.get(), 1.0F, 0.9F + 0.1F * user.getRandom().nextFloat());
@@ -526,7 +532,8 @@ public class SpellstoneSword extends Item {
             } else if (isResonatingWith(stack, EnigmaticItems.LOST_ENGINE)) {
                 UUID uuid = user.getData(EnigmaticAttachments.ENIGMATIC_DATA).getEngineHook();
                 if (uuid != null) {
-                    if (level instanceof ServerLevel server && server.getEntity(uuid) instanceof EngineHook hook) hook.discard();
+                    if (level instanceof ServerLevel server && server.getEntity(uuid) instanceof EngineHook hook)
+                        hook.discard();
                     user.swing(InteractionHand.MAIN_HAND);
                 } else user.getData(EnigmaticAttachments.ENIGMATIC_DATA).setEngineHook(null);
                 user.playSound(SoundEvents.CHAIN_BREAK, 1.0F, 0.2F);
@@ -541,7 +548,8 @@ public class SpellstoneSword extends Item {
                     double value = user.getAttributeValue(Attributes.ATTACK_DAMAGE);
                     if (sLevel > 4)
                         entity.hurt(EnigmaticDamageTypes.source(user.level(), DamageTypes.MAGIC, user), (float) (value * (1.2F + position.distanceTo(vec3) * 0.02F)));
-                    else entity.hurt(EnigmaticDamageTypes.source(user.level(), DamageTypes.MAGIC, user), (float) value * 1.2F);
+                    else
+                        entity.hurt(EnigmaticDamageTypes.source(user.level(), DamageTypes.MAGIC, user), (float) value * 1.2F);
                     stack.hurtAndBreak(1, user, LivingEntity.getSlotForHand(hand));
                     entity.teleportTo(vec3.x, vec3.y, vec3.z);
                     user.teleportTo(position.x, position.y, position.z);
@@ -568,7 +576,8 @@ public class SpellstoneSword extends Item {
                         if (level instanceof ServerLevel server)
                             server.sendParticles(ParticleTypes.PORTAL, x, y, z, 48, 0.2, 0.4, 0.2, 0.03);
                     }
-                } else level.playSound(user, user.blockPosition(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 0.6F, 0.25F);
+                } else
+                    level.playSound(user, user.blockPosition(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 0.6F, 0.25F);
             }
         }
     }
@@ -653,7 +662,8 @@ public class SpellstoneSword extends Item {
 
     public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
         if (ItemAbilities.DEFAULT_SWORD_ACTIONS.contains(ability)) return true;
-        if (isResonatingWith(stack, EnigmaticItems.VOID_PEARL)) return ItemAbilities.DEFAULT_SHIELD_ACTIONS.contains(ability);
+        if (isResonatingWith(stack, EnigmaticItems.VOID_PEARL))
+            return ItemAbilities.DEFAULT_SHIELD_ACTIONS.contains(ability);
         return false;
     }
 
@@ -677,23 +687,7 @@ public class SpellstoneSword extends Item {
         }
         return super.overrideOtherStackedOnMe(stack, other, slot, action, player, access);
     }
-    
-    public record Resonance(ItemStack spellstone) {
-        public static final MapCodec<Resonance> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ItemStack.SINGLE_ITEM_CODEC.fieldOf("spellstone").forGetter(Resonance::spellstone)
-        ).apply(instance, Resonance::of));
 
-        public static final Codec<Resonance> CODEC = MAP_CODEC.codec();
-
-        public static final StreamCodec<RegistryFriendlyByteBuf, Resonance> STREAM_CODEC = StreamCodec.composite(
-                ItemStack.STREAM_CODEC, Resonance::spellstone,
-                Resonance::of);
-
-        public static Resonance of(ItemStack spellstone) {
-            return new Resonance(spellstone);
-        }
-    }
-    
     public enum Form {
         GOLEM_HEART(0.1F, "golem_heart"),
         BLAZING_CORE(0.2F, "blazing_core"),
@@ -724,6 +718,22 @@ public class SpellstoneSword extends Item {
         }
     }
 
+    public record Resonance(ItemStack spellstone) {
+        public static final MapCodec<Resonance> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ItemStack.SINGLE_ITEM_CODEC.fieldOf("spellstone").forGetter(Resonance::spellstone)
+        ).apply(instance, Resonance::of));
+
+        public static final Codec<Resonance> CODEC = MAP_CODEC.codec();
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, Resonance> STREAM_CODEC = StreamCodec.composite(
+                ItemStack.STREAM_CODEC, Resonance::spellstone,
+                Resonance::of);
+
+        public static Resonance of(ItemStack spellstone) {
+            return new Resonance(spellstone);
+        }
+    }
+
     @OnlyIn(Dist.CLIENT)
     public static class ClientExtension implements IClientItemExtensions {
         public static void animate(ModelPart rightArm, ModelPart leftArm, @NotNull LivingEntity entity, boolean rightHanded) {
@@ -740,7 +750,8 @@ public class SpellstoneSword extends Item {
 
         public HumanoidModel.@Nullable ArmPose getArmPose(@NotNull LivingEntity entity, InteractionHand hand, ItemStack stack) {
             if (entity.getUsedItemHand() == hand && entity.getUseItemRemainingTicks() > 0) {
-                if (Form.getValue(stack) == 0.0F || entity.getOffhandItem().is(EnigmaticItems.SPELLCORE)) return ELEnumExtensions.SPELLSTONE_SWORD.getValue();
+                if (Form.getValue(stack) == 0.0F || entity.getOffhandItem().is(EnigmaticItems.SPELLCORE))
+                    return ELEnumExtensions.SPELLSTONE_SWORD.getValue();
                 if (isResonatingWith(stack, EnigmaticItems.ANGEL_BLESSING)) {
                     return HumanoidModel.ArmPose.CROSSBOW_CHARGE;
                 }
@@ -917,7 +928,7 @@ public class SpellstoneSword extends Item {
                         event.setNewDamage(event.getNewDamage() * (1.0F + modifier));
                     }
                 } else if (isResonatingWith(stack, EnigmaticItems.LOST_ENGINE)) {
-                     int len = (int) Math.pow(attacker.fallDistance * 2 + attacker.getDeltaMovement().length() * 10, 0.9);
+                    int len = (int) Math.pow(attacker.fallDistance * 2 + attacker.getDeltaMovement().length() * 10, 0.9);
                     event.setNewDamage(event.getNewDamage() * (1.0F + 0.025F * (float) len));
                 } else if (isResonatingWith(stack, EnigmaticItems.ILLUSION_LANTERN)) {
                     if (event.getSource().is(DamageTypeTags.IS_PLAYER_ATTACK)) {

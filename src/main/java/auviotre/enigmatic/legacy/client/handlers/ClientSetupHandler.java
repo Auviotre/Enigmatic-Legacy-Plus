@@ -23,6 +23,7 @@ import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.contents.item.spellstones.IllusionLantern;
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.SpellstoneSword;
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
+import auviotre.enigmatic.legacy.contents.item.tools.AnnihilatingSword;
 import auviotre.enigmatic.legacy.contents.item.tools.TotemOfMalice;
 import auviotre.enigmatic.legacy.registries.*;
 import net.minecraft.client.gui.screens.Screen;
@@ -67,6 +68,7 @@ public class ClientSetupHandler {
         event.register(EnigmaticItems.TOTEM_OF_MALICE, new TotemOfMalice.Decorator());
         event.register(EnigmaticItems.ILLUSION_LANTERN, new IllusionLantern.Decorator());
         event.register(EnigmaticItems.SPELLSTONE_SWORD, new SpellstoneSword.Decorator());
+        event.register(EnigmaticItems.ANNIHILATING_SWORD, new AnnihilatingSword.Decorator());
         for (ItemLike item : IItemHelper.UNKNOWN_ITEMS) event.register(item, new BaseItem.UnknownDecorator());
         event.register(EnigmaticBlocks.STARLIGHT_BLOCK, new BaseItem.WIPDecorator());
     }
@@ -107,6 +109,7 @@ public class ClientSetupHandler {
         event.registerEntityRenderer(EnigmaticEntities.ULTIMATE_WITHER_SKULL.get(), UltimateWitherSkullRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.EXPLORER_MARKER.get(), ExplorerMarkerRender::new);
         event.registerEntityRenderer(EnigmaticEntities.STARLIGHT_METEOR.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(EnigmaticEntities.ABYSS_PROJECTILE.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.ENGINE_HOOK.get(), EngineHookRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.ANGEL_BEAM.get(), AngelBeamRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.PIGLIN_WANDERER.get(), context -> new PiglinWandererRender(context, ModelLayers.PIGLIN_BRUTE, ModelLayers.PIGLIN_BRUTE_INNER_ARMOR, ModelLayers.PIGLIN_BRUTE_OUTER_ARMOR));

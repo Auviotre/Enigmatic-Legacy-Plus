@@ -1,4 +1,4 @@
-package auviotre.enigmatic.legacy.mixin;
+package auviotre.enigmatic.legacy.mixin.client;
 
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
@@ -20,7 +20,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @OnlyIn(Dist.CLIENT)
 @Mixin(ItemRenderer.class)
 public class MixinItemRenderer {
-    @Shadow @Final private ItemModelShaper itemModelShaper;
+    @Shadow
+    @Final
+    private ItemModelShaper itemModelShaper;
 
     @Inject(method = "getModel", at = @At("HEAD"), cancellable = true)
     public void getModelMix(ItemStack stack, Level level, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> info) {

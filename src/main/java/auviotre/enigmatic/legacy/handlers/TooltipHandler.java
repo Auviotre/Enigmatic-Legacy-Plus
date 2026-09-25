@@ -3,6 +3,7 @@ package auviotre.enigmatic.legacy.handlers;
 import auviotre.enigmatic.legacy.contents.item.materials.AbyssalHeart;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -58,7 +59,9 @@ public interface TooltipHandler {
         if (Screen.hasShiftDown()) {
             Player player = Minecraft.getInstance().player;
             ChatFormatting color = player != null && EnigmaticHandler.isTheWorthyOne(player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
-            Component percent = Component.literal(String.format("%.01f%%", 100 * AbyssalHeart.abyssThreshold.get())).withStyle(ChatFormatting.GOLD);
+            double threshold = AbyssalHeart.abyssThreshold.get();
+            if (!EnigmaticHandler.getCurio(player, EnigmaticItems.DIMNESS_CHARM).isEmpty() || stack.is(EnigmaticItems.DIMNESS_CHARM)) threshold = Math.clamp(2 * threshold - 1, 0, 0.999);
+            Component percent = Component.literal(String.format("%.01f%%", 100 * threshold)).withStyle(ChatFormatting.GOLD);
             list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly1"));
             list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly2", percent));
             list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly3", percent));

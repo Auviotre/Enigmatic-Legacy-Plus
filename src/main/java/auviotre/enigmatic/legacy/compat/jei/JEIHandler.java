@@ -4,8 +4,10 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.client.screen.SpellstoneTableScreen;
 import auviotre.enigmatic.legacy.compat.jei.category.SpellstoneCraftingCategory;
 import auviotre.enigmatic.legacy.compat.jei.category.TaintingCategory;
+import auviotre.enigmatic.legacy.compat.jei.extension.AnnihilatingRecipeExtension;
 import auviotre.enigmatic.legacy.compat.jei.extension.CursedRecipeExtension;
 import auviotre.enigmatic.legacy.compat.jei.subtype.TaintableSubtypeInterpreter;
+import auviotre.enigmatic.legacy.contents.crafting.AnnihilatingRecipe;
 import auviotre.enigmatic.legacy.contents.crafting.CursedShapedRecipe;
 import auviotre.enigmatic.legacy.contents.crafting.SpellstoneTableRecipe;
 import auviotre.enigmatic.legacy.contents.gui.SpellstoneTableMenu;
@@ -68,6 +70,7 @@ public class JEIHandler implements IModPlugin {
 
     public void registerVanillaCategoryExtensions(@NotNull IVanillaCategoryExtensionRegistration registration) {
         registration.getCraftingCategory().addExtension(CursedShapedRecipe.class, new CursedRecipeExtension());
+        registration.getCraftingCategory().addExtension(AnnihilatingRecipe.class, new AnnihilatingRecipeExtension());
     }
 
     public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
@@ -86,6 +89,10 @@ public class JEIHandler implements IModPlugin {
         );
         registration.addRecipes(EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, holders);
         registration.addRecipes(EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, List.of(fragmentation));
+
+//        registration.addRecipes(RecipeTypes.CRAFTING, List.of(new RecipeHolder<>(
+//                EnigmaticLegacy.location("annihilating_sword"), new AnnihilatingRecipe(CraftingBookCategory.MISC)))
+//        );
 
         Ingredient cursed_ring = Ingredient.of(EnigmaticItems.CURSED_RING);
         Ingredient two_ring = Ingredient.of(EnigmaticItems.CURSED_RING, EnigmaticItems.REDEMPTION_RING);

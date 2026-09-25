@@ -10,6 +10,7 @@ import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.packets.client.ChaosDescendingPacket;
 import auviotre.enigmatic.legacy.registries.*;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -83,16 +84,27 @@ public class ChaosElytra extends BaseElytraItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (Screen.hasShiftDown()) {
+            boolean boosted = EnigmaticHandler.isAbyssBoosted(Minecraft.getInstance().player);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.majesticElytra1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.majesticElytra2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.majesticElytra3");
             TooltipHandler.line(list);
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.chaosElytra1", ChatFormatting.GOLD, specialDamageResistance.get() + "%");
+            int resistance = (int) Math.min(100, (boosted ? 1.25 : 1.0) * specialDamageResistance.get());
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.chaosElytra1", ChatFormatting.GOLD, resistance + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.chaosElytra2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.chaosElytra3");
+            if (boosted) {
+                TooltipHandler.line(list);
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.abyssBoost");
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.chaosElytraBoost");
+            }
         } else TooltipHandler.holdShift(list);
         TooltipHandler.line(list);
         TooltipHandler.worthyOnly(list, stack);
+    }
+
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return oldStack.getItem() != newStack.getItem();
     }
 
     public int getEnchantmentValue(ItemStack stack) {
@@ -192,6 +204,7 @@ public class ChaosElytra extends BaseElytraItem {
                     if (player.canAttack(entity)) {
                         chaosDescending(player, entity);
                         Vec3 vec = entity.position().subtract(player.position()).normalize();
+                        entity.hasImpulse = true;
                         entity.knockback(movement.length(), vec.x, vec.z);
                         player.hasImpulse = true;
                         player.setDeltaMovement(player.getDeltaMovement().scale(0.5F));
@@ -232,7 +245,8 @@ public class ChaosElytra extends BaseElytraItem {
                 if (movement == null) {
                     movement = Vec3.ZERO;
                 }
-                double range = 3.75 + movement.length();
+                boolean boosted = EnigmaticHandler.isAbyssBoosted(owner);
+                double range = (boosted ? 4.8 : 3.75) + movement.length();
                 List<LivingEntity> entities = owner.level().getEntitiesOfClass(LivingEntity.class, owner.getBoundingBox().inflate(range));
                 for (LivingEntity entity : entities) {
                     if (entity == owner) continue;
@@ -240,12 +254,12 @@ public class ChaosElytra extends BaseElytraItem {
                     float modifier = Math.min(1.0F, 1.2F / entity.distanceTo(owner));
                     Vec3 vec = new Vec3(delta.x, 0, delta.z).normalize().scale(modifier);
                     entity.addDeltaMovement(new Vec3(vec.x, entity.onGround() ? 1.2F * modifier : 0.0F, vec.z));
-                    double powerModifier = descendingPowerModifier.getAsDouble() * (target == null ? 1.0 : 0.25);
+                    double powerModifier = descendingPowerModifier.getAsDouble() * (target == null ? 1.0 : 0.25) * (boosted ? 1.6 : 1.0);
                     double pow = Math.pow(powerModifier, Math.abs(movement.y));
                     AttributeInstance attribute = owner.getAttribute(Attributes.ATTACK_DAMAGE);
                     double baseValue = attribute == null ? owner.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) : attribute.getValue();
                     DamageSource source = EnigmaticDamageTypes.source(entity.level(), EnigmaticDamageTypes.ABYSS, owner);
-                    entity.hurt(source, (float) (baseValue * pow));
+                    entity.hurt(source, (float) (baseValue * pow) * (boosted ? 1.2F : 1.0F));
                 }
                 if (owner instanceof Player player) {
                     CompoundTag data = EnigmaticHandler.getPersistedData(player);
@@ -253,7 +267,6 @@ public class ChaosElytra extends BaseElytraItem {
                     if (owner instanceof ServerPlayer serverPlayer && data.getInt("ChaoExplosionKillCount") >= 10)
                         EnigmaticTriggers.ENIGMATIC_TRIGGER.get().trigger(serverPlayer, 4);
                     data.remove("ChaoExplosionKillCount");
-
                 }
             }
         }

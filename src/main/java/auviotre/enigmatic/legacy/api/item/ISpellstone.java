@@ -29,6 +29,14 @@ public interface ISpellstone {
         return ItemStack.EMPTY;
     }
 
+    static void addCooldown(@NotNull ServerPlayer player, int cooldown) {
+        BuiltInRegistries.ITEM.forEach(item -> {
+            if (item.getDefaultInstance().is(EnigmaticTags.Items.SPELLSTONES)) {
+                player.getCooldowns().addCooldown(item, cooldown);
+            }
+        });
+    }
+
     int getCooldown(ItemStack stack);
 
     default void triggerActiveAbility(ServerLevel level, @NotNull ServerPlayer player, ItemStack stack) {
@@ -36,18 +44,11 @@ public interface ISpellstone {
         int cooldown = getCooldown(stack);
         if (cooldown > 0 && !cooldowns.isOnCooldown(stack.getItem())) {
             cooldown = player.hasInfiniteMaterials() ? Math.min(15, cooldown) : cooldown;
-            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.COSMIC_SCROLL)) cooldown = (int) (cooldown * (1.0F - CosmicScroll.spellstoneCooldown.get() * 0.01F));
+            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.COSMIC_SCROLL))
+                cooldown = (int) (cooldown * (1.0F - CosmicScroll.spellstoneCooldown.get() * 0.01F));
             else if (EnigmaticHandler.hasCurio(player, EnigmaticItems.SPELLTUNER)) cooldown = (int) (cooldown * 0.9F);
             player.getData(EnigmaticAttachments.ENIGMATIC_DATA.get()).setSpellstoneCooldown(cooldown);
             addCooldown(player, cooldown);
         }
-    }
-
-    static void addCooldown(@NotNull ServerPlayer player, int cooldown) {
-        BuiltInRegistries.ITEM.forEach(item -> {
-            if (item.getDefaultInstance().is(EnigmaticTags.Items.SPELLSTONES)) {
-                player.getCooldowns().addCooldown(item, cooldown);
-            }
-        });
     }
 }

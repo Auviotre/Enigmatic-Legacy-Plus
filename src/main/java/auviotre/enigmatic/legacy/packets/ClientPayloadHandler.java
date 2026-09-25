@@ -42,6 +42,14 @@ public class ClientPayloadHandler {
         handle(ctx, () -> ClientPackets.handle(data));
     }
 
+    public void handle(final ForgerCrystalPacket data, final IPayloadContext ctx) {
+        handle(ctx, () -> ClientPackets.handle(data));
+    }
+
+    public void handle(final SacredChalicePacket data, final IPayloadContext ctx) {
+        handle(ctx, () -> ClientPackets.handle(data));
+    }
+
     public void handle(final SoulCompassUpdatePacket data, final IPayloadContext ctx) {
         handle(ctx, () -> ClientPackets.handle(data));
     }
@@ -67,6 +75,9 @@ public class ClientPayloadHandler {
     }
 
     public void handle(final SpellstoneSwordPacket data, final IPayloadContext ctx) {
+        handle(ctx, () -> ClientPackets.handle(data));
+    }
+    public void handle(final AcceptorSyncPacket data, final IPayloadContext ctx) {
         handle(ctx, () -> ClientPackets.handle(data));
     }
 }

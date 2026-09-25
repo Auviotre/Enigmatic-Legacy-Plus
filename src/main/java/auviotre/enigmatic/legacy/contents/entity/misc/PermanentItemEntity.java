@@ -3,12 +3,16 @@ package auviotre.enigmatic.legacy.contents.entity.misc;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IPermanentCrystal;
+import auviotre.enigmatic.legacy.api.item.ISharableItem;
 import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
 import auviotre.enigmatic.legacy.contents.item.misc.StorageCrystal;
 import auviotre.enigmatic.legacy.handlers.SoulArchive;
+import auviotre.enigmatic.legacy.packets.client.AcceptorSyncPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEntities;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -37,11 +41,14 @@ import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.include.com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class PermanentItemEntity extends Entity {
@@ -55,6 +62,8 @@ public class PermanentItemEntity extends Entity {
     private Vec3 position;
     // for Storage Crystal
     private Map<String, ItemStack> restoreMap;
+    // for Abyssal Heart
+    public Set<UUID> acceptors;
 
     public PermanentItemEntity(EntityType<PermanentItemEntity> type, Level world) {
         super(type, world);
@@ -84,6 +93,7 @@ public class PermanentItemEntity extends Entity {
         this.copyPosition(entity);
         this.age = entity.age;
         this.hoverStart = entity.hoverStart;
+        this.acceptors = entity.acceptors;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -143,7 +153,14 @@ public class PermanentItemEntity extends Entity {
 
             if (this.level().isClientSide) {
                 this.noPhysics = false;
-                this.level().addParticle(ParticleTypes.PORTAL, this.getX(), this.getY() + (this.getBbHeight() / 2), this.getZ(), ((Math.random() - 0.5) * 2.0), ((Math.random() - 0.5) * 2.0), ((Math.random() - 0.5) * 2.0));
+                LocalPlayer player = Minecraft.getInstance().player;
+                if (this.acceptors == null || (player != null && this.acceptors.contains(player.getUUID()))) {
+                    this.level().addParticle(ParticleTypes.PORTAL, this.getX(), this.getY() + (this.getBbHeight() / 2), this.getZ(), ((Math.random() - 0.5) * 2.0), ((Math.random() - 0.5) * 2.0), ((Math.random() - 0.5) * 2.0));
+                }
+            } else if (this.level() instanceof ServerLevel level && this.tickCount % 20 == 0) {
+                if (this.getItem().getItem() instanceof ISharableItem) {
+                    PacketDistributor.sendToPlayersNear(level, null, this.getX(), this.getY(), this.getZ(), 24, new AcceptorSyncPacket(this.getId(), this.acceptors));
+                }
             }
 
             ++this.age;
@@ -212,6 +229,15 @@ public class PermanentItemEntity extends Entity {
             }
         }
         compound.put("restoreMap", mapTag);
+
+        CompoundTag acceptorTag = new CompoundTag();
+        int i = 0;
+        if (acceptors != null) {
+            for (UUID uuid : acceptors) {
+                if (uuid != null) acceptorTag.putUUID(String.valueOf(i++), uuid);
+            }
+        }
+        compound.put("acceptorSet", acceptorTag);
     }
 
     public void readAdditionalSaveData(CompoundTag compound) {
@@ -238,11 +264,27 @@ public class PermanentItemEntity extends Entity {
         }
         this.restoreMap = builder.build();
 
+        Set<UUID> set = new HashSet<>();
+        CompoundTag acceptorTag = compound.getCompound("acceptorSet");
+        for (String key : acceptorTag.getAllKeys()) {
+            if (acceptorTag.hasUUID(key)) {
+                UUID tagUUID = acceptorTag.getUUID(key);
+                set.add(tagUUID);
+            }
+        }
+        this.acceptors = set;
+
         if (compound.contains("Item", 10)) {
             CompoundTag compoundtag = compound.getCompound("Item");
             this.setItem(ItemStack.parseOptional(this.registryAccess(), compoundtag));
         } else this.discard();
         if (this.getItem().isEmpty()) this.discard();
+    }
+
+    public boolean isInvisibleTo(Player player) {
+        if (this.getItem().getItem() instanceof ISharableItem)
+            if (this.acceptors != null && !this.acceptors.contains(player.getUUID())) return false;
+        return super.isInvisibleTo(player);
     }
 
     public void playerTouch(Player player) {
@@ -256,6 +298,20 @@ public class PermanentItemEntity extends Entity {
             ItemStack copy = stack.copy();
             boolean isPlayerOwner = player.getUUID().equals(this.getOwnerId());
             boolean allowPickUp = item instanceof IPermanentCrystal && isPlayerOwner;
+
+            if (item instanceof ISharableItem) {
+                if (acceptors != null && acceptors.contains(player.getUUID())) {
+                    if (player.getInventory().add(copy)) {
+                        acceptors.remove(player.getUUID());
+                        level.sendParticles((ServerPlayer) player, ParticleTypes.DRAGON_BREATH, false, this.getX(), this.getY(0.5), this.getZ(), 48, 0, 0, 0, 0.03);
+                        EnigmaticLegacy.LOGGER.info("Player {} picking up (share: {}): {}", player.getGameProfile().getName(), stack, this);
+                        player.awardStat(Stats.ITEM_PICKED_UP.get(item), count);
+                        if (acceptors.isEmpty()) this.discard();
+                        else PacketDistributor.sendToAllPlayers(new AcceptorSyncPacket(this.getId(), this.acceptors));
+                    }
+                }
+                return;
+            }
 
             if (allowPickUp) {
                 if (item instanceof StorageCrystal) {
@@ -271,14 +327,13 @@ public class PermanentItemEntity extends Entity {
                 }
                 level.sendParticles(ParticleTypes.DRAGON_BREATH, this.getX(), this.getY(0.5), this.getZ(), 48, 0, 0, 0, 0.03);
                 player.take(this, count);
-                EnigmaticLegacy.LOGGER.info("Player " + player.getGameProfile().getName() + " picking up: " + this);
+                EnigmaticLegacy.LOGGER.info("Player {} picking up (crystal): {}", player.getGameProfile().getName(), this);
                 this.discard();
                 stack.setCount(0);
             } else if (this.pickupDelay == 0 && (this.owner == null || this.owner.equals(player.getUUID())) && (count <= 0 || player.getInventory().add(stack))) {
                 copy.setCount(copy.getCount() - this.getItem().getCount());
+                EnigmaticLegacy.LOGGER.info("Player {} picking up (item: {}): {}", player.getGameProfile().getName(), copy, this);
                 if (stack.isEmpty()) {
-                    player.take(this, count);
-                    EnigmaticLegacy.LOGGER.info("Player " + player.getGameProfile().getName() + " picking up: " + this);
                     this.discard();
                     stack.setCount(count);
                 }

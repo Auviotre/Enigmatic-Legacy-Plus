@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.client.renderer;
 
 import auviotre.enigmatic.legacy.api.item.IPermanentCrystal;
+import auviotre.enigmatic.legacy.api.item.ISharableItem;
 import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -45,18 +46,23 @@ public class PermanentItemRenderer extends EntityRenderer<PermanentItemEntity> {
         if (player == null || !player.isAlive() && Math.sqrt(entity.distanceToSqr(player.getX(), player.getEyeY(), player.getZ())) <= 1.0)
             return;
 
-        poseStack.pushPose();
-        ItemStack itemstack = entity.getItem();
+        ItemStack stack = entity.getItem();
+        if (stack.getItem() instanceof ISharableItem) {
+            if (entity.acceptors == null) return;
+            if (!entity.acceptors.contains(player.getUUID())) return;
+        }
 
-        if (itemstack.getItem() instanceof IPermanentCrystal) {
+        poseStack.pushPose();
+
+        if (stack.getItem() instanceof IPermanentCrystal) {
             poseStack.scale(1.25f, 1.25f, 1.25f);
             poseStack.translate(0, -0.1125d, 0);
         }
 
-        this.random.setSeed(getSeedForItemStack(itemstack));
-        BakedModel bakedmodel = this.itemRenderer.getModel(itemstack, entity.level(), null, entity.getId());
+        this.random.setSeed(getSeedForItemStack(stack));
+        BakedModel bakedmodel = this.itemRenderer.getModel(stack, entity.level(), null, entity.getId());
         boolean flag = bakedmodel.isGui3d();
-        boolean shouldBob = IClientItemExtensions.of(itemstack).shouldBobAsEntity(itemstack);
+        boolean shouldBob = IClientItemExtensions.of(stack).shouldBobAsEntity(stack);
         float f1 = Mth.sin((entity.getAge() + partialTicks) / 10.0F + entity.hoverStart) * 0.1F + 0.1F;
         float f2 = shouldBob ? bakedmodel.getTransforms().getTransform(ItemDisplayContext.GROUND).scale.y() : 0;
         poseStack.translate(0.0D, f1 + 0.25F * f2, 0.0D);
@@ -64,7 +70,7 @@ public class PermanentItemRenderer extends EntityRenderer<PermanentItemEntity> {
         float f3 = entity.getItemHover(partialTicks);
         poseStack.mulPose(Axis.YP.rotation(f3));
 
-        renderMultipleFromCount(this.itemRenderer, poseStack, buffer, packedLight, itemstack, bakedmodel, flag, this.random);
+        renderMultipleFromCount(this.itemRenderer, poseStack, buffer, packedLight, stack, bakedmodel, flag, this.random);
         poseStack.popPose();
         super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
     }

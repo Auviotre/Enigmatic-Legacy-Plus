@@ -3,6 +3,7 @@ package auviotre.enigmatic.legacy;
 import auviotre.enigmatic.legacy.client.ClientConfig;
 import auviotre.enigmatic.legacy.client.handlers.QuoteHandler;
 import auviotre.enigmatic.legacy.compat.CompatHandler;
+import auviotre.enigmatic.legacy.contents.item.charms.ScorchedCharm;
 import auviotre.enigmatic.legacy.contents.item.misc.SoulCrystal;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.item.rings.DesolationRing;
@@ -17,6 +18,7 @@ import auviotre.enigmatic.legacy.packets.server.*;
 import auviotre.enigmatic.legacy.proxy.ClientProxy;
 import auviotre.enigmatic.legacy.proxy.CommonProxy;
 import auviotre.enigmatic.legacy.registries.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -117,19 +119,23 @@ public class EnigmaticLegacy {
         registrar.playToClient(PermanentDeathPacket.TYPE, PermanentDeathPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(IchorSpriteBeamPacket.TYPE, IchorSpriteBeamPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(TotemOfMalicePacket.TYPE, TotemOfMalicePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(ForgerCrystalPacket.TYPE, ForgerCrystalPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(SacredChalicePacket.TYPE, SacredChalicePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(SoulCompassUpdatePacket.TYPE, SoulCompassUpdatePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(ChaosDescendingPacket.TYPE, ChaosDescendingPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(TheCubeRevivePacket.TYPE, TheCubeRevivePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(SlotUnlockToastPacket.TYPE, SlotUnlockToastPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(PlayQuotePacket.TYPE, PlayQuotePacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
         registrar.playToClient(SpellstoneSwordPacket.TYPE, SpellstoneSwordPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
+        registrar.playToClient(AcceptorSyncPacket.TYPE, AcceptorSyncPacket.STREAM_CODEC, ClientPayloadHandler.getInstance()::handle);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.OP_BLOCKS) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (event.getTabKey() == CreativeModeTabs.OP_BLOCKS && minecraft.options.operatorItemsTab().get()) {
             event.accept(EnigmaticItems.THE_JUDGEMENT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.accept(EnigmaticItems.LOOT_GENERATOR.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.accept(EnigmaticItems.COSMIC_SCROLL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.accept(EnigmaticItems.QUOTE_PLAYER.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         } else if (event.getTab() == EnigmaticTabs.MAIN_TAB.get()) {
             tabInsert(event, EnigmaticItems.SPELLSTONE_SWORD.toStack(), EnigmaticBlocks.SPELLSTONE_TABLE.toStack());
             tabInsert(event, EnigmaticItems.INFERNAL_CINDER.toStack(), EnigmaticBlocks.INFERNAL_CINDER_SACK.toStack());
@@ -168,6 +174,7 @@ public class EnigmaticLegacy {
         SoulArchive.initialize(event.getServer());
         CursedRing.POSSESSIONS.clear();
         NightScroll.Events.BOXES.clear();
+        ScorchedCharm.EQUIP_LIST.clear();
         DesolationRing.Events.BOXES.clear();
         SoulCompass.Events.LAST_SOUL_COMPASS_UPDATE.clear();
         TheCube.clearLocationCache();

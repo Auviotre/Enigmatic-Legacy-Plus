@@ -50,6 +50,9 @@
   "advancement.enigmaticlegacy.infernal_spear.title": "Blazing Blow",
   "advancement.enigmaticlegacy.infernal_spear.desc": "Launch the piercing attack of Infernal Spear",
 
+  "advancement.enigmaticlegacy.execution_axe.title": "Fearsome Vengeance",
+  "advancement.enigmaticlegacy.execution_axe.desc": "Behead an enemy using Axe of Executioner",
+
   "advancement.enigmaticlegacy.ichor_droplet.title": "Golden Blood",
   "advancement.enigmaticlegacy.ichor_droplet.desc": "Discover the Ichor Droplet",
 
@@ -83,6 +86,12 @@
   "advancement.enigmaticlegacy.twisted_mirror.title": "Warped Beauty",
   "advancement.enigmaticlegacy.twisted_mirror.desc": "Create the Twisted Mirror",
 
+  "advancement.enigmaticlegacy.astral_fruit.title": "Fabulous Apple",
+  "advancement.enigmaticlegacy.astral_fruit.desc": "Find Celestial Fruit among treasures of the End City, and consume it",
+
+  "advancement.enigmaticlegacy.infernal_shield.title": "You Try Penetrating THIS!",
+  "advancement.enigmaticlegacy.infernal_shield.desc": "Forge Bulwark of Blazing Pride, the ultimate tool of defense",
+
   "advancement.enigmaticlegacy.the_twist.title": "Fateful Twist",
   "advancement.enigmaticlegacy.the_twist.desc": "Slay the Wither and create The Twist using Nefarious Essence",
 
@@ -97,6 +106,12 @@
 
   "advancement.enigmaticlegacy.desolation_ring.title": "Reality is Bent",
   "advancement.enigmaticlegacy.desolation_ring.desc": "Forge The Burden of Desolation, and bear it",
+
+  "advancement.enigmaticlegacy.dimness_charm.title": "Eye at the Brink of The Abyss",
+  "advancement.enigmaticlegacy.dimness_charm.desc": "Forge the Proof of Dimness, and earn the recognition of The Abyss.",
+
+  "advancement.enigmaticlegacy.violence_scroll.title": "Innate Cruelty",
+  "advancement.enigmaticlegacy.violence_scroll.desc": "Feel the most fanatical vision within your heart — its name is Violence.",
 
   "advancement.enigmaticlegacy.chaos_elytra.title": "Arrogance to all beings",
   "advancement.enigmaticlegacy.chaos_elytra.desc": "Take the Arrogance of Chaos, overlooking sentient beings from the sky",
@@ -118,6 +133,9 @@
 
   "advancement.enigmaticlegacy.redemption_ring.title": "The Fate Reverses",
   "advancement.enigmaticlegacy.redemption_ring.desc": "Break the Ring of Seven Curses to obtain redemption",
+
+  "advancement.enigmaticlegacy.forbidden_fruit.title": "Primordial Sin",
+  "advancement.enigmaticlegacy.forbidden_fruit.desc": "Consume The Forbidden Fruit and rid yourself of the curse of hunger",
 
   "advancement.enigmaticlegacy.unholy_grail.title": "Ignoring the Advices",
   "advancement.enigmaticlegacy.unholy_grail.desc": "Drink from Unholy Grail",
@@ -182,6 +200,8 @@
   "effect.enigmaticlegacyplus.abyss_corruption.desc": "A powerful negative buff that spreads with death.",
   "effect.enigmaticlegacyplus.blazing_might": "Blazing Might",
   "effect.enigmaticlegacyplus.blazing_might.desc": "The effect will be removed after receiving any damage.",
+  "effect.enigmaticlegacyplus.blood_chalice": "Chalice of Blood",
+  "effect.enigmaticlegacyplus.blood_chalice.desc": "Grants bonus damage based on the remaining duration of the effect.",
   "effect.enigmaticlegacyplus.ichor_corrosion": "Ichor Corrosion",
   "effect.enigmaticlegacyplus.ichor_corrosion.desc": "Reduce your defense while increasing the damage you receive.",
   "effect.enigmaticlegacyplus.ichor_curse": "Curse of Penance",
@@ -220,6 +240,7 @@
   "item.enigmaticlegacyplus.abyssal_heart": "Heart of the Abyss",
   "item.enigmaticlegacyplus.angel_blessing": "Angel's Blessing",
   "item.enigmaticlegacyplus.animal_guidebook": "Guide to Animal Companionship",
+  "item.enigmaticlegacyplus.annihilating_sword": "Decision of Annihilation",
   "item.enigmaticlegacyplus.antique_bag": "Antique Book Bag",
   "item.enigmaticlegacyplus.ascension_amulet": "Amulet of Ascension",
   "item.enigmaticlegacyplus.astral_dust": "Astral Dust",
@@ -242,6 +263,7 @@
   "item.enigmaticlegacyplus.cursed_xp_scroll": "Scroll of Ignorance Curse",
   "item.enigmaticlegacyplus.darkest_scroll": "Darkest Scroll",
   "item.enigmaticlegacyplus.desolation_ring": "The Burden of Desolation",
+  "item.enigmaticlegacyplus.dimness_charm": "Proof of Dimness",
   "item.enigmaticlegacyplus.dislocation_ring": "Dislocation Ring",
   "item.enigmaticlegacyplus.divine_fruit_pie": "Plate of Divine Fruit Pie",
   "item.enigmaticlegacyplus.dragon_breath_bow": "Dragon Breath Bow",
@@ -261,6 +283,7 @@
   "item.enigmaticlegacyplus.enigmatic_eye_dormant": "Dormant Eye",
   "item.enigmaticlegacyplus.escape_scroll": "Scroll of Postmortal Recall",
   "item.enigmaticlegacyplus.ethereal_forging_charm": "Ethereal Forging Charm",
+  "item.enigmaticlegacyplus.ethereal_forging_charm_active": "Starlight Forging Charm",
   "item.enigmaticlegacyplus.etherium_boots": "Etherium Boots",
   "item.enigmaticlegacyplus.etherium_chestplate": "Etherium Cuirass",
   "item.enigmaticlegacyplus.etherium_core": "Etherium Core",
@@ -282,6 +305,7 @@
   "item.enigmaticlegacyplus.fabulous_scroll": "Grace of the Creator",
   "item.enigmaticlegacyplus.forbidden_fruit": "The Forbidden Fruit",
   "item.enigmaticlegacyplus.forbidden_juice": "The Forbidden Juice",
+  "item.enigmaticlegacyplus.forger_crystal": "Flawless Forging Gem",
   "item.enigmaticlegacyplus.forger_gem": "The Forger's Gem",
   "item.enigmaticlegacyplus.forgotten_ice": "Forgotten Ice Crystal",
   "item.enigmaticlegacyplus.golden_ring": "Exquisite Ring",
@@ -302,6 +326,7 @@
   "item.enigmaticlegacyplus.infernal_shield": "Bulwark of Blazing Pride",
   "item.enigmaticlegacyplus.infernal_spear": "Infernal Blazing Spear",
   "item.enigmaticlegacyplus.infinimeal": "Essence of Raging Life",
+  "item.enigmaticlegacyplus.insignia": "Charming Insignia",
   "item.enigmaticlegacyplus.iron_ring": "Iron Ring",
   "item.enigmaticlegacyplus.loot_generator": "The One Box",
   "item.enigmaticlegacyplus.lore_fragment": "Blank Design Fragment",
@@ -318,11 +343,14 @@
   "item.enigmaticlegacyplus.ode_to_living": "Ode to Living Beings",
   "item.enigmaticlegacyplus.pure_heart": "Pure Heart",
   "item.enigmaticlegacyplus.quartz_ring": "Magic Quartz Ring",
+  "item.enigmaticlegacyplus.quote_player": "Quote Player",
   "item.enigmaticlegacyplus.raw_etherium": "Raw Etherium",
   "item.enigmaticlegacyplus.recall_potion": "Potion of Recall",
+  "item.enigmaticlegacyplus.redemption_amulet": "Amulet of Radiance",
   "item.enigmaticlegacyplus.redemption_potion": "Potion of Redemption",
   "item.enigmaticlegacyplus.redemption_ring": "Ring of Redemption",
   "item.enigmaticlegacyplus.revival_leaf": "Revival Leaves",
+  "item.enigmaticlegacyplus.sacred_chalice": "Pseudo-Sacred Chalice",
   "item.enigmaticlegacyplus.sacred_crystal": "Sacred Crystal",
   "item.enigmaticlegacyplus.sanguinary_handbook": "Sanguinary Hunting Handbook",
   "item.enigmaticlegacyplus.scorched_charm": "Charm of Scorched Sun",
@@ -469,11 +497,10 @@
   "tooltip.enigmaticlegacy.enigmaticAmulet2": "§5you still remain unable to recall what exactly.",
   "tooltip.enigmaticlegacy.enigmaticAmulet3": "§5Time slowly washes away last traces of those",
   "tooltip.enigmaticlegacy.enigmaticAmulet4": "§5lost memories...",
-  "tooltip.enigmaticlegacy.enigmaticAmuletShift1": "§5Whenever you die while having it equipped,",
-  "tooltip.enigmaticlegacy.enigmaticAmuletShift2": "§5summons §6Extradimensional Vessel§5 that",
-  "tooltip.enigmaticlegacy.enigmaticAmuletShift3": "§5safely stores your items,§d Soul Crystals",
-  "tooltip.enigmaticlegacy.enigmaticAmuletShift4": "§5and§d Experience§5.",
-  "tooltip.enigmaticlegacy.enigmaticAmuletShift5": "§5Approach the vessel to regain what was lost.",
+  "tooltip.enigmaticlegacy.enigmaticAmuletShift1": "§5Whenever you die while having it equipped, summons",
+  "tooltip.enigmaticlegacy.enigmaticAmuletShift2": "§6Extradimensional Vessel§5 that safely stores your items,",
+  "tooltip.enigmaticlegacy.enigmaticAmuletShift3": "§dSoul Crystals §5and§d Experience§5.",
+  "tooltip.enigmaticlegacy.enigmaticAmuletShift4": "§5Approach the vessel to regain what was lost.",
   "tooltip.enigmaticlegacy.enigmaticAmuletInscription": "§5Name is engraved upon it: §4%1$s",
   "tooltip.enigmaticlegacy.enigmaticAmuletModifierRED": "§6+%1$s §dAttack Damage",
   "tooltip.enigmaticlegacy.enigmaticAmuletModifierAQUA": "§6+%1$s §dSprinting Speed",
@@ -534,6 +561,12 @@
 
   "tooltip.enigmaticlegacy.monsterCharmAttribute": "Damage against Undead Creature",
   "tooltip.enigmaticlegacy.monsterCharm": "§5Slain monsters drop double as much experience.",
+
+  "tooltip.enigmaticlegacy.insignia1": "§5Replaces your nametag if renamed in §6Anvil§5.",
+  "tooltip.enigmaticlegacy.insignia2": "§5Allows you to see your own nametag.",
+  "tooltip.enigmaticlegacy.insignia3": "§6Shift§5+§6Right-Click§5 when holding to toggle this.",
+  "tooltip.enigmaticlegacy.insigniaTagDisplay": "§dSelf-Visible Nametag: %1$s",
+  "tooltip.enigmaticlegacy.insigniaName": "§dEngraved Name: %1$s",
 
   "tooltip.enigmaticlegacy.suvivalScroll1": "§5Slowly recover health under higher brightness.",
   "tooltip.enigmaticlegacy.suvivalScroll2": "§5When the health is low:",
@@ -617,9 +650,9 @@
   "tooltip.enigmaticlegacy.extradimensionalEyePos": "§d Position: §5[§6%1$s§5, §6%3$s§5, §6%3$s§5]",
   "tooltip.enigmaticlegacy.extradimensionalEyeDimension": "§d Dimension: §6%s",
 
-  "tooltip.enigmaticlegacy.forgerGem1" : "§5Half the experience required for forging",
-  "tooltip.enigmaticlegacy.forgerGem2" : "§5and make your anvil more durable.",
-  "tooltip.enigmaticlegacy.forgerGem3" : "§5Also can make the result more durable.",
+  "tooltip.enigmaticlegacy.forgerGem1": "§5Half the experience required for forging",
+  "tooltip.enigmaticlegacy.forgerGem2": "§5and make your anvil more durable.",
+  "tooltip.enigmaticlegacy.forgerGem3": "§5Also can make the result more durable.",
 
   "tooltip.enigmaticlegacy.infinimeal1": "§5Functions as infinite §6Bone Meal§5.",
   "tooltip.enigmaticlegacy.infinimeal2": "§5Effective on §6Cactus§5, §6Chorus Plants§5,",
@@ -665,7 +698,9 @@
   "tooltip.enigmaticlegacy.etheriumDisable": "§5Hold §6Shift§5 to suppress this effect.",
   "tooltip.enigmaticlegacy.etheriumDisable2": "§6Shift§5 and §6Right-click§5 to toggle this effect.",
   "tooltip.enigmaticlegacy.etherealLantern": "§5Provide temporary shields to nearby players.",
-  "tooltip.enigmaticlegacy.etherealForgingCharm": "§5Greatly reduce the durability consumption of items in inventory.",
+  "tooltip.enigmaticlegacy.etherealForgingCharm1": "§5Greatly reduce the durability consumption of items in inventory",
+  "tooltip.enigmaticlegacy.etherealForgingCharm2": "§5and improves the attributes of the forging results.",
+  "tooltip.enigmaticlegacy.etherealForgingCharm3": "§5Further enhances the effects of this item.",
   "tooltip.enigmaticlegacy.etherealForgingCharmBuff": "§dEnhancement: §5Increase the probability of reducing.",
 
   "tooltip.enigmaticlegacy.majesticElytra1": "§5Hold jump key while flying to continuously",
@@ -863,7 +898,9 @@
 
   "tooltip.enigmaticlegacy.unholyGrail": "§5You'd better not be drinking from it...",
 
-  "tooltip.enigmaticlegacy.voidTome" : "§5Use to obtain §6+1§d Arcane Scroll Slot§5.",
+  "tooltip.enigmaticlegacy.voidTomeUse": "§5Use to obtain §6+1§d Arcane Scroll Slot§5.",
+  "tooltip.enigmaticlegacy.voidTome1": "§5-§d Defence-bypassing§5 damage reduced by §6%1$s",
+  "tooltip.enigmaticlegacy.voidTome2": "§5- §6%1$s§5 Chance to become immune to incoming damage",
 
   "tooltip.enigmaticlegacy.antiqueBag1": "§5A container similar to a§d Ender Chest§5.",
   "tooltip.enigmaticlegacy.antiqueBag2": "§5The books stored in will be considered",
@@ -958,6 +995,7 @@
   "tooltip.enigmaticlegacy.firstCurseAlteration": "§5- §dReduce the effect of the §6First Curse §dby %1$s§5.",
   "tooltip.enigmaticlegacy.secondCurseAlteration1": "§5- §dTamable animals stay neutral towards you.",
   "tooltip.enigmaticlegacy.secondCurseAlteration2": "§5- §dNeutral creatures stay neutral towards you.",
+  "tooltip.enigmaticlegacy.thirdCurseAlteration": "§5- §dReduce the effect of the §6Third Curse §dby %1$s§5.",
   "tooltip.enigmaticlegacy.fourthCurseAlteration": "§5- §dAlways deals its full damage.",
   "tooltip.enigmaticlegacy.fourthCurseAlteration2": "§5- §dReduce the effect of the §6Fourth Curse §dby %1$s§5.",
 
@@ -1068,11 +1106,28 @@
   "tooltip.enigmaticlegacy.blessAmplifier2": "§5to upgrade the enchantments on the item.",
   "tooltip.enigmaticlegacy.blessAmplifier3": "§5Can break the level limit.",
 
+  "tooltip.enigmaticlegacy.sacredChalice1": "§5Can consume §650%§5 of your health to fill the chalice.",
+  "tooltip.enigmaticlegacy.sacredChalice2": "§5Also drains health from nearby creatures to enhance subsequent effects.",
+  "tooltip.enigmaticlegacy.sacredChalice3": "§5Restore all health upon use and gain",
+  "tooltip.enigmaticlegacy.sacredChalice4": "§dPure Resistance§5 and §dBlood Chalice§5 effects.",
+  "tooltip.enigmaticlegacy.sacredChalice4Alt": "§5powerful §dPure Resistance§5 and §dBlood Chalice§5 effects.",
+
+  "tooltip.enigmaticlegacy.forgerCrystal1": "§5Forging does§d not damage§5 the anvil.",
+  "tooltip.enigmaticlegacy.forgerCrystal2": "§5Half the experience required for forging.",
+  "tooltip.enigmaticlegacy.forgerCrystal3": "§5Can use an undamaged identical tool to create an§d unbreakable§5 item.",
+  "tooltip.enigmaticlegacy.forgerCrystal4": "§5Unbreakable tools can be used as §dTotems of Undying§5.",
+
   "tooltip.enigmaticlegacy.scorchedCharm1": "§5Immunize the wearer against the fire damage",
   "tooltip.enigmaticlegacy.scorchedCharm2": "§5And be able to walk on the lava.",
-  "tooltip.enigmaticlegacy.scorchedCharm3": "§5Obtain natural regeneration when in contact with lava.",
-  "tooltip.enigmaticlegacy.scorchedCharm4": "§5Trigger lifesteal when attacking a target on fire.",
+  "tooltip.enigmaticlegacy.scorchedCharm3": "§5Obtain natural§d regeneration§5 when in contact with lava.",
+  "tooltip.enigmaticlegacy.scorchedCharm4": "§5Trigger§d lifesteal§5 when attacking a target on fire.",
   "tooltip.enigmaticlegacy.scorchedCharm5": "§6%1$s §5chance to resist the attack damage.",
+
+  "tooltip.enigmaticlegacy.redemptionAmulet1": "§5Attack Strength provides a damage reduction effect.",
+  "tooltip.enigmaticlegacy.redemptionAmulet2": "§5You take no damage from §dunattacked targets§5.",
+  "tooltip.enigmaticlegacy.redemptionAmuletStat1": "§6+%1$s §dLuck",
+  "tooltip.enigmaticlegacy.redemptionAmuletStat2": "§6+%1$s §dDamage Reduction",
+  "tooltip.enigmaticlegacy.redemptionAmuletStat3": "§6+%1$s §dArmor Toughness",
 
   "tooltip.enigmaticlegacy.earthPromise1": "§5When receiving damage worth §6%1$s §5of your",
   "tooltip.enigmaticlegacy.earthPromise2": "§5health, block the attack and cooldown for§6 %1$s §5sec.",
@@ -1118,6 +1173,7 @@
   "tooltip.enigmaticlegacy.abyssalHeart2": "§5this realm shuddered beneath the gaze of",
   "tooltip.enigmaticlegacy.abyssalHeart3": "§5something so alien, so unholy, so unknowable",
   "tooltip.enigmaticlegacy.abyssalHeart4": "§5and madness-inducing.",
+  "tooltip.enigmaticlegacy.abyssBoost": "§l§dAbyss Boost:",
 
   "tooltip.enigmaticlegacy.theInfinitumLore": "§5The abyss returns even the boldest gaze.",
   "tooltip.enigmaticlegacy.theInfinitum1": "§6+%1$s §dKnockback",
@@ -1128,6 +1184,8 @@
   "tooltip.enigmaticlegacy.theInfinitum6": "§5lethal damage won't kill you.",
   "tooltip.enigmaticlegacy.theInfinitumBag1": "§5- §dReduce the effect of the §6Fourth Curse §dby %1$s§5.",
   "tooltip.enigmaticlegacy.theInfinitumBag2": "§5- §6+%1$s§d Lifesteal.",
+  "tooltip.enigmaticlegacy.theInfinitumBoost1": "§5- §dAdds§6 bonus damage§d based on the amount and amplifier",
+  "tooltip.enigmaticlegacy.theInfinitumBoost2": "§d  of§6 harmful effects§d on the target.",
 
   "tooltip.enigmaticlegacy.eldritchAmulet1": "§5When worn, your inventory persists with you",
   "tooltip.enigmaticlegacy.eldritchAmulet2": "§5after death. §6Experience§5 and §6Soul Crystals§5 will",
@@ -1136,11 +1194,16 @@
   "tooltip.enigmaticlegacy.eldritchAmulet5": "§ddown§5 and§d weakened§5.",
   "tooltip.enigmaticlegacy.eldritchAmuletStat1": "§6+%1$s §dAttack Damage",
   "tooltip.enigmaticlegacy.eldritchAmuletStat2": "§6+%1$s§d Lifesteal",
+  "tooltip.enigmaticlegacy.eldritchAmuletBoost": "§5- §dDeal §6%1$s§d more damage to creatures with less health than you.",
+
+  "tooltip.enigmaticlegacy.dimnessCharm1": "§5Reduces the threshold for the Seven-Curse time proportion required by §dAbyssal items§5.",
+  "tooltip.enigmaticlegacy.dimnessCharm2": "§5Provides §dAbyssal Boost§5 to all other §dAbyssal items§5.",
 
   "tooltip.enigmaticlegacy.desolationRing1": "§6Prevents any dropping from slain mob.",
   "tooltip.enigmaticlegacy.desolationRing2": "§6Neutral creatures§5 will not spawn in your proximity.",
   "tooltip.enigmaticlegacy.desolationRing3": "§6Enemies §5will not target you actively.",
   "tooltip.enigmaticlegacy.desolationRing4": "§5Unprovoked mobs around you will die for you.",
+  "tooltip.enigmaticlegacy.desolationRingBoost": "§5- §dThe first attack against an unprovoked creature applies an§6 execution§d effect.",
 
   "tooltip.enigmaticlegacy.violenceScrollLore1": "§5An accursed being is one rarely worth creating an enemy of.",
   "tooltip.enigmaticlegacy.violenceScrollLore2": "§5Whether their curse be one of luck, of pain, of destitution -",
@@ -1156,10 +1219,24 @@
   "tooltip.enigmaticlegacy.violenceScroll5": "§5- §6%1$s §dAttack Speed",
   "tooltip.enigmaticlegacy.violenceScroll6": "§5- §6%1$s §dEntity Reach",
   "tooltip.enigmaticlegacy.violenceScroll7": "§5- §6%1$s §dKnockback Resistance",
+  "tooltip.enigmaticlegacy.violenceScrollBoost": "§5- §dProvides a brief§6 damage immunity§d upon attacking.",
 
   "tooltip.enigmaticlegacy.chaosElytra1": "§5Reduce §6%1$s §5of damage from back.",
   "tooltip.enigmaticlegacy.chaosElytra2": "§5When accelerating vertically towards",
   "tooltip.enigmaticlegacy.chaosElytra3": "§5the ground, it will cause range damage.",
+  "tooltip.enigmaticlegacy.chaosElytraBoost": "§5- §dImproves all aspects of this item.",
+
+  "tooltip.enigmaticlegacy.annihilatingSword1": "§5Accumulates §dAnnihilation Point§5 when attacking targets.",
+  "tooltip.enigmaticlegacy.annihilatingSword2": "§5The amount accumulated is determined by§d damage dealt§5 and§d target health§5.",
+  "tooltip.enigmaticlegacy.annihilatingSword3": "§5When Annihilation Point reaches a certain threshold, there is a chance to deal§d massive§5 damage.",
+  "tooltip.enigmaticlegacy.annihilatingSword4": "§5When the other hand is empty:",
+  "tooltip.enigmaticlegacy.annihilatingSword5Main": "§5- Damage dealt: §6%1$s",
+  "tooltip.enigmaticlegacy.annihilatingSword6Main": "§5- Right-click to consume§d charge§5 and hold to deal more damage.",
+  "tooltip.enigmaticlegacy.annihilatingSword5Off": "§5- Can§d block§5.",
+  "tooltip.enigmaticlegacy.annihilatingSword6Off": "§5- And gain§d charge§5 when timed correctly.",
+  "tooltip.enigmaticlegacy.annihilatingSword7": "§5Current charge level: §6%1$s",
+  "tooltip.enigmaticlegacy.annihilatingSword8": "§5- §dCharge§5 damage multiplier: §6%1$s",
+  "tooltip.enigmaticlegacy.annihilatingSwordBoost": "§5- §d",
 
   "tooltip.enigmaticlegacy.cosmicScroll1": "§5You deal §6+%1$s §dDamage§5 to players who are not",
   "tooltip.enigmaticlegacy.cosmicScroll2": "§5chosen, and your melee attacks set them ablaze.",
@@ -1188,6 +1265,11 @@
   "tooltip.enigmaticlegacy.lootGenerator7": "§5instances to §6latest.log§5 file.",
   "tooltip.enigmaticlegacy.lootGenerator8": "§5Clicking on other sides of a chest will instead",
   "tooltip.enigmaticlegacy.lootGenerator9": "§5obliterate anything stored within.",
+
+  "tooltip.enigmaticlegacy.quotePlayer1": "§5Press §6Right-Click§5 to play selected quote.",
+  "tooltip.enigmaticlegacy.quotePlayer2": "§5Press §6Shift§5+§6Right-Click§5 to cycle through",
+  "tooltip.enigmaticlegacy.quotePlayer3": "§5available quotes.",
+  "tooltip.enigmaticlegacy.quotePlayerSelection": "§dCurrent Quote: §6%1$s",
 
   "message.enigmaticlegacy.networking.failed": "Enigmatic Legacy Networking Failure",
   "message.enigmaticlegacy.command.getcursetime": "%1$s is bearing the Seven Curses for %2$s ticks, or %3$s of their time in this world.",
@@ -1315,6 +1397,8 @@
   "enigmaticlegacyplus.configuration.abyssThreshold.tooltip": "The time needed to enable the Abyss items as a percentage.",
   "enigmaticlegacyplus.configuration.forTheWorthy": "Monster Enhancement",
   "enigmaticlegacyplus.configuration.forTheWorthy.tooltip": "Enhance the abilities of monsters encountered by the Worthy players.",
+  "enigmaticlegacyplus.configuration.immediatelyCurseBoost": "Default Curse Boost",
+  "enigmaticlegacyplus.configuration.immediatelyCurseBoost.tooltip": "Whether mobs gain curse boost upon spawning regardless of conditions.",
   "enigmaticlegacyplus.configuration.giveStarterGear": "Give Starter Gear",
   "enigmaticlegacyplus.configuration.giveStarterGear.tooltip": "If true, Mod will grant starter items on first login.",
   "enigmaticlegacyplus.configuration.neutralWhiteList": "Neutral Mob Enrage Whitelist",
@@ -1412,6 +1496,8 @@
   "enigmaticlegacyplus.configuration.OffsetYCreative": "Y-axis Offset in Creative Inventory",
   "enigmaticlegacyplus.configuration.quoteSubtitles": "Show quotes from the Inscrutable Eye",
   "enigmaticlegacyplus.configuration.deathQuoteChance": "Chance of quote after death",
+  "enigmaticlegacyplus.configuration.specialVisualEffects": "Special Visual Effects",
+  "enigmaticlegacyplus.configuration.specialVisualEffects.tooltip": "Visual effects of certain Abyssal items",
 
   "quote.no_peril_1": "Where there is no peril in the task - there can be no glory in its accomplishment.",
   "quote.end_doorstep_1": "The doorstep of The End... single step now separates you from it.",

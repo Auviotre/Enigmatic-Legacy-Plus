@@ -13,6 +13,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -22,6 +23,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -105,6 +107,12 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum4");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum5", ChatFormatting.GOLD, undeadProbability.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum6");
+            if (EnigmaticHandler.isAbyssBoosted(Minecraft.getInstance().player)) {
+                TooltipHandler.line(list);
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.abyssBoost");
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitumBoost1");
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitumBoost2");
+            }
         } else {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitumLore");
             TooltipHandler.line(list);
@@ -117,14 +125,10 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
     public List<Component> getTooltipInBag(List<Component> list) {
         TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBagSlot");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitumBag1", ChatFormatting.GOLD, "24%");
+        TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitumBag1", ChatFormatting.GOLD, "20%");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitumBag2", ChatFormatting.GOLD, lifeSteal.get() + "%");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.theTwistBag1", ChatFormatting.GOLD, String.format("%d%%", specialDamageBoost.get() / 10));
         return list;
-    }
-
-    public float getAttackDamageBonus(@NotNull Entity target, float damage, DamageSource damageSource) {
-        return super.getAttackDamageBonus(target, damage, damageSource);
     }
 
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
@@ -133,6 +137,10 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
         if (hand == InteractionHand.MAIN_HAND && !player.getOffhandItem().isEmpty())
             return InteractionResultHolder.pass(stack);
         return super.use(world, player, hand);
+    }
+
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return oldStack.getItem() != newStack.getItem();
     }
 
     @Mod(value = EnigmaticLegacy.MODID)
@@ -170,6 +178,22 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
                     if (attacker.getWeaponItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
                         event.setAmount(event.getAmount() * (1 + 0.01F * specialDamageBoost.get()));
                     }
+                }
+            }
+        }
+
+        @SubscribeEvent
+        private static void onDamaged(LivingDamageEvent.@NotNull Pre event) {
+            DamageSource source = event.getSource();
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
+            if (source.getEntity() instanceof LivingEntity attacker && EnigmaticHandler.isAbyssBoosted(attacker) && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
+                if (attacker.getWeaponItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {
+                    float harmCount = 0.0F;
+                    for (MobEffectInstance instance : event.getEntity().getActiveEffects()) {
+                        if (instance.getEffect().value().getCategory().equals(MobEffectCategory.HARMFUL))
+                            harmCount += instance.getAmplifier() + 1;
+                    }
+                    if (harmCount > 0) event.setNewDamage(event.getNewDamage() * (1 + 0.05F * harmCount));
                 }
             }
         }

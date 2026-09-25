@@ -1,0 +1,21 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "enigmaticlegacyplus:item/gui/annihilating_sword_2"
+  },
+  "perspectives": {
+    "firstperson_righthand": {
+      "parent": "enigmaticlegacyplus:item/3d/annihilating_sword_blocking"
+    },
+    "firstperson_lefthand": {
+      "parent": "enigmaticlegacyplus:item/3d/annihilating_sword_blocking"
+    },
+    "thirdperson_righthand": {
+      "parent": "enigmaticlegacyplus:item/3d/annihilating_sword_blocking"
+    },
+    "thirdperson_lefthand": {
+      "parent": "enigmaticlegacyplus:item/3d/annihilating_sword_blocking"
+    }
+  }
+}

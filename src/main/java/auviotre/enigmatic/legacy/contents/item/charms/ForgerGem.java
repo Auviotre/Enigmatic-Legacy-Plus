@@ -73,6 +73,10 @@ public class ForgerGem extends BaseCurioItem {
         } else TooltipHandler.holdShift(list);
     }
 
+    public boolean canEquip(SlotContext context, ItemStack stack) {
+        return super.canEquip(context, stack) && !EnigmaticHandler.hasCurio(context.entity(), EnigmaticItems.FORGER_CRYSTAL);
+    }
+
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         if (context.entity() instanceof Player) {
@@ -103,7 +107,6 @@ public class ForgerGem extends BaseCurioItem {
             return new ToolInfo(originDurability, extraDurability);
         }
     }
-
 
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)

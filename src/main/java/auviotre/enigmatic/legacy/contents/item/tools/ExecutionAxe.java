@@ -6,6 +6,7 @@ import auviotre.enigmatic.legacy.contents.entity.PiglinWanderer;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticTriggers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -116,10 +117,8 @@ public class ExecutionAxe extends SwordItem {
                     ItemEntity itemEntity = new ItemEntity(victim.level(), victim.getX(), victim.getY(), victim.getZ(), skull.getDefaultInstance());
                     itemEntity.setDefaultPickUpDelay();
                     drops.add(itemEntity);
-
-                    if (event.getSource().getEntity() instanceof ServerPlayer player) {
-                        //                    BeheadingTrigger.INSTANCE.trigger((ServerPlayer) event.getSource().getEntity());
-                    }
+                    if (event.getSource().getEntity() instanceof ServerPlayer player)
+                        EnigmaticTriggers.ENIGMATIC_TRIGGER.get().trigger(player, 8);
                 }
             }
         }

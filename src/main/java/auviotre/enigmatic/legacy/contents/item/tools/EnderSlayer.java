@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.contents.item.tools;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -46,7 +47,7 @@ public class EnderSlayer extends SwordItem {
     public static ModConfigSpec.IntValue specialDamageBoost;
 
     public EnderSlayer() {
-        super(TIER, new Item.Properties().fireResistant().rarity(Rarity.RARE).component(EnigmaticComponents.CURSED, true).attributes(createAttributes(TIER, 3.5F, -2.6F)));
+        super(TIER, IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).component(EnigmaticComponents.CURSED, true).attributes(createAttributes(TIER, 3.5F, -2.6F)));
     }
 
     @SubscribeConfig

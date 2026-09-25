@@ -2,7 +2,7 @@
 
 **Original Author:** **[Aizistral](https://aizistral.com/)**
 
-**Current Version:** 1.1.0
+**Current Version:** 1.1.2
 
 **Minecraft Version:** 1.21.1
 

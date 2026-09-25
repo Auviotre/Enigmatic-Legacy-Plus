@@ -52,15 +52,15 @@ public class StarlightBucket extends Item {
         super(IItemHelper.singleProperties());
     }
 
-    private Item getContent(ItemStack stack) {
-        return BuiltInRegistries.ITEM.get(ResourceLocation.parse(stack.getOrDefault(EnigmaticComponents.CONTENT, "minecraft:air")));
-    }
-
     @SubscribeConfig
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.translation("item.enigmaticlegacyplus.starlight_bucket").push("else.starlightBucket");
         checkExtraContent = builder.define("checkExtraContent", false);
         builder.pop(2);
+    }
+
+    private Item getContent(ItemStack stack) {
+        return BuiltInRegistries.ITEM.get(ResourceLocation.parse(stack.getOrDefault(EnigmaticComponents.CONTENT, "minecraft:air")));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -71,8 +71,9 @@ public class StarlightBucket extends Item {
         if (content instanceof MilkBucketItem) {
             component = Component.translatable("fluid_type.minecraft.milk");
         } else if (content instanceof BucketItem bucket) {
-            if (bucket.content != Fluids.EMPTY) component = new FluidStack(bucket.content, Integer.MAX_VALUE).getHoverName();
-        } else  if (content instanceof SolidBucketItem bucket) {
+            if (bucket.content != Fluids.EMPTY)
+                component = new FluidStack(bucket.content, Integer.MAX_VALUE).getHoverName();
+        } else if (content instanceof SolidBucketItem bucket) {
             if (!bucket.getBlock().defaultBlockState().isAir()) component = bucket.getBlock().getName();
         }
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.starlightBucket2", ChatFormatting.LIGHT_PURPLE, component);
@@ -147,7 +148,7 @@ public class StarlightBucket extends Item {
     }
 
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return getContent(stack).getUseDuration(stack ,entity);
+        return getContent(stack).getUseDuration(stack, entity);
     }
 
     public UseAnim getUseAnimation(ItemStack stack) {

@@ -35,7 +35,7 @@ import net.neoforged.neoforge.event.EventHooks;
 import javax.annotation.Nullable;
 
 public class EngineHook extends Projectile {
-    private static final EntityDataAccessor<Integer> DATA_HOOKED_ENTITY = SynchedEntityData.defineId(EngineHook .class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_HOOKED_ENTITY = SynchedEntityData.defineId(EngineHook.class, EntityDataSerializers.INT);
     private @Nullable Entity hookedIn;
     private State currentState;
 
@@ -180,7 +180,8 @@ public class EngineHook extends Projectile {
 
     public void handleEntityEvent(byte id) {
         if (id == 31 && this.level().isClientSide() && this.currentState == State.HOOKED_IN_BLOCK) this.pull();
-        else if (id == 32 && this.level().isClientSide() && this.currentState == State.HOOKED_IN_BLOCK) this.pullStart();
+        else if (id == 32 && this.level().isClientSide() && this.currentState == State.HOOKED_IN_BLOCK)
+            this.pullStart();
         else super.handleEntityEvent(id);
     }
 

@@ -1,0 +1,10 @@
+{
+  "parent": "bettercombat:coral_blade",
+  "attributes": {
+    "attacks": [
+      { "swing_sound": { "id": "bettercombat:sword_slash" } },
+      { "swing_sound": { "id": "bettercombat:sword_slash" } },
+      { "swing_sound": { "id": "enigmaticlegacyplus:misc.sword_hit_reject" } }
+    ]
+  }
+}

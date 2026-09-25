@@ -273,7 +273,7 @@ public class EnigmaticEnchantments {
             SlotContext context = event.getSlotContext();
             if (context.entity() == null) return;
             ItemStack stack = event.getItemStack();
-            ResourceLocation location = EnigmaticLegacy.location("enchantment.etheric_resonance/" + context.identifier().replace(':','_') + "_" + context.index());
+            ResourceLocation location = EnigmaticLegacy.location("enchantment.etheric_resonance/" + context.identifier().replace(':','/') + "_" + context.index());
             var ethereal = EnigmaticHandler.get(context.entity().level(), Registries.ENCHANTMENT, ETHERIC_RESONANCE);
             if (stack.getEnchantmentLevel(ethereal) > 0) {
                 event.addModifier(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(location, 0.01, AttributeModifier.Operation.ADD_VALUE));

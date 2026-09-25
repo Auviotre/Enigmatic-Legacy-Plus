@@ -4,16 +4,12 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.event.LivingCurseBoostEvent;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
-import auviotre.enigmatic.legacy.contents.entity.goal.LeapAttackGoal;
-import auviotre.enigmatic.legacy.contents.entity.goal.SkeletonMeleeAttackGoal;
-import auviotre.enigmatic.legacy.contents.entity.goal.SpiderRangedAttackGoal;
+import auviotre.enigmatic.legacy.contents.entity.goal.*;
 import auviotre.enigmatic.legacy.contents.item.amulets.EldritchAmulet;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.packets.client.EnigmaticDataSyncPacket;
 import auviotre.enigmatic.legacy.packets.client.SlotUnlockToastPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
-import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
-import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.core.Holder;
 import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +19,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -36,7 +31,9 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.world.entity.ai.goal.RangedCrossbowAttackGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.breeze.Breeze;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.item.BowItem;
@@ -51,10 +48,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
-import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
@@ -122,21 +116,6 @@ public class EnigmaticEventHandler {
     }
 
     @SubscribeEvent
-    private static void onCraft(PlayerEvent.@NotNull ItemCraftedEvent event) {
-        ItemStack crafting = event.getCrafting();
-        if (crafting.is(EnigmaticTags.Items.AMULETS)) {
-            Container container = event.getInventory();
-            for (int i = 0; i < container.getContainerSize(); i++) {
-                ItemStack stack = container.getItem(i);
-                if (stack.is(EnigmaticTags.Items.AMULETS) && stack.get(EnigmaticComponents.AMULET_NAME) != null) {
-                    crafting.set(EnigmaticComponents.AMULET_NAME, stack.get(EnigmaticComponents.AMULET_NAME));
-                    return;
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
     private static void onGrantAdvancement(@NotNull AdvancementEvent.AdvancementEarnEvent event) {
         String id = event.getAdvancement().id().toString();
         if (event.getEntity() instanceof ServerPlayer player) {
@@ -153,6 +132,11 @@ public class EnigmaticEventHandler {
     }
 
     // Curse Boost Related Event
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    private static void onEntitySpawn(FinalizeSpawnEvent event) {
+        if (CursedRing.immediatelyCurseBoost.get())
+            EnigmaticHandler.setCurseBoosted(event.getEntity(), true, null);
+    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     private static void onFinalTarget(@NotNull LivingChangeTargetEvent event) {
@@ -225,6 +209,9 @@ public class EnigmaticEventHandler {
             vex.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 120, 1));
             vex.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 40));
         }
+        if (entity instanceof Breeze evoker) {
+            addModifier(evoker, Attributes.ATTACK_DAMAGE, new AttributeModifier(location, 2.0, AttributeModifier.Operation.ADD_VALUE));
+        }
         if (entity instanceof Slime slime) {
             int size = slime.getSize();
             if (size > 2) slime.setSize(Mth.ceil(size * 1.2), true);
@@ -240,7 +227,7 @@ public class EnigmaticEventHandler {
         }
         if (entity instanceof Phantom phantom) {
             if (phantom.getRandom().nextBoolean()) {
-                phantom.setPhantomSize(phantom.getPhantomSize() + phantom.getRandom().nextInt(3));
+                phantom.setPhantomSize(phantom.getPhantomSize() + phantom.getRandom().nextInt(2));
             }
         }
     }
@@ -276,6 +263,12 @@ public class EnigmaticEventHandler {
         if (entity instanceof AbstractSkeleton skeleton) {
             priority = getGoalPriority(skeleton, meleeOrBow) - 1;
             if (priority > 0) skeleton.goalSelector.addGoal(priority, new SkeletonMeleeAttackGoal(skeleton));
+        }
+        if (entity instanceof Ghast ghast) {
+            ghast.goalSelector.addGoal(7, new GhastMultishotGoal(ghast));
+        }
+        if (entity instanceof Animal animal) {
+            animal.goalSelector.addGoal(5, new AvoidTheWorthyGoal(animal, 6.0F, 1.25, 1.25));
         }
         if (entity instanceof Vex vex) {
             if (vex.getOwner() != null && EnigmaticHandler.isCurseBoosted(vex.getOwner())) {

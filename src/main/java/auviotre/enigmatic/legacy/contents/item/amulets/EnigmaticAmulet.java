@@ -21,6 +21,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -39,6 +40,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
@@ -200,6 +202,21 @@ public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
                         }
                     }
                 });
+            }
+        }
+
+        @SubscribeEvent
+        private static void onCraft(PlayerEvent.@NotNull ItemCraftedEvent event) {
+            ItemStack crafting = event.getCrafting();
+            if (crafting.is(EnigmaticTags.Items.AMULETS)) {
+                Container container = event.getInventory();
+                for (int i = 0; i < container.getContainerSize(); i++) {
+                    ItemStack stack = container.getItem(i);
+                    if (stack.is(EnigmaticTags.Items.AMULETS) && stack.get(EnigmaticComponents.AMULET_NAME) != null) {
+                        crafting.set(EnigmaticComponents.AMULET_NAME, stack.get(EnigmaticComponents.AMULET_NAME));
+                        return;
+                    }
+                }
             }
         }
     }

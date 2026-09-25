@@ -215,11 +215,12 @@ public class HellBladeCharm extends BaseCurioItem {
             if (event.getSource().getEntity() instanceof Player player) {
                 CompoundTag data = EnigmaticHandler.getPersistedData(player);
                 if (player.level().dimension().equals(Level.NETHER) && !data.getBoolean("LootedHellBladeCharm")) {
+                    boolean hardcore = player.level().getLevelData().isHardcore();
                     float point = data.getFloat("HellPoint");
                     float healthFactor = 1 - player.getHealth() / player.getMaxHealth();
                     healthFactor = healthFactor * healthFactor;
-                    if (healthFactor < 0.2F) return;
-                    float damageFactor = Math.min(event.getOriginalDamage(), event.getNewDamage()) / player.getMaxHealth() * 8.0F;
+                    if (healthFactor < (hardcore ? 0.16F : 0.2F)) return;
+                    float damageFactor = Math.min(event.getOriginalDamage(), event.getNewDamage()) / player.getMaxHealth() * (hardcore ? 9.0F : 8.0F);
                     data.putFloat("HellPoint", point + Math.min(100.0F, healthFactor * damageFactor));
                 }
             }

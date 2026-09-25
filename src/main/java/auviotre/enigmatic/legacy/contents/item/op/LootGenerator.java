@@ -34,15 +34,20 @@ import java.util.List;
 import java.util.Set;
 
 public class LootGenerator extends BaseItem {
-    public List<ResourceKey<LootTable>> lootList = new ArrayList<>();
+    public static final List<ResourceKey<LootTable>> LOOT_LIST = new ArrayList<>();
 
     public LootGenerator() {
-        super(IItemHelper.singleProperties().rarity(Rarity.EPIC).durability(BuiltInLootTables.all().size() * 2));
+        super(IItemHelper.singleProperties().rarity(Rarity.EPIC));
+        if (LOOT_LIST.isEmpty()) initList();
+    }
+
+    public static void initList() {
+        LOOT_LIST.clear();
         Set<ResourceKey<LootTable>> all = BuiltInLootTables.all();
         List<ResourceKey<LootTable>> list = all.stream().sorted().toList();
         for (ResourceKey<LootTable> key : list) {
             String path = key.location().getPath();
-            if (path.startsWith("chests/")) this.lootList.add(key);
+            if (path.startsWith("chests/")) LOOT_LIST.add(key);
         }
     }
 
@@ -63,7 +68,7 @@ public class LootGenerator extends BaseItem {
 
         TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.lootGeneratorCurrent");
-        ResourceKey<LootTable> key = this.lootList.get(getLootTableIndex(stack));
+        ResourceKey<LootTable> key = LOOT_LIST.get(getLootTableIndex(stack));
         list.add(Component.literal(key.location().toString()).withStyle(ChatFormatting.GOLD));
     }
 
@@ -73,15 +78,14 @@ public class LootGenerator extends BaseItem {
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        int size = this.lootList.size();
         int id = getLootTableIndex(stack);
+        int size = LOOT_LIST.size();
         if (!player.isCrouching()) stack.set(EnigmaticComponents.LOOT_TABLE_ID.get(), (id + 1) % size);
         else stack.set(EnigmaticComponents.LOOT_TABLE_ID.get(), (id + size - 1) % size);
         player.swing(hand);
 
-        if (player instanceof ServerPlayer) {
-            player.displayClientMessage(Component.literal("Table: " + this.lootList.get(getLootTableIndex(stack)).location()), true);
-        }
+        if (player instanceof ServerPlayer)
+            player.displayClientMessage(Component.literal("Table: " + LOOT_LIST.get(getLootTableIndex(stack)).location()), true);
         return InteractionResultHolder.success(stack);
     }
 
@@ -97,12 +101,12 @@ public class LootGenerator extends BaseItem {
                 RandomSource lootRandomizer = player.getRandom();
                 if (level.isClientSide()) return InteractionResult.SUCCESS;
                 if (dir == Direction.UP) {
-                    chest.setLootTable(this.lootList.get(getLootTableIndex(stack)), lootRandomizer.nextLong());
+                    chest.setLootTable(LOOT_LIST.get(getLootTableIndex(stack)), lootRandomizer.nextLong());
                     chest.unpackLootTable(player);
                 } else if (dir == Direction.DOWN) {
                     HashMap<Item, Integer> lootMap = new HashMap<>();
                     for (int counter = 0; counter < 32768; counter++) {
-                        chest.setLootTable(this.lootList.get(getLootTableIndex(stack)), lootRandomizer.nextLong());
+                        chest.setLootTable(LOOT_LIST.get(getLootTableIndex(stack)), lootRandomizer.nextLong());
                         chest.unpackLootTable(player);
 
                         for (int slot = 0; slot < chest.getContainerSize(); slot++) {

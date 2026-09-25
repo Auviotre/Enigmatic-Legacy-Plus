@@ -88,6 +88,10 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
                 .add(Attributes.FLYING_SPEED, 0.15F).add(Attributes.ATTACK_DAMAGE, 4.0).add(Attributes.FOLLOW_RANGE, 48.0);
     }
 
+    private static float getOffset(RandomSource random, float range) {
+        return (random.nextFloat() * 2 - 1.0F) * range;
+    }
+
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ID_ATTACK_TARGET, 0);
@@ -287,10 +291,6 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             return InteractionResult.sidedSuccess(player.level().isClientSide());
         }
         return super.mobInteract(player, hand);
-    }
-
-    private static float getOffset(RandomSource random, float range) {
-        return  (random.nextFloat() * 2 - 1.0F) * range;
     }
 
     private static class FollowOwner extends Behavior<IchorSprite> {

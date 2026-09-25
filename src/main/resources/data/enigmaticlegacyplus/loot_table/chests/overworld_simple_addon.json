@@ -99,6 +99,17 @@
                     "type": "minecraft:item",
                     "conditions": [
                         {
+                            "chance": 0.9,
+                            "condition": "minecraft:random_chance"
+                        }
+                    ],
+                    "name": "enigmaticlegacyplus:insignia",
+                    "weight": 8
+                },
+                {
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
                             "chance": 0.32,
                             "condition": "minecraft:random_chance"
                         }

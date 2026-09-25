@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "enigmaticlegacyplus:item/sacred_chalice"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "filled": 1
+      },
+      "model": "enigmaticlegacyplus:item/sacred_chalice_filled"
+    }
+  ]
+}

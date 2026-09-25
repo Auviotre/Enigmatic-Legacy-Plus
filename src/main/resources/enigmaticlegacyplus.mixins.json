@@ -29,7 +29,10 @@
     "entity.MixinVillager",
     "entity.MixinWitch",
     "entity.MixinWitherBoss",
-    "entity.MixinZombie"
+    "entity.MixinZombie",
+    "entity.dragon.MixinAbstractPhase",
+    "entity.dragon.MixinChargePhase",
+    "entity.dragon.MixinStrafePhase"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -38,8 +41,12 @@
     "requireAnnotations": true
   },
   "client": [
-    "MixinItemRenderer",
     "MixinWorldListEntry",
+    "accessor.EffectInstanceAccessor",
+    "accessor.PostChainAccessor",
+    "client.MixinEntityRenderer",
+    "client.MixinGameRenderer",
+    "client.MixinItemRenderer",
     "compat.MixinApothScreen",
     "compat.MixinGuiBookLanding"
   ]

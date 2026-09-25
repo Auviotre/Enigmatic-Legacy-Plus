@@ -76,7 +76,6 @@ public class EarthPromise extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.earthPromise1", ChatFormatting.GOLD, healthThreshold.get() + "%");
             int cool = RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player) ? cooldown.get() / 25 : cooldown.get() / 20;
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.earthPromise2", ChatFormatting.GOLD, cool);
-
         } else TooltipHandler.holdShift(list);
         TooltipHandler.line(list);
         TooltipHandler.cursedOnly(list, stack);

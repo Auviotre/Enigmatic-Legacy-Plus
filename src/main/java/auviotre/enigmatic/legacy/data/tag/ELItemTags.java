@@ -34,10 +34,10 @@ public class ELItemTags extends ItemTagsProvider {
         );
         this.tag(ItemTags.LECTERN_BOOKS).add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get());
         this.tag(ItemTags.VANISHING_ENCHANTABLE).addTag(EnigmaticTags.Items.ETERNAL_BINDING_ENCHANTABLE)
-                .add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get(), SPELLSTONE_SWORD.get(), INFERNAL_CINDER.get(), INFERNAL_SHIELD.get());
-        this.tag(ItemTags.DURABILITY_ENCHANTABLE).add(SPELLSTONE_SWORD.get(), INFERNAL_CINDER.get(), INFERNAL_SHIELD.get(), ETHERIUM_HAMMER.get(), DRAGON_BREATH_BOW.get(), MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
+                .add(THE_ACKNOWLEDGMENT.get(), THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get(), SPELLSTONE_SWORD.get(), INFERNAL_CINDER.get(), INFERNAL_SHIELD.get(), ANNIHILATING_SWORD.get());
+        this.tag(ItemTags.DURABILITY_ENCHANTABLE).add(SPELLSTONE_SWORD.get(), INFERNAL_CINDER.get(), INFERNAL_SHIELD.get(), ETHERIUM_HAMMER.get(), DRAGON_BREATH_BOW.get(), MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get(), ANNIHILATING_SWORD.get());
         this.tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
-        this.tag(ItemTags.SWORDS).add(EXECUTION_AXE.get(), ENDER_SLAYER.get(), ETHERIUM_SWORD.get(), SPELLSTONE_SWORD.get());
+        this.tag(ItemTags.SWORDS).add(EXECUTION_AXE.get(), ENDER_SLAYER.get(), ETHERIUM_SWORD.get(), SPELLSTONE_SWORD.get(), ANNIHILATING_SWORD.get());
         this.tag(ItemTags.HOES).add(ETHERIUM_SCYTHE.get());
         this.tag(ItemTags.BOW_ENCHANTABLE).add(DRAGON_BREATH_BOW.get());
         this.tag(ItemTags.SWORD_ENCHANTABLE).add(THE_INFINITUM.get());
@@ -72,6 +72,12 @@ public class ELItemTags extends ItemTagsProvider {
 
         this.tag(EnigmaticTags.Items.ARMOR_CHECK_EXCLUSION).add(Items.ELYTRA, MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
         this.tag(EnigmaticTags.Items.BYPASS_FOURTH_CURSE).add(THE_TWIST.get(), THE_BLESS.get(), THE_INFINITUM.get());
+        this.tag(EnigmaticTags.Items.ABYSSAL_ITEMS).add(
+                ABYSSAL_HEART.get(), THE_INFINITUM.get(),
+                ELDRITCH_AMULET.get(), DESOLATION_RING.get(),
+                DIMNESS_CHARM.get(), VIOLENCE_SCROLL.get(),
+                CHAOS_ELYTRA.get(), ANNIHILATING_SWORD.get()
+        );
         this.tag(EnigmaticTags.Items.SPELLSTONES).addTag(EnigmaticTags.Items.THE_CUBE_MATERIAL)
                 .add(ETHERIUM_CORE.get(), THE_CUBE.get(), CREATION_HEART.get());
         this.tag(EnigmaticTags.Items.THE_CUBE_MATERIAL).add(
@@ -90,7 +96,8 @@ public class ELItemTags extends ItemTagsProvider {
                 CURSED_XP_SCROLL.get(), THUNDER_SCROLL.get(),
                 VIOLENCE_SCROLL.get(), COSMIC_SCROLL.get()
         );
-        this.tag(EnigmaticTags.Items.AMULETS).addTag(EnigmaticTags.Items.ENIGMATIC_AMULETS).add(UNWITNESSED_AMULET.get(), ASCENSION_AMULET.get(), ELDRITCH_AMULET.get());
+        this.tag(EnigmaticTags.Items.AMULETS).addTag(EnigmaticTags.Items.ENIGMATIC_AMULETS)
+                .add(UNWITNESSED_AMULET.get(), ASCENSION_AMULET.get(), REDEMPTION_AMULET.get(), ELDRITCH_AMULET.get());
         this.tag(EnigmaticTags.Items.ENIGMATIC_AMULETS).add(
                 ENIGMATIC_AMULET_RED.get(),
                 ENIGMATIC_AMULET_AQUA.get(),
@@ -126,11 +133,11 @@ public class ELItemTags extends ItemTagsProvider {
                 QUARTZ_RING.get(), ENDER_RING.get(), STARLIGHT_RING.get(), EARTH_PROMISE.get(), CURSED_RING.get(), REDEMPTION_RING.get(), DESOLATION_RING.get()
         );
         this.tag(CuriosTags.CHARM).add(
-                MINING_CHARM.get(), MONSTER_CHARM.get(),
+                MINING_CHARM.get(), MONSTER_CHARM.get(), INSIGNIA.get(),
                 FORGER_GEM.get(), HELL_BLADE_CHARM.get(),
                 ETHEREAL_FORGING_CHARM.get(), BERSERK_EMBLEM.get(),
-                ENCHANTER_PEARL.get(), SCORCHED_CHARM.get(),
-                SPELLTUNER.get(), ENIGMATIC_EYE.get()
+                ENCHANTER_PEARL.get(), FORGER_CRYSTAL.get(), SCORCHED_CHARM.get(),
+                SPELLTUNER.get(), ENIGMATIC_EYE.get(), DIMNESS_CHARM.get()
         );
         this.tag(CuriosTags.BACK).add(MAJESTIC_ELYTRA.get(), CHAOS_ELYTRA.get());
     }

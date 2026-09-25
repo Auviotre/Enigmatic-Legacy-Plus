@@ -19,6 +19,9 @@ public class EnigmaticTrigger extends SimpleCriterionTrigger<EnigmaticTrigger.Tr
      * 4. Killing with Arrogance of Chaos
      * 5. Use Escape Scroll
      * 6. Destroy Cursed Ring with stone
+     * 7. Max Violence Curse
+     * 8. Use Execution Axe
+     * 9. Consume The Forbidden Fruit
      */
     public void trigger(ServerPlayer player, int triggerID) {
         this.trigger(player, instance -> instance.test(triggerID));

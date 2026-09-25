@@ -9,6 +9,7 @@ import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import auviotre.enigmatic.legacy.registries.EnigmaticTriggers;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.serialization.Codec;
@@ -26,6 +27,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.EnchantmentTags;
@@ -118,6 +120,11 @@ public class ViolenceScroll extends BaseCurioItem {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScroll6", ChatFormatting.GOLD, String.format("+%d%%", count * entityReach.get()));
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScroll7", ChatFormatting.GOLD, String.format("+%d%%", count * krBoost.get()));
             }
+            if (EnigmaticHandler.isAbyssBoosted(Minecraft.getInstance().player)) {
+                TooltipHandler.line(list);
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.abyssBoost");
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScrollBoost");
+            }
         } else {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScrollLore1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScrollLore2");
@@ -168,6 +175,8 @@ public class ViolenceScroll extends BaseCurioItem {
                 effect.duration = 210;
                 effect.amplifier = Math.min(timer / 100, 9);
             }
+            if (entity.tickCount % 4 == 0 && entity instanceof ServerPlayer serverPlayer && timer >= 900)
+                EnigmaticTriggers.ENIGMATIC_TRIGGER.get().trigger(serverPlayer, 7);
         } else if (timer > 0) stack.set(EnigmaticComponents.VIOLENCE_CURSE_TIMER, (int) (timer * 0.95F));
         stack.set(EnigmaticComponents.VIOLENCE_TIMER, Math.max(i, 0));
     }
@@ -191,6 +200,10 @@ public class ViolenceScroll extends BaseCurioItem {
             if (!living.hasEffect(EnigmaticEffects.ABYSS_CORRUPTION) && !living.hasInfiniteMaterials())
                 living.addEffect(new MobEffectInstance(EnigmaticEffects.ABYSS_CORRUPTION, 100, 2));
         }
+    }
+
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return oldStack.getItem() != newStack.getItem();
     }
 
     private Multimap<Holder<Attribute>, AttributeModifier> createAttributeMap(LivingEntity entity, ItemStack stack) {
@@ -326,6 +339,10 @@ public class ViolenceScroll extends BaseCurioItem {
                 ItemStack curio = EnigmaticHandler.getCurio(entity, EnigmaticItems.VIOLENCE_SCROLL);
                 int i = curio.getOrDefault(EnigmaticComponents.VIOLENCE_TIMER, 0);
                 curio.set(EnigmaticComponents.VIOLENCE_TIMER, i + 100);
+                if (EnigmaticHandler.isAbyssBoosted(entity)) {
+                    entity.invulnerableTime = 22;
+                    entity.lastHurt = entity.getMaxHealth() / 2;
+                }
             }
         }
     }

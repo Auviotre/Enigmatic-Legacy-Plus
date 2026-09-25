@@ -117,7 +117,7 @@ public class AntiqueBag extends BaseItem {
         }
 
         @SubscribeEvent
-        private static void onDamaged(EntityTickEvent.@NotNull Pre event) {
+        private static void onTick(EntityTickEvent.@NotNull Pre event) {
             if (event.getEntity() instanceof LivingEntity entity && !entity.level().isClientSide() && EnigmaticHandler.isTheWorthyOne(entity)) {
                 if (AntiqueBag.hasBook(EnigmaticItems.THE_INFINITUM.toStack(), entity))
                     entity.getAttributes().addTransientAttributeModifiers(getModifier());

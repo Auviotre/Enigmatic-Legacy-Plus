@@ -1,0 +1,21 @@
+{
+    "type": "enigmaticlegacyplus:cursed_shaped",
+    "category": "misc",
+    "key": {
+        "I": {
+            "item": "enigmaticlegacyplus:ichor_droplet"
+        },
+        "X": {
+            "item": "enigmaticlegacyplus:sacred_crystal"
+        }
+    },
+    "pattern": [
+        "XIX",
+        "XXX",
+        " X "
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:sacred_chalice"
+    }
+}

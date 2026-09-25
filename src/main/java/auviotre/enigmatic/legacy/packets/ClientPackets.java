@@ -3,6 +3,7 @@ package auviotre.enigmatic.legacy.packets;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.client.Quote;
 import auviotre.enigmatic.legacy.client.screen.toast.SlotUnlockedToast;
+import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import auviotre.enigmatic.legacy.packets.client.*;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
@@ -11,16 +12,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class ClientPackets {
     public static void handle(final EnderRingGrabItemPacket packet) {
@@ -76,6 +82,46 @@ public class ClientPackets {
         }
         if (instance.level != null) {
             instance.level.playLocalSound(packet.x, packet.y, packet.z, SoundEvents.TOTEM_USE, SoundSource.HOSTILE, 1.0F, 1.0F, false);
+        }
+    }
+
+    public static void handle(final ForgerCrystalPacket packet) {
+        Minecraft instance = Minecraft.getInstance();
+        Player player = instance.player;
+        if (player != null) {
+            instance.particleEngine.createTrackingEmitter(player, EnigmaticParticles.ICHOR.get(), 40);
+            instance.gameRenderer.displayItemActivation(packet.totem);
+        }
+        if (instance.level != null) {
+            instance.level.playLocalSound(packet.x, packet.y, packet.z, SoundEvents.TOTEM_USE, SoundSource.HOSTILE, 1.0F, 1.0F, false);
+        }
+    }
+
+    public static void handle(final SacredChalicePacket packet) {
+        Level level = Minecraft.getInstance().level;
+        if (level != null) {
+            AABB box = AABB.ofSize(packet.center, packet.x, packet.y, packet.z);
+            List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, box, LivingEntity::isAlive);
+            if (entities.isEmpty()) return;
+            ColorParticleOption particle = ColorParticleOption.create(EnigmaticParticles.SPELL.get(), 0xFFBF0003);
+            for (int i = 0; i < 10; i++) {
+                double x = packet.center.x + 0.4F - 0.8F * level.getRandom().nextFloat();
+                double y = packet.center.y + 0.4F - 0.8F * level.getRandom().nextFloat();
+                double z = packet.center.z + 0.4F - 0.8F * level.getRandom().nextFloat();
+                level.addParticle(particle, x, y, z, 0, 0, 0);
+            }
+
+            for (LivingEntity entity : entities) {
+                double dist = entity.distanceToSqr(packet.center);
+                if (dist > 3) {
+                    dist = Math.sqrt(dist);
+                    Vec3 vec3 = packet.center.subtract(entity.getX(), entity.getY(0.5), entity.getZ()).normalize();
+                    for (double i = 0.5; i < dist; i += 0.4) {
+                        level.addParticle(particle, entity.getRandomX(0.1) + vec3.x * i, entity.getY() + vec3.y * i, entity.getRandomZ(0.1) + vec3.z * i,
+                                vec3.x * i * 0.1, vec3.y * i * 0.1, vec3.z * i * 0.1);
+                    }
+                }
+            }
         }
     }
 
@@ -207,7 +253,8 @@ public class ClientPackets {
                 break;
             case 22:
                 Vec3 look = new Vec3(packet.dx, packet.dy, packet.dz).scale(2);
-                if (player.tickCount % 10 == 0) level.playSound(player, packet.x, packet.y, packet.z, SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 1.0F, (float) (1.2F + 0.2F * Math.random()));
+                if (player.tickCount % 10 == 0)
+                    level.playSound(player, packet.x, packet.y, packet.z, SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 1.0F, (float) (1.2F + 0.2F * Math.random()));
                 for (int i = 0; i < 5; i++) {
                     Vec3 add = look.add(Math.random() * 1.8 - 0.9, Math.random() * 0.6 - 0.3, Math.random() * 1.8 - 0.9).normalize().scale(0.4);
                     level.addParticle(ParticleTypes.FLAME, packet.x, packet.y - 0.32, packet.z, add.x, add.y, add.z);
@@ -258,6 +305,16 @@ public class ClientPackets {
                 for (int i = 0; i < amount; i++) {
                     level.addParticle(ParticleTypes.SQUID_INK, packet.x, packet.y + 0.2 * Math.random() + 0.5, packet.z, 0.4 * Math.sin(Math.PI / 2 / amount * i), 0.0, 0.4 * Math.cos(Math.PI / 2 / amount * i));
                 }
+        }
+    }
+
+    public static void handle(AcceptorSyncPacket packet) {
+        Level level = Minecraft.getInstance().level;
+        if (level != null) {
+            Entity entity = level.getEntity(packet.entityID);
+            if (entity instanceof PermanentItemEntity itemEntity) {
+                itemEntity.acceptors = packet.set;
+            }
         }
     }
 }

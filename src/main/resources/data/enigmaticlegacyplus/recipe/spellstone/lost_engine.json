@@ -1,0 +1,31 @@
+{
+    "type": "enigmaticlegacyplus:spellstone_table",
+    "debris_count": 13,
+    "ingredients": [
+        {
+            "item": "minecraft:copper_block"
+        },
+        {
+            "item": "minecraft:redstone_block"
+        },
+        {
+            "item": "minecraft:piston"
+        },
+        {
+            "item": "minecraft:lightning_rod"
+        },
+        {
+            "item": "minecraft:piston"
+        },
+        {
+            "item": "minecraft:redstone_block"
+        },
+        {
+            "item": "minecraft:copper_block"
+        }
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:lost_engine"
+    }
+}

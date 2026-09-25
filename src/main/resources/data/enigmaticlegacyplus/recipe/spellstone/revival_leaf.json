@@ -1,0 +1,31 @@
+{
+    "type": "enigmaticlegacyplus:spellstone_table",
+    "debris_count": 6,
+    "ingredients": [
+        {
+            "tag": "minecraft:leaves"
+        },
+        {
+            "item": "minecraft:emerald"
+        },
+        {
+            "tag": "c:seeds"
+        },
+        {
+            "item": "enigmaticlegacyplus:infinimeal"
+        },
+        {
+            "tag": "c:seeds"
+        },
+        {
+            "item": "minecraft:emerald"
+        },
+        {
+            "tag": "minecraft:leaves"
+        }
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:revival_leaf"
+    }
+}

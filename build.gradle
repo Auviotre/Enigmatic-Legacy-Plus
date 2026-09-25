@@ -124,7 +124,7 @@ dependencies {
     implementation "curse.maven:sodium-394468:6382651"
     implementation "curse.maven:irisshaders-455508:6661598"
     // compat
-    implementation "curse.maven:thirst-was-taken-679270:7017923"
+    implementation "curse.maven:thirst-was-reclaimed-884742:8852248"
 
     implementation "curse.maven:sophisticated-backpacks-422301:8084526"
     implementation "curse.maven:sophisticated-core-618298:8084486"
@@ -133,7 +133,10 @@ dependencies {
     implementation "curse.maven:apothic-attributes-898963:6751650"
     implementation "curse.maven:apothic-enchanting-1063926:6926290"
 
-    implementation "curse.maven:mob-battle-mod-268746:8065542"
+//    implementation "curse.maven:mob-battle-mod-268746:8065542"
+
+    implementation "curse.maven:mystical-agriculture-246640:8344249"
+    implementation "curse.maven:cucumber-272335:8035802"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

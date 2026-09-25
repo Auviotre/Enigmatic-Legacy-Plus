@@ -143,7 +143,7 @@ public class RevivalLeaf extends SpellstoneItem {
         if (entity.tickCount % 12 == 0) {
             if (entity instanceof Player player && hasPlantBy(player)) {
                 player.getAttributes().addTransientAttributeModifiers(this.getModifiers());
-                if (player.getAbilities().flying) {
+                if (player.getAbilities().flying && player.level().isClientSide()) {
                     if (player.getRandom().nextBoolean()) {
                         BlockPos lazyPos = BlockPos.of(EnigmaticHandler.getPersistedData(player).getLong("RevivalFlightLazyPos"));
                         player.level().addParticle(ParticleTypes.HAPPY_VILLAGER, player.getRandomX(0.5), player.getY(), player.getRandomZ(0.5), 0, 0, 0);
@@ -202,8 +202,7 @@ public class RevivalLeaf extends SpellstoneItem {
     private boolean hasPlantBy(Player player) {
         BlockPos blockPos = player.blockPosition();
         CompoundTag data = EnigmaticHandler.getPersistedData(player);
-        double reach = player.getAttributes().getValue(Attributes.BLOCK_INTERACTION_RANGE);
-        int range = (int) Math.pow(reach + 1, 2) + 1;
+        int range = (int) (player.getAttributes().getValue(Attributes.BLOCK_INTERACTION_RANGE) * 2 + 1);
         if (player.getPersistentData().contains(TAG_ID)) {
             BlockPos lazyPos = BlockPos.of(data.getLong(TAG_ID));
             BlockState blockState = player.level().getBlockState(lazyPos);

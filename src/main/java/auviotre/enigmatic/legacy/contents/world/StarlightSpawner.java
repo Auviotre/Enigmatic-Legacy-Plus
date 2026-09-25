@@ -43,7 +43,7 @@ public class StarlightSpawner implements CustomSpawner {
             boolean flag = EnigmaticHandler.hasCurio(player, EnigmaticItems.STARLIGHT_RING);
             int range = flag ? RANGE * 3 / 5 : RANGE;
             if (flag) this.nextTick = Math.max(this.nextTick - random.nextInt(60), 200 + random.nextInt(100));
-            for (int i = 0; i < random.nextInt(flag ? 4 : 3) ; i++) {
+            for (int i = 0; i < random.nextInt(flag ? 4 : 3); i++) {
                 BlockPos spawnPos;
                 do {
                     spawnPos = blockPos.east(random.nextInt(-range, range + 1)).south(random.nextInt(-range, range + 1));

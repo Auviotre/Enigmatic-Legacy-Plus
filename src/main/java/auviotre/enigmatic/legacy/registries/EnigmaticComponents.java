@@ -57,6 +57,8 @@ public class EnigmaticComponents {
             () -> DataComponentType.<StorageCrystal.Info>builder().persistent(StorageCrystal.Info.CODEC).networkSynchronized(StorageCrystal.Info.STREAM_CODEC).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MALICE_DURABILITY = COMPONENTS.register("malice_durability",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> INSIGNIA_NAME = COMPONENTS.register("insignia_name",
+            () -> DataComponentType.<String>builder().persistent(Codec.STRING).networkSynchronized(ByteBufCodecs.STRING_UTF8).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> HUNTER_COUNT = COMPONENTS.register("hunter_count",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<String>>> HUNTER_LIST = COMPONENTS.register("hunter_list",
@@ -87,7 +89,11 @@ public class EnigmaticComponents {
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Float>> ELDRITCH_TIMER = COMPONENTS.register("eldritch_timer",
             () -> DataComponentType.<Float>builder().persistent(Codec.FLOAT).networkSynchronized(ByteBufCodecs.FLOAT).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Float>> ANNI_ENERGY = COMPONENTS.register("anni_energy",
+            () -> DataComponentType.<Float>builder().persistent(Codec.FLOAT).networkSynchronized(ByteBufCodecs.FLOAT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> LOOT_TABLE_ID = COMPONENTS.register("loot_table_id",
+            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> QUOTE_ID = COMPONENTS.register("quote_id",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> NO_DROP = COMPONENTS.register("no_drop",
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());

@@ -1,0 +1,31 @@
+{
+    "type": "enigmaticlegacyplus:spellstone_table",
+    "debris_count": 6,
+    "ingredients": [
+        {
+            "item": "minecraft:iron_ingot"
+        },
+        {
+            "item": "minecraft:snow_block"
+        },
+        {
+            "item": "minecraft:blue_ice"
+        },
+        {
+            "item": "minecraft:iron_block"
+        },
+        {
+            "item": "minecraft:blue_ice"
+        },
+        {
+            "item": "minecraft:snow_block"
+        },
+        {
+            "item": "minecraft:iron_ingot"
+        }
+    ],
+    "result": {
+        "count": 1,
+        "id": "enigmaticlegacyplus:forgotten_ice"
+    }
+}

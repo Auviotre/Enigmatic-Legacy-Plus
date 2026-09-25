@@ -24,6 +24,7 @@ public interface EnigmaticTags {
         TagKey<Item> BYPASS_FOURTH_CURSE = register("bypass_fourth_curse");
         TagKey<Item> ETERNAL_BINDING_ENCHANTABLE = register("enchantable/eternal_binding");
         TagKey<Item> ETHERIC_RESONANCE_ENCHANTABLE = register("enchantable/etheric_resonance");
+        TagKey<Item> ABYSSAL_ITEMS = register("abyssal_items");
 
         private static TagKey<Item> register(String name) {
             return register(EnigmaticLegacy.MODID, name);

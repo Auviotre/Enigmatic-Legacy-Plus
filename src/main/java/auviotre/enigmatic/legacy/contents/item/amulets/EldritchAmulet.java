@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.amulets;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
@@ -7,9 +8,11 @@ import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
+import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
@@ -19,6 +22,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -30,14 +34,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
@@ -64,7 +72,6 @@ public class EldritchAmulet extends BaseCurioItem {
         builder.pop(2);
     }
 
-
     private static Map<String, NonNullList<ItemStack>> inventoryMap(Player player) {
         Map<String, NonNullList<ItemStack>> inventories = new HashMap<>();
         inventories.put("Armor", player.getInventory().armor);
@@ -76,12 +83,12 @@ public class EldritchAmulet extends BaseCurioItem {
     public static void storeInventory(ServerPlayer player) {
         Map<String, NonNullList<ItemStack>> inventories = inventoryMap(player);
         CompoundTag tag = new CompoundTag();
-        Holder<Enchantment> holder = player.registryAccess().holderOrThrow(Enchantments.VANISHING_CURSE);
         inventories.forEach((key, value) -> {
             ListTag list = new ListTag();
             for (int i = 0; i < value.size(); i++) {
                 ItemStack stack = value.get(i);
-                if (EnchantmentHelper.getTagEnchantmentLevel(holder, stack) > 0) stack = ItemStack.EMPTY;
+                if (!stack.isEmpty() && !player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && EnchantmentHelper.has(stack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP))
+                    stack = ItemStack.EMPTY;
                 list.add(stack.saveOptional(player.registryAccess()));
                 value.set(i, ItemStack.EMPTY);
             }
@@ -111,6 +118,10 @@ public class EldritchAmulet extends BaseCurioItem {
         return hadTag;
     }
 
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return oldStack.getItem() != newStack.getItem();
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -120,6 +131,11 @@ public class EldritchAmulet extends BaseCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmulet3");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmulet4");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmulet5");
+            if (EnigmaticHandler.isAbyssBoosted(Minecraft.getInstance().player)) {
+                TooltipHandler.line(list);
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.abyssBoost");
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmuletBoost", ChatFormatting.GOLD, "80%");
+            }
         } else {
             TooltipHandler.holdShift(list);
             String name = stack.get(EnigmaticComponents.AMULET_NAME);
@@ -186,5 +202,20 @@ public class EldritchAmulet extends BaseCurioItem {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
         return attributes;
+    }
+
+    @Mod(value = EnigmaticLegacy.MODID)
+    @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
+    public static class Events {
+        @SubscribeEvent
+        private static void onDamaged(LivingDamageEvent.@NotNull Pre event) {
+            DamageSource source = event.getSource();
+            if (event.getNewDamage() >= Float.MAX_VALUE) return;
+            if (source.getEntity() instanceof LivingEntity attacker && EnigmaticHandler.isAbyssBoosted(attacker) && EnigmaticHandler.hasCurio(attacker, EnigmaticItems.ELDRITCH_AMULET)) {
+                if (event.getEntity().getHealth() < attacker.getHealth()) {
+                    event.setNewDamage(event.getNewDamage() * 1.8F);
+                }
+            }
+        }
     }
 }

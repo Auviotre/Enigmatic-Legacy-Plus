@@ -113,6 +113,7 @@ public class CursedRing extends CursedCurioItem {
     public static ModConfigSpec.BooleanValue ultraHardcore;
     public static ModConfigSpec.IntValue maxSoulCrystalLoss;
     public static ModConfigSpec.BooleanValue forTheWorthyMode;
+    public static ModConfigSpec.BooleanValue immediatelyCurseBoost;
     public static ModConfigSpec.BooleanValue giveStarterGear;
     public static ModConfigSpec.ConfigValue<List<? extends String>> neutralWhiteList;
 
@@ -141,6 +142,7 @@ public class CursedRing extends CursedCurioItem {
         ultraHardcore = builder.define("ultraHardcore", false);
         maxSoulCrystalLoss = builder.defineInRange("maxSoulCrystalLoss", 9, 0, 10);
         forTheWorthyMode = builder.define("forTheWorthy", true);
+        immediatelyCurseBoost = builder.define("immediatelyCurseBoost", false);
         giveStarterGear = builder.define("giveStarterGear", true);
         neutralWhiteList = builder.defineList("neutralWhiteList", List.of("minecraft:bee", "the_bumblezone:bee_queen"), () -> "minecraft:player", Objects::nonNull);
         builder.pop();
@@ -203,8 +205,9 @@ public class CursedRing extends CursedCurioItem {
     }
 
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
-        context.entity().getAttributes().addTransientAttributeModifiers(this.getArmorModifiers());
-        if (context.entity().level().isClientSide || !(context.entity() instanceof Player player)) return;
+        LivingEntity entity = context.entity();
+        entity.getAttributes().addTransientAttributeModifiers(this.getArmorModifiers(entity));
+        if (entity.level().isClientSide || !(entity instanceof Player player)) return;
         if (player.isCreative() || player.isSpectator()) return;
 
         if (EnigmaticHandler.hasItem(player, EnigmaticItems.ODE_TO_LIVING)) return;
@@ -249,9 +252,10 @@ public class CursedRing extends CursedCurioItem {
         }
     }
 
-    private Multimap<Holder<Attribute>, AttributeModifier> getArmorModifiers() {
+    private Multimap<Holder<Attribute>, AttributeModifier> getArmorModifiers(LivingEntity entity) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         double modifier = -0.01 * armorDebuff.getAsInt();
+        if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.DIMNESS_CHARM)) modifier *= 0.6F;
         builder.put(Attributes.ARMOR, new AttributeModifier(IItemHelper.getLocation(this), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(IItemHelper.getLocation(this), modifier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return builder.build();
@@ -281,7 +285,7 @@ public class CursedRing extends CursedCurioItem {
 
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         LivingEntity entity = context.entity();
-        entity.getAttributes().removeAttributeModifiers(this.getArmorModifiers());
+        entity.getAttributes().removeAttributeModifiers(this.getArmorModifiers(entity));
         EnigmaticHandler.setCurrentWorldCursed(false);
         CuriosApi.getCuriosInventory(entity).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
@@ -508,9 +512,11 @@ public class CursedRing extends CursedCurioItem {
                 if (event.getSource().getEntity() instanceof LivingEntity entity && EnigmaticHandler.isTheCursedOne(entity)) {
                     if (!entity.getWeaponItem().is(EnigmaticTags.Items.BYPASS_FOURTH_CURSE)) {
                         float debuff = 1.0F;
-                        if (entity.getWeaponItem().is(EnigmaticItems.THE_ACKNOWLEDGMENT)) debuff -= 0.2F;
-                        else if (AntiqueBag.hasBook(EnigmaticItems.THE_ACKNOWLEDGMENT.toStack(), entity)) debuff -= 0.08F;
-                        if (AntiqueBag.hasBook(EnigmaticItems.THE_INFINITUM.toStack(), entity)) debuff -= 0.24F;
+                        if (entity.getWeaponItem().is(EnigmaticItems.THE_ACKNOWLEDGMENT)) debuff *= 0.8F;
+                        else if (AntiqueBag.hasBook(EnigmaticItems.THE_ACKNOWLEDGMENT.toStack(), entity))
+                            debuff *= 0.92F;
+                        if (AntiqueBag.hasBook(EnigmaticItems.THE_INFINITUM.toStack(), entity)) debuff *= 0.8F;
+                        if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.DIMNESS_CHARM)) debuff *= 0.75F;
                         float modifier = 1.0F - 0.01F * monsterDamageDebuff.get() * debuff;
                         event.setAmount(event.getAmount() * Math.max(1.0F, modifier));
                     }

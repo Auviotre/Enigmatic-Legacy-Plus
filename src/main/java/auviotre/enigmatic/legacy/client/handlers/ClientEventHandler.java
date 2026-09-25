@@ -34,6 +34,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
@@ -45,6 +46,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
@@ -59,6 +61,10 @@ public class ClientEventHandler {
     public static final ResourceLocation FORBIDDEN_FOOD_EMPTY_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_empty");
     public static final ResourceLocation LAVA_BAR_PROGRESS_SPRITE = EnigmaticLegacy.location("hud/lava_bar_progress");
     public static final ResourceLocation LAVA_BAR_BACKGROUND_SPRITE = EnigmaticLegacy.location("hud/lava_bar_background");
+    public static int darkenTick = 0;
+    public static int darkenLastTick = 0;
+    public static float violenceTimer = 0;
+    public static float violenceLastTimer = 0;
     private static boolean spaceDown = false;
 
     @SubscribeEvent
@@ -128,9 +134,20 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     private static void onClientTick(ClientTickEvent.Pre event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        darkenLastTick = darkenTick;
+        violenceLastTimer = violenceTimer;
+        if (EnigmaticHandler.hasCurio(player, EnigmaticItems.VIOLENCE_SCROLL)) {
+            ItemStack curio = EnigmaticHandler.getCurio(player, EnigmaticItems.VIOLENCE_SCROLL);
+            violenceTimer = curio.getOrDefault(EnigmaticComponents.VIOLENCE_CURSE_TIMER, 0);
+        } else violenceTimer = 0;
+        if (player != null && player.getUseItem().is(EnigmaticItems.ANNIHILATING_SWORD) && player.getUsedItemHand().equals(InteractionHand.MAIN_HAND)) {
+            int tick = 24 - player.getUseItemRemainingTicks();
+            darkenTick = Math.max((int) violenceTimer, tick * tick);
+        } else darkenTick = (int) violenceTimer;
+
         if (Minecraft.getInstance().getConnection() == null) return;
 
-        LocalPlayer player = Minecraft.getInstance().player;
         if (!ISpellstone.get(player).isEmpty() && KeyHandler.SPELLSTONE.get().consumeClick())
             PacketDistributor.sendToServer(new SpellstoneKeyPacket());
         if (KeyHandler.SCROLL.get().consumeClick())
@@ -171,14 +188,13 @@ public class ClientEventHandler {
         }
         ItemStack curio = EnigmaticHandler.getCurio(player, EnigmaticItems.VIOLENCE_SCROLL);
         if (!curio.isEmpty() && event.getCamera().getFluidInCamera() == FogType.NONE) {
-            float timer = 1.0F - (float) (curio.getOrDefault(EnigmaticComponents.VIOLENCE_CURSE_TIMER, 0) + event.getPartialTick()) / 1000.0F;
-            float f = Math.max(event.getFarPlaneDistance() * (float) Math.pow(timer, 6.0F), 5.4F);
+            float timer = 1.0F - (float) Math.clamp(Mth.lerp(event.getPartialTick(), violenceLastTimer, violenceTimer) / 800.0F, 0.0F, 1.0F);
+            float f = Math.max(event.getFarPlaneDistance() * (float) Math.pow(timer, 6.0F), 16.0F);
             event.setNearPlaneDistance(event.getMode() == FogRenderer.FogMode.FOG_SKY ? 0.0F : f * 0.6F);
             event.setFarPlaneDistance(f);
             event.setCanceled(true);
         }
     }
-
 
     @SubscribeEvent
     private static void getFogColor(ViewportEvent.ComputeFogColor event) {
@@ -186,10 +202,19 @@ public class ClientEventHandler {
         if (player == null) return;
         ItemStack curio = EnigmaticHandler.getCurio(player, EnigmaticItems.VIOLENCE_SCROLL);
         if (!curio.isEmpty()) {
-            float timer = 1.0F - (float) (curio.getOrDefault(EnigmaticComponents.VIOLENCE_CURSE_TIMER, 0) + event.getPartialTick()) / 1000.0F;
+            float timer = 1.0F - (float) Math.clamp(Mth.lerp(event.getPartialTick(), violenceLastTimer, violenceTimer) / 800.0F, 0.0F, 1.0F);
             event.setBlue(event.getBlue() * timer + (1 - timer) * 0.07F);
             event.setGreen(event.getGreen() * timer + (1 - timer) * 0.06F);
             event.setRed(event.getRed() * timer + (1 - timer) * 0.12F);
+        }
+    }
+
+    @SubscribeEvent
+    private static void renderNameplate(RenderNameTagEvent event) {
+        if (event.getEntity() == Minecraft.getInstance().player) {
+            ItemStack insignia = EnigmaticHandler.getCurio(Minecraft.getInstance().player, EnigmaticItems.INSIGNIA);
+            if (!insignia.isEmpty() && insignia.getOrDefault(EnigmaticComponents.BOOLEAN, false))
+                event.setCanRender(TriState.TRUE);
         }
     }
 
@@ -219,6 +244,7 @@ public class ClientEventHandler {
         LocalPlayer player = minecraft.player;
         ItemStack spellstone = ISpellstone.get(player);
         GuiGraphics guiGraphics = event.getGuiGraphics();
+        if (minecraft.options.hideGui) return;
         if (event.getName().equals(VanillaGuiLayers.AIR_LEVEL) && OceanStone.preventOxygenBarRender.get()) {
             if (Spelltuner.hasTune(player, EnigmaticItems.OCEAN_STONE) || spellstone.is(EnigmaticItems.OCEAN_STONE) || spellstone.is(EnigmaticItems.VOID_PEARL)) {
                 event.setCanceled(true);

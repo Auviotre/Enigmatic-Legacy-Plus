@@ -130,6 +130,11 @@ public class ELAdvancementProvider extends AdvancementProvider {
                     AdvancementType.TASK, true, AdvancementRequirements.Strategy.OR,
                     Pair.of("use_item", EnigmaticTrigger.TriggerInstance.trigger(3))
             );
+            advancement(
+                    infernalCinder, consumer, "execution_axe", EnigmaticItems.EXECUTION_AXE.toStack(),
+                    AdvancementType.TASK, true, AdvancementRequirements.Strategy.OR,
+                    Pair.of("use_item", EnigmaticTrigger.TriggerInstance.trigger(8))
+            );
             AdvancementHolder ichorDroplet = advancement(
                     infernalCinder, consumer, "ichor_droplet", EnigmaticItems.ICHOR_DROPLET.toStack(),
                     AdvancementType.TASK, false, AdvancementRequirements.Strategy.OR,
@@ -208,6 +213,16 @@ public class ELAdvancementProvider extends AdvancementProvider {
                     AdvancementType.TASK, false, AdvancementRequirements.Strategy.OR,
                     Pair.of("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(EnigmaticItems.TWISTED_MIRROR).build()))
             );
+            advancement(
+                    twistedHeart, consumer, "astral_fruit", EnigmaticItems.ENCHANTED_ASTRAL_FRUIT.toStack(),
+                    AdvancementType.TASK, false, AdvancementRequirements.Strategy.OR,
+                    Pair.of("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(EnigmaticItems.ENCHANTED_ASTRAL_FRUIT).build()))
+            );
+            advancement(
+                    twistedHeart, consumer, "infernal_shield", EnigmaticItems.INFERNAL_SHIELD.toStack(),
+                    AdvancementType.TASK, false, AdvancementRequirements.Strategy.OR,
+                    Pair.of("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(EnigmaticItems.INFERNAL_SHIELD).build()))
+            );
             AdvancementHolder theTwist = advancement(
                     twistedHeart, consumer, "the_twist", EnigmaticItems.THE_TWIST.toStack(),
                     AdvancementType.GOAL, false, AdvancementRequirements.Strategy.OR,
@@ -241,6 +256,18 @@ public class ELAdvancementProvider extends AdvancementProvider {
                     abyssalHeart, consumer, "desolation_ring", stack,
                     AdvancementType.TASK, false, AdvancementRequirements.Strategy.OR,
                     Pair.of("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(EnigmaticItems.DESOLATION_RING).build()))
+            );
+            advancement(
+                    abyssalHeart, consumer, "dimness_charm", EnigmaticItems.DIMNESS_CHARM.toStack(),
+                    AdvancementType.CHALLENGE, true, AdvancementRequirements.Strategy.OR,
+                    Pair.of("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(EnigmaticItems.DIMNESS_CHARM).build()))
+            );
+            stack = EnigmaticItems.VIOLENCE_SCROLL.toStack();
+            stack.set(EnigmaticComponents.ELDRITCH_TIMER, 1.0F);
+            advancement(
+                    abyssalHeart, consumer, "violence_scroll", stack,
+                    AdvancementType.CHALLENGE, true, AdvancementRequirements.Strategy.OR,
+                    Pair.of("max_violence_curse", EnigmaticTrigger.TriggerInstance.trigger(7))
             );
             stack = EnigmaticItems.CHAOS_ELYTRA.toStack();
             stack.set(EnigmaticComponents.ELDRITCH_TIMER, 1.0F);
@@ -280,6 +307,11 @@ public class ELAdvancementProvider extends AdvancementProvider {
                     theBless, consumer, "redemption_ring", EnigmaticItems.REDEMPTION_RING.toStack(),
                     AdvancementType.CHALLENGE, true, AdvancementRequirements.Strategy.OR,
                     Pair.of("equipped_redemption_ring", CuriosTriggers.equip().withItem(ItemPredicate.Builder.item().of(EnigmaticItems.REDEMPTION_RING)).withLocation(LocationPredicate.Builder.location()).withSlot(SlotPredicate.Builder.slot().of("ring")).build())
+            );
+            AdvancementHolder forbiddenFruit = advancement(
+                    root, consumer, "forbidden_fruit", EnigmaticItems.FORBIDDEN_FRUIT.toStack(),
+                    AdvancementType.TASK, false, AdvancementRequirements.Strategy.OR,
+                    Pair.of("consume_fruit", EnigmaticTrigger.TriggerInstance.trigger(9))
             );
             AdvancementHolder unholyGrail = advancement(
                     root, consumer, "unholy_grail", EnigmaticItems.UNHOLY_GRAIL.toStack(),

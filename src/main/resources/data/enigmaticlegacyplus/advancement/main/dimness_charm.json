@@ -1,0 +1,35 @@
+{
+    "parent": "enigmaticlegacyplus:main/abyssal_heart",
+    "criteria": {
+        "has_item": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "enigmaticlegacyplus:dimness_charm"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancement.enigmaticlegacy.dimness_charm.desc"
+        },
+        "frame": "challenge",
+        "hidden": true,
+        "icon": {
+            "count": 1,
+            "id": "enigmaticlegacyplus:dimness_charm"
+        },
+        "title": {
+            "translate": "advancement.enigmaticlegacy.dimness_charm.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_item"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

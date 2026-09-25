@@ -26,6 +26,8 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
     private float etherealShield = 0;
     private long etheriumShieldTick = 0;
     private int reviveCooldown = 0;
+    private int annihilatingTick = 0;
+    private int[] annihilationSweepData = new int[3];
 
     public UUID getEngineHook() {
         return engineHook;
@@ -180,6 +182,22 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         this.reviveCooldown = reviveCooldown;
     }
 
+    public int getAnnihilatingTick() {
+        return this.annihilatingTick;
+    }
+
+    public void setAnnihilatingTick(int tick) {
+        this.annihilatingTick = tick;
+    }
+
+    public int[] getAnnihilationSweepData() {
+        return this.annihilationSweepData;
+    }
+
+    public void setAnnihilationSweepData(int damage, int tick, int level) {
+        this.annihilationSweepData = new int[]{damage, tick, level};
+    }
+
     public CompoundTag save(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
         if (this.engineHook != null) {
@@ -201,6 +219,8 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         tag.putLong("timeWithCurses", this.timeWithCurses);
         tag.putLong("timeWithoutCurses", this.timeWithoutCurses);
         tag.putInt("reviveCooldown", this.reviveCooldown);
+        tag.putInt("annihilatingTick", this.annihilatingTick);
+        tag.putIntArray("annihilationSweepData", this.annihilationSweepData);
         return tag;
     }
 
@@ -222,6 +242,8 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         this.timeWithCurses = tag.getLong("timeWithCurses");
         this.timeWithoutCurses = tag.getLong("timeWithoutCurses");
         this.reviveCooldown = tag.getInt("reviveCooldown");
+        this.annihilatingTick = tag.getInt("annihilatingTick");
+        this.annihilationSweepData = tag.getIntArray("annihilationSweepData");
     }
 
     public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {

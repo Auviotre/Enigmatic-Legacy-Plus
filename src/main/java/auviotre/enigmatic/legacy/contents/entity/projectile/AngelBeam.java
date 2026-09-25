@@ -39,7 +39,7 @@ public class AngelBeam extends AbstractHurtingProjectile {
         Vec3 vec3 = this.getDeltaMovement();
         if (this.level().isClientSide() && vec3.length() > 0.5) {
             Vec3 pos = this.position();
-            for (double i = 0; i < vec3.length();) {
+            for (double i = 0; i < vec3.length(); ) {
                 this.level().addParticle(ParticleTypes.END_ROD, pos.x, pos.y, pos.z, vec3.x * 0.05, vec3.y * 0.05, vec3.z * 0.05);
                 this.level().addParticle(ParticleTypes.CLOUD, pos.x, pos.y, pos.z, 0, 0, 0);
                 double rand = 0.5 + random.nextDouble() * 0.3;

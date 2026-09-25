@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "enigmaticlegacyplus:item/3d/annihilating_sword_1"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "enigmaticlegacyplus:item/gui/annihilating_sword_1"
+    },
+    "fixed": {
+      "parent": "enigmaticlegacyplus:item/gui/annihilating_sword_1"
+    },
+    "ground": {
+      "parent": "enigmaticlegacyplus:item/gui/annihilating_sword_1"
+    }
+  }
+}

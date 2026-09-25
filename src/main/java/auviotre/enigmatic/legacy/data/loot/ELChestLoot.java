@@ -35,6 +35,7 @@ public record ELChestLoot(HolderLookup.Provider registries) implements LootTable
                         .add(LootItem.lootTableItem(EnigmaticItems.FORGER_GEM).when(LootItemRandomChanceCondition.randomChance(0.5F)).setWeight(10))
                         .add(LootItem.lootTableItem(EnigmaticItems.VOID_TOME).when(LootItemRandomChanceCondition.randomChance(0.36F)).setWeight(10))
                         .add(LootItem.lootTableItem(EnigmaticItems.UNHOLY_GRAIL).when(LootItemRandomChanceCondition.randomChance(0.4F)).setWeight(10))
+                        .add(LootItem.lootTableItem(EnigmaticItems.INSIGNIA).when(LootItemRandomChanceCondition.randomChance(0.9F)).setWeight(8))
                         .add(LootItem.lootTableItem(EnigmaticItems.ANTIQUE_BAG).when(LootItemRandomChanceCondition.randomChance(0.32F)).setWeight(5))
                         .add(EmptyLootItem.emptyItem().setWeight(120))
                 )

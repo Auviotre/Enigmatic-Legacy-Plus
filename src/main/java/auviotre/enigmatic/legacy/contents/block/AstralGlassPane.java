@@ -33,6 +33,27 @@ public class AstralGlassPane extends IronBarsBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(COLORFUL, false).setValue(STYLE, 0).setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false).setValue(WATERLOGGED, false));
     }
 
+    private static void interact(BlockState state, Level level, BlockPos pos) {
+        spawnParticles(level, pos);
+        level.setBlock(pos, state.setValue(STYLE, (state.getValue(STYLE) + 1) % 4), 3);
+    }
+
+    private static void spawnParticles(Level level, BlockPos pos) {
+        float d0 = 0.5625F;
+        RandomSource random = level.random;
+        level.playSound(null, pos, EnigmaticSounds.ASTRAL_GLASS_CHANGE.get(), SoundSource.BLOCKS, 0.25F, 1.8F + 0.2F * random.nextFloat());
+        for (Direction direction : Direction.values()) {
+            BlockPos blockpos = pos.relative(direction);
+            if (!level.getBlockState(blockpos).isSolidRender(level, blockpos)) {
+                Direction.Axis axis = direction.getAxis();
+                float d1 = axis == Direction.Axis.X ? 0.5F + d0 * direction.getStepX() : random.nextFloat();
+                float d2 = axis == Direction.Axis.Y ? 0.5F + d0 * direction.getStepY() : random.nextFloat();
+                float d3 = axis == Direction.Axis.Z ? 0.5F + d0 * direction.getStepZ() : random.nextFloat();
+                level.addParticle(ParticleTypes.WHITE_ASH, pos.getX() + d1, pos.getY() + d2, pos.getZ() + d3, 0.0F, 0.0F, 0.0F);
+            }
+        }
+    }
+
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(STYLE, COLORFUL);
@@ -59,9 +80,10 @@ public class AstralGlassPane extends IronBarsBlock {
     }
 
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (state.getValue(COLORFUL)) return ItemInteractionResult.CONSUME;
         if (stack.is(EnigmaticItems.ASTRAL_DUST)) {
             stack.consume(1, player);
-            level.playSound(null, pos, EnigmaticSounds.ASTRAL_GLASS_CHANGE.get(),  SoundSource.BLOCKS, 0.25F, 1.8F + 0.2F * level.getRandom().nextFloat());
+            level.playSound(null, pos, EnigmaticSounds.ASTRAL_GLASS_CHANGE.get(), SoundSource.BLOCKS, 0.25F, 1.8F + 0.2F * level.getRandom().nextFloat());
             level.setBlock(pos, state.setValue(COLORFUL, true), 3);
             return ItemInteractionResult.SUCCESS;
         }
@@ -71,26 +93,5 @@ public class AstralGlassPane extends IronBarsBlock {
             else interact(state, level, pos);
         }
         return result;
-    }
-
-    private static void interact(BlockState state, Level level, BlockPos pos) {
-        spawnParticles(level, pos);
-        level.setBlock(pos, state.setValue(STYLE, (state.getValue(STYLE) + 1) % 4), 3);
-    }
-
-    private static void spawnParticles(Level level, BlockPos pos) {
-        float d0 = 0.5625F;
-        RandomSource random = level.random;
-        level.playSound(null, pos, EnigmaticSounds.ASTRAL_GLASS_CHANGE.get(),  SoundSource.BLOCKS, 0.25F, 1.8F + 0.2F * random.nextFloat());
-        for(Direction direction : Direction.values()) {
-            BlockPos blockpos = pos.relative(direction);
-            if (!level.getBlockState(blockpos).isSolidRender(level, blockpos)) {
-                Direction.Axis axis = direction.getAxis();
-                float d1 = axis == Direction.Axis.X ? 0.5F + d0 * direction.getStepX() : random.nextFloat();
-                float d2 = axis == Direction.Axis.Y ? 0.5F + d0 * direction.getStepY() : random.nextFloat();
-                float d3 = axis == Direction.Axis.Z ? 0.5F + d0 * direction.getStepZ() : random.nextFloat();
-                level.addParticle(ParticleTypes.WHITE_ASH, pos.getX() + d1, pos.getY() + d2, pos.getZ() + d3, 0.0F, 0.0F, 0.0F);
-            }
-        }
     }
 }

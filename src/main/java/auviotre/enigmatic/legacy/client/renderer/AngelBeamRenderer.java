@@ -23,6 +23,11 @@ public class AngelBeamRenderer extends EntityRenderer<AngelBeam> {
         super(context);
     }
 
+    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, float x, float y, float z, int alpha, float u, float v) {
+        consumer.addVertex(pose, x, y, z).setColor(255, 255, 255, alpha).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880).setNormal(pose, 0.0F, 1.0F, 0.0F);
+    }
+
     protected int getBlockLightLevel(AngelBeam entity, BlockPos pos) {
         return 15;
     }
@@ -33,11 +38,6 @@ public class AngelBeamRenderer extends EntityRenderer<AngelBeam> {
 
     public boolean shouldRender(AngelBeam livingEntity, Frustum camera, double camX, double camY, double camZ) {
         return true;
-    }
-
-    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, float x, float y, float z, int alpha, float u, float v) {
-        consumer.addVertex(pose, x, y, z).setColor(255, 255, 255, alpha).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY)
-                .setLight(15728880).setNormal(pose, 0.0F, 1.0F, 0.0F);
     }
 
     public void render(AngelBeam beam, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {

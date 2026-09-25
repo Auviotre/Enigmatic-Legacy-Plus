@@ -1,0 +1,6 @@
+{
+  "parent": "enigmaticlegacyplus:item/3d/annihilating_sword",
+  "textures": {
+    "layer0": "enigmaticlegacyplus:item/3d/annihilating_sword_1"
+  }
+}

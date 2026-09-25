@@ -30,6 +30,11 @@ public class EngineHookRenderer extends EntityRenderer<EngineHook> {
         this.model = new EngineHookModel(context.bakeLayer(EngineHookModel.LAYER));
     }
 
+    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, float x, float y, float z, float u, float v, int light) {
+        consumer.addVertex(pose, x, y, z).setColor(255, 255, 255, 255).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(light).setNormal(pose, 0.0F, 1.0F, 0.0F);
+    }
+
     protected int getBlockLightLevel(EngineHook entity, BlockPos pos) {
         return 15;
     }
@@ -40,11 +45,6 @@ public class EngineHookRenderer extends EntityRenderer<EngineHook> {
 
     public boolean shouldRender(EngineHook livingEntity, Frustum camera, double camX, double camY, double camZ) {
         return true;
-    }
-
-    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, float x, float y, float z, float u, float v, int light) {
-        consumer.addVertex(pose, x, y, z).setColor(255, 255, 255, 255).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY)
-                .setLight(light).setNormal(pose, 0.0F, 1.0F, 0.0F);
     }
 
     public void render(EngineHook hook, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
