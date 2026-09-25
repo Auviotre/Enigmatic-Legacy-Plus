@@ -7,6 +7,7 @@ import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import com.google.common.collect.ImmutableMultimap;
@@ -20,6 +21,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +34,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +63,7 @@ public class GolemHeart extends SpellstoneItem {
         knockbackResistance = builder.defineInRange("knockbackResistance", 0.9, 0.0, 1.0);
         meleeResistance = builder.defineInRange("meleeResistance", 25, 0, 100);
         explosionResistance = builder.defineInRange("explosionResistance", 40, 0, 100);
-        GHVulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.0, 1.0, 20.0);
+        GHVulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 1.0, 0.0, 19.0);
         builder.pop(2);
     }
 
@@ -101,20 +102,37 @@ public class GolemHeart extends SpellstoneItem {
 
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
+        AttributeMap attributes = entity.getAttributes();
+
         if (EnigmaticHandler.hasNoArmor(entity)) {
-            entity.getAttributes().removeAttributeModifiers(this.getArmorDefaultModifiers());
-            entity.getAttributes().addTransientAttributeModifiers(this.getFullArmorModifiers());
+            attributes.removeAttributeModifiers(this.getArmorDefaultModifiers());
+            attributes.addTransientAttributeModifiers(this.getFullArmorModifiers());
         } else {
-            entity.getAttributes().removeAttributeModifiers(this.getFullArmorModifiers());
-            entity.getAttributes().addTransientAttributeModifiers(this.getArmorDefaultModifiers());
+            attributes.removeAttributeModifiers(this.getFullArmorModifiers());
+            attributes.addTransientAttributeModifiers(this.getArmorDefaultModifiers());
         }
     }
 
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         LivingEntity entity = context.entity();
-        entity.getAttributes().removeAttributeModifiers(this.getArmorDefaultModifiers());
-        entity.getAttributes().removeAttributeModifiers(this.getFullArmorModifiers());
+        AttributeMap attributes = entity.getAttributes();
+
+        attributes.removeAttributeModifiers(this.getArmorDefaultModifiers());
+        attributes.removeAttributeModifiers(this.getFullArmorModifiers());
+
         super.onUnequip(context, newStack, stack);
+    }
+
+    @Override
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
+        ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
+        builder.put(EnigmaticAttributes.MAGIC_PROTECTION, new AttributeModifier(IItemHelper.getLocation(this), -GHVulnerabilityModifier.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
+        return builder.build();
+    }
+
+    @Override
+    public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
+        return List.of();
     }
 
     private Multimap<Holder<Attribute>, AttributeModifier> getArmorDefaultModifiers() {
@@ -152,8 +170,6 @@ public class GolemHeart extends SpellstoneItem {
                 DamageSource source = event.getSource();
                 if (EnigmaticHandler.hasNoArmor(event.getEntity()) && source.is(DamageTypeTags.IS_EXPLOSION)) {
                     event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * explosionResistance.getAsInt()));
-                } else if (source.is(Tags.DamageTypes.IS_MAGIC)) {
-                    event.setNewDamage((float) (event.getNewDamage() * GHVulnerabilityModifier.getAsDouble()));
                 } else if (source.is(EnigmaticTags.DamageTypes.GOLEM_HEART_IS_MELEE)) {
                     event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * meleeResistance.getAsInt()));
                 }
