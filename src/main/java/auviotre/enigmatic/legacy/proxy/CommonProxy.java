@@ -38,6 +38,20 @@ public class CommonProxy {
 
     }
 
+    /**
+     * Whether the vanilla "Operator Items" tab should expose the debug-only items.
+     * <p>
+     * This default implementation is safe on a dedicated server: it never touches
+     * {@code net.minecraft.client.Minecraft}, so that client-only class is not resolved
+     * server-side. The real option lookup lives in {@link ClientProxy}.
+     *
+     * @return {@code false} on the server, which matches the vanilla default for
+     * {@code operatorItemsTab}.
+     */
+    public boolean isOperatorItemsTabEnabled() {
+        return false;
+    }
+
     public void displayPermanentDeathScreen() {
     }
 

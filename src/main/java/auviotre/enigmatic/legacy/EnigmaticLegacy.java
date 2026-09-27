@@ -18,7 +18,6 @@ import auviotre.enigmatic.legacy.packets.server.*;
 import auviotre.enigmatic.legacy.proxy.ClientProxy;
 import auviotre.enigmatic.legacy.proxy.CommonProxy;
 import auviotre.enigmatic.legacy.registries.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -131,11 +130,18 @@ public class EnigmaticLegacy {
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        Minecraft minecraft = Minecraft.getInstance();
-        if (event.getTabKey() == CreativeModeTabs.OP_BLOCKS && minecraft.options.operatorItemsTab().get()) {
-            event.accept(EnigmaticItems.THE_JUDGEMENT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.accept(EnigmaticItems.LOOT_GENERATOR.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.accept(EnigmaticItems.QUOTE_PLAYER.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+        if (event.getTabKey() == CreativeModeTabs.OP_BLOCKS) {
+            // The "Operator Items" tab check must never dereference net.minecraft.client.Minecraft
+            // on a dedicated server. Minecraft is a client-only class and resolving it here crashes
+            // the server during BuildCreativeModeTabContentsEvent dispatch with
+            // "Attempted to load class net/minecraft/client/Minecraft for invalid dist DEDICATED_SERVER".
+            // Delegate the check to the proxy: CommonProxy returns false (vanilla default),
+            // ClientProxy reads the actual option.
+            if (PROXY.isOperatorItemsTabEnabled()) {
+                event.accept(EnigmaticItems.THE_JUDGEMENT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                event.accept(EnigmaticItems.LOOT_GENERATOR.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                event.accept(EnigmaticItems.QUOTE_PLAYER.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            }
         } else if (event.getTab() == EnigmaticTabs.MAIN_TAB.get()) {
             tabInsert(event, EnigmaticItems.SPELLSTONE_SWORD.toStack(), EnigmaticBlocks.SPELLSTONE_TABLE.toStack());
             tabInsert(event, EnigmaticItems.INFERNAL_CINDER.toStack(), EnigmaticBlocks.INFERNAL_CINDER_SACK.toStack());
