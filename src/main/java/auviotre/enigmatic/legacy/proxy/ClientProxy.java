@@ -62,6 +62,10 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    public boolean isOperatorItemsTabEnabled() {
+        return Minecraft.getInstance().options.operatorItemsTab().get();
+    }
+
     public void displayPermanentDeathScreen() {
         if (Minecraft.getInstance().level != null) {
             boolean local = Minecraft.getInstance().isLocalServer();
