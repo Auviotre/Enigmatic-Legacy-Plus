@@ -2,6 +2,8 @@
     "values": [
         "minecraft:infested",
         "minecraft:weaving",
-        "enigmaticlegacyplus:abyss_corruption"
+        "enigmaticlegacyplus:ichor_curse",
+        "enigmaticlegacyplus:abyss_corruption",
+        "enigmaticlegacyplus:violence_curse"
     ]
 }

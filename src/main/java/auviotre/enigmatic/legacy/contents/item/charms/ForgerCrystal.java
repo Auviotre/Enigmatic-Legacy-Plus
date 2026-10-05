@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
+import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
@@ -26,6 +27,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
 import org.jetbrains.annotations.NotNull;
@@ -35,8 +38,17 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 
 public class ForgerCrystal extends CursedCurioItem {
+    public static ModConfigSpec.BooleanValue unbreakableRestriction;
+
     public ForgerCrystal() {
         super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE), true);
+    }
+
+    @SubscribeConfig
+    public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
+        builder.translation("item.enigmaticlegacyplus.forger_crystal").push("blessItems.forgerCrystal");
+        unbreakableRestriction = builder.define("unbreakableRestriction", true);
+        builder.pop(2);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -93,9 +105,9 @@ public class ForgerCrystal extends CursedCurioItem {
                 ItemStack left = event.getLeft();
                 ItemStack right = event.getRight();
                 if (!left.isEmpty() && !right.isEmpty()) {
-                    boolean check = left.isDamageableItem() && !left.has(DataComponents.UNBREAKABLE) && !right.has(DataComponents.UNBREAKABLE);
-                    if (check)
-                        check = left.isRepairable() && (left.getItem() instanceof TieredItem || left.getItem() instanceof ArmorItem);
+                    boolean check = left.isDamageableItem() && !left.has(DataComponents.UNBREAKABLE) && !right.has(DataComponents.UNBREAKABLE) && left.isRepairable();
+                    if (check && unbreakableRestriction.get())
+                        check = (left.getItem() instanceof TieredItem || left.getItem() instanceof ArmorItem);
                     if (player.getAbilities().instabuild && left.isDamageableItem()) check = true;
                     if (left.is(right.getItem()) && check && left.getDamageValue() == 0 && right.getDamageValue() == 0 && !left.isEnchanted() && !right.isEnchanted()) {
                         ItemStack copy = left.copy();

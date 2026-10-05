@@ -1,7 +1,7 @@
 {
     "type": "minecraft:crafting_shapeless",
     "category": "misc",
-    "group": "starlight_block",
+    "group": "starlight_ingot",
     "ingredients": [
         {
             "item": "enigmaticlegacyplus:starlight_block"

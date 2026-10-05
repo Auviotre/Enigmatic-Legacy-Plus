@@ -31,7 +31,7 @@ public class IchorBottle extends BaseDrinkableItem {
     private final boolean enchanted;
 
     public IchorBottle(boolean enchanted) {
-        super(IItemHelper.singleProperties().craftRemainder(Items.GLASS_BOTTLE).food(FOOD_PROPERTIES).rarity(Rarity.RARE)
+        super(IItemHelper.singleProperties().craftRemainder(Items.GLASS_BOTTLE).food(FOOD_PROPERTIES).rarity(enchanted ? Rarity.EPIC : Rarity.RARE)
                 .component(EnigmaticComponents.CURSED, enchanted).component(EnigmaticComponents.BLESSED, enchanted));
         this.enchanted = enchanted;
     }

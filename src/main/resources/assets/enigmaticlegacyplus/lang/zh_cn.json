@@ -1445,6 +1445,7 @@
   "enigmaticlegacyplus.configuration.lavaHealAmount": "岩浆治疗量",
   "enigmaticlegacyplus.configuration.lifestealModifier": "生命窃取系数",
   "enigmaticlegacyplus.configuration.resistanceProbability": "抵挡概率",
+  "enigmaticlegacyplus.configuration.unbreakableRestriction": "不可破坏物品合成限制",
 
   "enigmaticlegacyplus.configuration.abyssItems": "深渊物品配置",
   "enigmaticlegacyplus.configuration.keepInventory": "保留物品栏",

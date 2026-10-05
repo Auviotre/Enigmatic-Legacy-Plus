@@ -11,6 +11,7 @@
     - **Starlight Ingot**
     - **Charming Insignia**
     - ...
+- Added new features to **Tome of Void**.
 - Added lots of **Advancements**.
 
 **Changes:**
@@ -20,6 +21,8 @@
 - Improved the way **Hearts of the Abyss** are obtained in multiplayer.
 - Added special visual effects for certain **Abyssal** items.
 - Completed AI curse boosts for nearly all mobs.
+- Changed mod compatibility from **Thirst Was Taken** to **Thirst Was Reclaimed**.
+- Adjusted the categories of most recipes.
 
 **Fixes:**
 - Fixed a bug where **The Cube** might cause the server to forcibly shut down.

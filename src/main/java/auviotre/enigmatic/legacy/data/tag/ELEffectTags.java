@@ -20,7 +20,18 @@ public class ELEffectTags extends TagsProvider<MobEffect> {
     }
 
     protected void addTags(HolderLookup.Provider provider) {
-        this.tag(EnigmaticTags.Effects.ALWAYS_APPLY).add(MobEffects.NIGHT_VISION.getKey(), EnigmaticEffects.ABYSS_CORRUPTION.getKey());
-        this.tag(EnigmaticTags.Effects.SHOULD_NOT_RANDOM_OUT).add(MobEffects.INFESTED.getKey(), MobEffects.WEAVING.getKey(), EnigmaticEffects.ABYSS_CORRUPTION.getKey());
+        this.tag(EnigmaticTags.Effects.ALWAYS_APPLY).add(
+                MobEffects.NIGHT_VISION.getKey(),
+                EnigmaticEffects.ICHOR_CURSE.getKey(),
+                EnigmaticEffects.ABYSS_CORRUPTION.getKey(),
+                EnigmaticEffects.VIOLENCE_CURSE.getKey()
+        );
+        this.tag(EnigmaticTags.Effects.SHOULD_NOT_RANDOM_OUT).add(
+                MobEffects.INFESTED.getKey(),
+                MobEffects.WEAVING.getKey(),
+                EnigmaticEffects.ICHOR_CURSE.getKey(),
+                EnigmaticEffects.ABYSS_CORRUPTION.getKey(),
+                EnigmaticEffects.VIOLENCE_CURSE.getKey()
+        );
     }
 }

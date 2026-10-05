@@ -1445,6 +1445,7 @@
   "enigmaticlegacyplus.configuration.lavaHealAmount": "Lava Healing Amount",
   "enigmaticlegacyplus.configuration.lifestealModifier": "Lifesteal Modifier",
   "enigmaticlegacyplus.configuration.resistanceProbability": "Resistance Probability",
+  "enigmaticlegacyplus.configuration.unbreakableRestriction": "Unbreakable Crafting Restriction",
 
   "enigmaticlegacyplus.configuration.abyssItems": "Abyss Items Configs",
   "enigmaticlegacyplus.configuration.keepInventory": "Keep Inventory",

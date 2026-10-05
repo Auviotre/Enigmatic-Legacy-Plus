@@ -88,7 +88,7 @@ public class EnigmaticItems {
     public static final DeferredItem<EscapeScroll> ESCAPE_SCROLL = registerWithTab("escape_scroll", EscapeScroll::new);
     public static final DeferredItem<HeavenScroll> HEAVEN_SCROLL = registerWithTab("heaven_scroll", HeavenScroll::new);
     public static final DeferredItem<FabulousScroll> FABULOUS_SCROLL = registerWithTab("fabulous_scroll", FabulousScroll::new);
-    public static final DeferredItem<CosmicScroll> COSMIC_SCROLL = registerWithTab("cosmic_scroll", CosmicScroll::new);
+    public static final DeferredItem<Item> EXTRA_SCROLL = registerWithTab("extra_scroll", BaseItem::Unknown);
     public static final DeferredItem<AnimalGuidebook> ANIMAL_GUIDEBOOK = registerWithTab("animal_guidebook", AnimalGuidebook::new);
     public static final DeferredItem<HunterGuidebook> HUNTER_GUIDEBOOK = registerWithTab("hunter_guidebook", HunterGuidebook::new);
     public static final DeferredItem<LivingOde> ODE_TO_LIVING = registerWithTab("ode_to_living", LivingOde::new);
@@ -149,6 +149,7 @@ public class EnigmaticItems {
     public static final DeferredItem<Item> ASTRAL_SPEAR = registerWithTab("astral_spear", BaseItem::Unknown);
     public static final DeferredItem<CursedRing> CURSED_RING = registerWithCTab("cursed_ring", CursedRing::new);
     public static final DeferredItem<TwistedHeart> TWISTED_HEART = registerWithCTab("twisted_heart", TwistedHeart::new);
+    public static final DeferredItem<AstralFruit> ENCHANTED_ASTRAL_FRUIT = registerWithCTab("enchanted_astral_fruit", () -> new AstralFruit(true));
     public static final DeferredItem<TwistedMirror> TWISTED_MIRROR = registerWithCTab("twisted_mirror", TwistedMirror::new);
     public static final DeferredItem<TwistedPotion> TWISTED_POTION = registerWithCTab("twisted_potion", TwistedPotion::new);
     public static final DeferredItem<InfernalShield> INFERNAL_SHIELD = registerWithCTab("infernal_shield", InfernalShield::new);
@@ -163,10 +164,10 @@ public class EnigmaticItems {
     public static final DeferredItem<TotemOfMalice> TOTEM_OF_MALICE = registerWithCTab("totem_of_malice", TotemOfMalice::new);
     public static final DeferredItem<EnchanterPearl> ENCHANTER_PEARL = registerWithCTab("enchanter_pearl", EnchanterPearl::new);
     public static final DeferredItem<EnderSlayer> ENDER_SLAYER = registerWithCTab("ender_slayer", EnderSlayer::new);
+    public static final DeferredItem<Item> EVIL_DAGGER = registerWithCTab("evil_dagger", BaseItem::Unknown);
     public static final DeferredItem<GuardianHeart> GUARDIAN_HEART = registerWithCTab("guardian_heart", GuardianHeart::new);
-    public static final DeferredItem<AstralFruit> ENCHANTED_ASTRAL_FRUIT = registerWithCTab("enchanted_astral_fruit", () -> new AstralFruit(true));
-    public static final DeferredItem<RedemptionRing> REDEMPTION_RING = registerWithCTab("redemption_ring", RedemptionRing::new);
     public static final DeferredItem<PureHeart> PURE_HEART = registerWithCTab("pure_heart", PureHeart::new);
+    public static final DeferredItem<IchorBottle> ENCHANTED_ICHOR_BOTTLE = registerWithCTab("enchanted_ichor_bottle", () -> new IchorBottle(true));
     public static final DeferredItem<Item> BLESS_ITEM = registerWithCTab("bless_item", BaseItem::Unknown);
     public static final DeferredItem<BlessPotion> BLESS_POTION = registerWithCTab("bless_potion", BlessPotion::new);
     public static final DeferredItem<IchorCurseBottle> ICHOR_CURSE_BOTTLE = registerWithCTab("ichor_curse_bottle", IchorCurseBottle::new);
@@ -180,14 +181,17 @@ public class EnigmaticItems {
     public static final DeferredItem<RedemptionAmulet> REDEMPTION_AMULET = registerWithCTab("redemption_amulet", RedemptionAmulet::new);
     public static final DeferredItem<EarthPromise> EARTH_PROMISE = registerWithCTab("earth_promise", EarthPromise::new);
     public static final DeferredItem<BlessStone> BLESS_STONE = registerWithCTab("bless_stone", BlessStone::new);
+    public static final DeferredItem<RedemptionRing> REDEMPTION_RING = registerWithCTab("redemption_ring", RedemptionRing::new);
+    public static final DeferredItem<Item> THE_NECKLACE = registerWithCTab("the_necklace", BaseItem::Unknown);
     public static final DeferredItem<Item> THE_REPENTANCE = registerWithCTab("the_repentance", BaseItem::Unknown);
-    public static final DeferredItem<IchorBottle> ENCHANTED_ICHOR_BOTTLE = registerWithCTab("enchanted_ichor_bottle", () -> new IchorBottle(true));
     public static final DeferredItem<Item> DARKEST_SCROLL = registerWithCTab("darkest_scroll", () -> new Item(IItemHelper.properties(16).rarity(Rarity.UNCOMMON)));
+    public static final DeferredItem<CosmicScroll> COSMIC_SCROLL = registerWithCTab("cosmic_scroll", CosmicScroll::new);
     public static final DeferredItem<NightScroll> NIGHT_SCROLL = registerWithCTab("night_scroll", NightScroll::new);
     public static final DeferredItem<CursedScroll> CURSED_SCROLL = registerWithCTab("cursed_scroll", CursedScroll::new);
     public static final DeferredItem<AvariceScroll> AVARICE_SCROLL = registerWithCTab("avarice_scroll", AvariceScroll::new);
     public static final DeferredItem<CursedXpScroll> CURSED_XP_SCROLL = registerWithCTab("cursed_xp_scroll", CursedXpScroll::new);
     public static final DeferredItem<ThunderScroll> THUNDER_SCROLL = registerWithCTab("thunder_scroll", ThunderScroll::new);
+    public static final DeferredItem<Item> BLESSING_SCROLL = registerWithCTab("blessing_scroll", BaseItem::Unknown);
     public static final DeferredItem<AbyssalHeart> ABYSSAL_HEART = registerWithCTab("abyssal_heart", AbyssalHeart::new);
     public static final DeferredItem<TheInfinitum> THE_INFINITUM = registerWithCTab("the_infinitum", TheInfinitum::new);
     public static final DeferredItem<EldritchAmulet> ELDRITCH_AMULET = registerWithCTab("eldritch_amulet", EldritchAmulet::new);
@@ -205,10 +209,10 @@ public class EnigmaticItems {
     public static final DeferredItem<BaseItem> UNKNOWN = ITEMS.register("unknown", BaseItem::Unknown);
 
     static {
-        IItemHelper.UNKNOWN_ITEMS.add(ICHOR_CHARM);
+        IItemHelper.UNKNOWN_ITEMS.add(EXTRA_SCROLL);
         IItemHelper.UNKNOWN_ITEMS.add(BLESS_ITEM);
         IItemHelper.UNKNOWN_ITEMS.add(SPIRIT_CRYSTAL);
-        IItemHelper.UNKNOWN_ITEMS.add(THE_REPENTANCE);
+        IItemHelper.UNKNOWN_ITEMS.add(THE_NECKLACE);
         IItemHelper.UNKNOWN_ITEMS.add(UNKNOWN);
     }
 

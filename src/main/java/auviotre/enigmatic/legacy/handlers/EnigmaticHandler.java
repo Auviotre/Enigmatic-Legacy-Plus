@@ -127,8 +127,9 @@ public interface EnigmaticHandler {
 
     static boolean isTheWorthyOne(LivingEntity entity) {
         double threshold = AbyssalHeart.abyssThreshold.get();
+        if (!(entity instanceof Player player)) return false;
         if (!getCurio(entity, EnigmaticItems.DIMNESS_CHARM).isEmpty()) threshold = 2 * threshold - 1;
-        return isTheCursedOne(entity) && getSufferingFraction(entity) >= Math.clamp(threshold, 0.05, 0.999);
+        return isTheCursedOne(entity) && getSufferingFraction(player) >= Math.clamp(threshold, 0.05, 0.999);
     }
 
     static boolean isEldritchItem(@NotNull ItemStack stack) {
@@ -334,9 +335,9 @@ public interface EnigmaticHandler {
         return info;
     }
 
-    static double getSufferingFraction(@Nullable LivingEntity entity) {
-        if (entity == null) return 0;
-        EnigmaticData data = entity.getData(EnigmaticAttachments.ENIGMATIC_DATA);
+    static double getSufferingFraction(@Nullable Player player) {
+        if (player == null) return 0;
+        EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
         long timeWithRing = data.getTimeWithCurses();
         long timeWithoutRing = data.getTimeWithoutCurses();
 

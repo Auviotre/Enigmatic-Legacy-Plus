@@ -42,7 +42,7 @@ public class EtheriumShieldAttribute extends PercentageAttribute {
                     instance.replaceFrom(attribute);
                     instance.removeModifier(BASE_ID);
                     currentBase = instance.getValue();
-                    instance.addPermanentModifier(new AttributeModifier(BASE_ID, value, AttributeModifier.Operation.ADD_VALUE));
+                    instance.addPermanentModifier(new AttributeModifier(BASE_ID, value - entityBase, AttributeModifier.Operation.ADD_VALUE));
                     current = instance.getValue();
                 } catch (Exception ignore) {
                 }
@@ -52,7 +52,7 @@ public class EtheriumShieldAttribute extends PercentageAttribute {
         MutableComponent component = Component.translatable("attribute.modifier.equals.0", toValueComponent(AttributeModifier.Operation.ADD_VALUE, current, flag), Component.translatable(this.getDescriptionId()));
         if (flag.isAdvanced() && !merged && NeoForgeConfig.COMMON.attributeAdvancedTooltipDebugInfo.get()) {
             double baseBonus = current - currentBase;
-            String baseBonusText = String.format(Locale.ROOT, baseBonus > 0 ? " + %s" : " - %s", FORMAT.format(value * 100.0) + "%");
+            String baseBonusText = String.format(Locale.ROOT, baseBonus > 0 ? " + %s" : " - %s", FORMAT.format(baseBonus * 100.0) + "%");
             Component debugInfo = Component.translatable("neoforge.attribute.debug.base", toValueComponent(AttributeModifier.Operation.ADD_VALUE, currentBase, flag), baseBonusText).withStyle(ChatFormatting.GRAY);
             component.append(CommonComponents.SPACE).append(debugInfo);
         }

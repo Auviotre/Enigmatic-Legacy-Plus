@@ -81,9 +81,9 @@ public record ELChestLoot(HolderLookup.Provider registries) implements LootTable
         output.accept(Chests.GOLEM_HEART, spellstonePool(EnigmaticItems.GOLEM_HEART, 0.067F, 0.028F));          //  9.5%
         output.accept(Chests.BLAZING_CORE, spellstonePool(EnigmaticItems.BLAZING_CORE, 0.045F, 0.019F));        //  6.4%
         output.accept(Chests.OCEAN_STONE, spellstonePool(EnigmaticItems.OCEAN_STONE, 0.077F, 0.027F));          // 10.4%
-        output.accept(Chests.ANGEL_BLESSING, spellstonePool(EnigmaticItems.ANGEL_BLESSING, 0.132F, 0.044F));    // 17.6%
+        output.accept(Chests.ANGEL_BLESSING, spellstonePool(EnigmaticItems.ANGEL_BLESSING, 0.122F, 0.034F));    // 15.6%
         output.accept(Chests.EYE_OF_NEBULA, spellstonePool(EnigmaticItems.EYE_OF_NEBULA, 0.046F, 0.027F));      //  7.3%
-        output.accept(Chests.VOID_PEARL, spellstonePool(EnigmaticItems.VOID_PEARL, 0.039F, 0.022F));            //  6.1%
+        output.accept(Chests.VOID_PEARL, spellstonePool(EnigmaticItems.VOID_PEARL, 0.038F, 0.021F));            //  5.9%
         output.accept(Chests.FORGOTTEN_ICE, spellstonePool(EnigmaticItems.FORGOTTEN_ICE, 0.164F, 0.067F));      // 23.1%
         output.accept(Chests.REVIVAL_LEAF, spellstonePool(EnigmaticItems.REVIVAL_LEAF, 0.084F, 0.033F));        // 11.7%
         output.accept(Chests.LOST_ENGINE, spellstonePool(EnigmaticItems.LOST_ENGINE, 0.057F, 0.021F));          //  7.8%

@@ -91,10 +91,11 @@ public class ELItemTags extends ItemTagsProvider {
                 SURVIVOR_SCROLL.get(), EXPLORER_SCROLL.get(),
                 HUNTER_SCROLL.get(), XP_SCROLL.get(),
                 ESCAPE_SCROLL.get(), HEAVEN_SCROLL.get(),
-                FABULOUS_SCROLL.get(), NIGHT_SCROLL.get(),
+                FABULOUS_SCROLL.get(), EXTRA_SCROLL.get(),
+                COSMIC_SCROLL.get(), NIGHT_SCROLL.get(),
                 CURSED_SCROLL.get(), AVARICE_SCROLL.get(),
                 CURSED_XP_SCROLL.get(), THUNDER_SCROLL.get(),
-                VIOLENCE_SCROLL.get(), COSMIC_SCROLL.get()
+                BLESSING_SCROLL.get(), VIOLENCE_SCROLL.get()
         );
         this.tag(EnigmaticTags.Items.AMULETS).addTag(EnigmaticTags.Items.ENIGMATIC_AMULETS)
                 .add(UNWITNESSED_AMULET.get(), ASCENSION_AMULET.get(), REDEMPTION_AMULET.get(), ELDRITCH_AMULET.get());
@@ -134,7 +135,7 @@ public class ELItemTags extends ItemTagsProvider {
         );
         this.tag(CuriosTags.CHARM).add(
                 MINING_CHARM.get(), MONSTER_CHARM.get(), INSIGNIA.get(),
-                FORGER_GEM.get(), HELL_BLADE_CHARM.get(),
+                FORGER_GEM.get(), ICHOR_CHARM.get(), HELL_BLADE_CHARM.get(),
                 ETHEREAL_FORGING_CHARM.get(), BERSERK_EMBLEM.get(),
                 ENCHANTER_PEARL.get(), FORGER_CRYSTAL.get(), SCORCHED_CHARM.get(),
                 SPELLTUNER.get(), ENIGMATIC_EYE.get(), DIMNESS_CHARM.get()

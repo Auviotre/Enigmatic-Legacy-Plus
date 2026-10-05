@@ -1,6 +1,7 @@
 {
     "type": "minecraft:crafting_shaped",
     "category": "misc",
+    "group": "starlight_ingot",
     "key": {
         "I": {
             "item": "enigmaticlegacyplus:etherium_ingot"

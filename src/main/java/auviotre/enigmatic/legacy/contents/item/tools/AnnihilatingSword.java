@@ -63,7 +63,6 @@ import net.neoforged.neoforge.common.util.AttributeUtil;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -365,9 +364,9 @@ public class AnnihilatingSword extends SwordItem {
                 if (entity.getRandom().nextFloat() < annihilation) {
                     data.putBoolean("AnnihilationKill", true);
                     if (victim.isAlive()) event.setNewDamage(event.getNewDamage() * 10F);
-                    if (entity.level() instanceof ServerLevel server) {
+//                    if (entity.level() instanceof ServerLevel server) {
 //                    server.sendParticles(EnigmaticParticles.ABYSS, victim.getX(), victim.getEyeY(), victim.getZ(), 16, victim.getBbWidth(), victim.getBbHeight() / 2, entity.getBbWidth(), 0);
-                    }
+//                    }
                 }
                 data.putFloat("AnnihilationPoint", annihilation);
             }
@@ -382,9 +381,9 @@ public class AnnihilatingSword extends SwordItem {
                     data.setAnnihilatingTick(data.getAnnihilatingTick() - 1);
                 } else entity.getAttributes().removeAttributeModifiers(getAttackSpeedBonus());
             }
-            if (event.getEntity() instanceof Player player && EnigmaticHandler.isTheWorthyOne(player)) {
+            if (event.getEntity() instanceof Player player && player.level() instanceof ServerLevel server) {
                 int[] data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getAnnihilationSweepData(); // dmg tick level
-                if (data.length == 3 && data[1] > 0 && player.level() instanceof ServerLevel server) {
+                if (data.length == 3 && data[1] > 0 && EnigmaticHandler.isTheWorthyOne(player)) {
                     int energy = data[2];
                     int tick = data[1];
                     float base = (float) (Math.PI / 180.0F) * player.getYRot();
@@ -421,10 +420,6 @@ public class AnnihilatingSword extends SwordItem {
             if (event.getItem().is(EnigmaticItems.ANNIHILATING_SWORD)) {
                 event.setDuration(event.getHand().equals(InteractionHand.MAIN_HAND) ? 24 : 32000);
             }
-        }
-
-        @SubscribeEvent
-        private static void onCraft(PlayerEvent.@NotNull ItemCraftedEvent event) {
         }
     }
 }

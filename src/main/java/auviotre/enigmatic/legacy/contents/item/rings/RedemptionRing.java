@@ -179,8 +179,8 @@ public class RedemptionRing extends BaseCurioItem {
         }
 
         static int getPossibleLevel(LivingEntity entity) {
-            if (entity == null) return 0;
-            double suffering = EnigmaticHandler.getSufferingFraction(entity) * 100;
+            if (!(entity instanceof Player player)) return 0;
+            double suffering = EnigmaticHandler.getSufferingFraction(player) * 100;
             EnigmaticData data = entity.getData(EnigmaticAttachments.ENIGMATIC_DATA);
             long time = data.getTimeWithCurses() / 1200L;
             int level = 0;

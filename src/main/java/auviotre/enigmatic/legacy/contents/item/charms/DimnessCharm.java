@@ -26,7 +26,7 @@ public class DimnessCharm extends CursedCurioItem {
     }
 
     public static boolean canEquip(LivingEntity entity) {
-        return EnigmaticHandler.isTheCursedOne(entity) && EnigmaticHandler.getSufferingFraction(entity) >= Math.clamp(2 * AbyssalHeart.abyssThreshold.get() - 1, 0.05, 0.999);
+        return entity instanceof Player player && EnigmaticHandler.isTheCursedOne(entity) && EnigmaticHandler.getSufferingFraction(player) >= Math.clamp(2 * AbyssalHeart.abyssThreshold.get() - 1, 0.05, 0.999);
     }
 
     @OnlyIn(Dist.CLIENT)

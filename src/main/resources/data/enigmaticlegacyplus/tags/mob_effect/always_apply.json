@@ -1,6 +1,8 @@
 {
     "values": [
         "minecraft:night_vision",
-        "enigmaticlegacyplus:abyss_corruption"
+        "enigmaticlegacyplus:ichor_curse",
+        "enigmaticlegacyplus:abyss_corruption",
+        "enigmaticlegacyplus:violence_curse"
     ]
 }
