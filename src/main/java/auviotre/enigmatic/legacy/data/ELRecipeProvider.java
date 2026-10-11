@@ -335,6 +335,12 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
                 .define('B', Items.BLAZE_ROD)
                 .unlockedBy("has_item", has(ICHOR_DROPLET))
                 .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ICHOR_CHARM)
+                .pattern("IBI").pattern("NMN").pattern("IBI")
+                .define('I', ICHOR_DROPLET).define('N', Items.NETHER_BRICK)
+                .define('B', Items.BLAZE_POWDER).define('M', Items.MAGMA_CREAM)
+                .unlockedBy("has_item", has(ICHOR_DROPLET))
+                .save(output);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, INFERNAL_SPEAR)
                 .pattern(" AS").pattern("BXA").pattern("AB ")
                 .define('X', ICHOR_SPEAR).define('A', INFERNAL_CINDER)

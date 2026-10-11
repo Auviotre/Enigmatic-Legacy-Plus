@@ -113,7 +113,7 @@ public class EnigmaticItems {
     public static final DeferredItem<Item> ICHOR_DROPLET = registerWithTab("ichor_droplet", BaseItem::new);
     public static final DeferredItem<Ichoroot> ICHOROOT = registerWithTab("ichoroot", Ichoroot::new);
     public static final DeferredItem<IchorSpear> ICHOR_SPEAR = registerWithTab("ichor_spear", IchorSpear::new);
-    public static final DeferredItem<Item> ICHOR_CHARM = registerWithTab("ichor_charm", BaseItem::Unknown);
+    public static final DeferredItem<IchorCharm> ICHOR_CHARM = registerWithTab("ichor_charm", IchorCharm::new);
     public static final DeferredItem<IchorBottle> ICHOR_BOTTLE = registerWithTab("ichor_bottle", () -> new IchorBottle(false));
     public static final DeferredItem<UnholyGrail> UNHOLY_GRAIL = registerWithTab("unholy_grail", UnholyGrail::new);
     public static final DeferredItem<VoidStone> VOID_STONE = registerWithTab("void_stone", VoidStone::new);

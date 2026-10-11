@@ -316,6 +316,7 @@
   "item.enigmaticlegacyplus.hunter_guidebook": "Guide to Feral Hunt",
   "item.enigmaticlegacyplus.hunter_scroll": "Scroll of Hunter",
   "item.enigmaticlegacyplus.ichor_bottle": "Nectar of Ichor",
+  "item.enigmaticlegacyplus.ichor_charm": "Charm of Corrosion",
   "item.enigmaticlegacyplus.ichor_curse_bottle": "Bottle of Penance",
   "item.enigmaticlegacyplus.ichor_droplet": "Ichor Droplet",
   "item.enigmaticlegacyplus.ichor_spear": "Ichor Spear",
@@ -677,6 +678,10 @@
 
   "tooltip.enigmaticlegacy.ichorSpear": "§5A one-time corruption throwing spear",
   "tooltip.enigmaticlegacy.ichorSpearFull": "§5Not consuming",
+
+  "tooltip.enigmaticlegacy.ichorCharm1": "§5Immune to the §6Ichor Corrosion§5 effect",
+  "tooltip.enigmaticlegacy.ichorCharm2": "§5When attacking a target, applies §6Ichor Corrosion",
+  "tooltip.enigmaticlegacy.ichorCharm3": "§5based on the negative effects it carries",
 
   "tooltip.enigmaticlegacy.infernalSpear1": "§5When held, increase the max level of the §6Blazing Might§5 effect.",
   "tooltip.enigmaticlegacy.infernalSpear2": "§5When the effect level of §6Blazing Might§5 reaches its maximum,",

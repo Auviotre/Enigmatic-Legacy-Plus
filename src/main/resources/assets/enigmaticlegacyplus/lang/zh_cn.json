@@ -316,6 +316,7 @@
   "item.enigmaticlegacyplus.hunter_guidebook": "野猎指南",
   "item.enigmaticlegacyplus.hunter_scroll": "寻猎者卷轴",
   "item.enigmaticlegacyplus.ichor_bottle": "灵液蜜酿",
+  "item.enigmaticlegacyplus.ichor_charm": "腐蚀护符",
   "item.enigmaticlegacyplus.ichor_curse_bottle": "悔孽之瓶",
   "item.enigmaticlegacyplus.ichor_droplet": "灵液滴",
   "item.enigmaticlegacyplus.ichor_spear": "灵液标枪",
@@ -678,6 +679,10 @@
   "tooltip.enigmaticlegacy.ichorSpear": "§5一次性的腐化投矛",
   "tooltip.enigmaticlegacy.ichorSpearFull": "§5不消耗",
 
+  "tooltip.enigmaticlegacy.ichorCharm1": "§5免疫§6灵液腐蚀§5效果",
+  "tooltip.enigmaticlegacy.ichorCharm2": "§5攻击目标时根据其携带的负面效果",
+  "tooltip.enigmaticlegacy.ichorCharm3": "§5附加上§6灵液腐蚀",
+
   "tooltip.enigmaticlegacy.infernalSpear1": "§5手持时提高§6烈焰巨力§5效果的最大等级",
   "tooltip.enigmaticlegacy.infernalSpear2": "§5当§6烈焰巨力§5效果等级达到最大时",
   "tooltip.enigmaticlegacy.infernalSpear3": "§6右键§5释放穿刺攻击并清除效果",
@@ -701,7 +706,7 @@
   "tooltip.enigmaticlegacy.etherealForgingCharm1": "§5极大减缓携带物品的耐久消耗",
   "tooltip.enigmaticlegacy.etherealForgingCharm2": "§5并改善锻造结果的属性",
   "tooltip.enigmaticlegacy.etherealForgingCharm3": "§5进一步提升该物品效果",
-  "tooltip.enigmaticlegacy.etherealForgingCharmBuff": "§d强化：§5提高减少的概率",
+  "tooltip.enigmaticlegacy.etherealForgingCharmBuff": "§d强化：§5提高减少耐久消耗的概率",
 
   "tooltip.enigmaticlegacy.majesticElytra1": "§5滑翔时按住跳跃键以",
   "tooltip.enigmaticlegacy.majesticElytra2": "§5持续向前加速",

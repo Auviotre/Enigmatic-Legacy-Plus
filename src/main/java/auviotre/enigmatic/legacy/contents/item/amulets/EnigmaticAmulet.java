@@ -163,6 +163,7 @@ public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
             map.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(location, projectileDeflect.get() * 0.01F, AttributeModifier.Operation.ADD_VALUE));
         } else if (color == Color.MAGENTA) {
             map.put(Attributes.GRAVITY, new AttributeModifier(location, gravity.get() * -0.01F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+            map.put(Attributes.SAFE_FALL_DISTANCE, new AttributeModifier(location, 1.0F, AttributeModifier.Operation.ADD_VALUE));
         } else if (color == Color.GREEN) {
             map.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(location, miningEfficiency.get(), AttributeModifier.Operation.ADD_VALUE));
         } else if (color == Color.BLACK) {
@@ -180,6 +181,7 @@ public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
         map.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(location, entity.isSprinting() ? sprintingSpeed.get() * 0.01F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(location, projectileDeflect.get() * 0.01F, AttributeModifier.Operation.ADD_VALUE));
         map.put(Attributes.GRAVITY, new AttributeModifier(location, gravity.get() * -0.01F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        map.put(Attributes.SAFE_FALL_DISTANCE, new AttributeModifier(location, 1.0F, AttributeModifier.Operation.ADD_VALUE));
         map.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(location, miningEfficiency.get(), AttributeModifier.Operation.ADD_VALUE));
         map.put(EnigmaticAttributes.LIFESTEAL, new AttributeModifier(location, lifesteal.get() * 0.01F, AttributeModifier.Operation.ADD_VALUE));
         map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(location, swimSpeed.get() * 0.01F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));

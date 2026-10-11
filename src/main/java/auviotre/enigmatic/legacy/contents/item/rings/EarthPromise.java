@@ -103,7 +103,6 @@ public class EarthPromise extends CursedCurioItem {
         return list;
     }
 
-
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {

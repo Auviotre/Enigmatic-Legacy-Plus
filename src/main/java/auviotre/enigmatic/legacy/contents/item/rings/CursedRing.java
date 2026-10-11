@@ -518,7 +518,7 @@ public class CursedRing extends CursedCurioItem {
                         if (AntiqueBag.hasBook(EnigmaticItems.THE_INFINITUM.toStack(), entity)) debuff *= 0.8F;
                         if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.DIMNESS_CHARM)) debuff *= 0.75F;
                         float modifier = 1.0F - 0.01F * monsterDamageDebuff.get() * debuff;
-                        event.setAmount(event.getAmount() * Math.max(1.0F, modifier));
+                        event.setAmount(event.getAmount() * Math.min(1.0F, modifier));
                     }
                 }
             }

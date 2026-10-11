@@ -25,6 +25,7 @@
 - Adjusted the categories of most recipes.
 
 **Fixes:**
+- Fixed an issue where the **Fourth Curse** of **Ring of the Seven Curses** failed to activate.
 - Fixed a bug where **The Cube** might cause the server to forcibly shut down.
 - Fixed the Night Vision effect of the **Charm of Treasure Hunter** not working properly.
 - Fixed an issue where **Etheric Resonance** was not taking effect in the curio slot.

@@ -81,10 +81,10 @@ public class EtheriumHammer extends DiggerItem {
     public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         Level level = attacker.level();
         var holder = EnigmaticHandler.get(level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
-        Boolean flag = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
+        Boolean flag = stack.getOrDefault(EnigmaticComponents.DORMANT, false);
         if (flag) return;
         if (stack.getEnchantmentLevel(holder) > 0 && attacker instanceof Player player) {
-            stack.set(EnigmaticComponents.BOOLEAN, true);
+            stack.set(EnigmaticComponents.DORMANT, true);
             List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(1.4, 0.4, 1.4),
                     entity -> entity.isAlive() && player.canAttack(entity) && entity != target && entity != attacker && entity.distanceTo(target) < 1.25F);
             for (LivingEntity entity : entities) {
@@ -94,7 +94,7 @@ public class EtheriumHammer extends DiggerItem {
             if (level instanceof ServerLevel server) {
                 server.sendParticles(EnigmaticParticles.ETHER.get(), target.getX(), target.getY(0.5), target.getZ(), 4, 0.2, 0.2, 0.2, 0.05);
             }
-            stack.set(EnigmaticComponents.BOOLEAN, false);
+            stack.set(EnigmaticComponents.DORMANT, false);
         }
         super.postHurtEnemy(stack, target, attacker);
     }
