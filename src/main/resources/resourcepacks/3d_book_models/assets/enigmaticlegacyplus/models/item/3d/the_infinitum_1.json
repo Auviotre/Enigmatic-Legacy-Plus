@@ -1,0 +1,8 @@
+{
+	"parent": "enigmaticlegacyplus:item/3d/the_infinitum_0",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "enigmaticlegacyplus:item/the_infinitum_3d",
+		"1": "enigmaticlegacyplus:item/the_infinitum_3d_eye_1"
+	}
+}

@@ -13,6 +13,7 @@
     - ...
 - Added new features to **Tome of Void**.
 - Added lots of **Advancements**.
+- Built-in resource pack of 3D Book Models now available.
 
 **Changes:**
 - Books in the **Antique Book Bag** will now display descriptions of their relevant buffs.

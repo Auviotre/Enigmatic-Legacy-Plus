@@ -63,7 +63,6 @@ public class MajesticElytra extends BaseElytraItem {
         builder.pop(2);
     }
 
-
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
