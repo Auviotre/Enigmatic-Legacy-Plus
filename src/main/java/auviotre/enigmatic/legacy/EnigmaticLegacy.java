@@ -18,7 +18,12 @@ import auviotre.enigmatic.legacy.packets.server.*;
 import auviotre.enigmatic.legacy.proxy.ClientProxy;
 import auviotre.enigmatic.legacy.proxy.CommonProxy;
 import auviotre.enigmatic.legacy.registries.*;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.*;
+import net.minecraft.server.packs.repository.BuiltInPackSource;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CreativeModeTab;
@@ -27,6 +32,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -35,14 +41,20 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforgespi.language.IModFileInfo;
+import net.neoforged.neoforgespi.locating.IModFile;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.nio.file.Path;
+import java.util.Optional;
 
 @Mod(EnigmaticLegacy.MODID)
 public class EnigmaticLegacy {
@@ -82,6 +94,7 @@ public class EnigmaticLegacy {
         container.registerConfig(ModConfig.Type.SERVER, ELConfig.SPEC);
         if (FMLEnvironment.dist.isClient()) {
             eventBus.addListener(this::onClientSetup);
+            eventBus.addListener(this::addPackFinders);
             NeoForge.EVENT_BUS.register(QuoteHandler.INSTANCE);
             container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
             container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
@@ -98,7 +111,7 @@ public class EnigmaticLegacy {
         PROXY.clientInit();
     }
 
-    private void onCommonSetup(FMLCommonSetupEvent event) {
+    private void onCommonSetup(final FMLCommonSetupEvent event) {
         PROXY.init();
     }
 
@@ -181,5 +194,26 @@ public class EnigmaticLegacy {
         TheCube.Events.LAST_HEALTH.clear();
         ChaosElytra.Events.TICK_MAP.clear();
         ChaosElytra.Events.MOVEMENT_MAP.clear();
+    }
+
+    public void addPackFinders(final AddPackFindersEvent event) {
+        if (event.getPackType() == PackType.CLIENT_RESOURCES) {
+            IModFileInfo modFileInfo = ModList.get().getModFileById(MODID);
+            if (modFileInfo == null) return;
+            IModFile modFile = modFileInfo.getFile();
+            PackLocationInfo locationInfo = new PackLocationInfo(
+                    "enigmaticlegacyplus:3d_book_models", Component.translatable("resource.3d_book_models.title"),
+                    PackSource.BUILT_IN, Optional.empty()
+            );
+            Path resourcePath = modFile.findResource("resourcepacks/3d_book_models");
+            PackSelectionConfig config = new PackSelectionConfig(false, Pack.Position.TOP, false);
+            event.addRepositorySource(consumer -> {
+                Pack pack = Pack.readMetaAndCreate(locationInfo,
+                        BuiltInPackSource.fromName(path -> new PathPackResources(path, resourcePath)),
+                        PackType.CLIENT_RESOURCES, config);
+                if (pack != null) consumer.accept(pack);
+            });
+            new PackSelectionConfig(false, Pack.Position.BOTTOM, false);
+        }
     }
 }

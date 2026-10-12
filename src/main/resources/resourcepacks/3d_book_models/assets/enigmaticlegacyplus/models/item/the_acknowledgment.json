@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "enigmaticlegacyplus:item/3d/the_acknowledgment"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "enigmaticlegacyplus:item/gui/the_acknowledgment"
+    },
+    "fixed": {
+      "parent": "enigmaticlegacyplus:item/3d/the_acknowledgment"
+    },
+    "ground": {
+      "parent": "enigmaticlegacyplus:item/3d/the_acknowledgment"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "enigmaticlegacyplus:item/3d/sanguinary_handbook"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "enigmaticlegacyplus:item/gui/sanguinary_handbook"
+    },
+    "fixed": {
+      "parent": "enigmaticlegacyplus:item/3d/sanguinary_handbook"
+    },
+    "ground": {
+      "parent": "enigmaticlegacyplus:item/3d/sanguinary_handbook"
+    }
+  }
+}

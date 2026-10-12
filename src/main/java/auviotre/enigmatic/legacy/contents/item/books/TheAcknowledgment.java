@@ -57,7 +57,7 @@ public class TheAcknowledgment extends Item implements IBagContent {
             TooltipHandler.line(list);
             TooltipHandler.holdShift(list);
         }
-        TooltipHandler.line(list);
+        if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
     public List<Component> getTooltipInBag(List<Component> list) {

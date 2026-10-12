@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "enigmaticlegacyplus:item/3d/void_tome"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "enigmaticlegacyplus:item/gui/void_tome"
+    },
+    "fixed": {
+      "parent": "enigmaticlegacyplus:item/3d/void_tome"
+    },
+    "ground": {
+      "parent": "enigmaticlegacyplus:item/3d/void_tome"
+    }
+  }
+}

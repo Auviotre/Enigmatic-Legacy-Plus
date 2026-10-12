@@ -83,7 +83,7 @@ public class AnnihilatingSword extends SwordItem {
         blocker.getCooldowns().addCooldown(stack.getItem(), Mth.clamp(tick, 30, 50) - (tick <= 8 ? 5 : 0));
         blocker.swing(blocker.getUsedItemHand());
         blocker.stopUsingItem();
-        addEnergy(stack, blocker);
+        if (tick <= 8) addEnergy(stack, blocker);
         blocker.getData(EnigmaticAttachments.ENIGMATIC_DATA).setAnnihilatingTick(16);
         if (source.getEntity() != null) {
             RandomSource random = blocker.getRandom();

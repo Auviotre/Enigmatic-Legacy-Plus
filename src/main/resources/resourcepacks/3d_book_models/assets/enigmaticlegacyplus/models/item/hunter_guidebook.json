@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "enigmaticlegacyplus:item/3d/hunter_guidebook"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "enigmaticlegacyplus:item/gui/hunter_guidebook"
+    },
+    "fixed": {
+      "parent": "enigmaticlegacyplus:item/3d/hunter_guidebook"
+    },
+    "ground": {
+      "parent": "enigmaticlegacyplus:item/3d/hunter_guidebook"
+    }
+  }
+}
