@@ -6,6 +6,7 @@ import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.generic.SpellstoneItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
+import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import auviotre.enigmatic.legacy.registries.EnigmaticTriggers;
@@ -41,7 +42,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
@@ -65,7 +65,7 @@ public class LostEngine extends SpellstoneItem {
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.translation("item.enigmaticlegacyplus.lost_engine").push("spellstone.lostEngine");
         bonusCritMultiplier = builder.defineInRange("bonusCritMultiplier", 50, 0, 200);
-        vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 2.5, 1.0, 20.0);
+        vulnerabilityModifier = builder.defineInRange("vulnerabilityModifier", 1.5, 0, 19);
         builder.pop(2);
     }
 
@@ -99,6 +99,7 @@ public class LostEngine extends SpellstoneItem {
         return 0;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         ResourceLocation location = IItemHelper.getLocation(this);
@@ -107,6 +108,7 @@ public class LostEngine extends SpellstoneItem {
         attributes.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(location, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         attributes.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, 4, AttributeModifier.Operation.ADD_VALUE));
         attributes.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(location, 0.2, AttributeModifier.Operation.ADD_VALUE));
+        attributes.put(EnigmaticAttributes.MAGIC_PROTECTION, new AttributeModifier(location, -vulnerabilityModifier.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
         return attributes;
     }
 
@@ -132,9 +134,7 @@ public class LostEngine extends SpellstoneItem {
             if (event.getNewDamage() >= Float.MAX_VALUE) return;
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.LOST_ENGINE)) {
                 DamageSource source = event.getSource();
-                if (source.is(Tags.DamageTypes.IS_MAGIC)) {
-                    event.setNewDamage(event.getNewDamage() * (float) vulnerabilityModifier.getAsDouble());
-                } else if (source.is(DamageTypeTags.IS_LIGHTNING)) {
+                if (source.is(DamageTypeTags.IS_LIGHTNING)) {
                     event.setNewDamage(event.getNewDamage() * (float) vulnerabilityModifier.getAsDouble());
                 }
             }
@@ -144,8 +144,11 @@ public class LostEngine extends SpellstoneItem {
         private static void onPlayerTick(PlayerTickEvent.@NotNull Pre event) {
             Player player = event.getEntity();
             if (ISpellstone.get(player).is(EnigmaticItems.LOST_ENGINE)) {
-                if (!player.level().isClientSide() && player.tickCount % 3 == 0) player.getCooldowns().tick();
-                if (player.level().isClientSide() && Minecraft.getInstance().player == player) {
+                boolean isClientSide = player.level().isClientSide();
+
+                if (!isClientSide && player.tickCount % 3 == 0) player.getCooldowns().tick();
+
+                if (isClientSide && Minecraft.getInstance().player == player) {
                     boolean spaceDown = Minecraft.getInstance().options.keyJump.isDown();
                     if (spaceDown && player.getDeltaMovement().y > 0.225F && !player.level().getBlockState(player.blockPosition()).canOcclude()) {
                         player.addDeltaMovement(new Vec3(0.0D, 0.0256D, 0.0D));
